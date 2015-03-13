@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+  #tools
+    ul
+      li
+        a.btn.warning activities
+        a.btn.danger remove
+        a.btn.info install
+            
+  .drawer
+    - for (var i = 0; i < 9; i++)
+      .apps
+        .avatar
+        .name App #{i}
+        .del-btn
+  

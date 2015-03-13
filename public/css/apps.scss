@@ -1,0 +1,83 @@
+// Place all the styles related to the apps controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+$apps-width: 140px;
+$apps-height: 200px;
+
+.apps {
+	display: block;
+	border-radius: 5%;
+	margin: 20px;
+	float: left;
+	width: $apps-width;
+	height: $apps-height;
+	.avatar {
+		border-radius: 5%;
+		background-color: $blue;
+		height: $apps-width;
+		width: $apps-width;
+	}
+	.name {
+		padding: 3px;
+		text-align: center;
+		font-weight: 700;
+	}
+	.del-btn {
+		display: none;
+		border-radius: 3px;
+		cursor: pointer;
+		width: 24px;
+		height: 24px;
+		color: white;
+		margin-left: -6px;
+		margin-top: -6px;
+		position: absolute;
+		background-image: image-url("icons/ic-delete.png");
+		background-size: 24px 24px;
+	}
+}
+
+.drawer {
+	display: block;
+	width: 80%;
+	padding: 50px;
+	margin: 0 auto;
+}
+
+#tools {
+	background-color: $grey;
+	display: block;
+	ul {
+		width: 100%;
+		height: 64px;
+		li {
+			height: 100%;
+			float: right;
+			a.btn {
+				height: 16px;
+				margin: 12px;
+				display: inline-block;
+			}
+		}
+	}
+}
+
+#app-details {
+	#content {
+		padding: 30px;
+	}
+	#advanced {
+		margin: 10px;
+		font-family: consolas;
+		background-color: $grey;
+		padding:15px;
+	}
+}
+
+.activities {
+	@extend .apps;
+	.avatar {
+		background-color: $yellow;
+	}
+}

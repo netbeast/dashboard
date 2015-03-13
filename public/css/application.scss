@@ -1,0 +1,9 @@
+// This is the main application scss list
+// From here files get imported in dependency order
+// and get compiled into style.css
+
+@import 'mixins';
+@import 'colors';
+@import '../fa/css/font-awesome.min.css';
+@import 'common';
+@import 'apps.scss';

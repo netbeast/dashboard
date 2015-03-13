@@ -1,0 +1,149 @@
+* {
+	margin: 0;
+	padding: 0;
+	outline: none;
+}
+
+body, html {
+	height: 100%;
+	width: 100%;
+	font-family: 'Muli', sans-serif;
+}
+
+a {
+	font-decoration: none;
+	color: inherit;
+}
+
+ul, li {
+	list-style: none;
+}
+
+$indicators-bar-height: 32px;
+$bar-item-height: 24px;
+
+nav {
+	height: $indicators-bar-height;
+	width: 100%;
+	z-index: 2000; /*highest*/
+	background-color: $green;
+	@include box-shadow(0, 0, 5px, $grey);
+	line-height: 52px;
+	p {
+		padding: 6px;
+	}
+	.indicator {
+		float: left;
+		&:hover {
+			background-color: $green-dark;
+		}
+	}
+	img.indicator, i.indicator {
+		width: $bar-item-height;
+		height: $bar-item-height;
+		font-size: $bar-item-height;
+		line-height: $bar-item-height;
+		padding: 4px;
+	}
+}
+
+/* Debug params */
+
+/* miscellaneous */
+.debug_dump {
+	clear: both;
+	float: left;
+	margin-top: 45px;
+	border: 1px solid $grey;
+	margin: 50px;
+	padding: 30px;
+	display: block;
+	@include box_sizing;
+}
+
+/* forms */
+
+input, textarea, select, .uneditable-input {
+	border: $blue;
+	width: 100%;
+	margin-bottom: 15px;
+	@include box_sizing;
+	font-size: 1.1rem;
+	font-family: inherit;
+	padding: 10px;
+}
+
+input[type=text], input[type=email], input[type=password], textarea {
+	min-height: 30px;
+	border-bottom: 2px solid $blue;
+	border-radius: none;
+	padding-bottom: -8px;
+}
+
+#error_explanation {
+	color: $red;
+	ul {
+		color: $red;
+		margin: 0 0 30px 0;
+	}
+}
+
+.field_with_errors {
+	.form-control {
+		color: $red;
+	}
+}
+
+.alert {
+	width: 75%;
+	height: 48px;
+	left: 50%;
+	top: 64px;
+	margin-left: -32.5%; /* Half of the width */
+	display: block;
+	position: fixed;
+	font-weight: 700;
+	border-radius: 5px;
+	text-align: center;
+	cursor: pointer;
+	z-index: 1000;
+	transition: opacity .5s;
+	@include box-shadow(0,0,10px,rgba(0,0,0,.7));
+	&.alert-success {
+		background-color: $green;
+	}
+	&.alert-info {
+		background-color: $blue;
+	}
+	&.alert-warning {
+		background-color: $yellow;
+	}
+	&.alert-danger {
+		color: white;
+		background-color: $red;
+	}
+	span {
+		height: 32px;
+		padding: 16px;
+		display: block;
+	}
+}
+
+.btn {
+	cursor: pointer;
+	padding: 10px;
+	border-radius: 3px;
+	background-color: $grey;
+	&.info {
+		background-color: $blue;
+	}
+	&.danger {
+		background-color: $red;
+	}
+	&.warning {
+		background-color: $yellow;
+	}
+	&.success {
+		background-color: $yellow;
+	}
+}

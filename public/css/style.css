@@ -1,0 +1,187 @@
+@import url(../fa/css/font-awesome.min.css);
+* {
+  margin: 0;
+  padding: 0;
+  outline: none; }
+
+body, html {
+  height: 100%;
+  width: 100%;
+  font-family: 'Muli', sans-serif; }
+
+a {
+  font-decoration: none;
+  color: inherit; }
+
+ul, li {
+  list-style: none; }
+
+nav {
+  height: 32px;
+  width: 100%;
+  z-index: 2000;
+  /*highest*/
+  background-color: #1FDA9A;
+  -webkit-box-shadow: 0 0 5px #F2F2F3 ;
+  -moz-box-shadow: 0 0 5px #F2F2F3 ;
+  box-shadow: 0 0 5px #F2F2F3 ;
+  line-height: 52px; }
+  nav p {
+    padding: 6px; }
+  nav .indicator {
+    float: left; }
+    nav .indicator:hover {
+      background-color: #18A776; }
+  nav img.indicator, nav i.indicator {
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+    line-height: 24px;
+    padding: 4px; }
+
+/* Debug params */
+/* miscellaneous */
+.debug_dump {
+  clear: both;
+  float: left;
+  margin-top: 45px;
+  border: 1px solid #F2F2F3;
+  margin: 50px;
+  padding: 30px;
+  display: block;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box; }
+
+/* forms */
+input, textarea, select, .uneditable-input {
+  border: #73C5E1;
+  width: 100%;
+  margin-bottom: 15px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 1.1rem;
+  font-family: inherit;
+  padding: 10px; }
+
+input[type=text], input[type=email], input[type=password], textarea {
+  min-height: 30px;
+  border-bottom: 2px solid #73C5E1;
+  border-radius: none;
+  padding-bottom: -8px; }
+
+#error_explanation {
+  color: #e65656; }
+  #error_explanation ul {
+    color: #e65656;
+    margin: 0 0 30px 0; }
+
+.field_with_errors .form-control {
+  color: #e65656; }
+
+.alert {
+  width: 75%;
+  height: 48px;
+  left: 50%;
+  top: 64px;
+  margin-left: -32.5%;
+  /* Half of the width */
+  display: block;
+  position: fixed;
+  font-weight: 700;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 1000;
+  transition: opacity 0.5s;
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.7) ;
+  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.7) ;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7) ; }
+  .alert.alert-success {
+    background-color: #1FDA9A; }
+  .alert.alert-info {
+    background-color: #73C5E1; }
+  .alert.alert-warning {
+    background-color: #FFD452; }
+  .alert.alert-danger {
+    color: white;
+    background-color: #e65656; }
+  .alert span {
+    height: 32px;
+    padding: 16px;
+    display: block; }
+
+.btn {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 3px;
+  background-color: #F2F2F3; }
+  .btn.info {
+    background-color: #73C5E1; }
+  .btn.danger {
+    background-color: #e65656; }
+  .btn.warning {
+    background-color: #FFD452; }
+  .btn.success {
+    background-color: #FFD452; }
+
+.apps, .activities {
+  display: block;
+  border-radius: 5%;
+  margin: 20px;
+  float: left;
+  width: 140px;
+  height: 200px; }
+  .apps .avatar, .activities .avatar {
+    border-radius: 5%;
+    background-color: #73C5E1;
+    height: 140px;
+    width: 140px; }
+  .apps .name, .activities .name {
+    padding: 3px;
+    text-align: center;
+    font-weight: 700; }
+  .apps .del-btn, .activities .del-btn {
+    display: none;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    color: white;
+    margin-left: -6px;
+    margin-top: -6px;
+    position: absolute;
+    background-image: url("/icons/ic-delete.png");
+    background-size: 24px 24px; }
+
+.drawer {
+  display: block;
+  width: 80%;
+  padding: 50px;
+  margin: 0 auto; }
+
+#tools {
+  background-color: #F2F2F3;
+  display: block; }
+  #tools ul {
+    width: 100%;
+    height: 64px; }
+    #tools ul li {
+      height: 100%;
+      float: right; }
+      #tools ul li a.btn {
+        height: 16px;
+        margin: 12px;
+        display: inline-block; }
+
+#app-details #content {
+  padding: 30px; }
+#app-details #advanced {
+  margin: 10px;
+  font-family: consolas;
+  background-color: #F2F2F3;
+  padding: 15px; }
+
+.activities .avatar {
+  background-color: #FFD452; }

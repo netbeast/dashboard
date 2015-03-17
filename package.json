@@ -12,7 +12,8 @@
     "express": "~4.12.2",
     "jade": "~1.9.2",
     "morgan": "~1.5.1",
-    "serve-favicon": "~2.2.0"
+    "serve-favicon": "~2.2.0",
+    "sqlite3": "^3.0.5"
   },
   "description": "xway dashboard in full js stack",
   "main": "app.js",

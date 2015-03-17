@@ -32,9 +32,11 @@ nav {
     float: left; }
     nav .indicator:hover {
       background-color: #18A776; }
-  nav img.indicator, nav i.indicator {
+  nav img.indicator {
     width: 24px;
     height: 24px;
+    padding: 4px; }
+  nav i.indicator {
     font-size: 24px;
     line-height: 24px;
     padding: 4px; }
@@ -65,20 +67,25 @@ input, textarea, select, .uneditable-input {
   font-family: inherit;
   padding: 10px; }
 
-input[type=text], input[type=email], input[type=password], textarea {
+input[type=text], input[type=email], input[type=password], input[type=url] {
   min-height: 30px;
   border-bottom: 2px solid #73C5E1;
   border-radius: none;
   padding-bottom: -8px; }
 
-#error_explanation {
-  color: #e65656; }
-  #error_explanation ul {
-    color: #e65656;
-    margin: 0 0 30px 0; }
-
-.field_with_errors .form-control {
-  color: #e65656; }
+.btn {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 3px;
+  background-color: #F2F2F3; }
+  .btn.info {
+    background-color: #73C5E1; }
+  .btn.danger {
+    background-color: #e65656; }
+  .btn.warning {
+    background-color: #FFD452; }
+  .btn.success {
+    background-color: #FFD452; }
 
 .alert {
   width: 75%;
@@ -111,20 +118,6 @@ input[type=text], input[type=email], input[type=password], textarea {
     height: 32px;
     padding: 16px;
     display: block; }
-
-.btn {
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 3px;
-  background-color: #F2F2F3; }
-  .btn.info {
-    background-color: #73C5E1; }
-  .btn.danger {
-    background-color: #e65656; }
-  .btn.warning {
-    background-color: #FFD452; }
-  .btn.success {
-    background-color: #FFD452; }
 
 .apps, .activities {
   display: block;

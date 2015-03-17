@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html ng-app="dashboard">
+<head>
+  <title> Beta |&nbsp;Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css" media="screen" title="no title" charset="utf-8">
+</head>
+<body>
+
+  <nav>
+  </nav>
+
+  <div id="tools">
+    <ul>
+      <li title="Select app to remove">
+        <i class="fa fa-trash btn danger" onclick="toggleRemoveButton();"> Uninstall </i>
+      </li>
+      <li>
+        <a href="/#/install" title="Install a new app">
+          <i class="fa fa-cube btn info">Install App</i>
+        </a>
+      </li>
+      <li>
+        <a href="/#/activities" title="Show running apps">
+          <i class="fa fa-heartbeat btn warning">Activities</i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div ng-view></div>
+
+
+  <!-- scripts -->
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="js/dashboard.js"></script>
+
+</body>
+</html>

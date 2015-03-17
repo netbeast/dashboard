@@ -38,9 +38,12 @@ nav {
 			background-color: $green-dark;
 		}
 	}
-	img.indicator, i.indicator {
+	img.indicator {
 		width: $bar-item-height;
 		height: $bar-item-height;
+		padding: 4px;
+	}
+	i.indicator {
 		font-size: $bar-item-height;
 		line-height: $bar-item-height;
 		padding: 4px;
@@ -73,25 +76,25 @@ input, textarea, select, .uneditable-input {
 	padding: 10px;
 }
 
-input[type=text], input[type=email], input[type=password], textarea {
+input[type=text],
+input[type=email],
+input[type=password],
+input[type=url] {
 	min-height: 30px;
 	border-bottom: 2px solid $blue;
 	border-radius: none;
 	padding-bottom: -8px;
 }
 
-#error_explanation {
-	color: $red;
-	ul {
-		color: $red;
-		margin: 0 0 30px 0;
-	}
-}
-
-.field_with_errors {
-	.form-control {
-		color: $red;
-	}
+.btn {
+	cursor: pointer;
+	padding: 10px;
+	border-radius: 3px;
+	background-color: $grey;
+	&.info { background-color: $blue; }
+	&.danger { background-color: $red; }
+	&.warning {	background-color: $yellow; }
+	&.success {	background-color: $yellow; }
 }
 
 .alert {
@@ -109,15 +112,9 @@ input[type=text], input[type=email], input[type=password], textarea {
 	z-index: 1000;
 	transition: opacity .5s;
 	@include box-shadow(0,0,10px,rgba(0,0,0,.7));
-	&.alert-success {
-		background-color: $green;
-	}
-	&.alert-info {
-		background-color: $blue;
-	}
-	&.alert-warning {
-		background-color: $yellow;
-	}
+	&.alert-success {	background-color: $green;	}
+	&.alert-info { background-color: $blue;	}
+	&.alert-warning {	background-color: $yellow; }
 	&.alert-danger {
 		color: white;
 		background-color: $red;
@@ -126,24 +123,5 @@ input[type=text], input[type=email], input[type=password], textarea {
 		height: 32px;
 		padding: 16px;
 		display: block;
-	}
-}
-
-.btn {
-	cursor: pointer;
-	padding: 10px;
-	border-radius: 3px;
-	background-color: $grey;
-	&.info {
-		background-color: $blue;
-	}
-	&.danger {
-		background-color: $red;
-	}
-	&.warning {
-		background-color: $yellow;
-	}
-	&.success {
-		background-color: $yellow;
 	}
 }

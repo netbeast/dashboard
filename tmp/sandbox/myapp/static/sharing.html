@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SlideShow</title>
+		<link rel="stylesheet" 	type="text/css" href="style.css">
+		<link rel="stylesheet" href="../fonts/font-awesome-4.3.0/css/font-awesome.min.css">
+
+
+  		<script src="../js/src/shared/util.js"></script>
+  		<script src="../js/src/display/api.js"></script>
+  		<script src="../js/src/display/metadata.js"></script>
+  		<script src="../js/src/display/canvas.js"></script>
+  		<script src="../js/src/display/webgl.js"></script>
+  		<script src="../js/src/display/pattern_helper.js"></script>
+  		<script src="../js/src/display/font_loader.js"></script>
+  		<script src="../js/src/display/annotation_helper.js"></script>
+  		<script src="../js/sharing.js"></script>
+    	<script src="../node_modules/socket.io/node_modules/socket.io-client/socket.io.js"></script>
+		<script src="../js/jquery-1.11.2.min.js"></script>
+	</head>
+	<body>
+		<header>
+			<form action="">
+				<input id="download-button" class="button" type="button" value="Allow Download!"/>
+			</form>        
+
+			<h1 id="title"><a id="x">X</a>way<a id="x">'s</a> Slide<a id="x">Show</a></h1>
+		</header>
+
+		<i id="button-left" class="fa fa-caret-left fa-2x"></i>
+
+		<div id="show-frame" class="html5-fullscreen-api">
+			<span id="fs-button"></span>
+			<canvas id="show"></canvas>
+		</div>
+
+		<i id="button-right" class="fa fa-caret-right fa-2x"></i>
+
+	</body>
+</html>

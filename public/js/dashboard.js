@@ -3,45 +3,30 @@
 // by jesusdario, netbeast CTO
 //==============================
 
-var dashboard = angular.module('dashboard', ['ngRoute']);
+var Dashboard = angular.module('Dashboard', ['ngRoute', 'AppsModule']);
 
-dashboard.controller('AppsController', function($scope, $http) {
-  // Simple GET request example : https://docs.angularjs.org/api/ng/service/$http
-  $http.get('/apps').
-  success(function(data, status, headers, config) {
-    // this callback will be called asynchronously
-    // when the response is available
-    $scope.apps = data;
-  }).
-  error(function(data, status, headers, config) {
-    // called asynchronously if an error occurs
-    // or server returns response with an error status.
-    /* SHOW ERROR TEMPLATE */
-  });
-});
-
-dashboard.config(['$routeProvider',
+Dashboard.config(['$routeProvider',
 function($routeProvider) {
   $routeProvider.
   when('/', {
     templateUrl: 'views/apps/index.html',
-    controller: 'AppsController'
+    controller: 'AppsListCtrl'
   }).
   when('/apps', {
     templateUrl: 'views/apps/index.html',
-    controller: 'AppsController'
+    controller: 'AppsListCtrl'
   }).
   when('/apps/:name', {
     templateUrl: 'views/apps/show.html',
-    controller: 'AppsController'
+    controller: 'AppsDetailCtrl'
   }).
   when('/install', {
     templateUrl: 'views/apps/new.html',
-    controller: 'AppsController'
+    controller: 'AppsNewCtrl'
   }).
   when('/activities', {
-    templateUrl: 'views/apps/on.html',
-    controller: 'AppsController'
+    templateUrl: 'views/apps/activities.html',
+    controller: 'AppsActivitiesCtrl'
   }).
   otherwise({
     redirectTo: '/'

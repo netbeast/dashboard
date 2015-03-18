@@ -1,0 +1,326 @@
+$black : #000000;
+$blue: #1B98FF;
+
+@font-face {
+    font-family: Muli;
+    src: url(../fonts/Muli-Regular.tt);
+}
+
+@font-face {
+    font-family: ModernPics;
+    src: url(../fonts/modernpics.otf);
+}
+
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body, html {
+	width: 100%;
+	height: 100%;
+	font-family: Muli, sans-serif;
+	overflow: hidden;
+}
+
+h1 {
+	font-size: 1.2em;
+	text-align: center;
+}
+
+.button {
+    position: relative;
+    overflow: visible;
+    display: inline-block;
+    padding: 0.5em 1em;
+    border: 1px solid #d4d4d4;
+    margin: 0;
+    text-decoration: none;
+    text-align: center;
+    text-shadow: 1px 1px 0 #fff;
+    font:11px/normal sans-serif;
+    color: #333;
+    white-space: nowrap;
+    cursor: pointer;
+    outline: none;
+    background-color: #ececec;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f4f4f4), to(#ececec));
+    background-image: -moz-linear-gradient(#f4f4f4, #ececec);
+    background-image: -ms-linear-gradient(#f4f4f4, #ececec);
+    background-image: -o-linear-gradient(#f4f4f4, #ececec);
+    background-image: linear-gradient(#f4f4f4, #ececec);
+    -moz-background-clip: padding; /* for Firefox 3.6 */
+    background-clip: padding-box;
+    border-radius: 0.2em;
+    /* IE hacks */
+    zoom: 1;
+    *display: inline;
+}
+
+.button:hover,
+.button:focus,
+.button:active,
+.button.active {
+    border-color: #3072b3;
+    border-bottom-color: #2a65a0;
+    text-decoration: none;
+    text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+    color: #fff;
+    background-color: #3c8dde;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#599bdc), to(#3072b3));
+    background-image: -moz-linear-gradient(#599bdc, #3072b3);
+    background-image: -o-linear-gradient(#599bdc, #3072b3);
+    background-image: linear-gradient(#599bdc, #3072b3);
+}
+
+
+#title {
+	color:#1B98FF;
+	text-align: center;
+	margin: 1% 0 1% 0;
+}
+
+#title-with-button {
+	color:#1B98FF;
+	text-align: center;
+	margin: 1% 0 1% 19.3%;
+}
+
+#x {
+	text-decoration: none;
+	color: black;
+}
+
+#drag-and-drop {
+	border: 5px dashed lightgray;
+	width: 80%;
+	padding-top: 17%;
+	padding-bottom: 17%;
+	margin-left: 10%;
+	margin-right: 10%;
+	margin-bottom: 0.5%;
+	text-align: center;
+	-webkit-transition-duration: 1s; /* Safari */
+    transition-duration: 1s;
+    display: none;
+}
+
+#drag-and-drop:hover {
+	background-color: #1B98FF;
+	border-color: white;
+	color: white;
+}
+
+#upload-form-area {
+	text-align: center;
+	display: none;
+}
+
+#boton {
+	float: right;
+	margin-right: 10%;
+}
+
+/*#page-container4 {
+	display: none;
+}
+
+#canvas4 {
+	display: block;
+}*/
+
+#button-left {
+	float: left;
+	margin: 15% 0 0 1.5%;
+	position: relative;
+    overflow: visible;
+    display: inline-block;
+    padding: 0.5em 1em;
+    border: 1px solid #d4d4d4;
+    text-decoration: none;
+    text-align: center;
+    text-shadow: 1px 1px 0 #fff;
+    color: #333;
+    white-space: nowrap;
+    cursor: pointer;
+    outline: none;
+    background-color: #ececec;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f4f4f4), to(#ececec));
+    background-image: -moz-linear-gradient(#f4f4f4, #ececec);
+    background-image: -ms-linear-gradient(#f4f4f4, #ececec);
+    background-image: -o-linear-gradient(#f4f4f4, #ececec);
+    background-image: linear-gradient(#f4f4f4, #ececec);
+    -moz-background-clip: padding; /* for Firefox 3.6 */
+    background-clip: padding-box;
+    border-radius: 0.2em;
+    /* IE hacks */
+    zoom: 1;
+    *display: inline;
+}
+
+#button-left:hover,
+#button-left:focus,
+#button-left:active,
+#button-left.active, 
+#button-right:hover,
+#button-right:focus,
+#button-right:active,
+#button-right.active {
+    border-color: #3072b3;
+    border-bottom-color: #2a65a0;
+    text-decoration: none;
+    text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+    color: #fff;
+    background-color: #3c8dde;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#599bdc), to(#3072b3));
+    background-image: -moz-linear-gradient(#599bdc, #3072b3);
+    background-image: -o-linear-gradient(#599bdc, #3072b3);
+    background-image: linear-gradient(#599bdc, #3072b3);
+}
+
+#button-right {
+	float: right;
+	margin: 15% 1.5% 0 0;
+	position: relative;
+    overflow: visible;
+    display: inline-block;
+    padding: 0.5em 1em;
+    border: 1px solid #d4d4d4;
+    text-decoration: none;
+    text-align: center;
+    text-shadow: 1px 1px 0 #fff;
+    color: #333;
+    white-space: nowrap;
+    cursor: pointer;
+    outline: none;
+    background-color: #ececec;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f4f4f4), to(#ececec));
+    background-image: -moz-linear-gradient(#f4f4f4, #ececec);
+    background-image: -ms-linear-gradient(#f4f4f4, #ececec);
+    background-image: -o-linear-gradient(#f4f4f4, #ececec);
+    background-image: linear-gradient(#f4f4f4, #ececec);
+    -moz-background-clip: padding; /* for Firefox 3.6 */
+    background-clip: padding-box;
+    border-radius: 0.2em;
+    /* IE hacks */
+    zoom: 1;
+    *display: inline;
+}
+
+#pop-up-box {
+margin: 0; 
+margin-left: 35%; 
+margin-right: 30%;
+margin-top: 8%; 
+padding-top: 10px; 
+width: 30%; 
+height: 50%; 
+position: absolute; 
+background: #FBFBF0; 
+border: solid #000000 2px; 
+z-index: 9; 
+font-family: arial; 
+display: block; 
+}
+
+#page-numbers {
+	text-align: center;
+	margin-top: 0;
+}
+
+#show-frame {
+	width: 81%;
+	height: 80%;
+	overflow: scroll;
+	border: 5px solid #1B98FF;
+	padding: 1% 0 1% 0;
+	margin: 0 auto 0 auto;
+	float: left;
+	text-align: center;
+	position: absolute;
+	left: 9%;
+
+}
+
+.html5-fullscreen-api {  
+    position: relative;  
+}  
+.html5-fullscreen-api canvas {  
+    max-width: 100%;
+    min-width: 80%;
+    border: 10px solid #fff;  
+    box-shadow: 0px 0px 50px #ccc;  
+}  
+
+.html5-fullscreen-api #fs-button {  
+    z-index: 100;  
+    display: inline-block;  
+    width: 32px;  
+    height: 32px;  
+    position: fixed;  
+    top: 10%;  
+    right: 10%;  
+    cursor: pointer;  
+}  
+
+.html5-fullscreen-api #fs-button:after {  
+    display: inline-block;  
+    width: 100%;  
+    height: 100%;  
+    font-size: 32px;  
+    font-family: ModernPics;  
+    color: rgba(0,0,0,.5);  
+    cursor: pointer;  
+    content: "v";  
+}  
+.html5-fullscreen-api #fs-button:hover:after {  
+    color: rgb(0,0,0);  
+}  
+
+#show-frame:-webkit-full-screen #fs-button {
+	top: 1%;
+	right: 1%;
+}
+
+#show-frame:-webkit-full-screen #fs-button:after {
+	content: "u";
+	color: rgba(255,255,255,.5);  
+}
+
+#show-frame:-webkit-full-screen #fs-button:hover:after {  
+    color: rgb(255,255,255);  
+}  
+
+
+#show-frame:-webkit-full-screen canvas {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	box-shadow: 0px 0px 50px #000;
+}
+
+#show-frame:-webkit-full-screen {  
+    background-image: url('../img/ios-linen.jpg');  
+    background-size: 50% auto;
+    border: 0px;
+    top: 0%;
+    left: 0%;
+    height: 100%;
+    width: 100%;  
+} 
+
+#download-pop-up-box {
+	margin: 0; 
+	margin-left: 35%; 
+	margin-right: 30%;
+	margin-top: 8%; 
+	padding-top: 10px; 
+	width: 30%; 
+	height: 50%; 
+	position: absolute; 
+	background: #FBFBF0; 
+	border: solid $black 2px; 
+	z-index: 9; 
+	font-family: arial; 
+	display: none; 
+}

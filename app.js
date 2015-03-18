@@ -4,8 +4,15 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var multer = require('multer');
 
+
+// Needed for the installation
+//============================
+var fs = require('fs');         // file system
+var glob = require('glob');     // find files
+var multer = require('multer'); // uploads
+var rimraf = require('rimraf'); // nodejs rm -rf
+var targz = require('tar.gz');
 var routes = require('./routes/apps');
 
 var app = express();
@@ -23,41 +30,103 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 /* Configure the multer for file uploads */
-app.use(multer({dest: path.join(__dirname, 'sandbox')}));
 
-app.use('/', routes);
+var DIR = path.join(__dirname, 'sandbox');
+var TMP = path.join(__dirname, 'tmp');
+app.use(multer({
+  dest: TMP,
+  rename: function (fieldname, filename, req, res) {
+    return filename;
+  },
+  onFileUploadStart: function (file, req, res) {
+    console.log('Upload mimetype: ' + file.mimetype);
+    if (file.mimetype !== 'application/octet-stream'
+    && file.mimetype !== 'application/x-gzip') {
+      res.status(403).json('Invalid file type. Must be application/x-gzip');
+      return false;
+    } else {
+      console.log(file.fieldname + ' is starting ...');
+    }
+  },
+  onFileUploadComplete: function (file, req, res) {
+    var tarball = path.join(TMP, file.name);
+    var extract = new targz().extract(tarball, TMP,
+      function(extractError){
+        if(extractError) {
+          console.log(extractError);
+          res.status(500).json("Could not install the app");
+        } else {
+          console.log('The extraction has ended!');
 
-// error handlers
-//===============
+          // Now check if the app exists
+          var result, package_json,
+          SEARCH = TMP + '/?**/package.json';
+          // find all package.json
+          // the '?' char means ONLY first ocurrence in search
+          // which is the main package.json we are searching
+          result = glob.sync(SEARCH)[0];
+          console.log(SEARCH + ' gave: ' + result);
+          if (result) {
+            package_json = JSON.parse(fs.readFileSync(result, 'utf8'));
+            console.log('Package name: ' + package_json.name);
+            //Move the folder from tmp to the sandbox
+            app_root = path.join(DIR, '/' + package_json.name);
+            if(!fs.existsSync(app_root)) {
+              fs.renameSync(result.substring(0, result.lastIndexOf("/")),
+              app_root);
+            } else {
+              console.log("App already exists");
+            }
+          } else {
+            console.log("App does NOT have package.json file");
+          }
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+          // Now remove tmp files
+          rimraf(tarball, function(rimrafError) {
+            if (rimrafError) {
+              console.log(rimrafError);
+            } else {
+              console.log("Dir \"" + TMP + "\" was removed");
+            }
+          });
+        }
+      });
+    }
+  }));
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
+  app.use('/', routes);
+
+  // error handlers
+  //===============
+
+  // catch 404 and forward to error handler
+  app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+  });
+
+  // development error handler
+  // will print stacktrace
+  if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+      res.status(err.status || 500);
+      res.render('error', {
+        message: err.message,
+        error: err
+      });
+    });
+  }
+
+  // production error handler
+  // no stacktraces leaked to user
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
-      error: err
+      error: {}
     });
   });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
-});
 
 
-module.exports = app;
+  module.exports = app;

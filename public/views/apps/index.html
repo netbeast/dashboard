@@ -1,11 +1,11 @@
 <section id="apps-drawer" ng-controller="AppsController">
   <div class="apps" ng-repeat="app in apps">
-    <a href="/#/apps/nombre">
+    <a href="/#/apps/{{app.name}}">
       <div class="avatar">
       </div>
     </a>
     <div class="name">
-      {{app.name}} – {{app.author}}
+      {{app.name}}
     </div>
   </div>
 </section>

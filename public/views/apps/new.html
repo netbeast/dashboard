@@ -1,4 +1,14 @@
 <h2> Install from Github <i class="fa fa-github"></i></h2>
-<input type="url" name="github" value="" placeholder="github url app"></input>
+
+<form  action="/apps/new" method="get">
+  <input type="url" name="github" value="" placeholder="github url app"></input>
+  <input type="submit" value="Install from github" name="submit">
+</form>
+
+<br/>
+
 <h2> Upload your own package <i class="fa fa-archive"></i></h2>
+<form action="/apps" enctype="multipart/form-data" method="post">
 <input type="file" name="pkg" value=""></input>
+<input type="submit" value="Install package" name="submit">
+</form>

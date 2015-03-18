@@ -4,8 +4,9 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var multer = require('multer');
 
-var routes = require('./routes/index');
+var routes = require('./routes/apps');
 
 var app = express();
 
@@ -21,7 +22,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+/* Configure the multer for file uploads */
+app.use(multer({dest: path.join(__dirname, 'sandbox')}));
+
 app.use('/', routes);
+
+// error handlers
+//===============
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -29,8 +36,6 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
-
-// error handlers
 
 // development error handler
 // will print stacktrace

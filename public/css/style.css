@@ -1,4 +1,4 @@
-@import url(../fa/css/font-awesome.min.css);
+@import url(../fa/css/font-awesome.css);
 * {
   margin: 0;
   padding: 0;
@@ -67,7 +67,10 @@ input, textarea, select, .uneditable-input {
   font-family: inherit;
   padding: 10px; }
 
-input[type=text], input[type=email], input[type=password], input[type=url] {
+input[type=text],
+input[type=email],
+input[type=password],
+input[type=url] {
   min-height: 30px;
   border-bottom: 2px solid #73C5E1;
   border-radius: none;
@@ -86,38 +89,6 @@ input[type=text], input[type=email], input[type=password], input[type=url] {
     background-color: #FFD452; }
   .btn.success {
     background-color: #FFD452; }
-
-.alert {
-  width: 75%;
-  height: 48px;
-  left: 50%;
-  top: 64px;
-  margin-left: -32.5%;
-  /* Half of the width */
-  display: block;
-  position: fixed;
-  font-weight: 700;
-  border-radius: 5px;
-  text-align: center;
-  cursor: pointer;
-  z-index: 1000;
-  transition: opacity 0.5s;
-  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.7) ;
-  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.7) ;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7) ; }
-  .alert.alert-success {
-    background-color: #1FDA9A; }
-  .alert.alert-info {
-    background-color: #73C5E1; }
-  .alert.alert-warning {
-    background-color: #FFD452; }
-  .alert.alert-danger {
-    color: white;
-    background-color: #e65656; }
-  .alert span {
-    height: 32px;
-    padding: 16px;
-    display: block; }
 
 .apps, .activities {
   display: block;
@@ -145,7 +116,7 @@ input[type=text], input[type=email], input[type=password], input[type=url] {
     margin-left: -6px;
     margin-top: -6px;
     position: absolute;
-    background-image: url("/icons/ic-delete.png");
+    background-image: image-url("icons/ic-delete.png");
     background-size: 24px 24px; }
 
 .drawer {
@@ -178,3 +149,5 @@ input[type=text], input[type=email], input[type=password], input[type=url] {
 
 .activities .avatar {
   background-color: #FFD452; }
+
+/*# sourceMappingURL=style.css.map */

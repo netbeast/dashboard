@@ -5,7 +5,7 @@ var router = express.Router();
 var glob = require('glob');
 
 
-var DIR = __dirname + '/../sandbox';
+var DIR = path.join(__dirname, '/../sandbox');
 
 // GET
 router.get('/apps', function(req, res) {
@@ -37,16 +37,22 @@ router.get('/apps', function(req, res) {
 
 router.get('/apps/:name', function(req, res) {
 
-  fs.readdir(dir, function (error, files) {
-    if (err) {
-      res.status(500).json('Could not read ' + DIR);
-      throw err;
+    var app_index = -1; // err by default
+
+  fs.readdir(DIR, function (error, files) {
+    if (error) {
+        res.status(500).json('Could not read ' + DIR);
+        throw error;
     }
 
-    if(files.indexOf(req.params.name) != -1) {
-      // If the app exists:
-      var data = {name: req.params.name, description: 'mockup description'};
-      res.json(data);
+      app_index = files.indexOf(req.params.name);
+
+    if( app_index != -1) {
+      // Now check if the app exists
+      var package_json, PATH = path.join(DIR, files[app_index], 'package.json');
+      package_json = JSON.parse(fs.readFileSync(PATH, 'utf8'));
+      console.log('Package name: ' + package_json.name);
+      res.json(package_json);
     } else {
       res.status(404).json('Not Found');
     }

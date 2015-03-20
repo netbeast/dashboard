@@ -63,12 +63,10 @@ app.use(multer({
           SEARCH = TMP + '/?**/package.json';
           // find all package.json
           // the '?' char means ONLY first ocurrence in search
-          // which is the main package.json we are searching
           result = glob.sync(SEARCH)[0];
-          console.log(SEARCH + ' gave: ' + result);
+
           if (result) {
             package_json = JSON.parse(fs.readFileSync(result, 'utf8'));
-            console.log('Package name: ' + package_json.name);
             //Move the folder from tmp to the sandbox
             app_root = path.join(DIR, '/' + package_json.name);
             if(!fs.existsSync(app_root)) {

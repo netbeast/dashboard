@@ -96,32 +96,3 @@ input[type=url] {
 	&.warning {	background-color: $yellow; }
 	&.success {	background-color: $yellow; }
 }
-
-.alert {
-	width: 75%;
-	height: 48px;
-	left: 50%;
-	top: 64px;
-	margin-left: -32.5%; /* Half of the width */
-	display: block;
-	position: fixed;
-	font-weight: 700;
-	border-radius: 5px;
-	text-align: center;
-	cursor: pointer;
-	z-index: 1000;
-	transition: opacity .5s;
-	@include box-shadow(0,0,10px,rgba(0,0,0,.7));
-	&.alert-success {	background-color: $green;	}
-	&.alert-info { background-color: $blue;	}
-	&.alert-warning {	background-color: $yellow; }
-	&.alert-danger {
-		color: white;
-		background-color: $red;
-	}
-	span {
-		height: 32px;
-		padding: 16px;
-		display: block;
-	}
-}

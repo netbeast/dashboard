@@ -3,20 +3,21 @@ var AppsModule = angular.module('AppsModule', []);
 AppsModule.controller('AppsListCtrl', ['$scope', '$http',
 function ($scope, $http) {
 
-  API.HTTP =  $http;
+  var client = new API($http);
 
   // DELETE
-  $scope.delete = API.delete;
+  $scope.delete = client.delete;
 
   // GET
-  API.read($scope, '');
+  client.read($scope, '');
 
 }]);
 
 AppsModule.controller('AppsDetailCtrl', ['$scope', '$routeParams', '$http',
 function($scope, $routeParams, $http) {
-  API.HTTP =  $http;
-  API.read($scope, $routeParams.name)
+
+    var client = new API($http);
+    client.read($scope, $routeParams.name)
 }]);
 
 AppsModule.controller('AppsActivitiesCtrl', ['$scope', '$routeParams',

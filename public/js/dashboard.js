@@ -12,10 +12,6 @@ function($routeProvider) {
     templateUrl: 'views/apps/index.html',
     controller: 'AppsListCtrl'
   }).
-  when('/apps', {
-    templateUrl: 'views/apps/index.html',
-    controller: 'AppsListCtrl'
-  }).
   when('/apps/:name', {
     templateUrl: 'views/apps/show.html',
     controller: 'AppsDetailCtrl'
@@ -26,7 +22,7 @@ function($routeProvider) {
   }).
   when('/remove', {
     templateUrl: 'views/apps/delete.html',
-    controller: 'AppsListCtrl'
+    controller: 'AppsRmCtrl'
   }).
   when('/activities', {
     templateUrl: 'views/apps/activities.html',

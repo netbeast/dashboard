@@ -62,3 +62,28 @@ $apps-height: 200px;
 		background-color: $yellow;
 	}
 }
+
+#installer-tabs {
+	ul {
+		width: 100%;
+		height: 48px;
+		background-color: $blue;
+		li {
+			height: 100%;
+			float: left;
+			a {
+				display: inline-block;
+				padding: 16px;
+				&.active {
+					background-color: $yellow;
+				}
+			}
+		}
+	}
+}
+
+.dropzone {
+	border: 1px solid $grey;
+	min-height: 400px;
+	margin: 20px;
+}

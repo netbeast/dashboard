@@ -1,15 +1,32 @@
+<div id="installer-tabs">
+  <ul>
+    <li ng-repeat="tab in tabs">
+      <a class="clickable" ng-click="onClickTab(tab)">
+        {{tab}}
+      </a>
+    </li>
+  </ul>
+</div>
 <section class="drawer">
-  <h2> Install from Github <i class="fa fa-github"></i></h2>
+  <div id="package">
+    <h2>Upload your own package <i class="fa fa-archive"></i></h2>
+    <div class="dropzone">
+    </div>
+  </div>
 
-  <form  action="/apps/new" method="get">
-    <input type="url" name="github" value="" placeholder="github url app"></input>
-    <input type="submit" value="Install from github" name="submit">
-  </form>
+  <div id="github" style="display:none">
+    <h2> Install from Github <i class="fa fa-github"></i></h2>
 
-  <br/>
+    <form  action="/apps/new" method="get">
+      <input type="url" name="github" value="" placeholder="github url app"></input>
+      <input type="submit" value="Install from github" name="submit">
+    </form>
+    <br/>
+  </div>
 
-  <h2> Upload your own package <i class="fa fa-archive"></i></h2>
-  <div class="dropzone">
-
+  <div id="docker" style="display:none">
+    <div id="viewThree">
+      Docker incoming
+    </div>
   </div>
 </section>

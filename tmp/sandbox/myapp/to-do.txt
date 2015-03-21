@@ -1,4 +1,0 @@
-TO DO:
-
-- Terminar configuración pdfjs
-- Implementar Ajax entre sharing y view.html 

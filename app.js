@@ -13,7 +13,7 @@ var glob = require('glob');     // find files
 var multer = require('multer'); // uploads
 var rimraf = require('rimraf'); // nodejs rm -rf
 var targz = require('tar.gz');
-var routes = require('./routes/apps');
+var routes = require('./routes/api');
 
 var app = express();
 
@@ -72,15 +72,19 @@ app.use(multer({
             if(!fs.existsSync(app_root)) {
               fs.renameSync(result.substring(0, result.lastIndexOf("/")),
               app_root);
+              res.status(204).json("File uploaded");
             } else {
               console.log("App already exists");
+              res.status(403).json("App already exists");
             }
           } else {
             console.log("App does NOT have package.json file");
+            res.status(403).json("App does NOT have package.json file");
           }
 
           // Now remove tmp files
-          rimraf(tarball, function(rimrafError) {
+          rimraf(tarball.split('.')[0] + '*',
+           function(rimrafError) {
             if (rimrafError) {
               console.log(rimrafError);
             } else {

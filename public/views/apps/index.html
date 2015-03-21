@@ -1,8 +1,8 @@
 <pre>apps JSON: {{apps}}</pre>
 
 <section id="apps-drawer">
-  <div class="apps" ng-repeat="app in apps">
-    <a class="btn danger" ng-click="delete">Delete</a>
+  <div id="{{app.name}}" class="apps" ng-repeat="app in apps">
+    <a class="btn danger" ng-click="API.delete(app.name)">Delete</a>
     <a href="/#/apps/{{app.name}}">
       <div class="avatar">
       </div>

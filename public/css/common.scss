@@ -4,13 +4,19 @@
 	outline: none;
 }
 
+@font-face {
+    font-family: Muli;
+    src: url('../fonts/Muli/Muli-Regular.ttf') format('truetype');
+}
+
 body, html {
 	height: 100%;
 	width: 100%;
 	font-family: 'Muli', sans-serif;
 }
 
-a {
+a  {
+	text-decoration: none;
 	font-decoration: none;
 	color: inherit;
 }
@@ -19,7 +25,7 @@ ul, li {
 	list-style: none;
 }
 
-$indicators-bar-height: 32px;
+$indicators-bar-height: 3px;
 $bar-item-height: 24px;
 
 nav {
@@ -50,27 +56,51 @@ nav {
 	}
 }
 
-/* Debug params */
-
-/* miscellaneous */
-.debug_dump {
-	clear: both;
-	float: left;
-	margin-top: 45px;
-	border: 1px solid $grey;
-	margin: 50px;
-	padding: 30px;
+#tools {
+	bottom: 0;
+	width: 100%;
 	display: block;
-	@include box_sizing;
+	position: fixed;
+	border: 1px solid $grey;
+	background-opacity: .5;
+	background-color: white;
+	#brand {
+		@include slant();
+		padding: 3px;
+		font-weight: bold;
+		font-size: 1.6em;
+	}
+
+	#title {
+		padding: 12px 4px;
+		background-color: none;
+	}
+
+	ul {
+		width: 100%;
+		height: 64px;
+		li {
+			height: 100%;
+			float: right;
+			&:first-child, &:nth-child(2) {
+				float: left;
+			}
+			a.btn, #brand, #title {
+				height: 16px;
+				margin: 12px;
+				display: inline-block;
+			}
+		}
+	}
 }
 
 /* forms */
 
 input, textarea, select, .uneditable-input {
 	border: $blue;
-	width: 100%;
+	width: auto;
 	margin-bottom: 15px;
-	@include box_sizing;
+	@include box-sizing;
 	font-size: 1.1rem;
 	font-family: inherit;
 	padding: 10px;
@@ -95,4 +125,12 @@ input[type=url] {
 	&.danger { background-color: $red; }
 	&.warning {	background-color: $yellow; }
 	&.success {	background-color: $yellow; }
+}
+
+.blurry {
+		@include blur(5px);
+}
+
+.desaturated {
+	@include desaturate();
 }

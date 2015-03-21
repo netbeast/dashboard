@@ -5,12 +5,16 @@
   padding: 0;
   outline: none; }
 
+@font-face {
+  font-family: Muli;
+  src: url("../fonts/Muli/Muli-Regular.ttf") format("truetype"); }
 body, html {
   height: 100%;
   width: 100%;
   font-family: 'Muli', sans-serif; }
 
 a {
+  text-decoration: none;
   font-decoration: none;
   color: inherit; }
 
@@ -18,7 +22,7 @@ ul, li {
   list-style: none; }
 
 nav {
-  height: 32px;
+  height: 3px;
   width: 100%;
   z-index: 2000;
   /*highest*/
@@ -42,24 +46,43 @@ nav {
     line-height: 24px;
     padding: 4px; }
 
-/* Debug params */
-/* miscellaneous */
-.debug_dump {
-  clear: both;
-  float: left;
-  margin-top: 45px;
-  border: 1px solid #F2F2F3;
-  margin: 50px;
-  padding: 30px;
+#tools {
+  bottom: 0;
+  width: 100%;
   display: block;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box; }
+  position: fixed;
+  border: 1px solid #F2F2F3;
+  background-opacity: .5;
+  background-color: white; }
+  #tools #brand {
+    -moz-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(-5deg, 0deg);
+    -webkit-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(-5deg, 0deg);
+    -o-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(-5deg, 0deg);
+    -ms-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(-5deg, 0deg);
+    transform: scale(1) rotate(0deg) translate(0px, 0px) skew(-5deg, 0deg);
+    padding: 3px;
+    font-weight: bold;
+    font-size: 1.6em; }
+  #tools #title {
+    padding: 12px 4px;
+    background-color: none; }
+  #tools ul {
+    width: 100%;
+    height: 64px; }
+    #tools ul li {
+      height: 100%;
+      float: right; }
+      #tools ul li:first-child, #tools ul li:nth-child(2) {
+        float: left; }
+      #tools ul li a.btn, #tools ul li #brand, #tools ul li #title {
+        height: 16px;
+        margin: 12px;
+        display: inline-block; }
 
 /* forms */
 input, textarea, select, .uneditable-input {
   border: #73C5E1;
-  width: 100%;
+  width: auto;
   margin-bottom: 15px;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -91,6 +114,19 @@ input[type=url] {
   .btn.success {
     background-color: #FFD452; }
 
+.blurry {
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px); }
+
+.desaturated {
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+  filter: gray;
+  filter: url("data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' height='0'><filter id='greyscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0' /></filter></svg>#greyscale"); }
+
 .apps, .activities {
   display: block;
   border-radius: 5%;
@@ -99,46 +135,32 @@ input[type=url] {
   width: 140px;
   height: 200px; }
   .apps .avatar, .activities .avatar {
-    border-radius: 5%;
-    background-color: #73C5E1;
-    height: 140px;
-    width: 140px; }
+    color: #73C5E1;
+    line-height: 140px;
+    font-size: 140px; }
   .apps .name, .activities .name {
     padding: 3px;
     text-align: center;
     font-weight: 700; }
-  .apps .del-btn, .activities .del-btn {
-    display: none;
-    border-radius: 3px;
-    cursor: pointer;
-    width: 24px;
-    height: 24px;
-    color: white;
-    margin-left: -6px;
-    margin-top: -6px;
+  .apps .del-overlay, .activities .del-overlay {
+    z-index: 1000;
+    display: block;
     position: absolute;
-    background-image: image-url("icons/ic-delete.png");
-    background-size: 24px 24px; }
+    width: 140px;
+    height: 200px; }
+    .apps .del-overlay .btn, .activities .del-overlay .btn {
+      position: absolute;
+      margin-top: 62px;
+      margin-left: 35px;
+      -webkit-box-shadow: 0 0 15px 3px rgba(10, 10, 10, 0.5);
+      -moz-box-shadow: 0 0 15px 3px rgba(10, 10, 10, 0.5);
+      box-shadow: 0 0 15px 3px rgba(10, 10, 10, 0.5); }
 
 .drawer {
-  display: block;
   width: 80%;
   padding: 50px;
-  margin: 0 auto; }
-
-#tools {
-  background-color: #F2F2F3;
+  margin: 0 auto;
   display: block; }
-  #tools ul {
-    width: 100%;
-    height: 64px; }
-    #tools ul li {
-      height: 100%;
-      float: right; }
-      #tools ul li a.btn {
-        height: 16px;
-        margin: 12px;
-        display: inline-block; }
 
 #app-details #content {
   padding: 30px; }

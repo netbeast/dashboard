@@ -24,6 +24,10 @@ function($routeProvider) {
     templateUrl: 'views/apps/new.html',
     controller: 'AppsNewCtrl'
   }).
+  when('/remove', {
+    templateUrl: 'views/apps/delete.html',
+    controller: 'AppsListCtrl'
+  }).
   when('/activities', {
     templateUrl: 'views/apps/activities.html',
     controller: 'AppsActivitiesCtrl'

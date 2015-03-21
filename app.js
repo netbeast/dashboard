@@ -40,12 +40,13 @@ app.use(multer({
   },
   onFileUploadStart: function (file, req, res) {
     console.log('Upload mimetype: ' + file.mimetype);
-    if (file.mimetype !== 'application/octet-stream'
-    && file.mimetype !== 'application/x-gzip') {
-      res.status(403).json('Invalid file type. Must be application/x-gzip');
-      return false;
+    var fname = file.name;
+    var ext = [fname.split('.')[1], fname.split('.')[2]].join('.');
+    if(ext === 'tar.gz' || ext === 'tgz.' || ext === 'zip.') {
+      console.log('Uploading file with extension ' + ext);
     } else {
-      console.log(file.fieldname + ' is starting ...');
+      res.status(403).json('Invalid file type. Must be a zip or tar.gz');
+      return false;
     }
   },
   onFileUploadComplete: function (file, req, res) {
@@ -84,7 +85,7 @@ app.use(multer({
 
           // Now remove tmp files
           rimraf(tarball.split('.')[0] + '*',
-           function(rimrafError) {
+          function(rimrafError) {
             if (rimrafError) {
               console.log(rimrafError);
             } else {

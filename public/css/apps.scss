@@ -13,54 +13,35 @@ $apps-height: 200px;
 	width: $apps-width;
 	height: $apps-height;
 	.avatar {
-		border-radius: 5%;
-		background-color: $blue;
-		height: $apps-width;
-		width: $apps-width;
+		color: $blue;
+		line-height: $apps-width;
+		font-size: $apps-width;
 	}
 	.name {
 		padding: 3px;
 		text-align: center;
 		font-weight: 700;
 	}
-	.del-btn {
-		display: none;
-		border-radius: 3px;
-		cursor: pointer;
-		width: 24px;
-		height: 24px;
-		color: white;
-		margin-left: -6px;
-		margin-top: -6px;
+	.del-overlay {
+		z-index: 1000;
+		display: block;
 		position: absolute;
-		background-image: image-url("icons/ic-delete.png");
-		background-size: 24px 24px;
+		width: $apps-width;
+		height: $apps-height;
+		.btn {
+			position: absolute;
+			margin-top: $apps-width / 2 - 8px;
+			margin-left: $apps-width / 4;
+			@include box-shadow(0, 0, 15px, 3px, rgba(10,10,10,.5));
+		}
 	}
 }
 
 .drawer {
-	display: block;
 	width: 80%;
 	padding: 50px;
 	margin: 0 auto;
-}
-
-#tools {
-	background-color: $grey;
 	display: block;
-	ul {
-		width: 100%;
-		height: 64px;
-		li {
-			height: 100%;
-			float: right;
-			a.btn {
-				height: 16px;
-				margin: 12px;
-				display: inline-block;
-			}
-		}
-	}
 }
 
 #app-details {

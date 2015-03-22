@@ -1,0 +1,22 @@
+{
+  "name": "sample-app",
+  "version": "0.0.1",
+  "description": "A sample app for you to start building!",
+  "main": "server.js",
+  "dependencies": {
+    "minimist": "^1.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node serverjs --port 31416",
+    "start": "node server.js --port 31416"
+  },
+  "keywords": [
+    "xway",
+    "iot",
+    "netbeast"
+  ],
+  "logo": "logo.gif",
+  "author": "netbeast",
+  "license": "Apache V2"
+}

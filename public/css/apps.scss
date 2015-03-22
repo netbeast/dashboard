@@ -11,11 +11,17 @@ $apps-height: 200px;
 	margin: 20px;
 	float: left;
 	width: $apps-width;
-	height: $apps-height;
 	.avatar {
 		color: $blue;
 		line-height: $apps-width;
 		font-size: $apps-width;
+		width: $apps-width;
+		height: $apps-width;
+		img {
+			height: auto;
+			width: $apps-width;
+			height: $apps-width;
+		}
 	}
 	.name {
 		padding: 3px;
@@ -64,26 +70,40 @@ $apps-height: 200px;
 }
 
 #installer-tabs {
+	width: 100%;
+	display: block;
 	ul {
-		width: 100%;
+		display: block;
+		margin: auto 0;
 		height: 48px;
+		font-size: 18px;
+		line-height: 18px;
 		background-color: $blue;
 		li {
 			height: 100%;
 			float: left;
 			a {
-				display: inline-block;
 				padding: 16px;
+				display: inline-block;
 				&.active {
 					background-color: $yellow;
 				}
+			}
+			&:hover {
+				color: white;
+				//endarken blue =>
+				background-color: $blue - #111111;
 			}
 		}
 	}
 }
 
 .dropzone {
-	border: 1px solid $grey;
-	min-height: 400px;
-	margin: 20px;
+	padding: 0;
+	height: 450px;
+	border: 3px dashed $grey;
+	margin: 20px 20px 0 20px;
+	.dz-message {
+		padding-top: 50px;
+	}
 }

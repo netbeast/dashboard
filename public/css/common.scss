@@ -25,35 +25,12 @@ ul, li {
 	list-style: none;
 }
 
-$indicators-bar-height: 3px;
-$bar-item-height: 24px;
-
 nav {
-	height: $indicators-bar-height;
+	height: 3px;
 	width: 100%;
 	z-index: 2000; /*highest*/
 	background-color: $blue;
 	@include box-shadow(0, 0, 5px, $grey);
-	line-height: 52px;
-	p {
-		padding: 6px;
-	}
-	.indicator {
-		float: left;
-		&:hover {
-			background-color: $green-dark;
-		}
-	}
-	img.indicator {
-		width: $bar-item-height;
-		height: $bar-item-height;
-		padding: 4px;
-	}
-	i.indicator {
-		font-size: $bar-item-height;
-		line-height: $bar-item-height;
-		padding: 4px;
-	}
 }
 
 #tools {

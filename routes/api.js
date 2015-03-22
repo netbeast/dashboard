@@ -25,7 +25,7 @@ router.get('/apps', function(req, res) {
       PATH = path.join(DIR, file, 'package.json');
       if (fs.existsSync(PATH)) {
         packageJSON = JSON.parse(fs.readFileSync(PATH, 'utf8'));
-        data.push({name: packageJSON.name});
+        data.push({name: packageJSON.name, logo: packageJSON.logo});
       }
     });
 

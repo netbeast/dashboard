@@ -7,19 +7,20 @@
     </li>
   </ul>
 </div>
-<section class="drawer">
-  <div id="package">
-    <h2>Upload your own package <i class="fa fa-archive"></i></h2>
-    <div class="dropzone">
-    </div>
-  </div>
 
+<div id="package">
+  <div class="dropzone">
+  </div>
+</div>
+
+<section class="drawer">
   <div id="github" style="display:none">
     <h2> Install from Github <i class="fa fa-github"></i></h2>
 
     <form  action="/apps/new" method="get">
       <input type="url" name="github" value="" placeholder="github url app"></input>
-      <input type="submit" value="Install from github" name="submit">
+      <br/>
+      <input class="btn green" type="submit" value="Install from github" name="submit">
     </form>
     <br/>
   </div>

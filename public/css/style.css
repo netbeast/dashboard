@@ -29,22 +29,7 @@ nav {
   background-color: #73C5E1;
   -webkit-box-shadow: 0 0 5px #F2F2F3 ;
   -moz-box-shadow: 0 0 5px #F2F2F3 ;
-  box-shadow: 0 0 5px #F2F2F3 ;
-  line-height: 52px; }
-  nav p {
-    padding: 6px; }
-  nav .indicator {
-    float: left; }
-    nav .indicator:hover {
-      background-color: #18A776; }
-  nav img.indicator {
-    width: 24px;
-    height: 24px;
-    padding: 4px; }
-  nav i.indicator {
-    font-size: 24px;
-    line-height: 24px;
-    padding: 4px; }
+  box-shadow: 0 0 5px #F2F2F3 ; }
 
 #tools {
   bottom: 0;
@@ -135,12 +120,17 @@ input[type=url] {
   border-radius: 5%;
   margin: 20px;
   float: left;
-  width: 140px;
-  height: 200px; }
+  width: 140px; }
   .apps .avatar, .activities .avatar {
     color: #73C5E1;
     line-height: 140px;
-    font-size: 140px; }
+    font-size: 140px;
+    width: 140px;
+    height: 140px; }
+    .apps .avatar img, .activities .avatar img {
+      height: auto;
+      width: 140px;
+      height: 140px; }
   .apps .name, .activities .name {
     padding: 3px;
     text-align: center;
@@ -176,22 +166,34 @@ input[type=url] {
 .activities .avatar {
   background-color: #FFD452; }
 
-#installer-tabs ul {
+#installer-tabs {
   width: 100%;
-  height: 48px;
-  background-color: #73C5E1; }
-  #installer-tabs ul li {
-    height: 100%;
-    float: left; }
-    #installer-tabs ul li a {
-      display: inline-block;
-      padding: 16px; }
-      #installer-tabs ul li a.active {
-        background-color: #FFD452; }
+  display: block; }
+  #installer-tabs ul {
+    display: block;
+    margin: auto 0;
+    height: 48px;
+    font-size: 18px;
+    line-height: 18px;
+    background-color: #73C5E1; }
+    #installer-tabs ul li {
+      height: 100%;
+      float: left; }
+      #installer-tabs ul li a {
+        padding: 16px;
+        display: inline-block; }
+        #installer-tabs ul li a.active {
+          background-color: #FFD452; }
+      #installer-tabs ul li:hover {
+        color: white;
+        background-color: #62b4d0; }
 
 .dropzone {
-  border: 1px solid #F2F2F3;
-  min-height: 400px;
-  margin: 20px; }
+  padding: 0;
+  height: 450px;
+  border: 3px dashed #F2F2F3;
+  margin: 20px 20px 0 20px; }
+  .dropzone .dz-message {
+    padding-top: 50px; }
 
 /*# sourceMappingURL=style.css.map */

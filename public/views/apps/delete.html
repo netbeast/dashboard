@@ -1,14 +1,14 @@
 <section class="drawer">
   <div id="{{app.name}}" class="apps" ng-repeat="app in apps">
     <div class="del-overlay">
-      <a class="btn danger" ng-click="API.delete(app.name)">Delete</a>
+      <a class="btn danger" ng-click="API.deleteApp(app.name)">Delete</a>
     </div>
     <a href="/#/apps/{{app.name}}">
       <div class="avatar desaturated">
-        <i ng-if="app.avatar !== undefined">
-            <!--<img src="{{app.avatar}}" alt="" />-->
+        <i ng-if="app.logo !== undefined">
+            <img ng-src="img/apps/{{app.name}}-{{app.logo}}" alt="" />
         </i>
-        <i ng-if="app.avatar === undefined" class="fa fa-cube"></i>
+        <i ng-if="app.logo === undefined" class="fa fa-cube"></i>
       </div>
     </a>
     <div class="name">

@@ -1,0 +1,36 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'start' ]
+2 info using npm@2.7.0
+3 info using node@v0.10.34
+4 verbose node symlink /usr/local/bin/node
+5 verbose run-script [ 'prestart', 'start', 'poststart' ]
+6 info prestart sample-app@0.0.1
+7 info start sample-app@0.0.1
+8 verbose unsafe-perm in lifecycle true
+9 info sample-app@0.0.1 Failed to exec start script
+10 verbose stack Error: sample-app@0.0.1 start: `node server.js --port 31416`
+10 verbose stack Exit status 8
+10 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:213:16)
+10 verbose stack     at EventEmitter.emit (events.js:98:17)
+10 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:14:12)
+10 verbose stack     at ChildProcess.emit (events.js:98:17)
+10 verbose stack     at maybeClose (child_process.js:766:16)
+10 verbose stack     at Process.ChildProcess._handle.onexit (child_process.js:833:5)
+11 verbose pkgid sample-app@0.0.1
+12 verbose cwd /Users/jdario/Development/dashboard-js/sandbox/sample-app
+13 error Darwin 13.4.0
+14 error argv "node" "/usr/local/bin/npm" "start"
+15 error node v0.10.34
+16 error npm  v2.7.0
+17 error code ELIFECYCLE
+18 error sample-app@0.0.1 start: `node server.js --port 31416`
+18 error Exit status 8
+19 error Failed at the sample-app@0.0.1 start script 'node server.js --port 31416'.
+19 error This is most likely a problem with the sample-app package,
+19 error not with npm itself.
+19 error Tell the author that this fails on your system:
+19 error     node server.js --port 31416
+19 error You can get their info via:
+19 error     npm owner ls sample-app
+19 error There is likely additional logging output above.
+20 verbose exit [ 1, true ]

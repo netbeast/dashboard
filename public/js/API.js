@@ -15,6 +15,7 @@ API.prototype = {
   },
   read: function ($scope, item) {
     if (item) {
+      console.log('GET ' + this.resource + '/' + item);
       this.$http.get(this.resource + '/' + item).
       success(function(data, status, headers, config) {
         $scope.app = data;
@@ -23,6 +24,7 @@ API.prototype = {
         alert(data);
       });
     } else {
+      console.log('GET ' + this.resource);
       this.$http.get(this.resource).
       success(function(data, status, headers, config) {
         console.log('RESPONSE: ' + data);
@@ -33,7 +35,8 @@ API.prototype = {
       });
     }
   },
-  delete: function (item) {
+  deleteApp: function (item) {
+    console.log('DELETE ' + this.resource + '/' + item);
     var msg = 'Are you sure you want to uninstall ' + item + '?';
     if (confirm(msg)) {
       this.$http.delete(this.resource + '/' + item).

@@ -1,3 +1,15 @@
 <section class="drawer">
-  In development, bitches
+  <div id="{{app.name}}" class="apps" ng-repeat="app in apps">
+    <a href="/#/apps/{{app.name}}">
+      <div class="avatar">
+        <i ng-if="app.logo !== undefined">
+            <img ng-src="img/apps/{{app.name}}-{{app.logo}}" alt="" />
+        </i>
+        <i ng-if="app.logo === undefined" class="fa fa-cube"></i>
+      </div>
+    </a>
+    <div class="name">
+      {{app.name}}
+    </div>
+  </div>
 </section>

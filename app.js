@@ -9,7 +9,7 @@ var bodyParser = require('body-parser');
 // Needed for the installation
 //============================
 var installer = require('./installer');
-var routes = require('./routes/api');
+var routes = require('./api');
 
 var app = express();
 

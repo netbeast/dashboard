@@ -77,7 +77,8 @@ module.exports = multer({
               if (packageJSON.logo) {
                 logo = path.join(appRoot, packageJSON.logo);
                 if (fs.existsSync(logo)) {
-                  cp(logo, path.join(PUBLIC, logo.split('/').pop()));
+                  cp(logo, path.join(PUBLIC,
+                    packageJSON.name + '-' + logo.split('/').pop()));
                 } else {
                   console.log('No logo found at ' + logo);
                 }
@@ -97,6 +98,13 @@ module.exports = multer({
 
           //Now remove tmp files
           rimraf(tmpDir, function(rimrafError) {
+            if (rimrafError) {
+              console.log(rimrafError);
+            } else {
+              console.log("Dir \"" + tmpDir + "\" was removed");
+            }
+          });
+          rimraf(tarball, function(rimrafError) {
             if (rimrafError) {
               console.log(rimrafError);
             } else {

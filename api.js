@@ -19,7 +19,6 @@ router.get('/apps/:name', function(req, res) {
   packageJSON = Helper.getAppPkgJSON(req.params.name);
 
   if (packageJSON !== undefined) {
-    Launcher.launch(req.params.name);
     res.json(packageJSON);
   } else {
     res.status(404).json('Not Found');
@@ -49,6 +48,10 @@ router.delete('/apps/:name', function(req, res) {
 //===========
 router.get('/activities', function(req, res) {
   res.json(Launcher.getApps());
+});
+
+router.get('/launch/:name', function(req, res) {
+    Launcher.launch(req, res);
 });
 
 module.exports = router;

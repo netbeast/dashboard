@@ -24,8 +24,10 @@ AppsModule.controller('AppsDetailCtrl', ['$scope', '$routeParams', '$http',
 function($scope, $routeParams, $http) {
   setNavColor('green');
   setTitle($routeParams.name);
+  var launcher = new API($http, 'launch');
   var client = new API($http, 'apps');
   client.read($scope, $routeParams.name);
+  launcher.read($scope, $routeParams.name);
 }]);
 
 AppsModule.controller('AppsActivitiesCtrl', ['$scope', '$http',

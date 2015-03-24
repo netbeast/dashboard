@@ -7,7 +7,7 @@ AppsModule.controller('AppsListCtrl', ['$scope', '$http',
 function ($scope, $http) {
   setTitle('Your apps drawer');
   setNavColor('blue');
-  var client = new API($http, 'apps');
+  var client = new AppsClient($http);
   client.read($scope, '');
 }]);
 
@@ -15,8 +15,8 @@ AppsModule.controller('AppsRmCtrl', ['$scope', '$http',
 function ($scope, $http) {
   setTitle('Uninstall apps');
   setNavColor('red');
-  var client = new API($http, 'apps');
-  $scope.API = client;
+  var client = new AppsClient($http);
+  $scope.AppsClient = client;
   client.read($scope, '');
 }]);
 
@@ -24,8 +24,8 @@ AppsModule.controller('AppsDetailCtrl', ['$scope', '$routeParams', '$http',
 function($scope, $routeParams, $http) {
   setNavColor('green');
   setTitle($routeParams.name);
-  var launcher = new API($http, 'launch');
-  var client = new API($http, 'apps');
+  var launcher = new ActivitiesClient($http);
+  var client = new AppsClient($http);
   client.read($scope, $routeParams.name);
   launcher.read($scope, $routeParams.name);
 }]);
@@ -34,8 +34,9 @@ AppsModule.controller('AppsActivitiesCtrl', ['$scope', '$http',
 function($scope, $http) {
   setTitle('Apps running');
   setNavColor('yellow');
-  var client = new API($http, 'activities');
-  client.read($scope, '');
+  var launcher = new ActivitiesClient($http);
+  $scope.ActivitiesClient = launcher;
+  launcher.read($scope, '');
 }]);
 
 AppsModule.controller('AppsNewCtrl', ['$scope',

@@ -1,52 +1,42 @@
-function API ($http, resource) {
+function AppsClient ($http) {
   this.$http = $http;
-  this.resource = '/' + resource;
 };
 
 // Simple GET request example : https://docs.angularjs.org/api/ng/service/$http
-API.prototype = {
-  constructor: API,
-  route: function (resource) {
-    if(!resource) {
-      return this.resource;
-    } else {
-      this.resource =  '/' + resource;
-    }
-  },
+AppsClient.prototype = {
+  constructor: AppsClient,
   read: function ($scope, item) {
     if (item) {
-      console.log('GET ' + this.resource + '/' + item);
-      this.$http.get(this.resource + '/' + item).
+      this.$http.get('/apps/' + item).
       success(function(data, status, headers, config) {
+        console.log('GET /apps/' + item + '/ ->' + data);
         $scope.app = data;
       }).
       error(function(data, status, headers, config) {
         alert(data);
       });
     } else {
-      console.log('GET ' + this.resource);
-      this.$http.get(this.resource).
+      this.$http.get('/apps').
       success(function(data, status, headers, config) {
-        console.log('RESPONSE: ' + data);
+        console.log('GET /apps -> ' + data);
         $scope.apps = data;
       }).
       error(function(data, status, headers, config) {
-        alert(data);
+        console.log(status + ' when GET /apps -> ' + data);
       });
     }
   },
-  deleteApp: function (item) {
-    console.log('DELETE ' + this.resource + '/' + item);
+  delete: function (item) {
     var msg = 'Are you sure you want to uninstall ' + item + '?';
     if (confirm(msg)) {
-      this.$http.delete(this.resource + '/' + item).
+      this.$http.delete('/apps/' + item).
       success(function(data, status, headers, config) {
-        console.log('RESPONSE: ' + data);
+        console.log('DELETE  /apps/' + item + ' -> ' + data);
         itemHTML = document.getElementById(item);
         itemHTML.parentElement.removeChild(itemHTML);
       }).
       error(function(data, status, headers, config) {
-        alert(data);
+        console.log(status + ' when DELETE /apps/'+item+' -> ' + data);
       });
     }
   }

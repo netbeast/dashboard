@@ -51,7 +51,11 @@ router.get('/activities', function(req, res) {
 });
 
 router.get('/launch/:name', function(req, res) {
-    Launcher.launch(req, res);
+    Launcher.start(req, res);
+});
+
+router.delete('/activities/:name', function(req, res) {
+    Launcher.close(req, res);
 });
 
 module.exports = router;

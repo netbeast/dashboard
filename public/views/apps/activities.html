@@ -1,7 +1,10 @@
 <section class="drawer">
   <div id="{{app.name}}" class="apps" ng-repeat="app in apps">
+    <div class="del-overlay">
+      <a class="btn warning" ng-click="ActivitiesClient.delete(app.name)">Close</a>
+    </div>
     <a href="/#/apps/{{app.name}}">
-      <div class="avatar">
+      <div class="avatar desaturated">
         <i ng-if="app.logo !== undefined">
             <img ng-src="img/apps/{{app.name}}-{{app.logo}}" alt="" />
         </i>

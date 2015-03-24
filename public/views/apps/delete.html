@@ -1,7 +1,7 @@
 <section class="drawer">
   <div id="{{app.name}}" class="apps" ng-repeat="app in apps">
     <div class="del-overlay">
-      <a class="btn danger" ng-click="API.deleteApp(app.name)">Delete</a>
+      <a class="btn danger" ng-click="AppsClient.delete(app.name)">Delete</a>
     </div>
     <a href="/#/apps/{{app.name}}">
       <div class="avatar desaturated">

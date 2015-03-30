@@ -16,6 +16,7 @@ ActivitiesClient.prototype = {
       $scope.port = data.port;
     }).
     error(function(data, status, headers, config) {
+      $scope.error = data;
       console.log(status + ' when PUT /launch/'+item+' -> ' + data);
     });
   },

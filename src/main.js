@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 
 /* Configure the multer for file uploads */
 
-app.use(installer);
+app.use(installer.multer);
 app.use('/', appsRoutes);
 app.use('/', activitiesRoutes);
 

@@ -1,4 +1,7 @@
 <section id="app" class='drawer'>
+		<a ng-show="error" ng-show="port" class="error">
+			{{error}}
+		</a>
 	<section id="avatar-n-launcher">
 		<div class="avatar">
 			<i ng-if="app.logo !== undefined">

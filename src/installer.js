@@ -4,6 +4,8 @@ var path = require('path');
 var rimraf = require('rimraf'); // nodejs rm -rf
 var targz = require('tar.gz');  // extractor
 var multer = require('multer'); // uploads
+var config = require('./helper');
+
 
 function cp(source, target, cb) {
   var cbCalled = false;
@@ -27,14 +29,62 @@ function cp(source, target, cb) {
   }
 }
 
-var config = require('./helper');
+// Checks a tmpDir and moves into the sandbox if all OK
+function install(tmpDir, req, res) {
 
-var DIR = config.DIR;
-var TMP = config.TMP;
+  // Now check if the app exists
+  var result, packageJSON, appRoot, logo
+  SEARCH = tmpDir + '/?**/package.json';
+  // find all package.json
+  // the '?' char means ONLY first ocurrence in search
+  result = glob.sync(SEARCH)[0];
+
+  if (result) {
+    packageJSON = JSON.parse(fs.readFileSync(result, 'utf8'));
+    //Move the folder from tmp to the sandbox
+    appRoot = path.join(config.DIR, packageJSON.name);
+    appTmpRoot = result.substring(0, result.lastIndexOf("/"));
+    if(!fs.existsSync(appRoot)) {
+      fs.renameSync(appTmpRoot, appRoot);
+      //upload logo if exist
+      if (packageJSON.logo) {
+        logo = path.join(appRoot, packageJSON.logo);
+        if (fs.existsSync(logo)) {
+          cp(logo, path.join(PUBLIC,
+            packageJSON.name + '-' + logo.split('/').pop()));
+        } else {
+          console.log('No logo found at ' + logo);
+        }
+      } else {
+        console.log('No logo present in package.json');
+      }
+      console.log("File uploaded");
+      res.status(204).json("File uploaded");
+    } else {
+      console.log("App already exists");
+      res.status(403).json("App already exists");
+    }
+  } else {
+    console.log("App does NOT have package.json file");
+    res.status(403).json("App does NOT have package.json file");
+  }
+
+  //Now remove tmp files
+  rimraf(tmpDir, function(rimrafError) {
+    if (rimrafError) {
+      console.log(rimrafError);
+    } else {
+      console.log("Dir \"" + tmpDir + "\" was removed");
+    }
+  });
+}
+
 var PUBLIC = path.join(config.PUBLIC, 'apps');
 
-module.exports = multer({
-  dest: TMP,
+Installer = {};
+
+Installer.multer = multer({
+  dest: config.TMP,
   rename: function (fieldname, filename, req, res) {
     return filename;
   },
@@ -50,8 +100,8 @@ module.exports = multer({
     }
   },
   onFileUploadComplete: function (file, req, res) {
-    var tmpDir = path.join(TMP, '' + new Date().getTime());
-    var tarball = path.join(TMP, file.name);
+    var tmpDir = path.join(config.TMP, '' + new Date().getTime());
+    var tarball = path.join(config.TMP, file.name);
     var extract = new targz().extract(tarball, tmpDir,
       function(extractError){
         if(extractError) {
@@ -60,51 +110,8 @@ module.exports = multer({
         } else {
           console.log('The extraction has ended!');
 
-          // Now check if the app exists
-          var result, packageJSON, appRoot, logo
-          SEARCH = tmpDir + '/?**/package.json';
-          // find all package.json
-          // the '?' char means ONLY first ocurrence in search
-          result = glob.sync(SEARCH)[0];
+          install(tmpDir, req, res);
 
-          if (result) {
-            packageJSON = JSON.parse(fs.readFileSync(result, 'utf8'));
-            //Move the folder from tmp to the sandbox
-            appRoot = path.join(DIR, packageJSON.name);
-            appTmpRoot = result.substring(0, result.lastIndexOf("/"));
-            if(!fs.existsSync(appRoot)) {
-              fs.renameSync(appTmpRoot, appRoot);
-              //upload logo if exist
-              if (packageJSON.logo) {
-                logo = path.join(appRoot, packageJSON.logo);
-                if (fs.existsSync(logo)) {
-                  cp(logo, path.join(PUBLIC,
-                    packageJSON.name + '-' + logo.split('/').pop()));
-                } else {
-                  console.log('No logo found at ' + logo);
-                }
-              } else {
-                console.log('No logo present in package.json');
-              }
-              console.log("File uploaded");
-              res.status(204).json("File uploaded");
-            } else {
-              console.log("App already exists");
-              res.status(403).json("App already exists");
-            }
-          } else {
-            console.log("App does NOT have package.json file");
-            res.status(403).json("App does NOT have package.json file");
-          }
-
-          //Now remove tmp files
-          rimraf(tmpDir, function(rimrafError) {
-            if (rimrafError) {
-              console.log(rimrafError);
-            } else {
-              console.log("Dir \"" + tmpDir + "\" was removed");
-            }
-          });
           rimraf(tarball, function(rimrafError) {
             if (rimrafError) {
               console.log(rimrafError);
@@ -114,5 +121,16 @@ module.exports = multer({
           });
         }
       });
-    }
+}
+});
+
+Installer.git = function (req, res) {
+  var git = require("nodegit");
+  var tmpDir = path.join(config.TMP, '' + new Date().getTime());
+  git.Clone(req.body.github, tmpDir).then(function(repository) {
+    // Work with the repository object here.
   });
+  res.json(req.body);
+}
+
+module.exports = Installer;

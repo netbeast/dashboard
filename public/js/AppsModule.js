@@ -40,11 +40,25 @@
       launcher.read($scope);
     }]);
 
-  AppsModule.controller('AppsNewCtrl', ['$scope',
-    function($scope) {
+  AppsModule.controller('AppsNewCtrl', ['$scope', '$routeParams',
+    function($scope, $routeParams) {
 
       hideNav();
       setTitle('Install a new app');
+
+      switch($routeParams.method) {
+        case 'package':
+          $scope.tab = 1;
+          break;
+        case 'github':
+          $scope.tab = 2;
+          break;
+        case 'docker':
+          $scope.tab = 3;
+          break;
+        default:
+          $scope.tab = 1;
+      }
 
       var dz = new Dropzone(".dropzone", {
         url: "/apps",

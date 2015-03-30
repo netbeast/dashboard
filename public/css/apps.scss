@@ -80,6 +80,14 @@ $apps-height: 200px;
 		}
 		p { width: 500px; }
 	}
+	.error {
+		padding: 10px;
+		background-color: $red;
+		display: block;
+		border-radius: 4px;
+		color: white;
+	}
+
 }
 
 .activities {

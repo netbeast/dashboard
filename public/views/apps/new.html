@@ -1,17 +1,17 @@
 <div id="installer-tabs">
-  <ul ng-init="tab = 1">
+  <ul>
     <li ng-class="{ active: tab === 1 }">
-      <a class="clickable" ng-click="tab = 1">
+      <a href="#/install/package" class="clickable">
         Package
       </a>
     </li>
     <li ng-class="{ active: tab === 2 }">
-      <a class="clickable" ng-click="tab = 2">
+      <a href="#/install/github" class="clickable">
         Github
       </a>
     </li>
     <li ng-class="{ active: tab === 3 }">
-      <a class="clickable" ng-click="tab = 3">
+      <a href="#/install/docker" class="clickable">
         Docker
       </a>
     </li>
@@ -27,10 +27,10 @@
   <div ng-show="tab === 2">
     <h2> Install from Github <i class="fa fa-github"></i></h2>
 
-    <form  action="/apps/new" method="get">
-      <input type="url" name="github" value="" placeholder="github url app"></input>
+    <form  action="/apps/" method="post">
+      <input type="url" name="github" value="" placeholder="Repo url"></input>
       <br/>
-      <input class="btn green" type="submit" value="Install from github" name="submit">
+      <input class="btn green" type="submit" name="submit">
     </form>
     <br/>
   </div>

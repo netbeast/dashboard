@@ -14,6 +14,7 @@
     "jade": "^1.9.2",
     "morgan": "~1.5.1",
     "multer": "^0.1.8",
+    "nodegit": "^0.3.3",
     "portfinder": "^0.4.0",
     "rimraf": "^2.3.2",
     "serve-favicon": "~2.2.0",

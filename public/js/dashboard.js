@@ -38,7 +38,11 @@
         templateUrl: 'views/apps/show.html',
         controller: 'AppsDetailCtrl'
       }).
-      when('/install', {
+      when('/install/', {
+        templateUrl: 'views/apps/new.html',
+        controller: 'AppsNewCtrl'
+      }).
+      when('/install/:method', {
         templateUrl: 'views/apps/new.html',
         controller: 'AppsNewCtrl'
       }).

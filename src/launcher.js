@@ -61,7 +61,7 @@ Launcher.start = function(req, res) {
 
         child.on('error', function (error) {
           console.log('ERROR: Launcher.start('+ entryPoint +')' + error);
-          res.status(500).send('Launcher.start('+ entryPoint +')' + error);
+          res.status(500).send('Launcher.start('+ app +'): \n' + error);
         });
       }
     });

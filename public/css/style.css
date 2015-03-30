@@ -185,6 +185,12 @@ input[type=url] {
     padding: 5px; }
   #app #app-details p {
     width: 500px; }
+#app .error {
+  padding: 10px;
+  background-color: #e65656;
+  display: block;
+  border-radius: 4px;
+  color: white; }
 
 .activities .avatar {
   background-color: #FFD452; }

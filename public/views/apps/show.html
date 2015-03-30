@@ -1,1 +1,54 @@
-app JSON: {{app}}
+<section id="app" class='drawer'>
+	<section id="avatar-n-launcher">
+		<div class="avatar">
+			<i ng-if="app.logo !== undefined">
+				<img ng-src="img/apps/{{app.name}}-{{app.logo}}" alt="" />
+			</i>
+			<i ng-if="app.logo === undefined" class="fa fa-cube"></i>
+		</div>
+		<a ng-show="port" class="btn info clickable" ng-click="launcher.open(port)">
+			Open {{app.name}}
+		</a>
+		<a ng-hide="port" ng-show="port" class="btn">
+			Launching {{app.name}}...
+		</a>
+	</section>
+	<section id="app-details">
+		<div>
+			<h2>{{app.name}}</h2>
+			<h1>By {{app.author}}</h1>
+			<p>{{app.description}}</p>
+			<div>
+				<ul>
+					<li>
+						<h3>Version</h3>
+						<p>{{app.version}}</p>
+					</li>
+					<li>
+						<h3>License</h3>
+						<p>{{app.license}}</p>
+					</li>
+				</ul>
+				<ul>
+					<li>
+						<h3>Key words</h3>
+						<p>
+							<span ng-repeat="keyword in app.keywords">
+								#{{keyword}} 
+							</span>
+						</p>
+					</li>
+					<li>
+						<h3>Dependencies</h3>
+						<p>{{app.dependencies}}</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+</section>

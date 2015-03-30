@@ -1,20 +1,30 @@
 <div id="installer-tabs">
-  <ul>
-    <li ng-repeat="tab in tabs">
-      <a class="clickable" ng-click="onClickTab(tab)">
-        {{tab}}
+  <ul ng-init="tab = 1">
+    <li ng-class="{ active: tab === 1 }">
+      <a class="clickable" ng-click="tab = 1">
+        Package
+      </a>
+    </li>
+    <li ng-class="{ active: tab === 2 }">
+      <a class="clickable" ng-click="tab = 2">
+        Github
+      </a>
+    </li>
+    <li ng-class="{ active: tab === 3 }">
+      <a class="clickable" ng-click="tab = 3">
+        Docker
       </a>
     </li>
   </ul>
 </div>
 
-<div id="package">
+<div ng-show="tab === 1">
   <div class="dropzone">
   </div>
 </div>
 
-<section class="drawer">
-  <div id="github" style="display:none">
+<section ng-show="tab > 1" class="drawer">
+  <div ng-show="tab === 2">
     <h2> Install from Github <i class="fa fa-github"></i></h2>
 
     <form  action="/apps/new" method="get">
@@ -25,7 +35,7 @@
     <br/>
   </div>
 
-  <div id="docker" style="display:none">
+  <div ng-show="tab === 3">
     <div id="viewThree">
       Docker incoming
     </div>

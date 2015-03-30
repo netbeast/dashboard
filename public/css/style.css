@@ -115,6 +115,15 @@ input[type=url] {
 .clickable {
   cursor: pointer; }
 
+.table {
+  border-radius: 4px;
+  display: block; }
+  .table td, .table th {
+    padding: 10px; }
+  .table tr {
+    width: 100%;
+    background-color: #F2F2F3; }
+
 .apps, .activities {
   display: block;
   border-radius: 5%;
@@ -155,13 +164,27 @@ input[type=url] {
   margin: 0 auto;
   display: block; }
 
-#app-details #content {
+#app section {
+  float: left;
+  display: block;
+  height: 100%; }
+#app #avatar-n-launcher .avatar {
+  padding: 30px;
+  color: #73C5E1;
+  line-height: 140px;
+  font-size: 140px;
+  width: 140px;
+  height: 140px; }
+  #app #avatar-n-launcher .avatar img {
+    height: auto;
+    width: 140px;
+    height: 140px; }
+#app #app-details {
   padding: 30px; }
-#app-details #advanced {
-  margin: 10px;
-  font-family: consolas;
-  background-color: #F2F2F3;
-  padding: 15px; }
+  #app #app-details ul li {
+    padding: 5px; }
+  #app #app-details p {
+    width: 500px; }
 
 .activities .avatar {
   background-color: #FFD452; }
@@ -182,9 +205,7 @@ input[type=url] {
       #installer-tabs ul li a {
         padding: 16px;
         display: inline-block; }
-        #installer-tabs ul li a.active {
-          background-color: #FFD452; }
-      #installer-tabs ul li:hover {
+      #installer-tabs ul li:hover, #installer-tabs ul li.active {
         color: white;
         background-color: #62b4d0; }
 

@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-
-
 // server.js
 //===========
 
@@ -31,7 +29,6 @@ if(isNaN(port)) {
 	console.log("Listening on port " + port);
 }
 
-console.log('Process pid INSIDE APP ' + process.pid);
 
 http.createServer(function(request, response) {
 	/* index.html is an user interface example */

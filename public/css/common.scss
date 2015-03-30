@@ -115,3 +115,15 @@ input[type=url] {
 .clickable {
 	cursor: pointer;
 }
+
+.table {
+	border-radius: 4px;
+	display: block;
+	td, th {
+		padding: 10px;
+	}
+	tr {
+		width: 100%;
+		background-color: $grey;
+	}
+}

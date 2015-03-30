@@ -50,15 +50,35 @@ $apps-height: 200px;
 	display: block;
 }
 
-#app-details {
-	#content {
-		padding: 30px;
+#app{
+	section {
+		float: left;
+		display: block;
+		height: 100%;
 	}
-	#advanced {
-		margin: 10px;
-		font-family: consolas;
-		background-color: $grey;
-		padding:15px;
+	#avatar-n-launcher {
+		.avatar {
+			padding: 30px;
+			color: $blue;
+			line-height: $apps-width;
+			font-size: $apps-width;
+			width: $apps-width;
+			height: $apps-width;
+			img {
+				height: auto;
+				width: $apps-width;
+				height: $apps-width;
+			}
+		}
+	}
+	#app-details {
+		padding: 30px;
+		ul { 
+			li {
+				padding: 5px;
+			} 
+		}
+		p { width: 500px; }
 	}
 }
 
@@ -85,11 +105,8 @@ $apps-height: 200px;
 			a {
 				padding: 16px;
 				display: inline-block;
-				&.active {
-					background-color: $yellow;
-				}
 			}
-			&:hover {
+			&:hover, &.active {
 				color: white;
 				//endarken blue =>
 				background-color: $blue - #111111;

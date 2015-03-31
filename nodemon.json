@@ -1,0 +1,3 @@
+{   
+    "ignore": ["sandbox/*", "tmp/*", "README.md", "LICENSE.txt"] 
+}

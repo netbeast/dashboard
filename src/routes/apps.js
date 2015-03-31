@@ -19,10 +19,12 @@ router.get('/apps/:name', function(req, res) {
 
 // CREATE
 router.post('/apps', function(req, res){
-  console.log(req.body);
-  console.log(req.files);
-  if(req.body.github) {
+  if(req.body.gitURL) {
     require('../installer').git(req, res);
+  } else {
+    console.log("Installer.multer() processing data...");
+    console.log(req.body);
+    console.log(req.files);
   }
 });
 

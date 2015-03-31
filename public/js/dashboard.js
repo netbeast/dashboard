@@ -3,7 +3,7 @@
 // by jesusdario, netbeast CTO
 //==============================
 (function(){
-  var Dashboard = angular.module('Dashboard', ['ngRoute', 'AppsModule']);
+  var Dashboard = angular.module('Dashboard', ['ngRoute']);
 
   Dashboard.controller('RoutesCtrl', ['$scope', '$http',
     function ($scope, $http) {

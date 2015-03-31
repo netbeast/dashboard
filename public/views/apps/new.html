@@ -1,43 +1,45 @@
-<div id="installer-tabs">
-  <ul>
-    <li ng-class="{ active: tab === 1 }">
-      <a href="#/install/package" class="clickable">
-        Package
-      </a>
-    </li>
-    <li ng-class="{ active: tab === 2 }">
-      <a href="#/install/github" class="clickable">
-        Github
-      </a>
-    </li>
-    <li ng-class="{ active: tab === 3 }">
-      <a href="#/install/docker" class="clickable">
-        Docker
-      </a>
-    </li>
-  </ul>
-</div>
-
-<div ng-show="tab === 1">
-  <div class="dropzone">
+<section id="install">
+  <div id="tabs">
+    <ul>
+      <li ng-class="{ active: tab === 1 }">
+        <a href="#/install/package" class="clickable">
+          Package
+        </a>
+      </li>
+      <li ng-class="{ active: tab === 2 }">
+        <a href="#/install/github" class="clickable">
+          Github
+        </a>
+      </li>
+      <li ng-class="{ active: tab === 3 }">
+        <a href="#/install/docker" class="clickable">
+          Docker
+        </a>
+      </li>
+    </ul>
   </div>
-</div>
 
-<section ng-show="tab > 1" class="drawer">
-  <div ng-show="tab === 2">
-    <h2> Install from Github <i class="fa fa-github"></i></h2>
+  <div ng-show="tab === 1">
+    <div class="dropzone">
+    </div>
+  </div>
 
-    <form  action="/apps/" method="post">
-      <input type="url" name="github" value="" placeholder="Repo url"></input>
+  <section ng-show="tab > 1" class="drawer">
+    <div id="github" ng-show="tab === 2">
+      <h2> Install from a public <i class="fa fa-git-square"> </i> repo <i ng-show="loading" class="fa fa-cog fa-spin"></i></h2>
+      <form ng-submit="gitSubmit()">
+        <p ng-show="gitError" style="width: 500px; margin: 10px auto -10px;" class="error">{{gitError}}</p>
+        <input type="url" ng-model="gitURL" value="" 
+        placeholder="Git URL">
+      </input><br/>
       <br/>
-      <input class="btn green" type="submit" name="submit">
+      <input class="btn green" type="submit" name="submit"></input>
     </form>
     <br/>
   </div>
 
-  <div ng-show="tab === 3">
-    <div id="viewThree">
-      Docker incoming
-    </div>
+  <div id="docker" ng-show="tab === 3">
+    <h3 >Docker incoming</h3>
   </div>
+</section>
 </section>

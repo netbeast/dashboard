@@ -26,6 +26,17 @@ AppsClient.prototype = {
       });
     }
   },
+  install: function ($scope) {
+    $scope.loading = true;
+    this.$http.post('/apps/', { gitURL: $scope.gitURL }).
+    success(function(data, status, headers, config) {
+      window.location.assign("/");
+    }).
+    error(function(data, status, headers, config) {
+      $scope.gitError = data;
+      $scope.loading = false;
+    });
+  },
   delete: function (item) {
     var msg = 'Are you sure you want to uninstall ' + item + '?';
     if (confirm(msg)) {

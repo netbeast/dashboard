@@ -31,15 +31,15 @@ function cp(source, target, cb) {
 
 // Checks a tmpDir and moves into the sandbox if all OK
 function install(tmpDir, req, res) {
-
+  console.log("Installing from temporary dir...");
   // Now check if the app exists
   var result, packageJSON, appRoot, logo
-  SEARCH = tmpDir + '/?**/package.json';
+  SEARCH = tmpDir + '/?**package.json';
   // find all package.json
   // the '?' char means ONLY first ocurrence in search
-  result = glob.sync(SEARCH)[0];
+  result = glob.sync(SEARCH)[0] || path.join(tmpDir, 'package.json');
 
-  if (result) {
+  if (fs.existsSync(result)) {
     packageJSON = JSON.parse(fs.readFileSync(result, 'utf8'));
     //Move the folder from tmp to the sandbox
     appRoot = path.join(config.DIR, packageJSON.name);
@@ -108,10 +108,8 @@ Installer.multer = multer({
           console.log(extractError);
           res.status(500).json("Could not install the app");
         } else {
-          console.log('The extraction has ended!');
-
           install(tmpDir, req, res);
-
+          //rm the tarball
           rimraf(tarball, function(rimrafError) {
             if (rimrafError) {
               console.log(rimrafError);
@@ -121,16 +119,32 @@ Installer.multer = multer({
           });
         }
       });
-}
+  }
 });
 
 Installer.git = function (req, res) {
-  var git = require("nodegit");
   var tmpDir = path.join(config.TMP, '' + new Date().getTime());
-  git.Clone(req.body.github, tmpDir).then(function(repository) {
-    // Work with the repository object here.
+  console.log("Cloning from git...");
+  console.log(req.body);
+  var git = require("nodegit");
+  var opts = {
+    remoteCallbacks: {
+      certificateCheck: function() {
+        // github will fail cert check on some OSX machines
+        // this overrides that check
+        return 1;
+      }
+    }
+  };
+
+  git.Clone(req.body.gitURL, tmpDir, opts)
+  .then(function(repository) {
+    install(tmpDir, req, res);
+    res.status(204).json("File Uploaded");
+  }, function(error) {
+    res.status(403).json(error);
+    console.log(error);
   });
-  res.json(req.body);
-}
+};
 
 module.exports = Installer;

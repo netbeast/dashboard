@@ -185,42 +185,57 @@ input[type=url] {
     padding: 5px; }
   #app #app-details p {
     width: 500px; }
-#app .error {
+
+.error, div.error {
   padding: 10px;
   background-color: #e65656;
-  display: block;
   border-radius: 4px;
   color: white; }
+
+div.error {
+  display: block; }
 
 .activities .avatar {
   background-color: #FFD452; }
 
-#installer-tabs {
+#install #tabs {
   width: 100%;
   display: block; }
-  #installer-tabs ul {
+  #install #tabs ul {
     display: block;
     margin: auto 0;
     height: 48px;
     font-size: 18px;
     line-height: 18px;
     background-color: #73C5E1; }
-    #installer-tabs ul li {
+    #install #tabs ul li {
       height: 100%;
       float: left; }
-      #installer-tabs ul li a {
+      #install #tabs ul li a {
         padding: 16px;
         display: inline-block; }
-      #installer-tabs ul li:hover, #installer-tabs ul li.active {
+      #install #tabs ul li:hover, #install #tabs ul li.active {
         color: white;
         background-color: #62b4d0; }
-
-.dropzone {
+#install .dropzone {
   padding: 0;
   height: 450px;
   border: 3px dashed #F2F2F3;
   margin: 20px 20px 0 20px; }
-  .dropzone .dz-message {
+  #install .dropzone .dz-message {
     padding-top: 50px; }
+#install #github {
+  text-align: center; }
+  #install #github .fa-github, #install #github .fa-bitbucket {
+    font-size: 20px; }
+  #install #github input[type=text], #install #github input[type=url] {
+    margin-top: 30px;
+    text-align: center;
+    width: 500px; }
+#install #docker {
+  color: #F2F2F3;
+  text-align: center; }
+  #install #docker h3 {
+    font-size: 100px; }
 
 /*# sourceMappingURL=style.css.map */

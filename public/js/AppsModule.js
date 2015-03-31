@@ -1,9 +1,10 @@
 // Apps Module
 //==============
 (function() {
-  var AppsModule = angular.module('AppsModule', []);
 
-  AppsModule.controller('AppsListCtrl', ['$scope', '$http',
+  var app = angular.module('Dashboard');
+
+  app.controller('AppsListCtrl', ['$scope', '$http',
     function ($scope, $http) {
       setTitle('Your apps drawer');
       setNavColor('blue');
@@ -11,7 +12,7 @@
       client.read($scope, '');
     }]);
 
-  AppsModule.controller('AppsRmCtrl', ['$scope', '$http',
+  app.controller('AppsRmCtrl', ['$scope', '$http',
     function ($scope, $http) {
       setTitle('Uninstall apps');
       setNavColor('red');
@@ -20,7 +21,7 @@
       client.read($scope, '');
     }]);
 
-  AppsModule.controller('AppsDetailCtrl', ['$scope', '$routeParams', '$http',
+  app.controller('AppsDetailCtrl', ['$scope', '$routeParams', '$http',
     function($scope, $routeParams, $http) {
       setNavColor('blue');
       setTitle($routeParams.name);
@@ -31,17 +32,8 @@
       $scope.launcher = launcher;
     }]);
 
-  AppsModule.controller('ActivitiesCtrl', ['$scope', '$http',
-    function($scope, $http) {
-      setTitle('Apps running');
-      setNavColor('yellow');
-      var launcher = new ActivitiesClient($http);
-      $scope.ActivitiesClient = launcher;
-      launcher.read($scope);
-    }]);
-
-  AppsModule.controller('AppsNewCtrl', ['$scope', '$routeParams',
-    function($scope, $routeParams) {
+  app.controller('AppsNewCtrl', ['$scope', '$routeParams', '$http',
+    function($scope, $routeParams, $http) {
 
       hideNav();
       setTitle('Install a new app');
@@ -88,6 +80,13 @@
       dz.on("uploadprogress", function(file) {
         ;
       });
+
+      $scope.gitURL = '';      
+      $scope.gitSubmit = function() {
+        var client = new AppsClient($http);
+        client.install($scope);
+      };
+
 
     }]);
 })();

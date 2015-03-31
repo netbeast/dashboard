@@ -80,14 +80,18 @@ $apps-height: 200px;
 		}
 		p { width: 500px; }
 	}
-	.error {
-		padding: 10px;
-		background-color: $red;
-		display: block;
-		border-radius: 4px;
-		color: white;
-	}
+}
 
+.error {
+	padding: 10px;
+	background-color: $red;
+	border-radius: 4px;
+	color: white;
+}
+
+div.error {
+	@extend .error;
+	display: block;
 }
 
 .activities {
@@ -97,38 +101,61 @@ $apps-height: 200px;
 	}
 }
 
-#installer-tabs {
-	width: 100%;
-	display: block;
-	ul {
+
+#install {
+	#tabs {
+		width: 100%;
 		display: block;
-		margin: auto 0;
-		height: 48px;
-		font-size: 18px;
-		line-height: 18px;
-		background-color: $blue;
-		li {
-			height: 100%;
-			float: left;
-			a {
-				padding: 16px;
-				display: inline-block;
-			}
-			&:hover, &.active {
-				color: white;
-				//endarken blue =>
-				background-color: $blue - #111111;
+		ul {
+			display: block;
+			margin: auto 0;
+			height: 48px;
+			font-size: 18px;
+			line-height: 18px;
+			background-color: $blue;
+			li {
+				height: 100%;
+				float: left;
+				a {
+					padding: 16px;
+					display: inline-block;
+				}
+				&:hover, &.active {
+					color: white;
+					//endarken blue =>
+					background-color: $blue - #111111;
+				}
 			}
 		}
 	}
-}
 
-.dropzone {
-	padding: 0;
-	height: 450px;
-	border: 3px dashed $grey;
-	margin: 20px 20px 0 20px;
-	.dz-message {
-		padding-top: 50px;
+	.dropzone {
+		padding: 0;
+		height: 450px;
+		border: 3px dashed $grey;
+		margin: 20px 20px 0 20px;
+		.dz-message {
+			padding-top: 50px;
+		}
+	}
+
+	#github {
+		text-align: center;
+		.fa-github, .fa-bitbucket {
+			font-size: 20px;
+		}
+		input[type=text], input[type=url] {
+			margin-top: 30px;
+			text-align: center;
+			width: 500px;
+		}
+	}
+
+	#docker {
+		color: $grey;
+		text-align: center;
+		h3{
+			font-size: 100px;
+		}
 	}
 }

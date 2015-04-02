@@ -5,14 +5,20 @@
  */
 
 var app = require('./src/main');
-var debug = require('debug')('dashboard-js:server');
 var http = require('http');
+var cmd = require('commander');
+var colors = require('colors');
+
+cmd
+  .version('0.1.1')
+  .option('-p, --port', 'Port to start the HTTP server')
+  .parse(process.argv);
 
 /**
- * Get port from environment and store in Express.
+ * Get port from command line and store in express
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(cmd.port || '3000');
 app.set('port', port);
 
 /**
@@ -86,5 +92,5 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  console.log('xway dashboard started on %s'.cyan, bind);
 }

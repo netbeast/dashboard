@@ -1,0 +1,123 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'publish' ]
+2 info using npm@2.7.0
+3 info using node@v0.10.34
+4 verbose node symlink /usr/local/bin/node
+5 verbose publish [ '.' ]
+6 silly cache add args [ '.', null ]
+7 verbose cache add spec .
+8 silly cache add parsed spec { raw: '.',
+8 silly cache add   scope: null,
+8 silly cache add   name: null,
+8 silly cache add   rawSpec: '.',
+8 silly cache add   spec: '/Users/jdario/Development/dashboard-js',
+8 silly cache add   type: 'directory' }
+9 verbose addLocalDirectory /Users/jdario/.npm/xy-dashboard/0.1.1/package.tgz not in flight; packing
+10 verbose tar pack [ '/Users/jdario/.npm/xy-dashboard/0.1.1/package.tgz',
+10 verbose tar pack   '/Users/jdario/Development/dashboard-js' ]
+11 verbose tarball /Users/jdario/.npm/xy-dashboard/0.1.1/package.tgz
+12 verbose folder /Users/jdario/Development/dashboard-js
+13 info prepublish xy-dashboard@0.1.1
+14 verbose addLocalTarball adding from inside cache /Users/jdario/.npm/xy-dashboard/0.1.1/package.tgz
+15 silly cache afterAdd xy-dashboard@0.1.1
+16 verbose afterAdd /Users/jdario/.npm/xy-dashboard/0.1.1/package/package.json not in flight; writing
+17 verbose afterAdd /Users/jdario/.npm/xy-dashboard/0.1.1/package/package.json written
+18 silly publish { name: 'xy-dashboard',
+18 silly publish   description: 'xway dashboard, IoT apps manager',
+18 silly publish   version: '0.1.1',
+18 silly publish   preferGlobal: 'true',
+18 silly publish   dependencies:
+18 silly publish    { 'body-parser': '~1.12.0',
+18 silly publish      colors: '^1.0.3',
+18 silly publish      commander: '^2.7.1',
+18 silly publish      'cookie-parser': '~1.3.4',
+18 silly publish      debug: '^2.1.3',
+18 silly publish      express: '~4.12.2',
+18 silly publish      glob: '^5.0.3',
+18 silly publish      morgan: '~1.5.1',
+18 silly publish      multer: '^0.1.8',
+18 silly publish      nodegit: '^0.3.3',
+18 silly publish      portfinder: '^0.4.0',
+18 silly publish      rimraf: '^2.3.2',
+18 silly publish      'serve-favicon': '~2.2.0',
+18 silly publish      'tar.gz': '^0.1.1' },
+18 silly publish   bin: { 'xy-dashboard': 'www' },
+18 silly publish   devDependencies: {},
+18 silly publish   repository:
+18 silly publish    { type: 'git',
+18 silly publish      url: 'https://github.com/netbeast-co/xy-dashboard' },
+18 silly publish   keywords:
+18 silly publish    [ 'xway',
+18 silly publish      'netbeast',
+18 silly publish      'xyos',
+18 silly publish      'iot',
+18 silly publish      'node',
+18 silly publish      'dashboard',
+18 silly publish      'smart',
+18 silly publish      'router' ],
+18 silly publish   author: { name: 'netbeast' },
+18 silly publish   license: 'Apache V2',
+18 silly publish   readme: '## xway dashboard\n\nIot in html5.\n\nThis is a web panel from you can install, manage or publish IoT applications. Multiplatform. Any device supporting once (Chromium V8 Javascript runtime) can deploy it.\n\n### Install\n``` bash\nnpm install -g xy-dashboard\n```\n\n### Run\n```bash\n# Port is optional, it will run by default on port 3000\nxy-dasyboard --port 8080\n```\n\n### Docs\nhttp://docs.netbeast.co\n\n#### How to build your own xway with Raspberry Pi\nhttps://medium.com/@netbeast/build-your-own-xway-e626d68977a8',
+18 silly publish   readmeFilename: 'README.md',
+18 silly publish   gitHead: 'eb303e036eaf5da2d4567dfeb465745304ccd510',
+18 silly publish   bugs: { url: 'https://github.com/netbeast-co/xy-dashboard/issues' },
+18 silly publish   homepage: 'https://github.com/netbeast-co/xy-dashboard',
+18 silly publish   _id: 'xy-dashboard@0.1.1',
+18 silly publish   scripts: {},
+18 silly publish   _shasum: '55ca5d4ce0c451facc10285eb70f5179f1584a06',
+18 silly publish   _from: '.' }
+19 silly mapToRegistry name xy-dashboard
+20 silly mapToRegistry using default registry
+21 silly mapToRegistry registry https://registry.npmjs.org/
+22 silly mapToRegistry uri https://registry.npmjs.org/xy-dashboard
+23 verbose publish registryBase https://registry.npmjs.org/
+24 silly publish uploading /Users/jdario/.npm/xy-dashboard/0.1.1/package.tgz
+25 verbose request uri https://registry.npmjs.org/xy-dashboard
+26 verbose request sending authorization for write operation
+27 info attempt registry request try #1 at 12:13:41
+28 verbose request id 07ac6a108db3b6fe
+29 http request PUT https://registry.npmjs.org/xy-dashboard
+30 http 409 https://registry.npmjs.org/xy-dashboard
+31 verbose headers { date: 'Fri, 03 Apr 2015 10:13:49 GMT',
+31 verbose headers   server: 'Apache',
+31 verbose headers   'content-type': 'application/json',
+31 verbose headers   'cache-control': 'max-age=60',
+31 verbose headers   'content-length': '17',
+31 verbose headers   'accept-ranges': 'bytes',
+31 verbose headers   via: '1.1 varnish',
+31 verbose headers   'x-served-by': 'cache-fra1226-FRA',
+31 verbose headers   'x-cache': 'MISS',
+31 verbose headers   'x-cache-hits': '0',
+31 verbose headers   'x-timer': 'S1428056022.961365,VS0,VE6215',
+31 verbose headers   'keep-alive': 'timeout=10, max=50',
+31 verbose headers   connection: 'Keep-Alive' }
+32 verbose request invalidating /Users/jdario/.npm/registry.npmjs.org/xy-dashboard on PUT
+33 verbose request uri https://registry.npmjs.org/xy-dashboard?write=true
+34 verbose request no auth needed
+35 info attempt registry request try #1 at 12:13:49
+36 http request GET https://registry.npmjs.org/xy-dashboard?write=true
+37 http 200 https://registry.npmjs.org/xy-dashboard?write=true
+38 verbose stack Error: cannot modify pre-existing version
+38 verbose stack     at conflictError (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/publish.js:184:11)
+38 verbose stack     at CachingRegistryClient.putNext (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/publish.js:147:15)
+38 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/publish.js:129:15
+38 verbose stack     at /usr/local/lib/node_modules/npm/lib/cache/caching-client.js:52:8
+38 verbose stack     at f (/usr/local/lib/node_modules/npm/node_modules/once/once.js:17:25)
+38 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:73:16
+38 verbose stack     at f (/usr/local/lib/node_modules/npm/node_modules/once/once.js:17:25)
+38 verbose stack     at CachingRegistryClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:262:12)
+38 verbose stack     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:178:14)
+38 verbose stack     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:344:22)
+39 verbose pkgid xy-dashboard
+40 verbose cwd /Users/jdario/Development/dashboard-js
+41 error Darwin 13.4.0
+42 error argv "node" "/usr/local/bin/npm" "publish"
+43 error node v0.10.34
+44 error npm  v2.7.0
+45 error code EPUBLISHCONFLICT
+46 error publish fail Cannot publish over existing version.
+46 error publish fail Update the 'version' field in package.json and try again.
+46 error publish fail
+46 error publish fail To automatically increment version numbers, see:
+46 error publish fail     npm help version
+47 verbose exit [ 1, true ]

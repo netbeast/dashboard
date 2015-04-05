@@ -1,4 +1,4 @@
-var fs = require('fs');         // file system
+var fs = require('fs-extra');   // file system
 var glob = require('glob');     // find files
 var path = require('path');
 var rimraf = require('rimraf'); // nodejs rm -rf

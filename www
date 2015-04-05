@@ -10,7 +10,7 @@
  var colors = require('colors');
 
  cmd
- .version('0.1.2')
+ .version('0.1.3')
  .option('-p, --port <n>', 'Port to start the HTTP server')
  .parse(process.argv);
 

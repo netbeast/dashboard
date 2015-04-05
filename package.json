@@ -1,7 +1,7 @@
 {
   "name": "xy-dashboard",
   "description": "xway dashboard, IoT apps manager",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "preferGlobal": "true",
   "dependencies": {
     "body-parser": "~1.12.0",
@@ -10,6 +10,7 @@
     "cookie-parser": "~1.3.4",
     "debug": "^2.1.3",
     "express": "~4.12.2",
+    "fs-extra": "^0.18.0",
     "glob": "^5.0.3",
     "morgan": "~1.5.1",
     "multer": "^0.1.8",

@@ -225,7 +225,9 @@ div.error {
   #install .dropzone .dz-message {
     padding-top: 50px; }
 #install #github {
-  text-align: center; }
+  text-align: center;
+  color: #F2F2F3;
+  font-size: 100px; }
   #install #github .fa-github, #install #github .fa-bitbucket {
     font-size: 20px; }
   #install #github input[type=text], #install #github input[type=url] {

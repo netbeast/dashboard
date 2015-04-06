@@ -26,20 +26,23 @@
 
   <section ng-show="tab > 1" class="drawer">
     <div id="github" ng-show="tab === 2">
-      <h2> Install from a public <i class="fa fa-git-square"> </i> repo <i ng-show="loading" class="fa fa-cog fa-spin"></i></h2>
+      <h2> 
+        Install from a public <i class="fa fa-git-square"></i>repo 
+        <i ng-show="loading" class="fa fa-cog fa-spin"></i>
+      </h2>
       <form ng-submit="gitSubmit()">
         <p ng-show="gitError" style="width: 500px; margin: 10px auto -10px;" class="error">{{gitError}}</p>
         <input type="url" ng-model="gitURL" value="" 
-        placeholder="Git URL">
-      </input><br/>
+        placeholder="Git URL"></input>
+        <br/>
+        <br/>
+        <input class="btn green" type="submit" name="submit"></input>
+      </form>
       <br/>
-      <input class="btn green" type="submit" name="submit"></input>
-    </form>
-    <br/>
-  </div>
+    </div>
 
-  <div id="docker" ng-show="tab === 3">
-    <h3 >Docker incoming</h3>
-  </div>
-</section>
+    <div id="docker" ng-show="tab === 3">
+      <h3 >Docker incoming</h3>
+    </div>
+  </section>
 </section>

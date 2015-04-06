@@ -45,21 +45,33 @@ function install(tmpDir, req, res) {
     appRoot = path.join(config.DIR, packageJSON.name);
     appTmpRoot = result.substring(0, result.lastIndexOf("/"));
     if(!fs.existsSync(appRoot)) {
-      fs.renameSync(appTmpRoot, appRoot);
-      //upload logo if exist
-      if (packageJSON.logo) {
-        logo = path.join(appRoot, packageJSON.logo);
-        if (fs.existsSync(logo)) {
-          cp(logo, path.join(PUBLIC,
-            packageJSON.name + '-' + logo.split('/').pop()));
-        } else {
-          console.log('No logo found at ' + logo);
+      fs.move(appTmpRoot, appRoot, function (err) {
+        if (err) {
+          throw err;
         }
-      } else {
-        console.log('No logo present in package.json');
-      }
-      console.log("File uploaded");
-      res.status(204).json("File uploaded");
+        console.log("Moved %s to %s", appTmpRoot, appRoot);
+        if (packageJSON.logo) {
+          logo = path.join(appRoot, packageJSON.logo);
+          if (fs.existsSync(logo)) {
+            cp(logo, path.join(PUBLIC,
+              packageJSON.name + '-' + logo.split('/').pop()));
+          } else {
+            console.log('No logo found at ' + logo);
+          }
+        } else {
+          console.log('No logo present in package.json');
+        }
+        console.log("File uploaded");
+        res.status(204).json("File uploaded");
+          //Now remove tmp files
+          rimraf(tmpDir, function(rimrafError) {
+            if (rimrafError) {
+              console.log(rimrafError);
+            } else {
+              console.log("Dir \"" + tmpDir + "\" was removed");
+            }
+          });
+        });
     } else {
       console.log("App already exists");
       res.status(403).json("App already exists");
@@ -68,15 +80,6 @@ function install(tmpDir, req, res) {
     console.log("App does NOT have package.json file");
     res.status(403).json("App does NOT have package.json file");
   }
-
-  //Now remove tmp files
-  rimraf(tmpDir, function(rimrafError) {
-    if (rimrafError) {
-      console.log(rimrafError);
-    } else {
-      console.log("Dir \"" + tmpDir + "\" was removed");
-    }
-  });
 }
 
 var PUBLIC = path.join(config.PUBLIC, 'apps');

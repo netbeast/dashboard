@@ -10,25 +10,40 @@ ActivitiesClient.prototype = {
     window.location.port = port;
   },
   launch: function ($scope, item) {
+    var ws; // app web socket
     this.$http.put('/launch/' + item).
     success(function(data, status, headers, config) {
-      console.log('PUT /launch/' + item + ' -> ' + data);
+      console.log('PUT /launch/' + item + ' -> (' + status + ')' + data);
+      ws = io.connect('http://localhost:3000/' + item);
       $scope.port = data.port;
+      ws.on('hello', function () {
+        console.log('ws: server fetched at /'+ item);
+      });
+      ws.on('stdout', function (stdout) {
+        console.log('ws/%s/stdout: %s', item, stdout);
+      });
+      ws.on('stderr', function (stderr) {
+        console.log('ws/%s/stderr: %s', item, stderr);
+      });
+      ws.on('close', function() {
+        console.log('ws/%s/close!', item);
+        ws.close();
+      });
     }).
     error(function(data, status, headers, config) {
       $scope.error = data;
-      console.log(status + ' when PUT /launch/'+item+' -> ' + data);
+      console.log(status + ' when PUT /launch/' + item + ' -> ' + data);
     });
   },
   read: function ($scope) {
-      this.$http.get('/activities/').
-      success(function(data, status, headers, config) {
-        console.log('GET /activities/ ->' + data);
-        $scope.apps = data;
-      }).
-      error(function(data, status, headers, config) {
-        console.log(status + ' when GET /activities -> ' + data);
-      });
+    this.$http.get('/activities/').
+    success(function(data, status, headers, config) {
+      console.log('GET /activities/ ->' + data);
+      $scope.apps = data;
+    }).
+    error(function(data, status, headers, config) {
+      console.log(status + ' when GET /activities -> ' + data);
+    });
   },
   delete: function (item) {
     var msg = 'Are you sure you want to stop ' + item + '?';

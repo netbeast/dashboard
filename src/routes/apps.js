@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Helper = require('../helper');
+var Launcher = require('../launcher');
 
 // GET
 router.get('/apps', function(req, res) {
@@ -30,10 +31,18 @@ router.post('/apps', function(req, res){
 
 // DELETE
 router.delete('/apps/:name', function(req, res) {
-  Helper.deleteApp(req.params.name, function(){
-    res.status(204).json('The app was deleted');
-  }, function() {
-    res.status(404).json('The app was not found');
+  Launcher.stop(req.params.name, function (err) {
+    if (err) {
+      res.send(404).json('' + err);
+    } else {
+      Helper.deleteApp(req.params.name, function(err) {
+        if (err) {
+          res.status(404).json('' + err);
+        } else {
+          res.status(204).json('The app was deleted');
+        }
+      });
+    }
   });
 });
 

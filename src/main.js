@@ -5,7 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-
 // Needed for the installation
 //============================
 var installer = require('./installer');
@@ -46,7 +45,8 @@ app.use(function(req, res, next){
 
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-  res.status(500).json('' + err);
+  if(!res.headersSent)
+    res.status(500).json('' + err);
 });
 
 module.exports = app;

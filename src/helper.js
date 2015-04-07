@@ -1,6 +1,5 @@
 var path = require('path');
-var fs = require('fs');
-var rimraf = require('rimraf');
+var fs = require('fs-extra');
 
 Helper = {};
 
@@ -47,19 +46,18 @@ Helper.getAppPkgJSON = function (app) {
   return packageJSON;
 }
 
-Helper.deleteApp = function (app, successCB, errorCB) {
+Helper.deleteApp = function (app, callback) {
   fs.readdirSync(Helper.DIR).forEach(function(root) {
     if(root === app) {
       PATH = path.join(Helper.DIR, root);
       if (fs.existsSync(PATH)) {
-        rimraf(PATH, function(rimrafError) {
-          if (rimrafError) {
-            console.log(rimrafError);
-            if(errorCB) errorCB();
-          } else {
-            if(successCB) successCB();
-          }
-        });
+        fs.remove(PATH, function(removeError) {
+            if (removeError) {
+              console.log(removeError);
+            } else {
+              console.log("Dir \"%s\" was removed", tarball);
+            }
+          });
       }
     }
   });

@@ -13,7 +13,7 @@ router.put('/launch/:name', function(req, res) {
 });
 
 router.delete('/activities/:name', function(req, res) {
-    launcher.stop(req, res);
+    launcher.close(req, res);
 });
 
 module.exports = router;

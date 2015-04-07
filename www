@@ -7,10 +7,9 @@
  var app = require('./src/main');
  var http = require('http');
  var cmd = require('commander');
- var colors = require('colors');
 
  cmd
- .version('0.1.33')
+ .version('0.1.37')
  .option('-p, --port <n>', 'Port to start the HTTP server')
  .parse(process.argv);
 
@@ -25,6 +24,19 @@ app.set('port', port);
  */
 
  var server = http.createServer(app);
+
+/**
+ * Prepare the websocket to handle communication among
+ * processes to their clients
+ */ 
+
+ var io = require('socket.io')(server);
+ io.on('connection', function (socket) {
+   socket.emit('news', { hello: 'world' });
+   socket.on('my other event', function (data) {
+     console.log(data);
+   });
+ });
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -91,5 +103,8 @@ app.set('port', port);
   var bind = typeof addr === 'string'
   ? 'pipe ' + addr
   : 'port ' + addr.port;
-  console.log('xway dashboard started on %s'.cyan, bind);
+  console.log('xway dashboard started on %s', bind);
 }
+
+exports.io = io;
+exports.server = server;

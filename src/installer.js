@@ -1,11 +1,9 @@
 var fs = require('fs-extra');   // file system
 var glob = require('glob');     // find files
 var path = require('path');
-var rimraf = require('rimraf'); // nodejs rm -rf
 var targz = require('tar.gz');  // extractor
 var multer = require('multer'); // uploads
 var config = require('./helper');
-
 
 function cp(source, target, cb) {
   var cbCalled = false;
@@ -34,7 +32,7 @@ function install(tmpDir, req, res) {
   console.log("Installing from temporary dir...");
   // Now check if the app exists
   var result, packageJSON, appRoot, logo
-  SEARCH = tmpDir + '/?**package.json';
+  SEARCH = tmpDir + '/?**/package.json';
   // find all package.json
   // the '?' char means ONLY first ocurrence in search
   result = glob.sync(SEARCH)[0] || path.join(tmpDir, 'package.json');
@@ -64,11 +62,11 @@ function install(tmpDir, req, res) {
         console.log("File uploaded");
         res.status(204).json("File uploaded");
           //Now remove tmp files
-          rimraf(tmpDir, function(rimrafError) {
-            if (rimrafError) {
-              console.log(rimrafError);
+          fs.remove(tmpDir, function(removeError) {
+            if (removeError) {
+              console.log(removeError);
             } else {
-              console.log("Dir \"" + tmpDir + "\" was removed");
+              console.log("Dir \"%s\" was removed", tmpDir);
             }
           });
         });
@@ -113,11 +111,11 @@ Installer.multer = multer({
         } else {
           install(tmpDir, req, res);
           //rm the tarball
-          rimraf(tarball, function(rimrafError) {
-            if (rimrafError) {
-              console.log(rimrafError);
+          fs.remove(tarball, function(removeError) {
+            if (removeError) {
+              console.log(removeError);
             } else {
-              console.log("Dir \"" + tmpDir + "\" was removed");
+              console.log("Dir \"%s\" was removed", tarball);
             }
           });
         }
@@ -143,7 +141,6 @@ Installer.git = function (req, res) {
   git.Clone(req.body.gitURL, tmpDir, opts)
   .then(function(repository) {
     install(tmpDir, req, res);
-    res.status(204).json("File Uploaded");
   }, function(error) {
     res.status(403).json(error);
     console.log(error);

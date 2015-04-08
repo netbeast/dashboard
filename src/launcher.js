@@ -13,76 +13,88 @@
 var spawn = require('child_process').spawn;
 var portfinder = require('portfinder');
 var helper = require('./helper');
-var path = require('path');
+var events = require('events');
 var www = require('../www');
+var path = require('path');
 
 portfinder.basePort = 3000;
 // Apps with their child object running
-var CHILDREN = {};
+var children = {};
 
-Launcher = {};
+var launcher = new events.EventEmitter();
 
-Launcher.start = function(req, res) {
+launcher.on('start', function(app) {
 
-  var app = req.params.name;
-  var appRoot = path.join(helper.SANDBOX, app);
-  var entryPoint = path.join(appRoot, helper.getAppPkgJSON(app).main);
+  if (children[app.name]) {
+    return;
+  }
 
-  if (!CHILDREN[app]) {
+  var appRoot = path.join(helper.SANDBOX, app.name);
+  var entryPoint = path.join(appRoot, 
+    helper.getAppPkgJSON(app.name).main);
+
+  child = spawn(entryPoint, ['--port', app.port], {
+    cwd: appRoot
+  });
+
+  //child management
+  child.unref(); //parent does not wait for it to finish
+  child.stdout.on('data', function (data) {
+    console.log('stdout: ' + data);
+    app.io.emit('stdout', '' + data);
+  });
+  child.stderr.on('data', function (data) {
+    console.error('stderr: ' + data);
+    app.io.emit('stderr', '' + data);
+  });
+  child.on('close', function (code) {
+    app.io.emit('close', ' process exited with code ' + code);
+    console.log('child process exited with code ' + code);
+    children[app] = undefined;
+  });
+  child.on('error', function (code) {
+    app.io.emit('stderr', '' + error);
+    children[app] = undefined;
+    console.error('' + error);
+  });
+  children[app.name] = child;
+  children[app.name].port = app.port;
+});
+
+launcher.start = function(req, res) {
+
+  var child = undefined;
+  var app = { 
+    name: req.params.name,
+    port: undefined,
+    io: undefined
+  };
+
+  if (!children[app]) {
 
     portfinder.getPort(function (err, port) {
       if(err) {
         res.status(404).json("Not enough ports");
         return;
       } else {
-        var child = spawn(entryPoint, ['--port', port], {
-          cwd: appRoot
-        });
-        CHILDREN[app] = child;
-        CHILDREN[app].port = port;
-        res.status(200).json({port: port});
-        console.log('Sent 204 JSON ' + {'port': port});
-        console.log('Running apps with pid=' + CHILDREN[app].pid);
-
+        app.port = port;
+        res.status(200).json({port: app.port});
         // Web Socket to publish app output
-        var io = www.io
-        .of('/' + app)
+        app.io = www.io.of('/' + app.name)
         .on('connection', function (socket) {
           socket.emit('hello');
-          console.log('ws: client hanged at /' + app);
-        });
-
-        //child management
-        child.unref(); //parent does not wait for it to finish
-        child.stdout.on('data', function (data) {
-          console.log('stdout: ' + data);
-          io.emit('stdout', '' + data);
-        });
-        child.stderr.on('data', function (data) {
-          console.log('stderr: ' + data);
-          io.emit('stderr', '' + data);
-        });
-        child.on('close', function (code) {
-          io.emit('close', ' process exited with code ' + code);
-          console.log('child process exited with code ' + code);
-          CHILDREN[app] = undefined;
-        });
-        child.on('error', function (error) {
-          console.log('child process exited with code ' + code);
-          io.emit('stderr', '' + error);
-          CHILDREN[app] = undefined;
+          console.log('ws/%s: client fetched!', app.name);
+          launcher.emit('start', app);
         });
       }
     });
-    /**
-    */
   } else {
-      res.status(200).json({port: CHILDREN[app].port});
+    res.status(200).json({port: children[app].port});
   }
 }
 
-Launcher.close = function (req, res) {
-  Launcher.stop(req.params.name, function (err) {
+launcher.close = function (req, res) {
+  launcher.stop(req.params.name, function (err) {
     if (err) {
       res.send(403).json('' + err);
     } else {
@@ -91,26 +103,26 @@ Launcher.close = function (req, res) {
   });
 }
 
-Launcher.stop = function (app, callback) {
+launcher.stop = function (app, callback) {
   var err = undefined;
-  if (CHILDREN[app]) {
+  if (children[app]) {
     console.log('Sending SIGTERM to ' + app);
-    CHILDREN[app].kill('SIGTERM');
-    CHILDREN[app] = undefined;
+    children[app].kill('SIGTERM');
+    children[app] = undefined;
   } else {
     err = 'Activity ' + app + ' was not found';
   }
   callback.call(this, err);
 }
 
-Launcher.getApps = function() {
+launcher.getApps = function() {
   var data = [];
   helper.getAppsJSON().forEach(function (app) {
-    if(CHILDREN[app.name]) {
+    if(children[app.name]) {
       data.push(app);
     }
   });
   return data;
 }
 
-module.exports = Launcher;
+module.exports = launcher;

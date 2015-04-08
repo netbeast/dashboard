@@ -27,6 +27,19 @@
     };
   });
 
+  ws = io.connect('http://localhost');
+  ws.on('hello', function () {
+    console.log('ws/main: server fetched.');
+  });
+  ws.on('stdout', function (stdout) {
+    toastr.info(stdout, 'Dashboard');
+    console.log('ws/stdout: %s', stdout);
+  });
+  ws.on('stderr', function (stderr) {
+    toastr.error(stderr, 'Dashboard');
+    console.log('ws/stderr: %s', stderr);
+  });
+
   Dashboard.config(['$routeProvider',
     function($routeProvider) {
       $routeProvider.

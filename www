@@ -31,12 +31,12 @@ app.set('port', port);
  */ 
 
  var io = require('socket.io')(server);
- io.on('connection', function (socket) {
-   socket.emit('news', { hello: 'world' });
-   socket.on('my other event', function (data) {
-     console.log(data);
-   });
- });
+ // io.on('connection', function (socket) {
+ //   socket.emit('news', { hello: 'world' });
+ //   socket.on('my other event', function (data) {
+ //     console.log(data);
+ //   });
+ // });
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -105,6 +105,11 @@ app.set('port', port);
   : 'port ' + addr.port;
   console.log('xway dashboard started on %s', bind);
 }
+
+process.on('uncaughtException', function (error) {
+  io.emit('stderr', '' + error);
+  console.error(error);
+});
 
 exports.io = io;
 exports.server = server;

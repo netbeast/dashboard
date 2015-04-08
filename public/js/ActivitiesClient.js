@@ -10,6 +10,7 @@ function ActivitiesClient ($http, toaster) {
 ActivitiesClient.prototype = {
   constructor: ActivitiesClient,
   open: function(port) {
+    console.log('Redirecting to port %s', port);
     window.location.port = port;
   },
   launch: function ($scope, item) {
@@ -20,7 +21,7 @@ ActivitiesClient.prototype = {
       ws = io.connect('http://localhost:80/' + item);
       $scope.port = data.port;
       ws.on('hello', function () {
-        console.log('ws: server fetched at /'+ item);
+        console.log('ws/%s: server fetched.', item);
       });
       ws.on('stdout', function (stdout) {
         toastr.info(stdout, item);

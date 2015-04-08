@@ -52,12 +52,13 @@ Helper.deleteApp = function (app, callback) {
       PATH = path.join(Helper.DIR, root);
       if (fs.existsSync(PATH)) {
         fs.remove(PATH, function(removeError) {
-            if (removeError) {
-              console.log(removeError);
-            } else {
-              console.log("Dir \"%s\" was removed", tarball);
-            }
-          });
+          if (removeError) {
+            console.log(removeError);
+          } else {
+            console.log("Dir \"%s\" was removed", PATH);
+          }
+          callback.call(this, removeError);
+        });
       }
     }
   });

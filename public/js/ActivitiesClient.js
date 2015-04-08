@@ -9,17 +9,13 @@ function ActivitiesClient ($http, toaster) {
 // Simple GET request example : https://docs.angularjs.org/api/ng/service/$http
 ActivitiesClient.prototype = {
   constructor: ActivitiesClient,
-  open: function(port) {
-    console.log('Redirecting to port %s', port);
-    window.location.port = port;
-  },
   launch: function ($scope, item) {
     var ws, scope = $scope;
     this.$http.put('/launch/' + item).
     success(function(data, status, headers, config) {
       console.log('PUT /launch/' + item + ' -> (' + status + ')' + data);
       if (data.port) {
-        scope.port = data.port;
+        scope.href = 'http://' + window.location.host + ':' + data.port;
         return;
       }
       ws = io.connect('/' + item)
@@ -40,7 +36,7 @@ ActivitiesClient.prototype = {
       })
       .on('ready', function (port) {
         console.log('ws/%s/ready!');
-        scope.port = port
+        scope.href = 'http://' + window.location.host + ':' + port;
       });
     }).
     error(function(data, status, headers, config) {

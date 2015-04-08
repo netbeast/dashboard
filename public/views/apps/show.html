@@ -9,10 +9,10 @@
 			</i>
 			<i ng-if="app.logo === undefined" class="fa fa-cube"></i>
 		</div>
-		<a ng-show="port" class="btn info clickable" ng-click="launcher.open(port)">
+		<a ng-show="href"  class="btn info clickable" href="{{href}}">
 			Open {{app.name}}
 		</a>
-		<a ng-hide="port" class="btn">
+		<a ng-hide="href" class="btn">
 			Launching {{app.name}}...
 		</a>
 	</section>

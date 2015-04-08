@@ -27,7 +27,7 @@
     };
   });
 
-  ws = io.connect('http://localhost');
+  ws = io.connect('/');
   ws.on('hello', function () {
     console.log('ws/main: server fetched.');
   });

@@ -33,11 +33,11 @@ router.post('/apps', function(req, res){
 router.delete('/apps/:name', function(req, res) {
   Launcher.stop(req.params.name, function (err) {
     if (err) {
-      res.send(404).json('' + err);
+      res.send(403).json('' + err);
     } else {
       Helper.deleteApp(req.params.name, function(err) {
         if (err) {
-          res.status(404).json('' + err);
+          res.status(403).json('' + err);
         } else {
           res.status(204).json('The app was deleted');
         }

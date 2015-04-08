@@ -77,6 +77,7 @@ launcher.start = function(req, res) {
         res.status(404).json("Not enough ports");
         return;
       } else {
+        children[app] = app; //provisional
         app.port = port;
         res.status(200).json({port: app.port});
         // Web Socket to publish app output

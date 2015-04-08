@@ -18,7 +18,7 @@ ActivitiesClient.prototype = {
     this.$http.put('/launch/' + item).
     success(function(data, status, headers, config) {
       console.log('PUT /launch/' + item + ' -> (' + status + ')' + data);
-      ws = io.connect('http://localhost:80/' + item);
+      ws = io.connect('/' + item);
       $scope.port = data.port;
       ws.on('hello', function () {
         console.log('ws/%s: server fetched.', item);

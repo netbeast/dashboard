@@ -1,6 +1,9 @@
+var toastr;
+
 // Activities
-function ActivitiesClient ($http) {
+function ActivitiesClient ($http, toaster) {
   this.$http = $http;
+  toastr = toaster;
 };
 
 // Simple GET request example : https://docs.angularjs.org/api/ng/service/$http
@@ -14,15 +17,17 @@ ActivitiesClient.prototype = {
     this.$http.put('/launch/' + item).
     success(function(data, status, headers, config) {
       console.log('PUT /launch/' + item + ' -> (' + status + ')' + data);
-      ws = io.connect('http://localhost:3000/' + item);
+      ws = io.connect('http://localhost:80/' + item);
       $scope.port = data.port;
       ws.on('hello', function () {
         console.log('ws: server fetched at /'+ item);
       });
       ws.on('stdout', function (stdout) {
+        toastr.info(stdout, item);
         console.log('ws/%s/stdout: %s', item, stdout);
       });
       ws.on('stderr', function (stderr) {
+        toastr.error(stderr, item);
         console.log('ws/%s/stderr: %s', item, stderr);
       });
       ws.on('close', function() {

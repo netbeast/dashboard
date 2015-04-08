@@ -5,7 +5,7 @@
   var app = angular.module('Dashboard');
 
   app.controller('AppsListCtrl', ['$scope', '$http',
-    function ($scope, $http) {
+    function ($scope, $http, toastr) {
       setTitle('Your apps drawer');
       setNavColor('blue');
       var client = new AppsClient($http);
@@ -21,11 +21,11 @@
       client.read($scope, '');
     }]);
 
-  app.controller('AppsDetailCtrl', ['$scope', '$routeParams', '$http',
-    function($scope, $routeParams, $http) {
+  app.controller('AppsDetailCtrl', ['$scope', '$routeParams', '$http', 'toastr',
+    function($scope, $routeParams, $http, toastr) {
       setNavColor('blue');
       setTitle($routeParams.name);
-      var launcher = new ActivitiesClient($http);
+      var launcher = new ActivitiesClient($http, toastr);
       var client = new AppsClient($http);
       client.read($scope, $routeParams.name);
       launcher.launch($scope, $routeParams.name);

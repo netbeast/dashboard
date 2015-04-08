@@ -36,12 +36,12 @@ launcher.on('start', function(app) {
   child = spawn(entryPoint, ['--port', app.port], {
     cwd: appRoot
   });
-
   //child management
   child.unref(); //parent does not wait for it to finish
   child.stdout.on('data', function (data) {
     console.log('stdout: ' + data);
     app.io.emit('stdout', '' + data);
+    app.io.emit('ready', app.port);
   });
   child.stderr.on('data', function (data) {
     console.error('stderr: ' + data);
@@ -71,35 +71,40 @@ launcher.start = function(req, res) {
   };
 
   if (!children[app]) {
-
+    console.log('- Looking for a free port for %s...', app.name);
     portfinder.getPort(function (err, port) {
       if(err) {
         res.status(404).json("Not enough ports");
-        return;
       } else {
         children[app] = app; //provisional
         app.port = port;
-        res.status(200).json({port: app.port});
+        console.log('- Found port for %s at %s.', app.name, app.port);
         // Web Socket to publish app output
         app.io = www.io.of('/' + app.name)
         .on('connection', function (socket) {
-          socket.emit('hello');
           console.log('ws/%s: client fetched!', app.name);
           launcher.emit('start', app);
         });
+        res.status(200).json({
+          port: undefined
+        });
       }
     });
-  } else {
-    res.status(200).json({port: children[app].port});
+  } else {    
+    console.log('- %s already ready and running at %s', app.name, children[app].port);
+    res.status(200).json({
+      port: children[app].port
+    });
   }
 }
 
 launcher.close = function (req, res) {
   launcher.stop(req.params.name, function (err) {
     if (err) {
-      res.send(403).json('' + err);
+      console.trace('' + err);
+      res.status(403).json('' + err);
     } else {
-      res.send(200).json('App closed');
+      res.status(200).json('App closed');
     }
   });
 }

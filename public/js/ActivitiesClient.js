@@ -14,26 +14,34 @@ ActivitiesClient.prototype = {
     window.location.port = port;
   },
   launch: function ($scope, item) {
-    var ws; // app web socket
+    console.log('- Trying to launch %s', item);
+    var ws, scope = $scope;
     this.$http.put('/launch/' + item).
     success(function(data, status, headers, config) {
       console.log('PUT /launch/' + item + ' -> (' + status + ')' + data);
-      ws = io.connect('/' + item);
-      $scope.port = data.port;
-      ws.on('hello', function () {
+      if (data.port) {
+        scope.port = data.port;
+        return;
+      }
+      ws = io.connect('/' + item)
+      .on('connection', function () {
         console.log('ws/%s: server fetched.', item);
-      });
-      ws.on('stdout', function (stdout) {
+      })
+      .on('stdout', function (stdout) {
         toastr.info(stdout, item);
         console.log('ws/%s/stdout: %s', item, stdout);
-      });
-      ws.on('stderr', function (stderr) {
+      })
+      .on('stderr', function (stderr) {
         toastr.error(stderr, item);
         console.log('ws/%s/stderr: %s', item, stderr);
-      });
-      ws.on('close', function() {
+      })
+      .on('close', function() {
         console.log('ws/%s/close!', item);
         ws.close();
+      })
+      .on('ready', function (port) {
+        console.log('ws/%s/ready!');
+        scope.port = port
       });
     }).
     error(function(data, status, headers, config) {

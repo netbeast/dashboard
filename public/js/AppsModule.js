@@ -25,9 +25,11 @@
     function($scope, $routeParams, $http, toastr) {
       setNavColor('blue');
       setTitle($routeParams.name);
-      var launcher = new ActivitiesClient($http, toastr);
+      // GET app details
       var client = new AppsClient($http);
       client.read($scope, $routeParams.name);
+      // PUT app running
+      var launcher = new ActivitiesClient($http, toastr);
       launcher.launch($scope, $routeParams.name);
       $scope.launcher = launcher;
     }]);

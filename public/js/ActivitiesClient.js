@@ -14,7 +14,6 @@ ActivitiesClient.prototype = {
     window.location.port = port;
   },
   launch: function ($scope, item) {
-    console.log('- Trying to launch %s', item);
     var ws, scope = $scope;
     this.$http.put('/launch/' + item).
     success(function(data, status, headers, config) {

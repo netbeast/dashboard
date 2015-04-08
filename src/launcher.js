@@ -70,7 +70,7 @@ launcher.start = function(req, res) {
     io: undefined
   };
 
-  if (!children[app]) {
+  if (!children[app.name]) {
     console.log('- Looking for a free port for %s...', app.name);
     portfinder.getPort(function (err, port) {
       if(err) {
@@ -90,11 +90,13 @@ launcher.start = function(req, res) {
         });
       }
     });
-  } else {    
-    console.log('- %s already ready and running at %s', app.name, children[app].port);
+  } else if (children[app.name]) {    
+    console.log('- %s already ready and running at %s', app.name, children[app.name].port);
     res.status(200).json({
-      port: children[app].port
+      port: children[app.name].port
     });
+  } else {
+    res.status(500).json('- server error at launcher.start');
   }
 }
 

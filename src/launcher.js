@@ -96,7 +96,7 @@ launcher.start = function(req, res) {
       port: children[app.name].port
     });
   } else {
-    res.status(500).json('- server error at launcher.start');
+    res.status(500).json('- server error at launcher.start %s', app.name);
   }
 }
 
@@ -117,8 +117,6 @@ launcher.stop = function (app, callback) {
     console.log('Sending SIGTERM to ' + app);
     children[app].kill('SIGTERM');
     children[app] = undefined;
-  } else {
-    err = 'Activity ' + app + ' was not found';
   }
   callback.call(this, err);
 }

@@ -13,7 +13,7 @@ AppsClient.prototype = {
         $scope.app = data;
       }).
       error(function(data, status, headers, config) {
-        alert(data);
+        console.error(data);
       });
     } else {
       this.$http.get('/apps').

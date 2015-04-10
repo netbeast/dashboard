@@ -1,4 +1,5 @@
 var toastr;
+//var ws = {};
 
 // Activities
 function ActivitiesClient ($http, toaster) {
@@ -13,12 +14,14 @@ ActivitiesClient.prototype = {
     var ws, scope = $scope;
     this.$http.put('/launch/' + item).
     success(function(data, status, headers, config) {
-      console.log('PUT /launch/' + item + ' -> (' + status + ')' + data);
+      console.log('PUT /launch/' + item + ' -> (' + status + ') ' + data.port);
       if (data.port) {
         scope.href = 'http://' + window.location.host + ':' + data.port;
         return;
       }
-      ws = io.connect('/' + item)
+      // Force new connection after disconnect to
+      // restart app
+      ws = io.connect('/' + item, {'forceNew': true})
       .on('connection', function () {
         console.log('ws/%s: server fetched.', item);
       })
@@ -32,7 +35,7 @@ ActivitiesClient.prototype = {
       })
       .on('close', function() {
         console.log('ws/%s/close!', item);
-        ws.close();
+        ws.close().disconnect();
       })
       .on('ready', function (port) {
         console.log('ws/%s/ready!');

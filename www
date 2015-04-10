@@ -31,12 +31,6 @@ app.set('port', port);
  */ 
 
  var io = require('socket.io')(server);
- // io.on('connection', function (socket) {
- //   socket.emit('news', { hello: 'world' });
- //   socket.on('my other event', function (data) {
- //     console.log(data);
- //   });
- // });
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -108,7 +102,7 @@ app.set('port', port);
 
 process.on('uncaughtException', function (error) {
   io.emit('stderr', '' + error);
-  console.error(error);
+  console.trace(error);
 });
 
 exports.io = io;

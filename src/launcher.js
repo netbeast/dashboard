@@ -32,7 +32,7 @@ launcher.on('start', function(app) {
   var appRoot = path.join(helper.SANDBOX, app.name);
   var entryPoint = path.join(appRoot, 
     helper.getAppPkgJSON(app.name).main);
-
+  console.log('-Launching %s...', app.name);
   child = spawn(entryPoint, ['--port', app.port], {
     cwd: appRoot
   });
@@ -50,22 +50,22 @@ launcher.on('start', function(app) {
   child.on('close', function (code) {
     app.io.emit('close', ' process exited with code ' + code);
     console.log('child process exited with code ' + code);
-    children[app] = undefined;
+    children[app.name] = undefined;
   });
   child.on('error', function (code) {
     app.io.emit('stderr', '' + error);
-    children[app] = undefined;
+    children[app.name] = undefined;
     console.error('' + error);
   });
-  children[app.name] = child;
-  children[app.name].port = app.port;
+  app.process = child;
+  children[app.name] = app;
 });
 
 launcher.start = function(req, res) {
 
-  var child = undefined;
   var app = { 
     name: req.params.name,
+    process: undefined,
     port: undefined,
     io: undefined
   };
@@ -76,7 +76,6 @@ launcher.start = function(req, res) {
       if(err) {
         res.status(404).json("Not enough ports");
       } else {
-        children[app] = app; //provisional
         app.port = port;
         console.log('- Found port for %s at %s.', app.name, app.port);
         // Web Socket to publish app output
@@ -85,6 +84,7 @@ launcher.start = function(req, res) {
           console.log('ws/%s: client fetched!', app.name);
           launcher.emit('start', app);
         });
+        app.io.emit('ready', app.port);
         res.status(200).json({
           port: undefined
         });
@@ -111,12 +111,12 @@ launcher.close = function (req, res) {
   });
 }
 
-launcher.stop = function (app, callback) {
+launcher.stop = function (appName, callback) {
   var err = undefined;
-  if (children[app]) {
-    console.log('Sending SIGTERM to ' + app);
-    children[app].kill('SIGTERM');
-    children[app] = undefined;
+  if (children[appName]) {
+    console.log('Sending SIGTERM to ' + appName);
+    children[appName].process.kill('SIGTERM');
+    children[appName] = undefined;
   }
   callback.call(this, err);
 }

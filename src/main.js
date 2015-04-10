@@ -43,10 +43,11 @@ app.use(function(req, res, next){
   res.type('txt').send('Not found');
 });
 
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  if(!res.headersSent)
-    res.status(500).json('' + err);
-});
+// app.use(function(err, req, res, next) {
+//   res.status(err.status || 500);
+//   if(!res.headersSent)
+//     res.status(500).json('' + err);
+//     console.error(err);
+// });
 
 module.exports = app;

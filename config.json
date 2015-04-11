@@ -1,0 +1,6 @@
+{
+	"port" : 3000,
+	"appsDir" : "./sandbox",
+	"tmpDir"  : "./tmp",
+	"publicDir"  : "./public"
+}

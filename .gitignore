@@ -21,5 +21,7 @@
 ehthumbs.db
 Thumbs.db
 
-sandbox/
-tmp/
+.log
+
+sandbox/*
+tmp/*

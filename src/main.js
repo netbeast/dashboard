@@ -5,28 +5,27 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-// Needed for the installation
-//============================
-var installer = require('./installer');
-var appsRoutes = require('./routes/apps');
-var activitiesRoutes = require('./routes/activities');
+// Config variables
+var config = require('./config');
 
+// Needed for the installation
+var installer = require('./installer');
 
 var app = express();
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(favicon(path.join(config.publicDir, 'img/favicon.png')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use(express.static(config.publicDir));
 
 /* Configure the multer for file uploads */
 
 app.use(installer.multer);
-app.use('/', appsRoutes);
-app.use('/', activitiesRoutes);
+app.use('/', require('./routes/apps'));
+app.use('/', require('./routes/activities'));
 
 // error handlers
 //===============

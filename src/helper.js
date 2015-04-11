@@ -1,17 +1,12 @@
 var path = require('path');
 var fs = require('fs-extra');
+var config = require('./config');
 
 Helper = {};
 
-Helper.DIR = path.join(__dirname, '..', 'sandbox');
-// Alias:
-Helper.SANDBOX = path.join(__dirname, '..', 'sandbox');
-Helper.TMP = path.join(__dirname, '..', 'tmp');
-Helper.PUBLIC = path.join(__dirname, '..', 'public');
-
 // Returns array of app names
 Helper.getApps = function () {
-  return fs.readdirSync(Helper.DIR);
+  return fs.readdirSync(config.appsDir);
 }
 
 // Returns array of
@@ -19,37 +14,45 @@ Helper.getApps = function () {
 //
 Helper.getAppsJSON = function () {
   var data = [];
-  var packageJSON;
+  var pkgJson;
 
-  fs.readdirSync(Helper.DIR).forEach(function(file) {
-    PATH = path.join(Helper.DIR, file, 'package.json');
+  fs.readdirSync(config.appsDir).forEach(function(file) {
+    PATH = path.join(config.appsDir, file, 'package.json');
     if (fs.existsSync(PATH)) {
-      packageJSON = JSON.parse(fs.readFileSync(PATH, 'utf8'));
-      data.push({name: packageJSON.name, logo: packageJSON.logo});
+      pkgJson = fs.readJsonSync(PATH);
+      data.push({
+        name: pkgJson.name, 
+        logo: (pkgJson.logo !== undefined)
+          ? pkgJson.logo.split('/').pop()
+          : undefined
+      });
     }
   });
   return data;
 }
 
 Helper.getAppPkgJSON = function (app) {
-  var packageJSON = undefined;
+  var pkgJson = undefined;
 
-  fs.readdirSync(Helper.DIR).forEach(function(file) {
+  fs.readdirSync(config.appsDir).forEach(function(file) {
     if(file === app) {
-      PATH = path.join(Helper.DIR, file, 'package.json');
+      PATH = path.join(config.appsDir, file, 'package.json');
       if (fs.existsSync(PATH)) {
-        packageJSON = JSON.parse(fs.readFileSync(PATH, 'utf8'));
+        pkgJson = fs.readJsonSync(PATH);
+        pkgJson.logo = (pkgJson.logo !== undefined)
+          ? pkgJson.logo.split('/').pop()
+          : undefined;
       }
     }
   });
 
-  return packageJSON;
+  return pkgJson;
 }
 
 Helper.deleteApp = function (app, callback) {
-  fs.readdirSync(Helper.DIR).forEach(function(root) {
+  fs.readdirSync(config.appsDir).forEach(function(root) {
     if(root === app) {
-      PATH = path.join(Helper.DIR, root);
+      PATH = path.join(config.appsDir, root);
       if (fs.existsSync(PATH)) {
         fs.remove(PATH, function(removeError) {
           if (removeError) {

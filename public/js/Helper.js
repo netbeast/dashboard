@@ -23,7 +23,7 @@ function setNavColor(str) {
 };
 
 function setTitle(str) {
-  document.title = 'Alfa | ' + str;
+  document.title = ' Beta | ' + str;
   var tooldiv = document.getElementById('title');
   tooldiv.innerHTML = '<span>' + str + '</span>';
 };

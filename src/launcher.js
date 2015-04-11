@@ -1,21 +1,10 @@
-(function() {
-  var childProcess = require("child_process");
-  oldSpawn = childProcess.spawn;
-  function mySpawn() {
-    console.log('spawn called');
-    console.log(arguments);
-    var result = oldSpawn.apply(this, arguments);
-    return result;
-  }
-  childProcess.spawn = mySpawn;
-})();
-
 var spawn = require('child_process').spawn;
 var portfinder = require('portfinder');
 var helper = require('./helper');
 var events = require('events');
 var www = require('../www');
 var path = require('path');
+var config = require('./config');
 
 portfinder.basePort = 3000;
 // Apps with their child object running
@@ -29,7 +18,7 @@ launcher.on('start', function(app) {
     return;
   }
 
-  var appRoot = path.join(helper.SANDBOX, app.name);
+  var appRoot = path.join(config.appsDir, app.name);
   var entryPoint = path.join(appRoot, 
     helper.getAppPkgJSON(app.name).main);
   console.log('-Launching %s...', app.name);
@@ -39,12 +28,12 @@ launcher.on('start', function(app) {
   //child management
   child.unref(); //parent does not wait for it to finish
   child.stdout.on('data', function (data) {
-    console.log('stdout: ' + data);
+    console.log('%s/stdout: %s', app.name, data);
     app.io.emit('stdout', '' + data);
     app.io.emit('ready', app.port);
   });
   child.stderr.on('data', function (data) {
-    console.error('stderr: ' + data);
+    console.error('%s/stderr: %s', app.name, data);
     app.io.emit('stderr', '' + data);
   });
   child.on('close', function (code) {

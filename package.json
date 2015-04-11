@@ -36,6 +36,12 @@
     "smart",
     "router"
   ],
+  "standard": {
+    "ignore": [
+      "node_modules/*",
+      "**/bower_components/*"
+    ]
+  },
   "author": "netbeast",
   "license": "Apache V2"
 }

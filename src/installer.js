@@ -3,89 +3,81 @@ var glob = require('glob');     // find files
 var path = require('path');
 var targz = require('tar.gz');  // extractor
 var multer = require('multer'); // uploads
-var config = require('./helper');
+var config = require('./config');
+var error = require('./error');
 
-function cp(source, target, cb) {
-  var cbCalled = false;
-
-  var rd = fs.createReadStream(source);
-  rd.on("error", done);
-
-  var wr = fs.createWriteStream(target);
-  wr.on("error", done);
-  wr.on("close", function(ex) {
-    done();
-  });
-  rd.pipe(wr);
-
-  function done(err) {
-    if (!cbCalled) {
-      if(err) console.log(err);
-      if(cb)  cb(err);
-      cbCalled = true;
-    }
-  }
-}
+var imgDir = path.join(config.publicDir, 'img/apps');
 
 // Checks a tmpDir and moves into the sandbox if all OK
 function install(tmpDir, req, res) {
-  console.log("Installing from temporary dir...");
-  // Now check if the app exists
-  var result, packageJSON, appRoot, logo
-  SEARCH = tmpDir + '/?**/package.json';
-  // find all package.json
-  // the '?' char means ONLY first ocurrence in search
-  result = glob.sync(SEARCH)[0] || path.join(tmpDir, 'package.json');
 
-  if (fs.existsSync(result)) {
-    packageJSON = JSON.parse(fs.readFileSync(result, 'utf8'));
-    //Move the folder from tmp to the sandbox
-    appRoot = path.join(config.DIR, packageJSON.name);
-    appTmpRoot = result.substring(0, result.lastIndexOf("/"));
-    if(!fs.existsSync(appRoot)) {
-      fs.move(appTmpRoot, appRoot, function (err) {
-        if (err) {
-          throw err;
-        }
-        console.log("Moved %s to %s", appTmpRoot, appRoot);
-        if (packageJSON.logo) {
-          logo = path.join(appRoot, packageJSON.logo);
-          if (fs.existsSync(logo)) {
-            cp(logo, path.join(PUBLIC,
-              packageJSON.name + '-' + logo.split('/').pop()));
-          } else {
-            console.log('No logo found at ' + logo);
-          }
-        } else {
-          console.log('No logo present in package.json');
-        }
-        console.log("File uploaded");
-        res.status(204).json("File uploaded");
-          //Now remove tmp files
-          fs.remove(tmpDir, function(removeError) {
-            if (removeError) {
-              console.log(removeError);
-            } else {
-              console.log("Dir \"%s\" was removed", tmpDir);
-            }
-          });
-        });
-    } else {
-      console.log("App already exists");
-      res.status(403).json("App already exists");
-    }
-  } else {
-    console.log("App does NOT have package.json file");
-    res.status(403).json("App does NOT have package.json file");
+  var result, pkgJson, appRoot, appTmpRoot, logo, main;
+  
+  // '?' char forces to return the first ocurrence in search
+  const search = tmpDir + '/?**/package.json';
+  result = glob.sync(search)[0] || path.join(tmpDir, 'package.json');
+
+  if (!fs.existsSync(result)) {
+    error.handle('noPkgJson', res);
+    return;
   }
+
+  pkgJson = fs.readJsonSync(result, {throws: false});
+  appRoot = path.join(config.appsDir, pkgJson.name);
+  appTmpRoot = result.substring(0, result.lastIndexOf("/"));
+
+  if (fs.existsSync(appRoot)) {
+    error.handle('appExists', res);
+    return;
+  }
+
+  // Check if main is an executable file
+  main = path.resolve(appTmpRoot, pkgJson.main);
+  if (!fs.existsSync(main)) {
+    error.handle('noMainExe', res);
+    return;
+  }
+  fs.chmodSync(main, '755');
+
+  fs.move(appTmpRoot, appRoot, function (err) {
+    if (err) {
+      console.error(err);
+      throw err;
+    }
+    console.log("Moved %s to %s", appTmpRoot, appRoot);
+    if (pkgJson.logo) {
+      logo = path.resolve(appRoot, pkgJson.logo);
+      if (fs.existsSync(logo)) {
+        var dest =  path.join(imgDir, pkgJson.name +
+         '-' + logo.split('/').pop())
+        fs.copy(logo, dest, function (err) {
+          if (err) return console.error(err)
+            console.log("- Logo copied to %s.", dest);
+            }); // copies file
+      } else {
+        console.log('- No logo found at %s', logo);
+      }
+    } else {
+      console.log('No logo present in package.json');
+    }
+    console.log("File uploaded");
+    res.status(204).json("File uploaded");
+    //Now remove tmp files
+    fs.remove(tmpDir, function(removeError) {
+      if (removeError) {
+        console.log(removeError);
+      } else {
+        console.log("Dir \"%s\" was removed", tmpDir);
+      }
+    });
+  });
 }
 
-var PUBLIC = path.join(config.PUBLIC, 'apps');
 
 Installer = {};
 
 Installer.multer = multer({
-  dest: config.TMP,
+  dest: config.tmpDir,
   rename: function (fieldname, filename, req, res) {
     return filename;
   },
@@ -96,13 +88,13 @@ Installer.multer = multer({
     if(ext === 'tar.gz' || ext === 'tgz.' || ext === 'zip.') {
       console.log('Uploading file with extension ' + ext);
     } else {
-      res.status(403).json('Invalid file type. Must be a zip or tar.gz');
+      error.handle('errorMime', res)
       return false;
     }
   },
   onFileUploadComplete: function (file, req, res) {
-    var tmpDir = path.join(config.TMP, '' + new Date().getTime());
-    var tarball = path.join(config.TMP, file.name);
+    var tmpDir = path.join(config.tmpDir, '' + new Date().getTime());
+    var tarball = path.join(config.tmpDir, file.name);
     var extract = new targz().extract(tarball, tmpDir,
       function(extractError){
         if(extractError) {
@@ -124,7 +116,7 @@ Installer.multer = multer({
 });
 
 Installer.git = function (req, res) {
-  var tmpDir = path.join(config.TMP, '' + new Date().getTime());
+  var tmpDir = path.join(config.tmpDir, '' + new Date().getTime());
   console.log("Cloning from git...");
   console.log(req.body);
   var git = require("nodegit");

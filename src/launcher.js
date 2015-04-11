@@ -37,8 +37,8 @@ launcher.on('start', function(app) {
     app.io.emit('stderr', '' + data);
   });
   child.on('close', function (code) {
-    app.io.emit('close', ' process exited with code ' + code);
-    console.log('child process exited with code ' + code);
+    app.io.emit('close', 'process exited with code %s', code);
+    console.log('child process exited with code %s', code);
     children[app.name] = undefined;
   });
   child.on('error', function (code) {
@@ -80,7 +80,6 @@ launcher.start = function(req, res) {
       }
     });
   } else if (children[app.name]) {    
-    console.log('- %s already ready and running at %s', app.name, children[app.name].port);
     res.status(200).json({
       port: children[app.name].port
     });
@@ -93,7 +92,7 @@ launcher.close = function (req, res) {
   launcher.stop(req.params.name, function (err) {
     if (err) {
       console.trace('' + err);
-      res.status(403).json('' + err);
+      res.status(500).json('' + err);
     } else {
       res.status(200).json('App closed');
     }

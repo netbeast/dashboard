@@ -4,9 +4,22 @@ var path = require('path');
 var targz = require('tar.gz');  // extractor
 var multer = require('multer'); // uploads
 var config = require('./config');
-var error = require('./error');
 
-var imgDir = path.join(config.publicDir, 'img/apps');
+// Define error handling:
+var error = {}
+
+// Forbidden error list
+error.list = {
+  errorMime : "Invalid file type. Must be a zip or tar.gz",
+  noPkgJson : "App does not have package.json file",
+  appExists : "App already exists",
+  noMainExe : "No valid 'main' field in package.json."
+}
+
+error.handle = function (code, response) {
+  console.log(error.list[code]);
+  response.status(403).json(error.list[code]);
+}
 
 // Checks a tmpDir and moves into the sandbox if all OK
 function install(tmpDir, req, res) {
@@ -48,19 +61,20 @@ function install(tmpDir, req, res) {
     if (pkgJson.logo) {
       logo = path.resolve(appRoot, pkgJson.logo);
       if (fs.existsSync(logo)) {
-        var dest =  path.join(imgDir, pkgJson.name +
-         '-' + logo.split('/').pop())
+        var imgDir = path.join(config.publicDir, 'img/apps');
+        var dest =  path.join(imgDir, pkgJson.name + '-' + logo.split('/').pop());
         fs.copy(logo, dest, function (err) {
-          if (err) return console.error(err)
+          if (err) 
+            return console.error(err)
+          else 
             console.log("- Logo copied to %s.", dest);
-            }); // copies file
+        });
       } else {
         console.log('- No logo found at %s', logo);
       }
     } else {
-      console.log('No logo present in package.json');
+      console.log('- No logo present in package.json');
     }
-    console.log("File uploaded");
     res.status(204).json("File uploaded");
     //Now remove tmp files
     fs.remove(tmpDir, function(removeError) {
@@ -72,7 +86,6 @@ function install(tmpDir, req, res) {
     });
   });
 }
-
 
 Installer = {};
 

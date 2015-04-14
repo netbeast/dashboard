@@ -34,6 +34,32 @@
       $scope.launcher = launcher;
     }]);
 
+  app.controller('AppsLiveCtrl', ['$scope', '$http', '$routeParams', '$sce',
+    function ($scope, $http, $routeParams, $sce) {
+      var item = $routeParams.name;
+      setTitle(item);
+      setNavColor('green');
+      $http.get('/apps/' + item + '/port').
+      success(function(data, status, headers, config) {
+        if (data) {
+          console.log('GET /apps/' + item + '/port ->' + data);
+          $scope.url = 'http://' + window.location.host + ':' + data;
+          iframe = document.getElementById('live');
+          $scope.go = function(towards) {
+            console.log('go %s', towards);
+            iframe.contentWindow.history.go(towards);
+          };
+          $scope.href = $sce.trustAsResourceUrl($scope.url);
+        } else {
+          window.location.assign("/");
+        }
+      }).
+      error(function(data, status, headers, config) {
+        console.error(data);
+        window.location.assign("/");
+      });
+    }]);
+
   app.controller('AppsNewCtrl', ['$scope', '$routeParams', '$http',
     function($scope, $routeParams, $http) {
 
@@ -42,16 +68,16 @@
 
       switch($routeParams.method) {
         case 'package':
-          $scope.tab = 1;
-          break;
+        $scope.tab = 1;
+        break;
         case 'github':
-          $scope.tab = 2;
-          break;
+        $scope.tab = 2;
+        break;
         case 'docker':
-          $scope.tab = 3;
-          break;
+        $scope.tab = 3;
+        break;
         default:
-          $scope.tab = 1;
+        $scope.tab = 1;
       }
 
       var dz = new Dropzone(".dropzone", {

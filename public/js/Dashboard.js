@@ -1,6 +1,6 @@
 //
 // Angular core of dashboard app
-// by jesusdario, netbeast CTO
+// by jesus@netbeast
 //==============================
 (function(){
   var Dashboard = angular.module('Dashboard', ['ngRoute', 'toastr']);
@@ -20,13 +20,7 @@
       });
     }]);
 
-  Dashboard.directive('toolBox', function() {
-    return {
-      restrict: 'E',
-      templateUrl: 'views/tool-box.html'
-    };
-  });
-
+  // Error handling
   ws = io.connect('/');
   ws.on('hello', function () {
     console.log('ws/main: server fetched.');
@@ -58,6 +52,10 @@
       when('/install/:method', {
         templateUrl: 'views/apps/new.html',
         controller: 'AppsNewCtrl'
+      }).
+      when('/i/:name', {
+        templateUrl: 'views/apps/live.html',
+        controller: 'AppsLiveCtrl'
       }).
       when('/remove', {
         templateUrl: 'views/apps/delete.html',

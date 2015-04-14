@@ -159,3 +159,27 @@ div.error {
 		}
 	}
 }
+
+//running app
+iframe#live {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+.iframe-nav {
+	margin: 0;
+	height: 64px;
+	font-size: 36px;
+	line-height: 64px;
+	div { //little hack
+		margin-left: -86px;
+		i {
+			padding: 12px;
+		}
+	}
+	margin-left: 50%;
+	position: fixed;
+	bottom: 0;
+	z-index: 3000;
+}

@@ -11,6 +11,7 @@
     "express": "^4.12.3",
     "fs-extra": "^0.18.0",
     "glob": "^5.0.3",
+    "http-proxy": "^1.10.1",
     "morgan": "^1.5.2",
     "multer": "^0.1.8",
     "portfinder": "^0.4.0",

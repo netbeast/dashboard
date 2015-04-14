@@ -119,4 +119,8 @@ launcher.getApps = function() {
   return data;
 }
 
+launcher.getApp = function(appName) {
+  return children[appName];
+}
+
 module.exports = launcher;

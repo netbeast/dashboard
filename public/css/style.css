@@ -225,9 +225,7 @@ div.error {
   #install .dropzone .dz-message {
     padding-top: 50px; }
 #install #github {
-  text-align: center;
-  color: #F2F2F3;
-  font-size: 100px; }
+  text-align: center; }
   #install #github .fa-github, #install #github .fa-bitbucket {
     font-size: 20px; }
   #install #github input[type=text], #install #github input[type=url] {
@@ -239,5 +237,24 @@ div.error {
   text-align: center; }
   #install #docker h3 {
     font-size: 100px; }
+
+iframe#live {
+  position: absolute;
+  width: 100%;
+  height: 100%; }
+
+.iframe-nav {
+  margin: 0;
+  height: 64px;
+  font-size: 36px;
+  line-height: 64px;
+  margin-left: 50%;
+  position: fixed;
+  bottom: 0;
+  z-index: 3000; }
+  .iframe-nav div {
+    margin-left: -86px; }
+    .iframe-nav div i {
+      padding: 12px; }
 
 /*# sourceMappingURL=style.css.map */

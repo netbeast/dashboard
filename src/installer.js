@@ -72,6 +72,7 @@ function install(tmpDir, req, res) {
       } else {
         console.log('- No logo found at %s', logo);
       }
+    }
     res.status(204).json("File uploaded");
     //Now remove tmp files
     fs.remove(tmpDir, function(removeError) {

@@ -42,9 +42,9 @@ launcher.on('start', function(app) {
     children[app.name] = undefined;
   });
   child.on('error', function (code) {
-    app.io.emit('stderr', '' + error);
+    app.io.emit('stderr', '' + code);
     children[app.name] = undefined;
-    console.error('' + error);
+    console.error('' + code);
   });
   app.process = child;
   children[app.name] = app;

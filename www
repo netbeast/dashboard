@@ -96,10 +96,10 @@ function onListening() {
   console.log('xway dashboard started on %s', bind);
 }
 
-// process.on('uncaughtException', function (error) {
-//   io.emit('stderr', '' + error);
-//   console.trace(error);
-// });
+process.on('uncaughtException', function (error) {
+   io.emit('stderr', '' + error);
+   console.trace(error);
+});
 
 exports.io = io;
 exports.server = server;

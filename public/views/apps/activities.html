@@ -1,18 +1,14 @@
-<section class="drawer">
-  <div id="{{app.name}}" class="apps" ng-repeat="app in apps">
+<section class="drawer container-fluid text-center">
+  <article id="{{app.name}}" class="col-xs-12 col-sm-4 col-md-3" data-ng-repeat="app in apps">
     <div class="del-overlay">
-      <a class="btn warning" ng-click="ActivitiesClient.delete(app.name)">Close</a>
+      <a class="btn btn-warning" ng-click="ActivitiesClient.delete(app.name)">Close</a>
     </div>
-    <a href="/#/apps/{{app.name}}">
+    <a class="apps" ng-href="#/apps/{{app.name}}">
       <div class="avatar desaturated">
-        <i ng-if="app.logo !== undefined">
-            <img ng-src="img/apps/{{app.name}}-{{app.logo}}" alt="" />
-        </i>
-        <i ng-if="app.logo === undefined" class="fa fa-cube"></i>
+        <img ng-src="/apps/{{app.name}}/logo" alt="/apps/{{app.name}}/logo" />
       </div>
+      <h3>{{app.name}}</h3>
+      <p>{{app.author}}</p>
     </a>
-    <div class="name">
-      {{app.name}}
-    </div>
-  </div>
+  </article>
 </section>

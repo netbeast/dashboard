@@ -3,29 +3,62 @@
 <head>
   <title> Beta |&nbsp;Dashboard</title>
   <link rel="icon" href="img/favicon.png" type="image/png">
-  <link rel="stylesheet" href="/css/style.css" media="screen" title="no title" charset="utf-8">
-  <link rel="stylesheet" type="text/css" href="bower_components/angular-toastr/dist/angular-toastr.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" charset="utf-8">
+  <link rel="stylesheet" type="text/css" 
+  href="bower_components/angular-toastr/dist/angular-toastr.css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" charset="utf-8">
+
 </head>
 <body>
 
   <nav></nav>
   <div ng-view></div>
-  <tool-box></tool-box>
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Get access to the xway marketplace private beta</h4>
+        </div>
+        <div class="modal-body">
+         <h1>Request an invitation</h1>
+         <form action="//netbeast.us10.list-manage.com/subscribe/post?u=e1b0aa92fc5da4634494fec97&amp;id=7823e40432" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate ng-pristine ng-valid" target="_blank" novalidate="">
+          <div class="form-group">
+            <input type="email" name="EMAIL" class="form-control input-lg" placeholder="What's your email?" tabindex="6">
+          </div>
+          <input id="subscribe-submit" type="submit" class="btn btn-success btn-block btn-lg" value="Request beta access">
+        </form><br/>
+        <p>or... <a href="/#/signin" class="btn btn-primary btn-sm">sign in</a> !</p>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-default" href="/skip">Skip to the dashboard</a>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<tool-box></tool-box>
 
-  <!-- scripts -->
-  <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="bower_components/dropzone/dist/dropzone.js"></script>
-  <script src="bower_components/socket.io-client/socket.io.js"></script>
-  <script src="bower_components/angular-toastr/dist/angular-toastr.tpls.js">
-  </script>
-  <script src="js/Helper.js"></script>
-  <script src="js/AppsClient.js"></script>
-  <script src="js/ActivitiesClient.js"></script>
-  <script src="js/Dashboard.js"></script>
-  <script src="js/DashboardDirectives.js"></script>
-  <script src="js/AppsModule.js"></script>
-  <script src="js/ActivitiesModule.js"></script>
+<!-- vendor scripts -->
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="bower_components/socket.io-client/socket.io.js"></script>
+<script src="bower_components/dropzone/dist/dropzone.js"></script>
+
+<!-- angular -->
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-toastr/dist/angular-toastr.tpls.js">
+</script>
+
+<!-- App code -->
+<script src="js/ga.js"></script>
+<script src="js/helper.js"></script>
+<script src="js/controllers/activitiesClient.js"></script>
+<script src="js/index.js"></script>
+<script src="js/directives/index.js"></script>
+<script src="js/controllers/apps.js"></script>
+<script src="js/controllers/users.js"></script>
+<script src="js/controllers/activities.js"></script>
 
 </body>
 </html>

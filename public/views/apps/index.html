@@ -1,15 +1,11 @@
-<section class="drawer">
-  <div class="apps" ng-repeat="app in apps">
-    <a href="/#/apps/{{app.name}}">
+<section class="drawer container-fluid text-center">
+  <article class="col-xs-12 col-sm-4 col-md-3" data-ng-repeat="app in apps | filter:search.text">
+    <a class="apps" ng-href="#/apps/{{app.name}}">
       <div class="avatar">
-        <i ng-if="app.logo !== undefined">
-            <img ng-src="img/apps/{{app.name}}-{{app.logo}}" alt="" />
-        </i>
-        <i ng-if="app.logo === undefined" class="fa fa-cube"></i>
+          <img ng-src="/apps/{{app.name}}/logo" alt="/apps/{{app.name}}/logo" />
       </div>
+      <h3>{{app.name}}</h3>
+      <p>{{app.author}}</p>
     </a>
-    <div class="name">
-      {{app.name}}
-    </div>
-  </div>
+  </article>
 </section>

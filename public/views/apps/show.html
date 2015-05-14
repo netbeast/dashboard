@@ -1,57 +1,50 @@
-<section id="app" class='drawer'>
-		<a ng-show="error" ng-show="port" class="error">
-			{{error}}
-		</a>
-	<section id="avatar-n-launcher">
+<div id="app" class='container text-center'>
+<br/><br/>
+<br/><br/>
+	<section class="col-xs-12 col-sm-12 col-md-4">
 		<div class="avatar">
-			<i ng-if="app.logo !== undefined">
-				<img ng-src="img/apps/{{app.name}}-{{app.logo}}" alt="" />
-			</i>
-			<i ng-if="app.logo === undefined" class="fa fa-cube"></i>
-		</div>
-		<a ng-show="href"  class="btn info clickable" href="#/i/{{app.name}}">
-			Open {{app.name}}
-		</a>
-		<a ng-hide="href" class="btn">
-			Launching {{app.name}}...
-		</a>
+			<img style="padding:20px; max-width: 100%;" ng-src="apps/{{app.name}}/logo" alt="" />
 	</section>
-	<section id="app-details">
-		<div>
-			<h2>{{app.name}}</h2>
-			<h1>By {{app.author}}</h1>
-			<p>{{app.description}}</p>
+		<section class="col-xs-12 col-sm-12 col-md-8">
 			<div>
-				<ul>
-					<li>
-						<h3>Version</h3>
-						<p>{{app.version}}</p>
-					</li>
-					<li>
-						<h3>License</h3>
-						<p>{{app.license}}</p>
-					</li>
-				</ul>
-				<ul>
-					<li>
-						<h3>Key words</h3>
-						<p>
+				<h2>{{app.name}}</h2>
+				<h1>By {{app.author}}</h1>
+				<p>{{app.description}}</p>
+
+				<a ng-show="href"  class="btn btn-info" href="#/i/{{app.name}}">
+					Open {{app.name}}
+				</a>
+				<a ng-hide="href" class="btn">
+					Launching {{app.name}}...
+				</a>
+			<br/>
+			<br/>
+			<div>
+				<table class="table">
+					<tr>
+						<td>Version</td>
+						<td>{{app.version}}</td>
+					</tr>						
+					<tr>
+						<td>License</td>
+						<td>{{app.license}}</td>
+					</tr>
+					<tr>
+						<td>Key words</td>
+						<td>
 							<span ng-repeat="keyword in app.keywords">
 								#{{keyword}} 
 							</span>
-						</p>
-					</li>
-					<li>
-						<h3>Dependencies</h3>
-						<p>{{app.dependencies}}</p>
-					</li>
-				</ul>
+						</td>
+					</tr>
+				</table>
+				<a target="_blank" href="http://docs.netbeast.co/category/dev/">
+					Check out our docs to learn how to create your own apps
+				</a>
+				<br/><br/>
+				<br/><br/>
+				<br/><br/>
 			</div>
 		</div>
 	</section>
-	<br/>
-	<br/>
-	<br/>
-	<br/>
-	<br/>
-</section>
+</div>

@@ -1,4 +1,5 @@
 var path = require('path');
+var www = require('../www');
 var fs = require('fs-extra');
 var config = require('./config');
 
@@ -15,16 +16,12 @@ Helper.getApps = function () {
 Helper.getAppsJSON = function () {
   var data = [];
   var pkgJson;
-
   fs.readdirSync(config.appsDir).forEach(function(file) {
     PATH = path.join(config.appsDir, file, 'package.json');
     if (fs.existsSync(PATH)) {
       pkgJson = fs.readJsonSync(PATH);
       data.push({
-        name: pkgJson.name, 
-        logo: (pkgJson.logo !== undefined)
-          ? pkgJson.logo.split('/').pop()
-          : undefined
+        name: pkgJson.name
       });
     }
   });
@@ -33,19 +30,14 @@ Helper.getAppsJSON = function () {
 
 Helper.getAppPkgJSON = function (app) {
   var pkgJson = undefined;
-
   fs.readdirSync(config.appsDir).forEach(function(file) {
     if(file === app) {
       PATH = path.join(config.appsDir, file, 'package.json');
       if (fs.existsSync(PATH)) {
         pkgJson = fs.readJsonSync(PATH);
-        pkgJson.logo = (pkgJson.logo !== undefined)
-          ? pkgJson.logo.split('/').pop()
-          : undefined;
       }
     }
   });
-
   return pkgJson;
 }
 
@@ -54,11 +46,13 @@ Helper.deleteApp = function (app, callback) {
     if(root === app) {
       PATH = path.join(config.appsDir, root);
       if (fs.existsSync(PATH)) {
+        console.log('Uninstallig ' + app);
+        www.io.emit('stdout', 'Uninstalling ' + app + '...');
         fs.remove(PATH, function(removeError) {
           if (removeError) {
             console.log(removeError);
           } else {
-            console.log("Dir \"%s\" was removed", PATH);
+            www.io.emit('success', 'Done!');
           }
           callback.call(this, removeError);
         });

@@ -5,24 +5,23 @@
 }
 
 @font-face {
-    font-family: Muli;
-    src: url('../fonts/Muli/Muli-Regular.ttf') format('truetype');
+	font-family: Muli;
+	src: url('../fonts/Muli/Muli-Regular.ttf') format('truetype');
 }
 
 body, html {
 	height: 100%;
 	width: 100%;
-	font-family: 'Muli', sans-serif;
+	font-family: "Muli",  Helvetica, arial;
+}
+body {
+	margin-bottom: 50px;
 }
 
 a  {
 	text-decoration: none;
 	font-decoration: none;
 	color: inherit;
-}
-
-ul, li {
-	list-style: none;
 }
 
 nav {
@@ -41,89 +40,124 @@ nav {
 	border: 1px solid $grey;
 	background-opacity: .5;
 	background-color: white;
-	#brand {
-		@include slant();
-		padding: 3px;
-		font-weight: bold;
-		font-size: 1.6em;
-	}
-
-	#title {
-		padding: 12px 4px;
-		background-color: none;
-	}
 
 	ul {
-		width: 100%;
-		height: 64px;
+		float: left;
+		height: 50px;
 		li {
-			height: 100%;
-			float: right;
-			&:first-child, &:nth-child(2) {
-				float: left;
+			margin: 12px;
+			float: left;
+			h2 {
+				margin-top: -1px;
 			}
-			a.btn, #brand, #title {
-				height: 16px;
-				margin: 12px;
+			span {
 				display: inline-block;
+				padding-top: 12px;
 			}
+		}
+		img {
+			margin: -6px;
+			max-height: 50px;
+			width: auto;
 		}
 	}
 }
 
-/* forms */
-
-input, textarea, select, .uneditable-input {
-	border: $blue;
-	width: auto;
-	margin-bottom: 15px;
-	@include box-sizing;
-	font-size: 1.1rem;
-	font-family: inherit;
-	padding: 10px;
+.del-overlay {
+	position: absolute;
+	left: 50%; top: 50%;
+	margin-top: -25px;
+	margin-left: -35px;
+	z-index: 1000;
 }
 
-input[type=text],
-input[type=email],
-input[type=password],
-input[type=url] {
-	min-height: 30px;
-	border-bottom: 2px solid $blue;
-	border-radius: none;
-	padding-bottom: -8px;
+/* apps#index */
+.drawer {
+	width: 100%;
+	padding: 20px 0 50px 0;
+	.apps {
+		display: block;
+		border-radius: 3px;
+		padding: 40px 20px;
+		margin-top: 15px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+		img {
+			width: auto;
+			max-height: 140px;
+		}
+		i.fa {
+			color: white;
+			font-size: 140px;
+		}
+	}
 }
 
-.btn {
-	cursor: pointer;
-	padding: 10px;
-	border-radius: 3px;
-	background-color: $grey;
-	&.info { background-color: $blue; }
-	&.danger { background-color: $red; }
-	&.warning {	background-color: $yellow; }
-	&.success {	background-color: $yellow; }
+
+#install {
+	#tabs {
+		width: 100%;
+		display: block;
+		ul {
+			display: block;
+			margin: auto 0;
+			height: 48px;
+			font-size: 18px;
+			line-height: 18px;
+			background-color: $blue;
+			li {
+				height: 100%;
+				float: left;
+				a {
+					padding: 16px;
+					display: inline-block;
+				}
+				&:hover, &.active {
+					color: white;
+					//endarken blue =>
+					background-color: $blue - #111111;
+				}
+			}
+		}
+	}
+
+	.dropzone {
+		padding: 0;
+		height: 450px;
+		border: 3px dashed $grey;
+		margin: 20px 20px 0 20px;
+		.dz-message {
+			font-size: 3em;
+			padding-top: 50px;
+		}
+		&:hover {
+			border: 3px dashed $blue;
+		}
+	}
+}
+
+iframe#live {
+	position: absolute;
+	overflow-y: hidden;
+	width: 100%;
+	height: 100%;
+}
+
+.light-frame {
+	border-radius: 4px;
+	border: 1px solid #ddd;
+	border-bottom: 2px solid #ddd;
 }
 
 .blurry {
-		@include blur(5px);
+	@include blur(5px);
 }
 
 .desaturated {
 	@include desaturate();
 }
 
-.clickable {
-	cursor: pointer;
-}
-
-.table {
-	border-radius: 4px;
-	display: block;
-	td, th {
-		padding: 10px;
-	}
-	tr {
-		width: 100%;
-		background-color: $grey;
-	}
+.slant {
+	@include slant();
 }

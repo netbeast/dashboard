@@ -1,10 +1,10 @@
-var spawn = require('child_process').spawn;
-var portfinder = require('portfinder');
-var helper = require('./helper');
-var events = require('events');
-var www = require('../www');
-var path = require('path');
-var config = require('./config');
+var spawn = require('child_process').spawn
+, portfinder = require('portfinder')
+, config = require('./config')
+, helper = require('./helper')
+, events = require('events')
+, www = require('../www')
+, path = require('path');
 
 portfinder.basePort = 3000;
 // Apps with their child object running

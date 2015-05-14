@@ -45,20 +45,16 @@ app.set('port', port);
 /**
  * Normalize a port into a number, string, or false.
  */
-
  function normalizePort(val) {
   var port = parseInt(val, 10);
-
   if (isNaN(port)) {
     // named pipe
     return val;
   }
-
   if (port >= 0) {
     // port number
     return port;
   }
-
   return false;
 }
 
@@ -70,11 +66,9 @@ app.set('port', port);
   if (error.syscall !== 'listen') {
     throw error;
   }
-
   var bind = typeof port === 'string'
   ? 'Pipe ' + port
   : 'Port ' + port;
-
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
@@ -91,10 +85,10 @@ app.set('port', port);
 }
 
 /**
- * Event listener for HTTP server "listening" event.
- */
+* Event listener for HTTP server "listening" event.
+**/
 
- function onListening() {
+function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string'
   ? 'pipe ' + addr
@@ -102,10 +96,10 @@ app.set('port', port);
   console.log('xway dashboard started on %s', bind);
 }
 
-process.on('uncaughtException', function (error) {
-  io.emit('stderr', '' + error);
-  console.trace(error);
-});
+// process.on('uncaughtException', function (error) {
+//   io.emit('stderr', '' + error);
+//   console.trace(error);
+// });
 
 exports.io = io;
 exports.server = server;

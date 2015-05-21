@@ -1,0 +1,11 @@
+// This is the main application scss list
+// From here files get imported in dependency order
+// and get compiled into style.css
+
+@import 'bootstrap.min.css';
+@import '../../dist/fa/css/font-awesome.css';
+@import '../../../node_modules/dropzone/dist/dropzone.css';
+@import '../../../node_modules/angular-toastr/dist/angular-toastr.css';
+@import 'mixins';
+@import 'colors';
+@import 'common';

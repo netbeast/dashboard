@@ -1,0 +1,14 @@
+<!-- API capabilities -->
+<div class="container">
+<br/>
+<table class='table table-striped table-bordered'>
+	<tr>
+		<th>path</th>
+		<th>method</th>
+	</tr>
+	<tr ng-if="r.route.path" ng-repeat="r in routes">
+		<td>{{r.route.path}}</td>
+		<td>{{keys(r.route.methods)[0]}}</td>
+	</tr>
+</table>
+</div>

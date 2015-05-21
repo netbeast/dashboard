@@ -1,7 +1,7 @@
 var spawn = require('child_process').spawn
 , portfinder = require('portfinder')
-, config = require('./config')
-, helper = require('./helper')
+, config = require('../config')
+, helper = require('./helpers')
 , events = require('events')
 , www = require('../www')
 , path = require('path');
@@ -70,10 +70,8 @@ launcher.start = function(req, res) {
         // Web Socket to publish app output
         app.io = www.io.of('/' + app.name)
         .on('connection', function (socket) {
-          console.log('ws/%s: client fetched!', app.name);
           launcher.emit('start', app);
         });
-        app.io.emit('ready', app.port);
         res.status(200).json({
           port: undefined
         });
@@ -84,7 +82,7 @@ launcher.start = function(req, res) {
       port: children[app.name].port
     });
   } else {
-    res.status(500).json('- server error at launcher.start %s', app.name);
+    res.status(500).json('Server error at launcher.start %s', app.name);
   }
 }
 

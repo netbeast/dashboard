@@ -7,18 +7,14 @@
  var app = require('./src/main');
  var http = require('http');
  var cmd = require('commander');
- var config = require('./src/config');
+ var config = require('./config');
 
  cmd
  .version('0.1.42')
- .option('-p, --port <n>', 'Port to start the HTTP server')
+ .option('-p, --port <n>', 'Port to start the HTTP server', parseInt)
  .parse(process.argv);
 
-
-// Get port from command line or configuration
-// and store in express
-var port = normalizePort(cmd.port || config.port);
-
+var port = cmd.port || config.port;
 app.set('port', port);
 
 /**
@@ -41,22 +37,6 @@ app.set('port', port);
  server.listen(port);
  server.on('error', onError);
  server.on('listening', onListening);
-
-/**
- * Normalize a port into a number, string, or false.
- */
- function normalizePort(val) {
-  var port = parseInt(val, 10);
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
-  if (port >= 0) {
-    // port number
-    return port;
-  }
-  return false;
-}
 
 /**
  * Event listener for HTTP server "error" event.

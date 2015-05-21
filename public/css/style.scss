@@ -1,9 +1,0 @@
-// This is the main application scss list
-// From here files get imported in dependency order
-// and get compiled into style.css
-
-@import '../fa/css/font-awesome.css';
-@import '../bower_components/dropzone/dist/dropzone.css';
-@import 'mixins';
-@import 'colors';
-@import 'common';

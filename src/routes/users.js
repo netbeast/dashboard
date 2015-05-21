@@ -1,8 +1,10 @@
-var express = require('express');
-var request = require('request');
-var fs = require('fs-extra');
-var sha1 = require('sha1');
-var router = express.Router();
+var express = require('express')
+, request = require('request')
+, error = require('../error')
+, www = require('../../www')
+, fs = require('fs-extra')
+, sha1 = require('sha1')
+, router = express.Router();
 
 // Activities
 //===========
@@ -17,12 +19,20 @@ router.post('/login', function(req, response) {
 		if (err) 
 			throw err;
 		if (res.statusCode === 200)
-			fs.writeJsonSync('./user.json', body);
+			fs.writeJsonSync('./config/user.json', body);
 	}).pipe(response); 
 });
 
 router.get('/logout', function(req, res) {
-	res.json(req.body);
+	fs.remove('./config/user.json', function(err) {
+		if (err)
+			error.handle(this, err);
+
+		else {
+			www.io.emit('success', 'Successfully logged out');
+			res.status(304).send();
+		}
+	});
 });
 
 module.exports = router;

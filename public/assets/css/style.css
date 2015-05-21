@@ -1,0 +1,147 @@
+@import url(bootstrap.min.css);
+@import url(../fa/css/font-awesome.css);
+@import url(../bower_components/dropzone/dist/dropzone.css);
+* {
+  margin: 0;
+  padding: 0;
+  outline: none; }
+
+@font-face {
+  font-family: Muli;
+  src: url("../fonts/Muli/Muli-Regular.ttf") format("truetype"); }
+body, html {
+  height: 100%;
+  width: 100%;
+  font-family: "Muli",  Helvetica, arial; }
+
+body {
+  margin-bottom: 50px; }
+
+a {
+  text-decoration: none;
+  font-decoration: none;
+  color: inherit; }
+
+nav {
+  height: 3px;
+  width: 100%;
+  z-index: 2000;
+  /*highest*/
+  background-color: #73C5E1;
+  -webkit-box-shadow: 0 0 5px #F2F2F3 ;
+  -moz-box-shadow: 0 0 5px #F2F2F3 ;
+  box-shadow: 0 0 5px #F2F2F3 ; }
+
+#tools {
+  bottom: 0;
+  width: 100%;
+  display: block;
+  position: fixed;
+  border: 1px solid #F2F2F3;
+  background-opacity: .5;
+  background-color: white; }
+  #tools ul {
+    float: left;
+    height: 50px; }
+    #tools ul li {
+      margin: 12px;
+      float: left; }
+      #tools ul li h2 {
+        margin-top: -1px; }
+      #tools ul li span {
+        display: inline-block;
+        padding-top: 12px; }
+    #tools ul img {
+      margin: -6px;
+      max-height: 50px;
+      width: auto; }
+
+.del-overlay {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -25px;
+  margin-left: -35px;
+  z-index: 1000; }
+
+/* apps#index */
+.drawer {
+  width: 100%;
+  padding: 20px 0 50px 0; }
+  .drawer .apps {
+    display: block;
+    border-radius: 3px;
+    padding: 40px 20px;
+    margin-top: 15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden; }
+    .drawer .apps img {
+      width: auto;
+      max-height: 140px; }
+    .drawer .apps i.fa {
+      color: white;
+      font-size: 140px; }
+
+#install #tabs {
+  width: 100%;
+  display: block; }
+  #install #tabs ul {
+    display: block;
+    margin: auto 0;
+    height: 48px;
+    font-size: 18px;
+    line-height: 18px;
+    background-color: #73C5E1; }
+    #install #tabs ul li {
+      height: 100%;
+      float: left; }
+      #install #tabs ul li a {
+        padding: 16px;
+        display: inline-block; }
+      #install #tabs ul li:hover, #install #tabs ul li.active {
+        color: white;
+        background-color: #62b4d0; }
+#install .dropzone {
+  padding: 0;
+  height: 450px;
+  border: 3px dashed #F2F2F3;
+  margin: 20px 20px 0 20px; }
+  #install .dropzone .dz-message {
+    font-size: 3em;
+    padding-top: 50px; }
+  #install .dropzone:hover {
+    border: 3px dashed #73C5E1; }
+
+iframe#live {
+  position: absolute;
+  overflow-y: hidden;
+  width: 100%;
+  height: 100%; }
+
+.light-frame {
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  border-bottom: 2px solid #ddd; }
+
+.blurry {
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px); }
+
+.desaturated {
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+  filter: gray;
+  filter: url("data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' height='0'><filter id='greyscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0' /></filter></svg>#greyscale"); }
+
+.slant {
+  -moz-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(-5deg, 0deg);
+  -webkit-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(-5deg, 0deg);
+  -o-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(-5deg, 0deg);
+  -ms-transform: scale(1) rotate(0deg) translate(0px, 0px) skew(-5deg, 0deg);
+  transform: scale(1) rotate(0deg) translate(0px, 0px) skew(-5deg, 0deg); }
+
+/*# sourceMappingURL=style.css.map */

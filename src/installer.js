@@ -1,9 +1,9 @@
 var fs = require('fs-extra')   // file system
-, Decompress = require('decompress')
+, exec = require('child_process').exec
 , path = require('path')
 , www = require('../www')
 , multer = require('multer') // uploads
-, config = require('./config')
+, config = require('../config')
 , error = require('./error')
 
 // Checks a tmpDir and moves into the sandbox if all OK
@@ -54,20 +54,21 @@ Installer.multer = multer({
     console.log('Upload mimetype: ' + file.mimetype);
     var fname = file.name;
     var ext = [fname.split('.')[1], fname.split('.')[2]].join('.');
-    if(ext === 'tar.gz' || ext === 'tgz.' || ext === 'zip.') {
-      console.log('Uploading file with extension ' + ext);
+    if(ext === 'tar.gz' || ext === 'tgz.') {
+      return true
     } else {
       error.handle('errorMime', res)
       return false;
     }
   },
   onFileUploadComplete: function (file, req, res) {
+    var start = new Date().getTime();
     var tmpDir = path.join(config.appsDir, '' + new Date().getTime());
+    fs.mkdirSync(tmpDir, '0755');
     var tarball = path.join(config.tmpDir, file.name);
     www.io.emit('stdout', 'Decompressing bundle...');
-    new Decompress({mode: '755'}).src(tarball)
-    .dest(tmpDir).use(Decompress.targz({strip: 1}))
-    .run(function (err) {
+    var cmd = "tar xf "+tarball+" -C "+tmpDir+" --strip-components=1";
+    exec(cmd, function(err) {
       if(err) {
         error.handle(err, res);
       } else {
@@ -76,6 +77,9 @@ Installer.multer = multer({
           fs.remove(tmpDir, function(err) {
             if (err) throw err;
           });
+          var end = new Date().getTime();
+          var time = end - start;
+          console.log('Execution time: ' + time);
           if (err)
             error.handle(err, res);
           else

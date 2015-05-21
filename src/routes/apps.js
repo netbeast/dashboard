@@ -1,18 +1,19 @@
 var express = require('express')
-, router = express.Router()
-, Helper = require('../helper')
-, launcher = require('../launcher')
+, config = require('../../config')
+, Helper = require('../helpers')
 , fs = require('fs-extra')
 , path = require('path')
-, config = require('../config')
-, httpProxy = require('http-proxy')
-, proxy = httpProxy.createProxyServer({ws: true});
+, installer = require('../installer')
+, launcher = require('../launcher')
+, httpProxy = require('http-proxy');
+
+var router = express.Router();
 
 // GET
 router.get('/apps', function(req, res) {
   res.json({
     apps: Helper.getAppsJSON(),
-    user: fs.readJsonSync('./user.json', {throw: false})
+    user: config.getUser() || false
   });
 });
 
@@ -49,9 +50,8 @@ router.get('/apps/:name/port?', function(req, res) {
 });
 
 // CREATE
-router.post('/apps', function(req, res){
+router.post('/apps', installer.multer, function(req, res) {
   console.log(req.body);
-  console.log(req.files);
 });
 
 // DELETE
@@ -72,6 +72,8 @@ router.delete('/apps/:name', function(req, res) {
 });
 
 // Proxy
+//======
+var proxy = httpProxy.createProxyServer({ws: true});
 router.use('/i/:name?', function(req, res)  {
   var app, reqPath, referer, proxyUrl;
   // Capture the referer to proxy the request
@@ -93,18 +95,16 @@ router.use('/i/:name?', function(req, res)  {
     reqPath = (referer !== undefined)
     ? '/' + req.params.name + req.url
     : req.url;
+
     req.url = reqPath.replace('/i/', '/');
     req.url = req.url.replace('/' + app.name, '');
+
     // This block of code actually pipes the request
     // to the running app and pass it to the client
     proxyUrl = req.protocol + '://localhost:' + app.port;
     proxy.web(req, res, { 
       target: proxyUrl
     });
-    // Some logging
-    console.log('req url: %s', req.url);
-    console.log('proxy url: %s', proxyUrl);
-    console.log('referer: %s', referer);
   } else {
     // Here app is not running
     res.status(404).json("App not running");

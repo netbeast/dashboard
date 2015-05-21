@@ -21,9 +21,13 @@
 ehthumbs.db
 Thumbs.db
 
+
+# Project ignores #
+###################
+
 .log
 .sass-cache/
 
 sandbox/*
 tmp/*
-user.json
+config/user.json

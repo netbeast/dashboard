@@ -1,7 +1,7 @@
 <section class="drawer container-fluid text-center">
   <article id="{{app.name}}" class="col-xs-12 col-sm-4 col-md-3" data-ng-repeat="app in apps">
     <div class="del-overlay">
-      <a class="btn btn-warning" ng-click="ActivitiesClient.delete(app.name)">Close</a>
+      <a class="btn btn-warning" ng-click="stop(app.name)">Close</a>
     </div>
     <a class="apps" ng-href="#/apps/{{app.name}}">
       <div class="avatar desaturated">

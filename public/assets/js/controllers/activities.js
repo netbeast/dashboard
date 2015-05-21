@@ -3,11 +3,17 @@
 var helper = require('../helper');
 
 require('angular').module('Dashboard').
-controller('ActivitiesCtrl', ['$scope', '$http',
-	function($scope, $http) {
+controller('ActivitiesCtrl', ['$scope', 'toastr', 'Activities',
+	function($scope, toastr, Activities) {
 		helper.setTitle('Apps running');
 		helper.setNavColor('yellow');
-		var launcher = new ActivitiesClient($http);
-		$scope.ActivitiesClient = launcher;
-		launcher.read($scope);
+		//$scope.ActivitiesClient = launcher;
+		Activities.all()
+		.success(function(data) {
+			$scope.apps = data;
+		}).
+		error(function(data, status) {
+			toastr.error(data, 'Status ' + status);
+		});
+		$scope.stop = Activities.stop;
 	}]);

@@ -41,7 +41,7 @@ Dashboard.config(['$routeProvider',
     }).
     when('/apps/:name', {
       templateUrl: 'views/apps/show.html',
-      controller: 'AppsDetailCtrl'
+      controller: 'AppsShowCtrl'
     }).
     when('/install/', {
       templateUrl: 'views/apps/new.html',
@@ -80,5 +80,6 @@ Dashboard.config(['$routeProvider',
     });
   }]);
 
-require('./controllers');
+require('./services');
 require('./directives');
+require('./controllers');

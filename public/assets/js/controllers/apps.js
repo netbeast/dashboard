@@ -4,6 +4,23 @@ var helper = require('../helper');
 var app = require('angular').module('Dashboard');
 var Dropzone = require('Dropzone');
 
+app.controller('AppsShowCtrl', [
+  '$scope', '$routeParams', '$http', 'Activities',
+  function($scope, $routeParams, $http, Activities) {
+    helper.setNavColor('blue');
+    helper.setTitle($routeParams.name);
+    console.dir(Activities);
+    $http.get('/apps/' + $routeParams.name).
+    success(function(data, status, headers, config) {
+      console.log('GET /apps/' + $routeParams.name + '/ ->' + data);
+      $scope.app = data;
+    }).
+    error(function(data, status, headers, config) {
+      console.error(data);
+    });
+    Activities.launch($scope, $routeParams.name);
+  }]);
+
 app.controller('AppsListCtrl', ['$scope', '$http', 'toastr',
   function ($scope, $http, toastr) {
     helper.setTitle('Your apps drawer');
@@ -34,25 +51,6 @@ app.controller('AppsRmCtrl', ['$scope', '$http',
     });
   }]);
 
-app.controller('AppsDetailCtrl', ['$scope', '$routeParams', '$http', 'toastr',
-  function($scope, $routeParams, $http, toastr) {
-    helper.setNavColor('blue');
-    helper.setTitle($routeParams.name);
-      // GET app details
-      $http.get('/apps/' + $routeParams.name).
-      success(function(data, status, headers, config) {
-        console.log('GET /apps/' + $routeParams.name + '/ ->' + data);
-        $scope.app = data;
-      }).
-      error(function(data, status, headers, config) {
-        console.error(data);
-      });
-      // PUT app running
-      var launcher = new ActivitiesClient($http, toastr);
-      launcher.launch($scope, $routeParams.name);
-      $scope.launcher = launcher;
-    }]);
-
 app.controller('AppsLiveCtrl', ['$scope', '$http', '$routeParams', '$sce',
   function ($scope, $http, $routeParams, $sce) {
     var item = $routeParams.name;
@@ -63,11 +61,6 @@ app.controller('AppsLiveCtrl', ['$scope', '$http', '$routeParams', '$sce',
       if (data) {
         console.log('GET /apps/' + item + '/port ->' + data);
         $scope.url = 'http://' + window.location.host + ':' + data;
-        iframe = document.getElementById('live');
-        $scope.go = function(towards) {
-          console.log('go %s', towards);
-          iframe.contentWindow.history.go(towards);
-        };
         $scope.href = $sce.trustAsResourceUrl($scope.url);
       } else {
         window.location.assign("/");

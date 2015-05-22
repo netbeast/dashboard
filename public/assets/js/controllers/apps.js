@@ -9,14 +9,14 @@ app.controller('AppsShowCtrl', [
   function($scope, $routeParams, $http, Activities) {
     helper.setNavColor('blue');
     helper.setTitle($routeParams.name);
-    console.dir(Activities);
     $http.get('/apps/' + $routeParams.name).
-    success(function(data, status, headers, config) {
+    success(function(data) {
       console.log('GET /apps/' + $routeParams.name + '/ ->' + data);
       $scope.app = data;
     }).
-    error(function(data, status, headers, config) {
+    error(function(data) {
       console.error(data);
+      toastr.error(data);
     });
     Activities.launch($scope, $routeParams.name);
   }]);

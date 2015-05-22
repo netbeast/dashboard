@@ -30,7 +30,7 @@ angular.module("Dashboard")
         }
       // Force new connection after disconnect to
       // restart app
-      var ws, io = require('../socket.io-browser');
+      var ws, io = require('../lib/socket.io');
       ws = io.connect('/' + app, {'forceNew': true})
       .on('connection', function () {
         console.log('ws/%s: server fetched.', app);

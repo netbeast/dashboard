@@ -16,3 +16,10 @@ require('angular').module('Dashboard')
       console.log(status + ' when GET /routes -> ' + data);
     });
   }]);
+
+require('angular').module('Dashboard')
+.controller('SettingsCtrl', ['$scope', '$http',
+  function ($scope, $http) {
+    helper.setTitle('Settings');
+    helper.setNavColor('#777777');
+  }]);

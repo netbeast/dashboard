@@ -8,7 +8,7 @@ var bootstrap = require('bootstrap');
 var angular = require('angular');
 require('angular-route');
 require('angular-toastr');
-var io = require('./socket.io-browser');
+var io = require('./lib/socket.io');
 
 var Dashboard = angular.module('Dashboard', ['ngRoute', 'toastr']);
 
@@ -73,7 +73,7 @@ Dashboard.config(['$routeProvider',
     }).
     when('/settings', {
       templateUrl: 'views/settings.html',
-      controller: 'LoginCtrl'
+      controller: 'SettingsCtrl'
     }).
     otherwise({
       redirectTo: '/'

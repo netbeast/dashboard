@@ -19,7 +19,7 @@ exports.setNavColor = function setNavColor(str) {
  };
  nav = document.getElementsByTagName('nav')[0];
  nav.style.height = '3px';
- nav.style.backgroundColor = colors[str];
+ nav.style.backgroundColor = colors[str] || str;
 };
 
 exports.setTitle = function(str) {

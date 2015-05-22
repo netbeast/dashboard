@@ -2,5 +2,5 @@
 require('./activities');
 require('./apps');
 require('./users');
-require('./routes');
+require('./misc');
 

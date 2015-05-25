@@ -2,7 +2,7 @@
 var error = {
 	list : {
   		// Forbidden error list
-  		errorMime : "Invalid file type. Must be a zip or tar.gz",
+  		errorMime : "Invalid file type. Must be a .tgz or tar.gz",
   		noPkgJson : "App does not have package.json file",
   		appExists : "App already exists",
   		noMainExe : "No valid 'main' field in package.json."

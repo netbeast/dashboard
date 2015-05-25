@@ -1,6 +1,7 @@
 var express	 = require('express')
 , apps 	 	 = require('./apps')
 , users 	 = require('./users')
+, config 	 = require('../../config')
 , activities = require('./activities');
 
 var router = express.Router();

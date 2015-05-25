@@ -1,7 +1,7 @@
 {
   "name": "xy-dashboard",
   "description": "xway dashboard, IoT apps manager",
-  "version": "0.1.5",
+  "version": "0.1.51",
   "preferGlobal": "true",
   "dependencies": {
     "MD5": "^1.2.1",

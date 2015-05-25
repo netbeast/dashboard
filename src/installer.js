@@ -39,6 +39,17 @@ function install(tmpDir, callback) {
       console.error(err);
       throw err;
     }
+
+    //exec scripts if any
+    www.io.emit('stdout', 'Running package.json scripts...');
+    for (var key in pkgJson.scripts) {
+      exec(pkgJson.scripts[key], {cwd: appRoot}, function(err, stdout, stderr) {
+        if (err) throw err;
+        console.error("[%s] stderr: %s", pkgJson.scripts[key], stderr);
+        console.error("[%s] stdout: %s", pkgJson.scripts[key], stdout);
+      })
+    }
+
     callback.call(this, null);
   });
 }
@@ -48,42 +59,25 @@ Installer = {};
 Installer.multer = multer({
   dest: config.tmpDir,
   rename: function (fieldname, filename, req, res) {
-    return filename;
-  },
-  onFileUploadStart: function (file, req, res) {
-    console.log('Upload mimetype: ' + file.mimetype);
-    var fname = file.name;
-    var ext = [fname.split('.')[1], fname.split('.')[2]].join('.');
-    if(ext === 'tar.gz' || ext === 'tgz.') {
-      return true
-    } else {
-      error.handle('errorMime', res)
-      return false;
-    }
+    return '' + new Date().getTime() + '.tgz';
   },
   onFileUploadComplete: function (file, req, res) {
-    var start = new Date().getTime();
     var tmpDir = path.join(config.appsDir, '' + new Date().getTime());
     fs.mkdirSync(tmpDir, '0755');
     var tarball = path.join(config.tmpDir, file.name);
     www.io.emit('stdout', 'Decompressing bundle...');
-    var cmd = "tar xf "+tarball+" -C "+tmpDir+" --strip-components=1";
+    var cmd = "tar xf " + tarball + " -C " + tmpDir + " --strip-components=1";
     exec(cmd, function(err) {
       if(err) {
         error.handle(err, res);
       } else {
         install(tmpDir, function (err) {
           www.io.emit('stdout', 'Cleaned temporary files.');
-          fs.remove(tmpDir, function(err) {
-            if (err) throw err;
-          });
-          var end = new Date().getTime();
-          var time = end - start;
-          console.log('Execution time: ' + time);
-          if (err)
+          if (err) {
             error.handle(err, res);
-          else
+          } else {
             res.status(204).send("ok");
+          }
         });
       }
       fs.remove(tarball, function(err) {

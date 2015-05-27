@@ -21,7 +21,6 @@ launcher.on('start', function(app) {
   var appRoot = path.join(config.appsDir, app.name);
   var entryPoint = path.join(appRoot, 
     helper.getAppPkgJSON(app.name).main);
-  console.log('-Launching %s...', app.name);
   child = spawn(entryPoint, ['--port', app.port], {
     cwd: appRoot
   });
@@ -33,7 +32,7 @@ launcher.on('start', function(app) {
     app.io.emit('ready', app.port);
   });
   child.stderr.on('data', function (data) {
-    console.error('%s/stderr: %s', app.name, data);
+    console.log('%s/stderr: %s', app.name, data);
     app.io.emit('stderr', '' + data);
   });
   child.on('close', function (code) {

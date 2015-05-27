@@ -19,15 +19,19 @@ Dashboard.run([ 'toastr', function(toastr) {
       console.log('ws/main: server fetched.');
     });
     ws.on('success', function (msg) {
-      toastr.success(msg, 'Dashboard');
+      toastr.success(msg, 'xway');
       console.log('ws/main: server fetched.');
     });
+    ws.on('warning', function (msg) {
+      toastr.warning(msg, 'xway');
+      console.log('ws/stderr: %s', stderr);
+    });
     ws.on('stdout', function (stdout) {
-      toastr.info(stdout, 'Dashboard');
+      toastr.info(stdout, 'xway');
       console.log('ws/stdout: %s', stdout);
     });
     ws.on('stderr', function (stderr) {
-      toastr.error(stderr, 'Dashboard');
+      toastr.error(stderr, 'xway');
       console.log('ws/stderr: %s', stderr);
     });
   }]);
@@ -72,7 +76,7 @@ Dashboard.config(['$routeProvider',
       controller: 'RoutesCtrl'
     }).
     when('/settings', {
-      templateUrl: 'views/settings.html',
+      templateUrl: 'views/misc/settings.html',
       controller: 'SettingsCtrl'
     }).
     otherwise({

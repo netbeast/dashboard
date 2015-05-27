@@ -22,4 +22,8 @@ require('angular').module('Dashboard')
   function ($scope, $http) {
     helper.setTitle('Settings');
     helper.setNavColor('#777777');
+
+    $scope.update = function () {
+      $http.put('/update');
+    };
   }]);

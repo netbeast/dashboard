@@ -23,7 +23,7 @@ router.get('/config', function (req, res) {
 });
 
 router.put('/update', function (req, res) {
-	www.io.emit('warning', 'Updating dashboard to last version...');
+	www.io.emit('warning', 'Updating dashboard to last version.');
 	child = spawn('git', ['pull']);
   	//child management
   	child.stdout.on('data', function (data) {
@@ -35,7 +35,10 @@ router.put('/update', function (req, res) {
   		www.io.emit('stderr', '' + data);
   	});
   	child.on('close', function (code) {
-  		www.io.emit('close', 'process exited with code %s', code);
+  		if(code === 0)
+  			www.io.emit('success', 'Done! You will have to reset if there are any changes');
+  		else
+  			www.io.emit('stderr', 'Could not update the dashboard');
   		console.log('child process exited with code %s', code);
   	});
   	child.on('error', function (code) {

@@ -1,50 +1,58 @@
-<div id="app" class='container text-center'>
-<br/><br/>
-<br/><br/>
+<br/><br/><br/><br/>
+<div id="app" class='container'>
 	<section class="col-xs-12 col-sm-12 col-md-4">
 		<div class="avatar">
-			<img style="padding:20px; max-width: 100%;" ng-src="apps/{{app.name}}/logo" alt="" />
-	</section>
-		<section class="col-xs-12 col-sm-12 col-md-8">
-			<div>
-				<h2>{{app.name}}</h2>
-				<h1>By {{app.author}}</h1>
-				<p>{{app.description}}</p>
-
-				<a ng-show="href"  class="btn btn-info" href="#/i/{{app.name}}">
-					Open {{app.name}}
-				</a>
-				<a ng-hide="href" class="btn">
-					Launching {{app.name}}...
-				</a>
-			<br/>
-			<br/>
-			<div>
-				<table class="table">
-					<tr>
-						<td>Version</td>
-						<td>{{app.version}}</td>
-					</tr>						
-					<tr>
-						<td>License</td>
-						<td>{{app.license}}</td>
-					</tr>
-					<tr>
-						<td>Key words</td>
-						<td>
-							<span ng-repeat="keyword in app.keywords">
-								#{{keyword}} 
-							</span>
-						</td>
-					</tr>
-				</table>
-				<a target="_blank" href="http://docs.netbeast.co/category/dev/">
-					Check out our docs to learn how to create your own apps
-				</a>
-				<br/><br/>
-				<br/><br/>
-				<br/><br/>
-			</div>
+			<img ng-src="apps/{{app.name}}/logo" 
+			alt="apps/{{app.name}}/logo" />
 		</div>
+		<br/>
+		<h4>{{app.name}} by {{app.author}}</h4>
+		<table class="table">
+			<tr>
+				<td>Version</td>
+				<td>{{app.version}}</td>
+			</tr>	
+			<tr>
+				<td>Downloads</td>
+				<td>{{app.downloads}}</td>
+			</tr>					
+			<tr>
+				<td>License</td>
+				<td>{{app.license}}</td>
+			</tr>
+			<tr>
+				<td>Key words</td>
+				<td>
+					<span ng-repeat="keyword in app.keywords">
+						#{{keyword}} 
+					</span>
+				</td>
+			</tr>
+		</table>
+		<a ng-show="href"  class="btn btn-info" href="#/i/{{app.name}}">
+			Open {{app.name}}
+		</a>
+		<a ng-hide="href" class="btn">
+			Launching {{app.name}}...
+		</a>
 	</section>
+	<section class="col-xs-12 col-sm-12 col-md-8">
+		<div>
+			<h2>{{app.name}}</h2>
+			<h3>{{app.description}}</h3>
+			<a ng-show="href"  class="btn btn-info" href="#/i/{{app.name}}">
+				Open {{app.name}}
+			</a>
+			<a ng-hide="href" class="btn">
+				Launching {{app.name}}...
+			</a>
+			<hr/>
+			<div ng-bind-html="readme"></div>
+		</div>
+		<br/>
+		<a target="_blank" href="http://bit.ly/1EBHpvO">
+			Check out our docs to learn how to create your own apps
+		</a>
+	</div>
+</section>
 </div>

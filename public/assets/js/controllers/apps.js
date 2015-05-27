@@ -5,10 +5,19 @@ var app = require('angular').module('Dashboard');
 var Dropzone = require('Dropzone');
 
 app.controller('AppsShowCtrl', [
-  '$scope', '$routeParams', '$http', 'Activities',
-  function($scope, $routeParams, $http, Activities) {
+  '$scope', '$routeParams', '$http', 'Activities', '$sce',
+  function($scope, $routeParams, $http, Activities, $sce) {
     helper.setNavColor('blue');
     helper.setTitle($routeParams.name);
+
+    $http.get('/apps/' + $routeParams.name + '/readme').
+    success(function(data, status, headers, config) {
+      $scope.readme = $sce.trustAsHtml(data);
+    }).
+    error(function(data, status, headers, config) {
+      console.log("error fetching readme");  
+    }); 
+
     $http.get('/apps/' + $routeParams.name).
     success(function(data) {
       console.log('GET /apps/' + $routeParams.name + '/ ->' + data);

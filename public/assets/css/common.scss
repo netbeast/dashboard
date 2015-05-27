@@ -95,6 +95,14 @@ nav {
 }
 
 
+#app {
+	.avatar img {
+		max-height: 90%;
+		max-width: 90%;
+	}
+}
+
+
 #install {
 	#tabs {
 		width: 100%;

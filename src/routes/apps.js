@@ -1,4 +1,5 @@
 var express = require('express')
+, showdown  = require('showdown')
 , config = require('../../config')
 , Helper = require('../helpers')
 , fs = require('fs-extra')
@@ -47,6 +48,19 @@ router.get('/apps/:name/port?', function(req, res) {
   } else {
     res.status(403).send("App not running");
   }
+});
+
+router.get('/apps/:name/readme', function (req, res) {
+  var readme = path.join(config.appsDir, req.params.name, 'README.md');
+  if (!fs.existsSync(readme))
+    return res.send("This app does not have a README.md");
+
+  fs.readFile(readme, 'utf8', function (err, data) {
+    console.log(showdown);
+    var converter = new showdown.converter(),
+    html = converter.makeHtml(data);
+    res.send(html);
+  });
 });
 
 // CREATE

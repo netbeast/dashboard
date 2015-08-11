@@ -4,22 +4,13 @@ var express	 = require('express')
 , users 	 = require('./users')
 , spawn		 = require('child_process').spawn
 , config 	 = require('../../config')
-, activities = require('./activities');
+, activities = require('./activities')
+, asciiTable = require('ascii-table');
 
 var router = express.Router();
 
-router.get('/routes', function (req, res) {
-	var stack = [].concat(
-		activities.stack
-		, apps.stack
-		, users.stack
-		, router.stack
-		);
-	res.status("200").json(stack);
-});
-
 router.get('/config', function (req, res) {
-	res.status("200").json(config);
+	res.json(config);
 });
 
 router.put('/update', function (req, res) {
@@ -55,6 +46,26 @@ router.get('/skip', function(req, res) {
 		alias: null
 	});
 	res.status(301).redirect('/');
+});
+
+router.get('/routes', function (req, res) {
+  var stack = [].concat(
+    activities.stack, apps.stack, users.stack, router.stack);
+
+  if (req.query.format === 'plain') {
+    var table = new asciiTable('xway API');
+    table.setHeading('Path', 'Method');
+    stack.forEach(function(s) {
+      if (s.route !== undefined)
+        table.addRow(s.route.path, 
+          Object.keys(s.route.methods)[0]);
+    });
+    res.header("Content-Type", "text/plain");
+    res.end(table.toString() + '\n');
+  } else {
+    res.json(stack);
+  }
+
 });
 
 router.use('/', apps);

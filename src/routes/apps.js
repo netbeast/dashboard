@@ -64,9 +64,7 @@ router.get('/apps/:name/readme', function (req, res) {
 });
 
 // CREATE
-router.post('/apps', installer.multer, function(req, res) {
-  console.log(req.body);
-});
+router.post('/apps', installer.multer);
 
 // DELETE
 router.delete('/apps/:name', function(req, res) {

@@ -27,6 +27,7 @@ app.controller('AppsShowCtrl', [
       console.error(data);
       toastr.error(data);
     });
+    
     Activities.launch($scope, $routeParams.name);
   }]);
 

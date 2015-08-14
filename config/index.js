@@ -29,8 +29,9 @@ var root = path.join(__dirname, '..')
 var defaultConfig = {
 	port : 80,
 	tmpDir : '/tmp',
-	appsDir : path.join(root, './sandbox'),
+	sandbox : path.join(root, './sandbox'),
 	publicDir : path.join(root, './public'),
+	appsDir : path.join(root, './sandbox/node_modules'),
 	user : fs.readJsonSync(userFile, {throw: false})
 };
 

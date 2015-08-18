@@ -6,8 +6,10 @@
 * and parse it smart.
 */
 
-var fs = require('fs-extra');
-var path = require('path');
+var fs = require('fs-extra')
+, exec = require('child_process').exec
+, path = require('path')
+
 
 /*
 * You could also write in this folder a 
@@ -24,7 +26,8 @@ var path = require('path');
 
 var root = path.join(__dirname, '..')
 , userFile = path.join(__dirname, 'user.json')
-, configFile = path.join(__dirname, 'config.json');
+, configFile = path.join(__dirname, 'config.json')
+
 
 var defaultConfig = {
 	port : 80,
@@ -33,18 +36,17 @@ var defaultConfig = {
 	publicDir : path.join(root, './public'),
 	appsDir : path.join(root, './sandbox/node_modules'),
 	user : fs.readJsonSync(userFile, {throw: false})
-};
-
-var config = fs.readJsonSync(configFile,	
-	{throws: false}) || defaultConfig;
-
-config.getUser = function() {
-	return fs.readJsonSync(userFile, {throw: false});
 }
 
-console.log('\n');
-console.log('[Default config]');
-console.dir(config);
-console.log('\n');
+var config = fs.readJsonSync(configFile,	
+	{throws: false}) || defaultConfig
 
-module.exports = config;
+config.getUser = function() {
+	return fs.readJsonSync(userFile, {throw: false})
+}
+
+console.log('[Default config]')
+console.dir(config)
+
+
+module.exports = config

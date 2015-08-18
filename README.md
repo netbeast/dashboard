@@ -24,6 +24,7 @@ Compiling with npm the xy-dashboard node.js native modules may take a while. Tha
 ```bash
 git clone -b production --single-branch https://github.com/netbeast-co/xy-dashboard/
 cd xy-dashboard
+npm link npm # npm package itself is needed but not included in production
 sudo ./www
 ```
 

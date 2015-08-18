@@ -46,6 +46,8 @@ gulp.task('browserify', function () {
   .pipe(buffer())
   .pipe(sourcemaps.init())
   .on('error', gutil.log)
-  .pipe(sourcemaps.write('./'))
-  .pipe(gulp.dest('./public/dist/js/'));
+  .pipe(sourcemaps.write({
+    includeContent: false, 
+    sourceRoot: './public/dist/js/'
+  })).pipe(gulp.dest('./public/dist/js/'));
 });

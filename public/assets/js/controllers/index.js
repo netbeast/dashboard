@@ -1,6 +1,6 @@
-'use strict';
-require('./activities');
-require('./apps');
-require('./users');
-require('./misc');
+'use strict'
+require('./activities')
+require('./apps')
+require('./users')
+require('./misc')
 

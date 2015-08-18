@@ -5,80 +5,38 @@ var app = require('angular').module('Dashboard');
 var Dropzone = require('Dropzone');
 
 app.controller('AppsShowCtrl', [
-  '$scope', '$routeParams', '$http', 'Activities', '$sce',
-  function($scope, $routeParams, $http, Activities, $sce) {
+  '$scope', '$routeParams', 'Apps', 'Activities', '$sce',
+  function($scope, $routeParams, Apps, Activities, $sce) {
+    var appName = $routeParams.name;
     helper.setNavColor('blue');
-    helper.setTitle($routeParams.name);
-
-    $http.get('/apps/' + $routeParams.name + '/readme').
-    success(function(data, status, headers, config) {
+    helper.setTitle(appName);
+    Apps.getReadme(appName).success(function(data) {
       $scope.readme = $sce.trustAsHtml(data);
-    }).
-    error(function(data, status, headers, config) {
-      console.log("error fetching readme");  
     }); 
-
-    $http.get('/apps/' + $routeParams.name).
-    success(function(data) {
-      console.log('GET /apps/' + $routeParams.name + '/ ->' + data);
+    Apps.get(appName).success(function(data) {
       $scope.app = data;
-    }).
-    error(function(data) {
-      console.error(data);
-      toastr.error(data);
     });
-    
-    Activities.launch($scope, $routeParams.name);
+    Activities.launch($scope, appName);
   }]);
 
-app.controller('AppsListCtrl', ['$scope', '$http', 'toastr',
-  function ($scope, $http, toastr) {
+app.controller('AppsListCtrl', ['$scope', 'Apps',
+  function ($scope, Apps) {
     helper.setTitle('Your apps drawer');
     helper.setNavColor('blue');
-    $http.get('/apps').
-    success(function(data, status, headers, config) {
+    Apps.all().success(function(data) {
       $scope.apps = data.apps;
       if(!data.user) {
         $('#myModal').modal();
       }
-    }).
-    error(function(data, status, headers, config) {
-      toastr.error(data)
     });
   }]);
 
-app.controller('AppsRmCtrl', ['$scope', '$http',
-  function ($scope, $http) {
+app.controller('AppsRmCtrl', ['$scope', 'Apps',
+  function ($scope, Apps) {
     helper.setTitle('Uninstall apps');
     helper.setNavColor('red');
-    $http.get('/apps').
-    success(function(data, status, headers, config) {
-      console.log('GET /apps -> ' + data);
+    Apps.all().success(function(data) {
       $scope.apps = data.apps;
-    }).
-    error(function(data, status, headers, config) {
-      console.log(status + ' when GET /apps -> ' + data);
-    });
-  }]);
-
-app.controller('AppsLiveCtrl', ['$scope', '$http', '$routeParams', '$sce',
-  function ($scope, $http, $routeParams, $sce) {
-    var item = $routeParams.name;
-    helper.setTitle(item);
-    helper.setNavColor('green');
-    $http.get('/apps/' + item + '/port').
-    success(function(data, status, headers, config) {
-      if (data) {
-        console.log('GET /apps/' + item + '/port ->' + data);
-        $scope.url = 'http://' + window.location.host + ':' + data;
-        $scope.href = $sce.trustAsResourceUrl($scope.url);
-      } else {
-        window.location.assign("/");
-      }
-    }).
-    error(function(data, status, headers, config) {
-      console.error(data);
-      window.location.assign("/");
     });
   }]);
 
@@ -109,7 +67,7 @@ app.controller('AppsNewCtrl', ['$scope', '$routeParams', '$http', 'toastr', '$lo
       dz.removeFile(file);
     });
 
-    dz.on("success", function(file, response) {
+    dz.on("processing", function(file, response) {
       $location.path("/");
     });
   }]);

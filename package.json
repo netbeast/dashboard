@@ -14,7 +14,6 @@
     "http-proxy": "^1.10.1",
     "morgan": "^1.5.2",
     "multer": "^0.1.8",
-    "npm": "^2.13.4",
     "portfinder": "^0.4.0",
     "request": "^2.55.0",
     "serve-favicon": "^2.2.0",
@@ -63,7 +62,8 @@
     ]
   },
   "scripts": {
-    "preinstall": "ENV=production"
+    "preinstall": "ENV=production",
+    "postinstall": "npm link npm"
   },
   "author": "netbeast",
   "license": "Apache V2"

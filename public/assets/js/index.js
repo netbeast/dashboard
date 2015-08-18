@@ -8,11 +8,12 @@ var bootstrap = require('bootstrap');
 var angular = require('angular');
 require('angular-route');
 require('angular-toastr');
+require('angular-contextmenu');
 var io = require('./lib/socket.io');
 
-var Dashboard = angular.module('Dashboard', ['ngRoute', 'toastr']);
+var Dashboard = angular.module('Dashboard', ['ngRoute', 'toastr', 'io.dennis.contextmenu']);
 
-Dashboard.run([ 'toastr', function(toastr) {
+Dashboard.run(['toastr', function(toastr) {
     // Error handling
     ws = io.connect('/');
     ws.on('hello', function () {
@@ -51,13 +52,9 @@ Dashboard.config(['$routeProvider',
       templateUrl: 'views/apps/new.html',
       controller: 'AppsNewCtrl'
     }).
-    when('/install/:method', {
-      templateUrl: 'views/apps/new.html',
-      controller: 'AppsNewCtrl'
-    }).
     when('/i/:name', {
       templateUrl: 'views/apps/live.html',
-      controller: 'AppsLiveCtrl'
+      controller: 'ActivitiesLiveCtrl'
     }).
     when('/remove', {
       templateUrl: 'views/apps/delete.html',
@@ -65,7 +62,7 @@ Dashboard.config(['$routeProvider',
     }).
     when('/activities', {
       templateUrl: 'views/apps/activities.html',
-      controller: 'ActivitiesCtrl'
+      controller: 'ActivitiesListCtrl'
     }).
     when('/signin', {
       templateUrl: 'views/users/signin.html',

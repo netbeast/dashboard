@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // Dependencies
-var app = require('./src/main')
+var app = require('./src')
 , forever = require('forever-monitor')
 , config = require('./config')
 , cmd = require('commander')

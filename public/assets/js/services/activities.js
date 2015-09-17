@@ -3,8 +3,8 @@
 var io = require('../lib/socket.io')
 
 angular.module("Dashboard")
-.factory("Activities", ['$http', '$sce', 'toastr', 
-  function ActivitiesFactory ($http, $sce, toastr) {
+.factory("Activities", ['$http', '$sce',  
+  function ActivitiesFactory ($http, $sce) {
 
     var self = {}
     self.all = function() {

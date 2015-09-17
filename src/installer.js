@@ -1,6 +1,6 @@
 var fs = require('fs-extra')
 , path = require('path')
-, www = require('../www')
+, broker = require('./helpers/broker')
 , multer = require('multer')
 , config = require('../config')
 , npm = require('npm')
@@ -15,12 +15,12 @@ module.exports = multer({
     npm.load({}, function () {
       npm.commands.install(config.sandbox, tarball, function(err) {
         if (err && err.code === 'ENOENT') {
-          www.io.emit('stderr', 'Sorry, this is not a valid xway app')
+          broker.emit('stderr', 'Sorry, this is not a valid xway app')
         } else if (err) {
-          www.io.emit('stderr', err.toString())
+          broker.emit('stderr', err.toString())
           throw err
         }
-        www.io.emit('stdout', 'Installation ended')
+        broker.emit('stdout', 'Installation ended')
         res.status(204).send()
 
         fs.remove(tarball, function(err) {

@@ -3,39 +3,38 @@
 // by jesus@netbeast
 //==============================
 
-$ = jQuery = require('jquery');
-var bootstrap = require('bootstrap');
-var angular = require('angular');
-require('angular-route');
-require('angular-toastr');
-require('angular-contextmenu');
-var io = require('./lib/socket.io');
+var io = require('./lib/socket.io')
 
-var Dashboard = angular.module('Dashboard', ['ngRoute', 'toastr', 'io.dennis.contextmenu']);
+var Dashboard = angular.module('Dashboard', ['ngRoute'])
 
-Dashboard.run(['toastr', function(toastr) {
+Dashboard.run([function () {
     // Error handling
-    ws = io.connect('/');
+    ws = io.connect('/')
+
     ws.on('hello', function () {
-      console.log('ws/main: server fetched.');
-    });
+      console.log('ws/main: server fetched.')
+    })
+
     ws.on('success', function (msg) {
-      toastr.success(msg, 'xway');
-      console.log('ws/main: server fetched.');
-    });
+      toastr.success(msg, 'xway')
+      console.log('ws/main: server fetched.')
+    })
+
     ws.on('warning', function (msg) {
-      toastr.warning(msg, 'xway');
-      console.log('ws/stderr: %s', stderr);
-    });
+      toastr.warning(msg, 'xway')
+      console.log('ws/stderr: %s', stderr)
+    })
+
     ws.on('stdout', function (stdout) {
-      toastr.info(stdout, 'xway');
-      console.log('ws/stdout: %s', stdout);
-    });
+      toastr.info(stdout, 'xway')
+      console.log('ws/stdout: %s', stdout)
+    })
+
     ws.on('stderr', function (stderr) {
-      toastr.error(stderr, 'xway');
-      console.log('ws/stderr: %s', stderr);
-    });
-  }]);
+      toastr.error(stderr, 'xway')
+      console.log('ws/stderr: %s', stderr)
+    })
+  }])
 
 Dashboard.config(['$routeProvider',
   function($routeProvider) {
@@ -78,9 +77,9 @@ Dashboard.config(['$routeProvider',
     }).
     otherwise({
       redirectTo: '/'
-    });
-  }]);
+    })
+  }])
 
-require('./services');
-require('./directives');
-require('./controllers');
+require('./services')
+require('./directives')
+require('./controllers')

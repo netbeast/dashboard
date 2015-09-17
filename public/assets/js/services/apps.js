@@ -1,23 +1,25 @@
 'use strict'
 
 angular.module("Dashboard")
-.factory("Apps", ['$http', '$sce', 'toastr', 
-  function ActivitiesFactory ($http, $sce, toastr) {
+.factory("Apps", ['$http', '$sce', '$location',  
+  function ActivitiesFactory ($http, $sce, $location) {
 
     var self = {}
     self.get = function(app) {
       return $http.get('/apps/' + app).error(function(data) {
-        console.log("error fetching app: %s", data.toString())  
-        toastr.error("Error fetching app. " + data.toString())
+        console.log(data.toString())  
+        toastr.error(data.toString())
+        $location.path('/')
       })
     }
     self.all = function() {
       return self.get('')
     }
     self.getReadme = function(app) {
-      return $http.get('/apps/' + app + '/readme').error(function(data) {
-        console.log("error fetching readme: %s", data.toString())  
-        toastr.error("Error fetching readme. " + data.toString())
+      return $http.get('/apps/' + app + '/readme')
+      .error(function(data) {
+        console.log(data.toString())  
+        toastr.error(data.toString())
       })
     }
     self.remove = function(app) {

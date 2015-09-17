@@ -1,6 +1,7 @@
 # xway dashboard
 [![Build Status](https://travis-ci.org/netbeast-co/xy-dashboard.svg)](https://travis-ci.org/netbeast-co/xy-dashboard)
 [![npm version](https://badge.fury.io/js/xy-dashboard.svg)](http://badge.fury.io/js/xy-dashboard)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast-co/xway?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 ###Iot in html5.
 

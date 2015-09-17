@@ -8,7 +8,8 @@ var express = require('express')
 , launcher = require('../launcher')
 , httpProxy = require('http-proxy')
 , npm = require('npm')
-, www = require('../../www')
+, broker = require('../helpers/broker')
+, E = require('../error')
 
 var router = express.Router()
 
@@ -17,13 +18,13 @@ router.get('/apps', function(req, res) {
   res.json(Helper.getAppsJSON())
 })
 
-router.get('/apps/:name', function(req, res) {
+router.get('/apps/:name', function(req, res, next) {
   var packageJSON = undefined // err by default
   packageJSON = Helper.getAppPkgJSON(req.params.name)
   if (packageJSON !== undefined) {
     res.json(packageJSON)
   } else {
-    res.status(404).json('Not Found.')
+    next(new E.NotFound())
   }
 })
 
@@ -71,13 +72,13 @@ router.post('/apps', installer, function (req, res) {
       npm.commands.install(config.sandbox, req.body.url, function(err) {
 
         if (err && err.code === 'ENOENT') {
-          www.io.emit('stderr', 'Sorry, this is not a valid xway app')
+          broker.emit('stderr', 'Sorry, this is not a valid xway app')
         } else if (err) {
-          www.io.emit('stderr', err.toString())
+          broker.emit('stderr', err.toString())
           throw err
         }
 
-        www.io.emit('stdout', 'Installation ended')
+        broker.emit('stdout', 'Installation ended')
         res.status(204).send()
       })
     })

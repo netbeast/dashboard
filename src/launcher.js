@@ -21,7 +21,7 @@ launcher.on('start', function(app) {
   appRoot = path.join(config.appsDir, app.name)
   pkgJson = helper.getAppPkgJSON(app.name)
   
-  if (pkgJson === undefined)
+  if (!pkgJson)
     return
 
   entryPoint = path.join(appRoot, pkgJson.main)

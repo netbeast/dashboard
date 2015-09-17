@@ -1,5 +1,5 @@
 var path = require('path')
-var www = require('../../www')
+var broker = require('../helpers/broker')
 var fs = require('fs-extra')
 var config = require('../../config')
 
@@ -51,12 +51,12 @@ Helper.deleteApp = function (app, callback) {
   }
 
   console.log('Uninstalling ' + app)
-  www.io.emit('stdout', 'Uninstalling ' + app + '...')
+  broker.emit('stdout', 'Uninstalling ' + app + '...')
   fs.remove(PATH, function(err) {
     if (err)
       console.log(err)
     else
-      www.io.emit('success', app + ' successfully uninstalled')
+      broker.emit('success', app + ' successfully uninstalled')
 
     return callback.call(this, err)
   })

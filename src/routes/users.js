@@ -1,6 +1,6 @@
 var express = require('express')
 , request = require('request')
-, www = require('../../www')
+, broker = require('../helpers/broker')
 , fs = require('fs-extra')
 , sha1 = require('sha1')
 , router = express.Router()
@@ -26,7 +26,7 @@ router.get('/logout', function(req, res) {
 		if (err) {
 			throw err
 		} else {
-			www.io.emit('success', 'Successfully logged out')
+			broker.emit('success', 'Successfully logged out')
 			res.status(304).send()
 		}
 	})

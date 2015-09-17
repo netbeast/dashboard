@@ -1,7 +1,7 @@
 'use strict'
 
 var helper = require('../helper')
-var app = require('angular').module('Dashboard')
+var app = angular.module('Dashboard')
 var Dropzone = require('Dropzone')
 
 app.controller('AppsShowCtrl', [
@@ -24,10 +24,7 @@ app.controller('AppsListCtrl', ['$scope', 'Apps',
     helper.setTitle('Your apps drawer')
     helper.setNavColor('blue')
     Apps.all().success(function(data) {
-      $scope.apps = data.apps
-      if(!data.user) {
-        $('#myModal').modal()
-      }
+      $scope.apps = data
     })
   }])
 
@@ -36,12 +33,12 @@ app.controller('AppsRmCtrl', ['$scope', 'Apps',
     helper.setTitle('Uninstall apps')
     helper.setNavColor('red')
     Apps.all().success(function(data) {
-      $scope.apps = data.apps
+      $scope.apps = data
     })
   }])
 
-app.controller('AppsNewCtrl', ['$scope', '$routeParams', '$http', 'toastr', '$location',
-  function($scope, $routeParams, $http, toastr, $location) {
+app.controller('AppsNewCtrl', ['$scope', '$routeParams', '$http',  '$location',
+  function($scope, $routeParams, $http, $location) {
 
     helper.hideNav()
     helper.setTitle('Install a new app')

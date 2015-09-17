@@ -77,7 +77,7 @@ describe("Apps", function(){
 		})
 
 		it("should upload app @ github to repo", function (done) {
-			this.timeout(12*s) //this also takes time
+			this.timeout(20*s) //this also takes time
 			var req = request.post('http://localhost:3000/apps', function (err, resp, body) {
 				should.not.exist(err)
 				body.should.equal('')

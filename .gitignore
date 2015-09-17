@@ -8,7 +8,7 @@
 *.iso
 *.jar
 *.rar
-*.tar
+# *.tar so it uploads test prepackaged app
 *.zip
 
 # OS generated files #

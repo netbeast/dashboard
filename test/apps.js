@@ -28,15 +28,6 @@ describe("Apps", function(){
 		setTimeout(done, 2000)
 	})
 
-	it("should return 404 when an app does not exist", function(done) {
-		request('http://localhost:3000/apps/tsaebten', function (err, resp, body) {
-			should.not.exist(err)
-			expect(resp.statusCode).to.equal(404)
-			body.should.be.a('String')
-			done()
-		})
-	})
-
 	it("should upload myapp to repository", function(done) {
 			this.timeout(8*s) //this takes time
 			var req = request.post('http://localhost:3000/apps', function (err, resp, body) {

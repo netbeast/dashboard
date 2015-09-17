@@ -3,82 +3,60 @@
 // by jesus@netbeast
 //==============================
 
-var io = require('./lib/socket.io')
+var mqtt = require('mqtt')
+, broker = require('./helpers/broker')
 
-var Dashboard = angular.module('Dashboard', ['ngRoute'])
+angular.module('Dashboard', ['ngRoute'])
 
-Dashboard.run([function () {
-    // Error handling
-    ws = io.connect('/')
-
-    ws.on('hello', function () {
-      console.log('ws/main: server fetched.')
-    })
-
-    ws.on('success', function (msg) {
-      toastr.success(msg, 'xway')
-      console.log('ws/main: server fetched.')
-    })
-
-    ws.on('warning', function (msg) {
-      toastr.warning(msg, 'xway')
-      console.log('ws/stderr: %s', stderr)
-    })
-
-    ws.on('stdout', function (stdout) {
-      toastr.info(stdout, 'xway')
-      console.log('ws/stdout: %s', stdout)
-    })
-
-    ws.on('stderr', function (stderr) {
-      toastr.error(stderr, 'xway')
-      console.log('ws/stderr: %s', stderr)
-    })
-  }])
-
-Dashboard.config(['$routeProvider',
+.config(['$routeProvider',
   function($routeProvider) {
-    $routeProvider.
-    when('/', {
+    $routeProvider
+    .when('/', {
       templateUrl: 'views/apps/index.html',
       controller: 'AppsListCtrl'
-    }).
-    when('/apps/:name', {
+    })
+    .when('/apps/:name', {
       templateUrl: 'views/apps/show.html',
       controller: 'AppsShowCtrl'
-    }).
-    when('/install/', {
+    })
+    .when('/install/', {
       templateUrl: 'views/apps/new.html',
       controller: 'AppsNewCtrl'
-    }).
-    when('/i/:name', {
+    })
+    .when('/i/:name', {
       templateUrl: 'views/apps/live.html',
       controller: 'ActivitiesLiveCtrl'
-    }).
-    when('/remove', {
+    })
+    .when('/remove', {
       templateUrl: 'views/apps/delete.html',
       controller: 'AppsRmCtrl'
-    }).
-    when('/activities', {
+    })
+    .when('/activities', {
       templateUrl: 'views/apps/activities.html',
       controller: 'ActivitiesListCtrl'
-    }).
-    when('/signin', {
+    })
+    .when('/signin', {
       templateUrl: 'views/users/signin.html',
       controller: 'LoginCtrl'
-    }).
-    when('/routes', {
+    })
+    .when('/routes', {
       templateUrl: 'views/misc/routes.html',
       controller: 'RoutesCtrl'
-    }).
-    when('/settings', {
+    })
+    .when('/settings', {
       templateUrl: 'views/misc/settings.html',
       controller: 'SettingsCtrl'
-    }).
-    otherwise({
+    })
+    .otherwise({
       redirectTo: '/'
     })
   }])
+
+.run(function () {
+  var ws = mqtt.connect('ws://localhost:1883')
+  ws.subscribe('notifications')
+  ws.on('message', broker.handle)
+})
 
 require('./services')
 require('./directives')

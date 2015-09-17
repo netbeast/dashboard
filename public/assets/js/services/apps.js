@@ -5,16 +5,20 @@ angular.module("Dashboard")
   function ActivitiesFactory ($http, $sce, $location) {
 
     var self = {}
+    
     self.get = function(app) {
       return $http.get('/apps/' + app).error(function(data) {
         console.log(data.toString())  
         toastr.error(data.toString())
         $location.path('/')
+        $location.replace()
       })
     }
+
     self.all = function() {
       return self.get('')
     }
+
     self.getReadme = function(app) {
       return $http.get('/apps/' + app + '/readme')
       .error(function(data) {
@@ -22,6 +26,7 @@ angular.module("Dashboard")
         toastr.error(data.toString())
       })
     }
+    
     self.remove = function(app) {
       return $http.delete('/apps/' + app)
       .success(function(data, status) {

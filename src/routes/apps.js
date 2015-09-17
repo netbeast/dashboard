@@ -56,7 +56,6 @@ router.get('/apps/:name/readme', function (req, res) {
     return res.send("This app does not have a README.md")
 
   fs.readFile(readme, 'utf8', function (err, data) {
-    console.log(showdown)
     var converter = new showdown.converter(),
     html = converter.makeHtml(data)
     res.send(html)

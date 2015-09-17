@@ -1,25 +1,32 @@
 'use strict'
 
-var helper = require('../helper')
-var app = angular.module('Dashboard')
+var helper = require('../helpers')
 var Dropzone = require('Dropzone')
 
-app.controller('AppsShowCtrl', [
+angular.module('Dashboard')
+
+.controller('AppsShowCtrl', [
   '$scope', '$routeParams', 'Apps', 'Activities', '$sce',
   function($scope, $routeParams, Apps, Activities, $sce) {
     var appName = $routeParams.name
     helper.setNavColor('blue')
     helper.setTitle(appName)
     Apps.getReadme(appName).success(function(data) {
+
       $scope.readme = $sce.trustAsHtml(data)
     }) 
+    
     Apps.get(appName).success(function(data) {
       $scope.app = data
     })
-    Activities.launch($scope, appName)
+
+    Activities.launch(appName)
+    .success(function (data) {
+      $scope.href = 'http://' + window.location.host + ':' + data.port
+    })
   }])
 
-app.controller('AppsListCtrl', ['$scope', 'Apps',
+.controller('AppsListCtrl', ['$scope', 'Apps',
   function ($scope, Apps) {
     helper.setTitle('Your apps drawer')
     helper.setNavColor('blue')
@@ -28,7 +35,7 @@ app.controller('AppsListCtrl', ['$scope', 'Apps',
     })
   }])
 
-app.controller('AppsRmCtrl', ['$scope', 'Apps',
+.controller('AppsRmCtrl', ['$scope', 'Apps',
   function ($scope, Apps) {
     helper.setTitle('Uninstall apps')
     helper.setNavColor('red')
@@ -37,7 +44,7 @@ app.controller('AppsRmCtrl', ['$scope', 'Apps',
     })
   }])
 
-app.controller('AppsNewCtrl', ['$scope', '$routeParams', '$http',  '$location',
+.controller('AppsNewCtrl', ['$scope', '$routeParams', '$http',  '$location',
   function($scope, $routeParams, $http, $location) {
 
     helper.hideNav()

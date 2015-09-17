@@ -1,6 +1,6 @@
 'use strict'
 
-var helper = require('../helper')
+var helper = require('../helpers')
 
 angular.module('Dashboard')
 .controller('RoutesCtrl', ['$scope', '$http',

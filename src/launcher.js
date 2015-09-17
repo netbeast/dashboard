@@ -1,9 +1,10 @@
 var spawn = require('child_process').spawn
+, broker = require('./helpers/broker')
 , portfinder = require('portfinder')
 , config = require('../config')
 , helper = require('./helpers')
 , events = require('events')
-, www = require('../www')
+, chalk = require('chalk')
 , path = require('path')
 
 portfinder.basePort = 3000
@@ -12,7 +13,7 @@ var children = {}
 
 var launcher = new events.EventEmitter()
 
-launcher.on('start', function(app) {
+launcher.on('start', function (app) {
   var appRoot, pkgJson, entryPoint
 
   if (children[app.name])
@@ -24,66 +25,64 @@ launcher.on('start', function(app) {
   if (!pkgJson)
     return
 
+  //child management
   entryPoint = path.join(appRoot, pkgJson.main)
   child = spawn(entryPoint, ['--port', app.port], {
     cwd: appRoot
   })
-  //child management
+
   child.unref() //parent does not wait for it to finish
+  
   child.stdout.on('data', function (data) {
-    console.log('%s/stdout: %s', app.name, data)
-    app.io.emit('stdout', '' + data)
-    app.io.emit('ready', app.port)
+    console.log(chalk.grey('[%s] %s'), app.name, data)
   })
+  
   child.stderr.on('data', function (data) {
-    console.log('%s/stderr: %s', app.name, data)
-    app.io.emit('stderr', '' + data)
+    broker.notify({ emphasis: 'error', title: app.name, body: data })
   })
+  
   child.on('close', function (code) {
-    app.io.emit('close', 'process exited with code %s', code)
-    console.log('child process exited with code %s', code)
+    broker.notify({ title: app.name, body: data })
     children[app.name] = undefined
   })
+  
   child.on('error', function (code) {
-    app.io.emit('stderr', '' + code)
+    broker.notify({ emphasis: 'error', title: app.name, body: data })
     children[app.name] = undefined
-    console.error('' + code)
   })
+
   app.process = child
   children[app.name] = app
 })
 
-launcher.start = function(req, res) {
+launcher.start = function (req, res) {
 
   var app = { 
     name: req.params.name,
     process: undefined,
-    port: undefined,
-    io: undefined
+    port: undefined
   }
 
   if (!children[app.name]) {
-    console.log('- Looking for a free port for %s...', app.name)
+    console.log('[launcher] Looking for a free port for %s...', app.name)
     portfinder.getPort(function (err, port) {
       if(err) {
         res.status(404).json("Not enough ports")
       } else {
         app.port = port
-        console.log('- Found port for %s at %s.', app.name, app.port)
-        // Web Socket to publish app output
-        app.io = www.io.of('/' + app.name)
-        .on('connection', function (socket) {
-          launcher.emit('start', app)
-        })
+        console.log('[launcher] Found port for %s at %s.', app.name, app.port)
+        launcher.emit('start', app)
         res.status(200).json({
           port: undefined
         })
       }
     })
+
   } else if (children[app.name]) {    
     res.status(200).json({
       port: children[app.name].port
     })
+    
   } else {
     res.status(500).json('Server error at launcher.start %s', app.name)
   }
@@ -95,7 +94,7 @@ launcher.close = function (req, res) {
       console.trace('' + err)
       res.status(500).json('' + err)
     } else {
-      res.status(200).json('App closed')
+      res.send('App closed')
     }
   })
 }

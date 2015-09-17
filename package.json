@@ -11,7 +11,6 @@
     "express": "^4.12.3",
     "forever-monitor": "^1.6.0",
     "fs-extra": "^0.18.0",
-    "gulp": "^3.9.0",
     "http-proxy": "^1.10.1",
     "morgan": "^1.5.2",
     "multer": "^0.1.8",

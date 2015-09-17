@@ -23,8 +23,9 @@ describe("Apps", function(){
 	var dashboard = undefined
 
 	before(function(done) {
+		this.timeout(8*s)
 		dashboard = spawn('./www', ['-p', '3000'], {})
-		setTimeout(done, 1000)
+		setTimeout(done, 2000)
 	})
 
 	describe("#GET", function(){
@@ -59,7 +60,7 @@ describe("Apps", function(){
 
 	describe("#POST", function() {
 		it("should upload myapp to repository", function(done) {
-			this.timeout(3*s) //this takes time
+			this.timeout(8*s) //this takes time
 			var req = request.post('http://localhost:3000/apps', function (err, resp, body) {
 				should.not.exist(err)
 				body.should.equal('')
@@ -76,7 +77,7 @@ describe("Apps", function(){
 		})
 
 		it("should upload app @ github to repo", function (done) {
-			this.timeout(100*s) //this also takes time
+			this.timeout(12*s) //this also takes time
 			var req = request.post('http://localhost:3000/apps', function (err, resp, body) {
 				should.not.exist(err)
 				body.should.equal('')

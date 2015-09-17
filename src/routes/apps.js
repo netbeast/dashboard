@@ -7,15 +7,14 @@ var express = require('express')
 , installer = require('../installer')
 , launcher = require('../launcher')
 , httpProxy = require('http-proxy')
+, npm = require('npm')
+, www = require('../../www')
 
 var router = express.Router()
 
 // GET
 router.get('/apps', function(req, res) {
-  res.json({
-    apps: Helper.getAppsJSON(),
-    user: config.getUser() || false
-  })
+  res.json(Helper.getAppsJSON())
 })
 
 router.get('/apps/:name', function(req, res) {
@@ -66,20 +65,38 @@ router.get('/apps/:name/readme', function (req, res) {
 // CREATE
 router.post('/apps', installer, function (req, res) {
   // do nothing but let installer handle
+  if (req.body.url) {
+    console.log("installing from %s", req.body.url)
+    npm.load({}, function () {
+      npm.commands.install(config.sandbox, req.body.url, function(err) {
+
+        if (err && err.code === 'ENOENT') {
+          www.io.emit('stderr', 'Sorry, this is not a valid xway app')
+        } else if (err) {
+          www.io.emit('stderr', err.toString())
+          throw err
+        }
+
+        www.io.emit('stdout', 'Installation ended')
+        res.status(204).send()
+      })
+    })
+  }
 })
 
 // DELETE
-router.delete('/apps/:name', function(req, res) {
+router.delete('/apps/:name', function (req, res) {
   launcher.stop(req.params.name, function (err) {
     if (err) {
-      res.status(403).json('' + err)
+      res.status(500).json('' + err)
     } else {
-      Helper.deleteApp(req.params.name, function(err) {
-        if (err) {
+      Helper.deleteApp(req.params.name, function (err) {
+        if (err && err.code === 404)
+          res.status(404).send('Not found')
+        else if(err)
           res.status(403).json('' + err)
-        } else {
+        else
           res.status(204).json('The app was deleted')
-        }
       })
     }
   })

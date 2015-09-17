@@ -1,3 +1,0 @@
-{   
-    "ignore": ["sandbox/*", "tmp/*", "README.md", "LICENSE.txt", "node_modules/*"] 
-}

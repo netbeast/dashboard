@@ -6,6 +6,7 @@ var app = require('./src/main')
 , config = require('./config')
 , cmd = require('commander')
 , http = require('http')
+, path = require('path')
 
 // Variables
 var io, server, port
@@ -54,13 +55,9 @@ server.on('error', function (error) {
   }
 })
 
-// process.on('uncaughtException', function (error) {
-//    io.emit('stderr', '' + error)
-//    console.trace(error)
-// })
-
 // Start the deamon that recognises other xways
-var deamon = new (forever.Monitor)('bin/deamon.js')
+var deamonBin = path.join(__dirname, 'bin/deamon.js') 
+var deamon = new (forever.Monitor)(deamonBin, {max: 1})
 deamon.start()
 
 exports.io = io

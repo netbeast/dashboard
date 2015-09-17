@@ -10,6 +10,8 @@
 
   <nav></nav>
   <div ng-view></div>
+  
+  <!-- Change this modal for a redirect + jade rendering -->
   <div class="modal fade" id="myModal">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -36,6 +38,8 @@
 <tool-box></tool-box>
 
 <!-- App code -->
+<!-- stop compiling bootstrap, jquery, toastr
+and other global dependencies, bitch, just use them -->
 <script src="dist/js/bundle.js"></script>
 
 </body>

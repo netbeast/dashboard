@@ -11,7 +11,6 @@ module.exports = multer({
     return '' + new Date().getTime() + '-' + filename
   },
   onFileUploadComplete: function (file, req, res) {
-    res.status(204).send();
     var tarball = path.join(config.tmpDir, file.name)
     npm.load({}, function () {
       npm.commands.install(config.sandbox, tarball, function(err) {
@@ -22,6 +21,8 @@ module.exports = multer({
           throw err
         }
         www.io.emit('stdout', 'Installation ended')
+        res.status(204).send()
+
         fs.remove(tarball, function(err) {
           if (err) throw err
         })

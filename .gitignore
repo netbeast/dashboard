@@ -4,10 +4,10 @@
 # git has its own built in compression methods
 *.7z
 *.dmg
-*.gz
 *.iso
 *.jar
 *.rar
+# *.gz
 # *.tar so it uploads test prepackaged app
 *.zip
 

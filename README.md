@@ -1,4 +1,7 @@
 # xway dashboard
+[![Build Status](https://travis-ci.org/netbeast-co/xy-dashboard.svg)](https://travis-ci.org/netbeast-co/xy-dashboard)
+[![npm version](https://badge.fury.io/js/xy-dashboard.svg)](http://badge.fury.io/js/xy-dashboard)
+
 ###Iot in html5.
 
 This is a web panel from you can install, manage or publish IoT applications. For Linux + node.js. You already tried the xway dashboard or distro? Let us know http://bit.ly/1dQmFKt!

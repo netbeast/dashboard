@@ -26,14 +26,19 @@ angular.module("Dashboard")
         toastr.error(data.toString())
       })
     }
+
+    self.update = function (app, pkg) {
+      console.log(pkg)
+      return $http.put('/apps/' + app, pkg)
+      .error(function(data, status) {
+        toastr.error(data, 'An error has occurred when updating the app')
+        console.error(__filename + ' @ self.update()' + data)
+      })
+    }
     
-    self.remove = function(app) {
+    self.remove = self.delete = function (app) {
       return $http.delete('/apps/' + app)
-      .success(function(data, status) {
-        toastr.success(app + " succesfully removed")
-        var icon = document.getElementById(app)
-        icon.parentElement.removeChild(icon)
-      }).error(function(data, status) {
+      .error(function(data, status) {
         toastr.error(data, 'An error has occurred when removing the app')
         console.error(__filename + ' @ self.remove()' + data)
       })

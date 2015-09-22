@@ -1,0 +1,29 @@
+<article>
+	<a ng-right-click="toggleMenu($event)"
+	class="apps" ng-href="#/apps/{{app}}">
+	<div class="avatar">
+		<img ng-src="/apps/{{app}}/logo" 
+		alt="/apps/{{app}}/logo" />
+	</div>
+	<h3>{{app}}</h3>
+</a>
+
+<div class="context-menu dropdown clearfix">
+	<ul class="dropdown-menu" role="menu" aria-labelledby="context-menu"
+	ng-show="visible" style="display: block;">
+	<li class="dropdown-header">{{app}}</li>
+	<li><a tabindex="-1" ng-click="launch()">Launch</a></li>
+	<li class="disabled">
+		<a tabindex="-1" ng-href="/#/apps/{{app}}">Stop</a>
+	</li>
+	<li><a tabindex="-1" ng-href="/#/apps/{{app}}">Details</a></li>
+	<li>
+		<a tabindex="-1" class="clickable" ng-click="delete()">
+			<i class="fa fa-trash"> Remove</i>
+		</a>
+	</li>
+	<li role="separator" class="divider"></li>
+	<li><a tabindex="-1" href="#">Start on boot</a></li>
+</ul>
+</div>
+</article>

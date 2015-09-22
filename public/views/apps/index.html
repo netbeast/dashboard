@@ -4,13 +4,8 @@
   	Find some at the <mark class="info"><a class="link" target="_blank" 
     href="//market.netbeast.co">marketplace</a></mark> :)
   </h1>
-  <article class="col-xs-12 col-sm-4 col-md-3" data-ng-repeat="app in apps | filter:search.text">
-  <a class="apps" ng-href="#/apps/{{app.name}}">
-    <div class="avatar">
-      <img ng-src="/apps/{{app.name}}/logo" alt="/apps/{{app.name}}/logo" />
-    </div>
-    <h3>{{app.name}}</h3>
-    <p>{{app.author}}</p>
-  </a>
-</article>
+  <i data-ng-repeat="app in apps | filter:search.text">
+    <app app="app" class="col-xs-12 col-sm-4 col-md-3">
+    </app>
+  </i>
 </section>

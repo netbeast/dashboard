@@ -5,8 +5,9 @@ var gulp = require('gulp')
 , source = require('vinyl-source-stream')
 , buffer = require('vinyl-buffer')
 , browserify = require('browserify')
-, sass = require('gulp-sass')
 , nodemon = require('gulp-nodemon')
+, sass = require('gulp-sass')
+, spawn = require('child_process').spawn
 , minify = require('gulp-minify-css')
 , gutil = require('gulp-util')
 
@@ -16,33 +17,36 @@ gulp.task('default', ['serve'], function() {
 })
 
 gulp.task('serve', function () {
-  nodemon({ script: './www', ext: 'js', 
-    ignore: ["sandbox/*", "*.md", "*.txt", "public/*"] 
-  })
+  nodemon({ script: './www', ignore: [
+    ".sandbox/*", "tmp/*", "*.md", "*.txt", "public/*"] })
 })
 
 gulp.task('sass', function () {
-	gulp.src('./public/assets/css/style.scss')
-	.pipe(sourcemaps.init())
-	.pipe(sass())
-	.pipe(minify())
-	.pipe(sourcemaps.write('./'))
-	.pipe(gulp.dest('./public/dist/css'))
+  gulp.src('./public/assets/css/style.scss')
+  .pipe(sourcemaps.init())
+  .pipe(sass())
+  .pipe(minify())
+  .pipe(sourcemaps.write('./'))
+  .pipe(gulp.dest('./public/dist/css'))
 })
 
 gulp.task('browserify', function () {
   // set up the browserify instance on a task basis
-  var b = browserify({
-  	entries: './public/assets/js/index.js',
-  	debug: true
+  var bundler = browserify({
+    entries: './public/assets/js/index.js',
+    debug: true
   })
-  return b.bundle()
+
+  return bundler.bundle()
+  .on('error', function(err) {
+    // print the error (can replace with gulp-util)
+    console.log(err.message)
+    // end this stream
+    this.emit('end')
+  })
   .pipe(source('bundle.js'))
   .pipe(buffer())
-  .pipe(sourcemaps.init())
-  .on('error', gutil.log)
-  .pipe(sourcemaps.write({
-    includeContent: false, 
-    sourceRoot: './public/dist/js/'
-  })).pipe(gulp.dest('./public/dist/js/'))
+  .pipe(sourcemaps.init({loadMaps: true}))
+  .pipe(sourcemaps.write('./'))
+  .pipe(gulp.dest('./public/dist/js/'))
 })

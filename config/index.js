@@ -7,8 +7,10 @@
 */
 
 var fs = require('fs-extra')
+, async = require('async')
 , exec = require('child_process').exec
 , path = require('path')
+, launcher = require('../src/launcher')
 
 
 /*
@@ -32,14 +34,17 @@ var root = path.join(__dirname, '..')
 var defaultConfig = {
 	port : 80,
 	tmpDir : '/tmp',
-	sandbox : path.join(root, './sandbox'),
+	configDir: __dirname,
+	sandbox : path.join(root, './.sandbox'),
 	publicDir : path.join(root, './public'),
-	appsDir : path.join(root, './sandbox/node_modules'),
+	appsDir : path.join(root, './.sandbox/node_modules'),
 	user : fs.readJsonSync(userFile, {throw: false})
 }
 
 var config = fs.readJsonSync(configFile,	
 	{throws: false}) || defaultConfig
+
+module.exports = config
 
 config.getUser = function() {
 	return fs.readJsonSync(userFile, {throw: false})
@@ -49,4 +54,22 @@ console.log('[Default config]')
 console.dir(config)
 
 
-module.exports = config
+// start apps that must be initialized on boot
+fs.readdir(config.appsDir, function (err, files) {
+	if (err)
+		throw err
+
+	async.map(files, function(file, callback) {
+		var pkgJson = path.join(config.appsDir, file, 'package.json')
+		fs.readJson(pkgJson, function (err, data) {
+			if (err)
+				callback(err)
+			else if (data.bootOnLoad)
+				launcher.boot(file, function(err, port) {
+					if (err)
+						throw err
+					console.info('launched app on port %s', port)
+				})
+		})
+	})
+})

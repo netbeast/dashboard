@@ -15,29 +15,34 @@ var router = express.Router()
 
 // GET
 router.get('/apps', function(req, res) {
-  res.json(Helper.getAppsJSON())
+  fs.readdir(config.appsDir, function(err, files) {
+    if (err)
+      throw err
+
+    res.json(files)
+  })
 })
 
 router.get('/apps/:name', function(req, res, next) {
-  var packageJSON = undefined // err by default
-  packageJSON = Helper.getAppPkgJSON(req.params.name)
-  if (packageJSON !== undefined) {
-    res.json(packageJSON)
+  var pkgJson = path.join(config.appsDir, req.params.name, 'package.json')
+  var app = fs.readJsonSync(pkgJson, { throw: false })
+  if (app !== undefined) {
+    res.json(app)
   } else {
     next(new E.NotFound())
   }
 })
 
 router.get('/apps/:name/logo', function (req, res) {
-  var app = Helper.getAppPkgJSON(req.params.name)
-  var appRoot = path.join(config.appsDir, app.name)
-  if (app.logo) {
+  var pkgJson = path.join(config.appsDir, req.params.name, 'package.json')
+  var app = fs.readJsonSync(pkgJson, { throw: false })
+  try {
+    var appRoot = path.join(config.appsDir, app.name)
     var appLogo = path.join(appRoot, app.logo)
-    if (fs.existsSync(appLogo))
-      return res.sendFile(appLogo)
+    res.sendFile(appLogo)
+  } catch (e) {
+    res.sendFile(path.join(config.publicDir, 'img/dflt.png'))
   }
-
-  res.sendFile(path.join(config.publicDir, 'img/dflt.png'))
 })
 
 router.get('/apps/:name/port?', function(req, res) {
@@ -59,6 +64,17 @@ router.get('/apps/:name/readme', function (req, res) {
     var converter = new showdown.converter(),
     html = converter.makeHtml(data)
     res.send(html)
+  })
+})
+
+router.get('/apps/:name/package', function (req, res) {
+  var pkg = path.join(config.appsDir, req.params.name, 'package.json')
+  if (!fs.existsSync(pkg))
+    return res.send("Fatal: This app does not have a package.json")
+
+  fs.readFile(pkg, 'utf8', function (err, data) {
+    res.header("Content-Type", "text/plain")
+    res.send('' + data)
   })
 })
 
@@ -99,6 +115,17 @@ router.delete('/apps/:name', function (req, res) {
           res.status(204).json('The app was deleted')
       })
     }
+  })
+})
+
+
+router.put('/apps/:name', function (req, res) {
+  var file = path.join(config.appsDir, req.params.name, 'package.json')
+  fs.writeJson(file, req.body, function(err) {
+    if (err)
+      throw new Error('Invalid JSON')
+    else
+      res.json(204)
   })
 })
 

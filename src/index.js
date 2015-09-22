@@ -8,10 +8,10 @@ var express = require('express')
 
 var app = module.exports = express()
 
-app.use(favicon(path.join(config.publicDir, 'img/xway.png')))
 app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(favicon(path.join(config.publicDir, 'img/xway.png')))
 
 app.use(express.static(config.publicDir))
 

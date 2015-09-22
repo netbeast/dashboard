@@ -14,14 +14,9 @@ body, html {
 	width: 100%;
 	font-family: "Muli",  Helvetica, arial;
 }
+
 body {
 	margin-bottom: 50px;
-}
-
-a  {
-	text-decoration: none;
-	font-decoration: none;
-	color: inherit;
 }
 
 nav {
@@ -142,6 +137,14 @@ nav {
 		&:hover {
 			border: 3px dashed $blue;
 		}
+	}
+}
+
+article {
+	.context-menu {
+		position: absolute;
+		margin-top: -140px;
+		margin-left: 60px;
 	}
 }
 

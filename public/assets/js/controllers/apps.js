@@ -35,6 +35,33 @@ angular.module('Dashboard')
     })
   }])
 
+.controller('Apps.edit', ['$scope', 'Apps', '$routeParams', '$sce',
+  function($scope, Apps, $routeParams, $sce) {
+
+    var appName = $routeParams.name
+
+    Apps.get(appName).success(function(data) {
+      $scope.app = data
+    })
+
+    $.ajax('/apps/' + appName + '/package')
+    .done(function(data) {
+      $scope.package = $sce.trustAsHtml(data)      
+      $scope.$apply()
+    })
+    .fail(function(data) {
+      toastr.error(data, 'Dashboard')
+    })
+
+    $scope.update = function() {
+      var content = $('#content').text()
+      Apps.update(appName, content).success(function(data) {
+        toastr.success('Your app has been updated correctly', 'Dashboard')
+      })
+    }
+
+  }])
+
 .controller('AppsRmCtrl', ['$scope', 'Apps',
   function ($scope, Apps) {
     helper.setTitle('Uninstall apps')

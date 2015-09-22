@@ -33,28 +33,6 @@ server.on('listening', function () {
     server.address().port)
 })
 
-server.on('error', function (error) {
-  if (error.syscall !== 'listen') {
-    throw error
-  }
-  var bind = typeof port === 'string'
-  ? 'Pipe ' + port
-  : 'Port ' + port
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-    console.error(bind + ' requires elevated privileges')
-    process.exit(1)
-    break
-    case 'EADDRINUSE':
-    console.error(bind + ' is already in use')
-    process.exit(1)
-    break
-    default:
-    throw error
-  }
-})
-
 // Start the deamon that recognises other xways
 var deamonBin = path.join(__dirname, 'bin/deamon.js') 
 var deamon = new (forever.Monitor)(deamonBin, {max: 1})

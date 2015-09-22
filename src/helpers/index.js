@@ -13,36 +13,12 @@ Helper.getApps = function () {
 // Returns array of
 // [{name: <appName>, logo: <appLogo>},...]
 //
-Helper.getAppsJSON = function () {
-  var data = []
-  var pkgJson
-  fs.readdirSync(config.appsDir).forEach(function(file) {
-    PATH = path.join(config.appsDir, file, 'package.json')
-    if (fs.existsSync(PATH)) {
-      pkgJson = fs.readJsonSync(PATH)
-      data.push({
-        name: pkgJson.name
-      })
-    }
-  })
-  return data
-}
-
-Helper.getAppPkgJSON = function (app) {
-  var pkgJson = undefined
-  fs.readdirSync(config.appsDir).forEach(function(file) {
-    if(file === app) {
-      PATH = path.join(config.appsDir, file, 'package.json')
-      if (fs.existsSync(PATH)) {
-        pkgJson = fs.readJsonSync(PATH)
-      }
-    }
-  })
-  return pkgJson
+Helper.getApps = function (callback) {
+  fs.readdir(config.appsDir, callback)
 }
 
 Helper.deleteApp = function (app, callback) {
-  var PATH = path.join(config.appsDir, app)
+  var PATH = path.join(__dirname, '../../.sandbox/node_modules', app)
 
   if (!fs.existsSync(PATH)) {
     var err = new Error('App does not exist')

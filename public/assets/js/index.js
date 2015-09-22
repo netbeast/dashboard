@@ -19,6 +19,10 @@ angular.module('Dashboard', ['ngRoute'])
       templateUrl: 'views/apps/show.html',
       controller: 'AppsShowCtrl'
     })
+    .when('/apps/:name/edit', {
+      templateUrl: 'views/apps/edit.html',
+      controller: 'Apps.edit'
+    })
     .when('/install/', {
       templateUrl: 'views/apps/new.html',
       controller: 'AppsNewCtrl'

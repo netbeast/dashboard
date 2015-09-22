@@ -58,17 +58,11 @@ nav {
 	}
 }
 
-.del-overlay {
-	position: absolute;
-	left: 50%; top: 50%;
-	margin-top: -25px;
-	margin-left: -35px;
-	z-index: 1000;
-}
-
 /* apps#index */
 .drawer {
 	width: 100%;
+	height: 100%;
+	position: absolute;
 	padding: 20px 0 50px 0;
 	.apps {
 		display: block;
@@ -87,6 +81,11 @@ nav {
 			font-size: 140px;
 		}
 	}
+	.context-menu {
+		position: absolute;
+		margin-top: -140px;
+		margin-left: 60px;
+	}
 }
 
 
@@ -94,57 +93,6 @@ nav {
 	.avatar img {
 		max-height: 90%;
 		max-width: 90%;
-	}
-}
-
-
-#install {
-	#tabs {
-		width: 100%;
-		display: block;
-		ul {
-			display: block;
-			margin: auto 0;
-			height: 48px;
-			font-size: 18px;
-			line-height: 18px;
-			background-color: $blue;
-			li {
-				height: 100%;
-				float: left;
-				a {
-					padding: 16px;
-					display: inline-block;
-				}
-				&:hover, &.active {
-					color: white;
-					//endarken blue =>
-					background-color: $blue - #111111;
-				}
-			}
-		}
-	}
-
-	.dropzone {
-		padding: 0;
-		height: 450px;
-		border: 3px dashed $grey;
-		margin: 20px 20px 0 20px;
-		.dz-message {
-			font-size: 3em;
-			padding-top: 50px;
-		}
-		&:hover {
-			border: 3px dashed $blue;
-		}
-	}
-}
-
-article {
-	.context-menu {
-		position: absolute;
-		margin-top: -140px;
-		margin-left: 60px;
 	}
 }
 

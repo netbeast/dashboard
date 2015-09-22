@@ -35,12 +35,44 @@ angular.module('Dashboard')
 
   }])
 
-.controller('AppsListCtrl', ['$scope', 'Apps',
-  function ($scope, Apps) {
+.controller('AppsListCtrl', ['$scope', 'Apps', '$location',
+  function ($scope, Apps, $location) {
+
     helper.setTitle('Your apps drawer')
     helper.setNavColor('blue')
+
     Apps.all().success(function(data) {
       $scope.apps = data
+    })
+
+    var dz = new Dropzone('.drawer', {
+      url: '/apps',
+      clickable: false,
+      dictDefaultMessage: '',
+      previewTemplate: $('.dz-template').html(),
+      accept: function(file, done) {
+        var fname = file.name
+        var ext = [fname.split('.')[1], fname.split('.')[2]].join('.')
+        if(ext === 'tar.gz' || ext === 'tgz.') {
+          console.log('Uploading file with extension ' + ext)
+          done()
+        } else {
+          done('Invalid file type. Must be a tar.gz')
+          this.removeFile(file)
+        }
+      }
+    })
+
+    dz.on('success', function(file) {
+      dz.removeFile(file)
+      Apps.all().success(function(data) {
+        $scope.apps = data
+        $scope.$apply()
+      })
+    })
+
+    dz.on('error', function(file, error, xhr) {
+      toastr.error(error, 'Dashboard')
     })
   }])
 
@@ -69,36 +101,4 @@ angular.module('Dashboard')
       })
     }
 
-  }])
-
-.controller('AppsNewCtrl', ['$scope', '$routeParams', '$http',  '$location',
-  function($scope, $routeParams, $http, $location) {
-
-    helper.hideNav()
-    helper.setTitle('Install a new app')
-
-    var dz = new Dropzone(".dropzone", {
-      url: "/apps",
-      maxFiles: 1,
-      accept: function(file, done) {
-        var fname = file.name
-        var ext = [fname.split('.')[1], fname.split('.')[2]].join('.')
-        if(ext === 'tar.gz' || ext === 'tgz.') {
-          console.log('Uploading file with extension ' + ext)
-          done()
-        } else {
-          done('Invalid file type. Must be a tar.gz')
-          this.removeFile(file)
-        }
-      }
-    })
-
-    dz.on("error", function(file, error, xhr) {
-      toastr.error(error)
-      dz.removeFile(file)
-    })
-
-    dz.on("processing", function(file, response) {
-      $location.path("/")
-    })
   }])

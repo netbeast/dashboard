@@ -23,10 +23,6 @@ angular.module('Dashboard', ['ngRoute'])
       templateUrl: 'views/apps/edit.html',
       controller: 'Apps.edit'
     })
-    .when('/install/', {
-      templateUrl: 'views/apps/new.html',
-      controller: 'AppsNewCtrl'
-    })
     .when('/i/:name', {
       templateUrl: 'views/apps/live.html',
       controller: 'ActivitiesLiveCtrl'

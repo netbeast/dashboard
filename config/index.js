@@ -12,42 +12,18 @@ var fs = require('fs-extra')
 , path = require('path')
 , launcher = require('../src/launcher')
 
-
-/*
-* You could also write in this folder a 
-* config.json with this structure to change
-* the dashboard configuration: 
-{
-	port : 3000,
-	appsDir : "/your/apps/",
-	tmpDir : "/the/tmp/dir",
-	publicDir : "/your/public-assets"
-	(don't change 'publicDir' unless you know what you are doing)	
-}
-*/
-
 var root = path.join(__dirname, '..')
 , userFile = path.join(__dirname, 'user.json')
 , configFile = path.join(__dirname, 'config.json')
 
 
-var defaultConfig = {
+var config = module.exports = {
 	port : 80,
 	tmpDir : '/tmp',
 	configDir: __dirname,
 	sandbox : path.join(root, './.sandbox'),
 	publicDir : path.join(root, './public'),
-	appsDir : path.join(root, './.sandbox/node_modules'),
-	user : fs.readJsonSync(userFile, {throw: false})
-}
-
-var config = fs.readJsonSync(configFile,	
-	{throws: false}) || defaultConfig
-
-module.exports = config
-
-config.getUser = function() {
-	return fs.readJsonSync(userFile, {throw: false})
+	appsDir : path.join(root, './.sandbox/node_modules')
 }
 
 console.log('[Default config]')
@@ -59,7 +35,7 @@ fs.readdir(config.appsDir, function (err, files) {
 	if (err)
 		throw err
 
-	async.map(files, function(file, callback) {
+	async.mapSeries(files, function(file, callback) {
 		var pkgJson = path.join(config.appsDir, file, 'package.json')
 		fs.readJson(pkgJson, function (err, data) {
 			if (err)

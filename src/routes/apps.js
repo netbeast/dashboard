@@ -101,16 +101,16 @@ router.post('/apps', installer, function (req, res) {
 })
 
 // DELETE
-router.delete('/apps/:name', function (req, res) {
+router.delete('/apps/:name', function (req, res, next) {
   launcher.stop(req.params.name, function (err) {
     if (err) {
-      res.status(500).json('' + err)
+      next(new Error('Launcher stopped'))
     } else {
       Helper.deleteApp(req.params.name, function (err) {
         if (err && err.code === 404)
-          res.status(404).send('Not found')
+          next(new E.NotFound('App not found'))
         else if(err)
-          res.status(403).json('' + err)
+          next(new Error('Launcher stopped'))
         else
           res.status(204).json('The app was deleted')
       })
@@ -119,11 +119,11 @@ router.delete('/apps/:name', function (req, res) {
 })
 
 
-router.put('/apps/:name', function (req, res) {
+router.put('/apps/:name', function (req, res, next) {
   var file = path.join(config.appsDir, req.params.name, 'package.json')
   fs.writeJson(file, req.body, function(err) {
     if (err)
-      throw new Error('Invalid JSON')
+      next(new E.InvalidFormat('Not a valid package.json'))
     else
       res.json(204)
   })

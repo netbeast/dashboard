@@ -15306,8 +15306,8 @@ angular.module('Dashboard')
     var appName = $routeParams.name
     helper.setNavColor('blue')
     helper.setTitle(appName)
-    Apps.getReadme(appName).success(function(data) {
 
+    Apps.getReadme(appName).success(function(data) {
       $scope.readme = $sce.trustAsHtml(data)
     }) 
     
@@ -15319,6 +15319,15 @@ angular.module('Dashboard')
     .success(function (data) {
       $scope.href = 'http://' + window.location.host + ':' + data.port
     })
+
+    //pin app to boot
+    $scope.update = function () {
+      $scope.app.bootOnLoad = true
+      Apps.update(appName, $scope.app).success(function () {
+        toastr.success('App will start on load next time', 'Dashboard')
+      })
+    }
+
   }])
 
 .controller('AppsListCtrl', ['$scope', 'Apps',
@@ -15355,15 +15364,6 @@ angular.module('Dashboard')
       })
     }
 
-  }])
-
-.controller('AppsRmCtrl', ['$scope', 'Apps',
-  function ($scope, Apps) {
-    helper.setTitle('Uninstall apps')
-    helper.setNavColor('red')
-    Apps.all().success(function(data) {
-      $scope.apps = data
-    })
   }])
 
 .controller('AppsNewCtrl', ['$scope', '$routeParams', '$http',  '$location',
@@ -15670,8 +15670,8 @@ angular.module("Dashboard")
     self.getReadme = function(app) {
       return $http.get('/apps/' + app + '/readme')
       .error(function(data) {
-        console.log(data.toString())  
-        toastr.error(data.toString())
+        toastr.error(data, 'Dashboard')
+        console.error('%s @ self.remove() %s', __filename, data)  
       })
     }
 
@@ -15680,7 +15680,7 @@ angular.module("Dashboard")
       return $http.put('/apps/' + app, pkg)
       .error(function(data, status) {
         toastr.error(data, 'An error has occurred when updating the app')
-        console.error(__filename + ' @ self.update()' + data)
+        console.error('%s @ self.update() %s', __filename, data)
       })
     }
     
@@ -15688,7 +15688,7 @@ angular.module("Dashboard")
       return $http.delete('/apps/' + app)
       .error(function(data, status) {
         toastr.error(data, 'An error has occurred when removing the app')
-        console.error(__filename + ' @ self.remove()' + data)
+        console.error('%s @ self.remove() %s', __filename, data)
       })
     }
 

@@ -22,8 +22,8 @@ angular.module("Dashboard")
     self.getReadme = function(app) {
       return $http.get('/apps/' + app + '/readme')
       .error(function(data) {
-        console.log(data.toString())  
-        toastr.error(data.toString())
+        toastr.error(data, 'Dashboard')
+        console.error('%s @ self.remove() %s', __filename, data)  
       })
     }
 
@@ -32,7 +32,7 @@ angular.module("Dashboard")
       return $http.put('/apps/' + app, pkg)
       .error(function(data, status) {
         toastr.error(data, 'An error has occurred when updating the app')
-        console.error(__filename + ' @ self.update()' + data)
+        console.error('%s @ self.update() %s', __filename, data)
       })
     }
     
@@ -40,7 +40,7 @@ angular.module("Dashboard")
       return $http.delete('/apps/' + app)
       .error(function(data, status) {
         toastr.error(data, 'An error has occurred when removing the app')
-        console.error(__filename + ' @ self.remove()' + data)
+        console.error('%s @ self.remove() %s', __filename, data)
       })
     }
 

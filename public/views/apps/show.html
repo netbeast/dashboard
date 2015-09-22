@@ -29,11 +29,8 @@
 				</td>
 			</tr>
 		</table>
-		<a ng-show="href"  class="btn btn-info" href="#/i/{{app.name}}">
-			Open {{app.name}}
-		</a>
-		<a ng-hide="href" class="btn">
-			Launching {{app.name}}...
+		<a href="/#/apps/{{app.name}}" class="btn btn-default" ng-click="update()">
+			<i class="fa fa-thumb-tack"> Start this app on boot</i>
 		</a>
 	</section>
 	<section class="col-xs-12 col-sm-12 col-md-8">
@@ -49,9 +46,15 @@
 			<hr/>
 			<div ng-bind-html="readme"></div>
 			<hr/>
-			<a ng-href="/#/apps/{{app.name}}/edit"><i class="fa fa-pencil"> Edit package (advanced)</i></a>
+			<a ng-href="/#/apps/{{app.name}}/edit">
+				<i class="fa fa-pencil"> Edit package (advanced)</i>
+			</a>
 		</div>
 		<br/>
 	</div>
 </section>
 </div>
+<br/>
+<br/>
+<br/>
+<br/>

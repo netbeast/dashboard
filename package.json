@@ -64,7 +64,7 @@
   "scripts": {
     "preinstall": "ENV=production",
     "postinstall": "npm link npm",
-    "test": "mocha"
+    "test": "./node_modules/mocha/bin/mocha"
   },
   "author": "netbeast",
   "license": "GPL3"

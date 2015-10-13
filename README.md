@@ -1,12 +1,12 @@
-# xway dashboard
+# Netbeast dashboard
 
-[![Join the chat at https://gitter.im/netbeast-co/xway](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast-co/xway?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://travis-ci.org/netbeast-co/xy-dashboard.svg)](https://travis-ci.org/netbeast-co/xy-dashboard)
+[![Join the chat at https://gitter.im/netbeast-co/router](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast-co/xway?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/netbeast-co/xy-dashboard.svg)](https://travis-ci.org/netbeast-co/dashboard)
 [![npm version](https://badge.fury.io/js/xy-dashboard.svg)](http://badge.fury.io/js/xy-dashboard)
 
 ###Iot in html5.
 
-This is a web panel from you can install, manage or publish IoT applications. For Linux + node.js. You already tried the xway dashboard or distro? Let us know http://bit.ly/1dQmFKt!
+This is a web panel from you can install, manage or publish IoT applications. For Linux + node.js. You already tried the Netbeast dashboard or distro? Let us know http://bit.ly/1dQmFKt!
 
 ## Try it locally
 Find it live at `http://localhost`
@@ -14,7 +14,7 @@ Find it live at `http://localhost`
 
 ### Install
 ``` bash
-npm install -g xy-dashboard
+npm install -g nb-dashboard
 ```
 
 ### Run
@@ -24,11 +24,11 @@ sudo xy-dasyboard --port 80
 
 ## Turn your Raspberry Pi in a home automation gateway!
 
-Compiling with npm the xy-dashboard node.js native modules may take a while. That is why we precompile them weekly and push them to this repo production branch. You can have it on your Raspberry Pi in less than a minute:
+Compiling with npm the nb-dashboard node.js native modules may take a while. That is why we precompile them weekly and push them to this repo production branch. You can have it on your Raspberry Pi in less than a minute:
 
 ```bash
-git clone -b production --single-branch https://github.com/netbeast-co/xy-dashboard/
-cd xy-dashboard
+git clone -b production --single-branch https://github.com/netbeast-co/dashboard/
+cd nb-dashboard
 npm link npm # npm package itself is needed but not included in production
 sudo ./www
 ```
@@ -47,7 +47,7 @@ You can build IoT apps using only web technologies: javascript and HTML5! Also w
 
 
 ### Docs
-https://github.com/netbeast-co/xway
+https://github.com/netbeast-co/router
 
 ### Chat with us
 We are at gitter: http://bit.ly/1dQmFKt

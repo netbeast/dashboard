@@ -1,7 +1,7 @@
 # Netbeast dashboard
 
 [![Join the chat at https://gitter.im/netbeast-co/router](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast-co/xway?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://travis-ci.org/netbeast-co/xy-dashboard.svg)](https://travis-ci.org/netbeast-co/dashboard)
+[![Build Status](https://travis-ci.org/netbeast-co/xdashboard.svg)](https://travis-ci.org/netbeast-co/dashboard)
 [![npm version](https://badge.fury.io/js/xy-dashboard.svg)](http://badge.fury.io/js/xy-dashboard)
 
 ###Iot in html5.

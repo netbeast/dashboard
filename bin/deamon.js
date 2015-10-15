@@ -1,5 +1,4 @@
-#!/bin/sh
-':' // exec "$(command -v nodejs || command -v node)" "$0" "$@"
+#!/usr/bin/env node
 
 var sha1 = require('sha1')
 var dgram = require('dgram')

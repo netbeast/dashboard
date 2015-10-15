@@ -1,24 +1,22 @@
 'use strict'
 
 var gulp = require('gulp')
-, sourcemaps = require('gulp-sourcemaps')
-, source = require('vinyl-source-stream')
-, buffer = require('vinyl-buffer')
-, browserify = require('browserify')
-, nodemon = require('gulp-nodemon')
-, sass = require('gulp-sass')
-, spawn = require('child_process').spawn
-, minify = require('gulp-minify-css')
-, gutil = require('gulp-util')
+var sourcemaps = require('gulp-sourcemaps')
+var source = require('vinyl-source-stream')
+var buffer = require('vinyl-buffer')
+var browserify = require('browserify')
+var nodemon = require('gulp-nodemon')
+var sass = require('gulp-sass')
+var minify = require('gulp-minify-css')
 
-gulp.task('default', ['serve'], function() {
+gulp.task('default', ['serve'], function () {
   gulp.watch('./public/assets/css/**', ['sass'])
   gulp.watch('./public/assets/js/**', ['browserify'])
 })
 
 gulp.task('serve', function () {
-  nodemon({ script: './www', ignore: [
-    ".sandbox/*", "tmp/*", "*.md", "*.txt", "public/*"] })
+  nodemon({ script: './www', ignore: [ 'test',
+    '.sandbox/*', 'tmp/*', '*.md', '*.txt', 'public/*'] })
 })
 
 gulp.task('sass', function () {
@@ -38,7 +36,7 @@ gulp.task('browserify', function () {
   })
 
   return bundler.bundle()
-  .on('error', function(err) {
+  .on('error', function (err) {
     // print the error (can replace with gulp-util)
     console.log(err.message)
     // end this stream
@@ -46,7 +44,7 @@ gulp.task('browserify', function () {
   })
   .pipe(source('bundle.js'))
   .pipe(buffer())
-  .pipe(sourcemaps.init({loadMaps: true}))
+  .pipe(sourcemaps.init({ loadMaps: true }))
   .pipe(sourcemaps.write('./'))
   .pipe(gulp.dest('./public/dist/js/'))
 })

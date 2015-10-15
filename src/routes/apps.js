@@ -1,29 +1,28 @@
 var express = require('express')
-, showdown  = require('showdown')
-, config = require('../../config')
-, Helper = require('../helpers')
-, fs = require('fs-extra')
-, path = require('path')
-, installer = require('../installer')
-, launcher = require('../launcher')
-, httpProxy = require('http-proxy')
-, npm = require('npm')
-, broker = require('../helpers/broker')
-, E = require('../error')
+var Showdown = require('showdown')
+var config = require('../../config')
+var Helper = require('../helpers')
+var fs = require('fs-extra')
+var path = require('path')
+var installer = require('../installer')
+var launcher = require('../launcher')
+var httpProxy = require('http-proxy')
+var npm = require('npm')
+var broker = require('../helpers/broker')
+var E = require('../error')
 
 var router = express.Router()
 
 // GET
-router.get('/apps', function(req, res) {
-  fs.readdir(config.appsDir, function(err, files) {
-    if (err)
-      throw err
+router.get('/apps', function (req, res, next) {
+  fs.readdir(config.appsDir, function (err, files) {
+    if (err) return next(err)
 
     res.json(files)
   })
 })
 
-router.get('/apps/:name', function(req, res, next) {
+router.get('/apps/:name', function (req, res, next) {
   var pkgJson = path.join(config.appsDir, req.params.name, 'package.json')
   var app = fs.readJsonSync(pkgJson, { throw: false })
   if (app !== undefined) {
@@ -45,23 +44,25 @@ router.get('/apps/:name/logo', function (req, res) {
   }
 })
 
-router.get('/apps/:name/port?', function(req, res) {
+router.get('/apps/:name/port?', function (req, res) {
   var app = launcher.getApp(req.params.name)
   if (app) {
     console.dir(app.port)
     res.json(app.port)
   } else {
-    res.status(403).send("App not running")
+    res.status(403).send('App not running')
   }
 })
 
-router.get('/apps/:name/readme', function (req, res) {
+router.get('/apps/:name/readme', function (req, res, next) {
   var readme = path.join(config.appsDir, req.params.name, 'README.md')
-  if (!fs.existsSync(readme))
-    return res.send("This app does not have a README.md")
+  if (!fs.existsSync(readme)) {
+    return res.send('This app does not have a README.md')
+  }
 
   fs.readFile(readme, 'utf8', function (err, data) {
-    var converter = new showdown.converter(),
+    if (err) return next(err)
+    var converter = new Showdown.converter(),
     html = converter.makeHtml(data)
     res.send(html)
   })
@@ -70,49 +71,30 @@ router.get('/apps/:name/readme', function (req, res) {
 router.get('/apps/:name/package', function (req, res) {
   var pkg = path.join(config.appsDir, req.params.name, 'package.json')
   if (!fs.existsSync(pkg))
-    return res.send("Fatal: This app does not have a package.json")
+  return res.send('Fatal: This app does not have a package.json')
 
   fs.readFile(pkg, 'utf8', function (err, data) {
-    res.header("Content-Type", "text/plain")
+    res.header('Content-Type', 'text/plain')
     res.send('' + data)
   })
 })
 
 // CREATE
-router.post('/apps', installer, function (req, res) {
-  // do nothing but let installer handle
-  if (req.body.url) {
-    console.log("installing from %s", req.body.url)
-    npm.load({}, function () {
-      npm.commands.install(config.sandbox, req.body.url, function(err) {
+router.post('/apps', installer.multer, installer.process, installer.git)
 
-        if (err && err.code === 'ENOENT') {
-          broker.emit('stderr', 'Sorry, this is not a valid xway app')
-        } else if (err) {
-          broker.emit('stderr', err.toString())
-          throw err
-        }
-
-        broker.emit('stdout', 'Installation ended')
-        res.status(204).send()
-      })
-    })
-  }
-})
-
-// DELETE
 router.delete('/apps/:name', function (req, res, next) {
   launcher.stop(req.params.name, function (err) {
     if (err) {
       next(new Error('Launcher stopped'))
     } else {
       Helper.deleteApp(req.params.name, function (err) {
-        if (err && err.code === 404)
+        if (err && err.code === 404) {
           next(new E.NotFound('App not found'))
-        else if(err)
+        } else if (err) {
           next(new Error('Launcher stopped'))
-        else
+        } else {
           res.status(204).json('The app was deleted')
+        }
       })
     }
   })
@@ -121,11 +103,11 @@ router.delete('/apps/:name', function (req, res, next) {
 
 router.put('/apps/:name', function (req, res, next) {
   var file = path.join(config.appsDir, req.params.name, 'package.json')
-  fs.writeJson(file, req.body, function(err) {
+  fs.writeJson(file, req.body, function (err) {
     if (err)
-      next(new E.InvalidFormat('Not a valid package.json'))
+    next(new E.InvalidFormat('Not a valid package.json'))
     else
-      res.json(204)
+    res.json(204)
   })
 })
 
@@ -144,7 +126,7 @@ router.use('/i/:name?', function(req, res)  {
   // with the port where it is running
   app = launcher.getApp(req.params.name)
   || launcher.getApp(referer)
-  
+
   if (app) {
     // Here app is running
     // In case the path is /i/:name
@@ -163,7 +145,7 @@ router.use('/i/:name?', function(req, res)  {
     proxy.web(req, res, { target: proxyUrl })
   } else {
     // Here app is not running
-    res.status(404).json("App not running")
+    res.status(404).json('App not running')
   }
 })
 

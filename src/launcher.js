@@ -1,12 +1,10 @@
 var spawn = require('child_process').spawn
-, broker = require('./helpers/broker')
-, portfinder = require('portfinder')
-, config = require('../config')
-, helper = require('./helpers')
-, fs = require('fs-extra')
-, events = require('events')
-, chalk = require('chalk')
-, path = require('path')
+var broker = require('./helpers/broker')
+var portfinder = require('portfinder')
+var fs = require('fs-extra')
+var events = require('events')
+var chalk = require('chalk')
+var path = require('path')
 
 portfinder.basePort = 3000
 // Apps with their child object running
@@ -17,34 +15,32 @@ var launcher = new events.EventEmitter()
 launcher.on('start', function (app) {
   var appRoot, pkgJson, entryPoint
 
-  if (children[app.name])
-    return
+  if (children[app.name]) return
 
   appRoot = path.join(__dirname, '../.sandbox/node_modules', app.name)
   pkgJson = fs.readJsonSync(path.join(appRoot, 'package.json'))
-  
-  if (!pkgJson || !pkgJson.main)
-    return
 
-  //child management
+  if (!pkgJson || !pkgJson.main) return
+
+  // child management
   entryPoint = path.join(appRoot, pkgJson.main)
-  child = spawn(entryPoint, ['--port', app.port], {
+  var child = spawn(entryPoint, ['--port', app.port], {
     cwd: appRoot
   })
-  
+
   child.stdout.on('data', function (data) {
     console.log(chalk.grey('[%s] %s'), app.name, data)
   })
-  
+
   child.stderr.on('data', function (data) {
     broker.notify({ emphasis: 'error', title: app.name, body: data })
   })
-  
+
   child.on('close', function (code) {
     broker.notify({ title: app.name, body: code })
     children[app.name] = undefined
   })
-  
+
   child.on('error', function (code) {
     broker.notify({ emphasis: 'error', title: app.name, body: code })
     children[app.name] = undefined
@@ -55,14 +51,12 @@ launcher.on('start', function (app) {
 })
 
 launcher.start = function (req, res) {
-
-  var app = { name: req.params.name }
-
-  launcher.boot(req.params.name, function(err, port) {
-    if (err)
+  launcher.boot(req.params.name, function (err, port) {
+    if (err) {
       res.status(500).send(err)
-    else
+    } else {
       res.json({port: port})
+    }
   })
 }
 
@@ -78,20 +72,19 @@ launcher.close = function (req, res) {
 }
 
 launcher.stop = function (appName, callback) {
-  var err = undefined
   if (children[appName]) {
     console.log('Sending SIGTERM to ' + appName)
     children[appName].process.kill('SIGTERM')
     children[appName] = undefined
   }
-  callback.call(this, err)
+  callback.call(this)
 }
 
-launcher.getApps = function() {
+launcher.getApps = function () {
   var data = []
   var dir = path.join(__dirname, '../.sandbox/node_modules')
   fs.readdirSync(dir).forEach(function (app) {
-    if(children[app]) {
+    if (children[app]) {
       data.push(app)
     }
   })
@@ -99,13 +92,12 @@ launcher.getApps = function() {
 }
 
 launcher.boot = function (appName, callback) {
-
   var app = { name: appName }
 
   if (!children[app.name]) {
     console.log('[booting] Looking for a free port for %s...', app.name)
     portfinder.getPort(function (err, port) {
-      if(err) {
+      if (err) {
         callback.call(this, new Error('Not enough ports'))
       } else {
         app.port = port
@@ -114,16 +106,14 @@ launcher.boot = function (appName, callback) {
         callback.call(this, null, port)
       }
     })
-
-  } else if (children[app.name]) {    
+  } else if (children[app.name]) {
     callback.call(this, null, children[app.name].port)
-    
   } else {
     callback.call(this, new Error('Server error at launcher.start'))
   }
 }
 
-launcher.getApp = function(appName) {
+launcher.getApp = function (appName) {
   return children[appName]
 }
 

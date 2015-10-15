@@ -1,10 +1,10 @@
 var express = require('express')
-, path = require('path')
-, fs = require('fs-extra')
-, logger = require('morgan')
-, config = require('../config')
-, favicon = require('serve-favicon')
-, bodyParser = require('body-parser')
+var path = require('path')
+var fs = require('fs-extra')
+var logger = require('morgan')
+var config = require('../config')
+var favicon = require('serve-favicon')
+var bodyParser = require('body-parser')
 
 var app = module.exports = express()
 
@@ -18,11 +18,10 @@ app.use(express.static(config.publicDir))
 app.use(require('./routes'))
 
 // error with Error classes
-//=========================
-app.use(function(err, req, res, next) {  
-	console.error(err.stack)
-	if (!err.statusCode || err.statusCode === 500)
-		fs.writeJson('./error-report', {err: err, req: req})
-
-	res.status(err.statusCode || 500).send(err.message)
+app.use(function (err, req, res, next) {
+  console.error(err.stack)
+  if (!err.statusCode || err.statusCode === 500) {
+    fs.writeJson('./error-report', {err: err, req: req})
+  }
+  res.status(err.statusCode || 500).send(err.message)
 })

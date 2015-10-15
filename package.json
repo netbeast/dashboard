@@ -1,7 +1,7 @@
 {
   "name": "xy-dashboard",
   "description": "netbeast os dashboard, IoT apps manager",
-  "version": "0.1.52",
+  "version": "0.1.53",
   "preferGlobal": "true",
   "dependencies": {
     "ascii-table": "0.0.8",

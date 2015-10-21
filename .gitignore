@@ -28,6 +28,5 @@ Thumbs.db
 .log
 .sass-cache/
 
-sandbox/*
-tmp/*
+.sandbox/*
 config/user.json

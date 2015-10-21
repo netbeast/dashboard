@@ -18,7 +18,8 @@ Helper.getApps = function (callback) {
 }
 
 Helper.deleteApp = function (app, callback) {
-  var PATH = path.join(__dirname, '../../.sandbox/node_modules', app)
+  const PATH = path.join(__dirname, config.appsDir, app)
+  console.log(PATH)
 
   if (!fs.existsSync(PATH)) {
     var err = new Error('App does not exist')

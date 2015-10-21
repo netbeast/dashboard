@@ -1,5 +1,5 @@
 language: node_js
-sudo: true
+sudo: required
 node_js:
   - "0.12"
 before_script:

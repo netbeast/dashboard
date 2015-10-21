@@ -1,0 +1,12 @@
+language: node_js
+sudo: false
+node_js:
+  - 4.0
+  - iojs-v3
+  - iojs-v2
+  - iojs-v1
+  - 0.12
+  - 0.10
+  - 0.8
+before_install:
+  - node -v | grep v0.8 && npm install npm@1.4.28 -g || echo "no need to update NPM"

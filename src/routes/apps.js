@@ -7,7 +7,6 @@ var path = require('path')
 var installer = require('../installer')
 var launcher = require('../launcher')
 var httpProxy = require('http-proxy')
-var npm = require('npm')
 var broker = require('../helpers/broker')
 var E = require('../error')
 

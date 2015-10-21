@@ -66,6 +66,7 @@
   },
   "scripts": {
     "preinstall": "ENV=production",
+    "postinstall": "mkdir .sandbox",
     "test": "./node_modules/mocha/bin/mocha --bail"
   },
   "author": "netbeast",

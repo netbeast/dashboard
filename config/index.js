@@ -21,7 +21,7 @@ var config = module.exports = {
   configDir: __dirname,
   sandbox: path.join(root, './.sandbox'),
   publicDir: path.join(root, './public'),
-  appsDir: path.join(root, './.sandbox/node_modules')
+  appsDir: path.join(root, './.sandbox')
 }
 
 console.log('[Default config]')
@@ -29,7 +29,7 @@ console.dir(config)
 
 // start apps that must be initialized on boot
 fs.readdir(config.appsDir, function (err, files) {
-  if (err) return callback(err)
+  if (err) throw err
 
   async.mapSeries(files, function (file, callback) {
     var pkgJson = path.join(config.appsDir, file, 'package.json')

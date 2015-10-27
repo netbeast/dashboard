@@ -10,28 +10,31 @@ var sass = require('gulp-sass')
 var minify = require('gulp-minify-css')
 
 gulp.task('default', ['serve'], function () {
-  gulp.watch('./public/assets/css/**', ['sass'])
-  gulp.watch('./public/assets/js/**', ['browserify'])
+  gulp.watch('./web/assets/css/**', ['sass'])
+  gulp.watch('./web/assets/js/**', ['browserify'])
 })
 
 gulp.task('serve', function () {
-  nodemon({ script: './www', ignore: [ 'test',
-    '.sandbox/*', 'tmp/*', '*.md', '*.txt', 'public/*'] })
+  nodemon({
+    script: './index.js',
+    ignore: ['test', '.sandbox/*', '*.md', '*.txt', 'web/*'],
+    env: { 'ENV': 'development' }
+  })
 })
 
 gulp.task('sass', function () {
-  gulp.src('./public/assets/css/style.scss')
+  gulp.src('./web/assets/css/style.scss')
   .pipe(sourcemaps.init())
   .pipe(sass())
   .pipe(minify())
   .pipe(sourcemaps.write('./'))
-  .pipe(gulp.dest('./public/dist/css'))
+  .pipe(gulp.dest('./web/dist/css'))
 })
 
 gulp.task('browserify', function () {
   // set up the browserify instance on a task basis
   var bundler = browserify({
-    entries: './public/assets/js/index.js',
+    entries: './web/assets/js/index.js',
     debug: true
   })
 
@@ -46,5 +49,5 @@ gulp.task('browserify', function () {
   .pipe(buffer())
   .pipe(sourcemaps.init({ loadMaps: true }))
   .pipe(sourcemaps.write('./'))
-  .pipe(gulp.dest('./public/dist/js/'))
+  .pipe(gulp.dest('./web/dist/js/'))
 })

@@ -17,6 +17,7 @@
     "gift": "^0.6.1",
     "gulp-sass": "^2.0.4",
     "http-proxy": "^1.10.1",
+    "lodash": "^3.10.1",
     "morgan": "^1.5.2",
     "mqtt": "^1.4.1",
     "multer": "^0.1.8",
@@ -40,7 +41,7 @@
     "gulp-sass": "^2.0.1",
     "gulp-sourcemaps": "^1.5.2",
     "gulp-util": "^3.0.4",
-    "mocha": "^2.3.2",
+    "mocha": "^2.3.3",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },
@@ -60,7 +61,10 @@
   "scripts": {
     "preinstall": "export ENV=production",
     "postinstall": "mkdir .sandbox",
-    "test": "export ./node_modules/mocha/bin/mocha --bail"
+    "test": "export ENV=development; ./node_modules/mocha/bin/mocha --bail",
+    "build": "./node_modules/gulp/bin/gulp.js build",
+    "serve": "./node_modules/gulp/bin/gulp.js serve",
+    "app": "./node_modules/gulp/bin/gulp.js"
   },
   "author": "netbeast",
   "license": "GPL3"

@@ -1,8 +1,8 @@
 <section class="drawer container-fluid text-center">
 	<h1 ng-if="apps.length === 0">
 		It seems you have not installed any apps yet.<br/><br/>
-		Find some at the <mark class="info"><a class="link" target="_blank" 
-		href="//market.netbeast.co">marketplace</a></mark> :)
+		Find some at the <a class="link" target="_blank"
+		href="//market.netbeast.co">marketplace</a>
 	</h1>
 	<i data-ng-repeat="app in apps | filter:search.text">
 		<app app="app" class="col-xs-12 col-sm-4 col-md-3">

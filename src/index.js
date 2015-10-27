@@ -8,7 +8,9 @@ var bodyParser = require('body-parser')
 
 var app = module.exports = express()
 
-app.use(logger('dev'))
+app.use(logger('dev', {
+  skip: function (req, res) { return res.statusCode < 400 }
+}))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(favicon(path.join(config.publicDir, 'img/favicon.png')))
@@ -21,7 +23,7 @@ app.use(require('./routes'))
 app.use(function (err, req, res, next) {
   console.error(err.stack)
   if (!err.statusCode || err.statusCode === 500) {
-    fs.writeJson('./error-report', {err: err, req: req})
+    fs.appendFile('./.errorlog', err.stack)
   }
   res.status(err.statusCode || 500).send(err.message)
 })

@@ -1,20 +1,20 @@
 var express = require('express')
 var Showdown = require('showdown')
 var config = require('../../config')
-var Helper = require('../helpers')
 var fs = require('fs-extra')
 var path = require('path')
 var installer = require('../installer')
 var launcher = require('../launcher')
 var httpProxy = require('http-proxy')
 var broker = require('../helpers/broker')
-var E = require('../error')
-
+var App = require('../models/app')
+var NotFound = require('../util/not-found')
+var InvalidFormat = require('../util/invalid-format')
 var router = express.Router()
 
 // GET
 router.get('/apps', function (req, res, next) {
-  fs.readdir(config.appsDir, function (err, files) {
+  App.all(function (err, files) {
     if (err) return next(err)
 
     res.json(files)
@@ -22,13 +22,11 @@ router.get('/apps', function (req, res, next) {
 })
 
 router.get('/apps/:name', function (req, res, next) {
-  var pkgJson = path.join(config.appsDir, req.params.name, 'package.json')
-  var app = fs.readJsonSync(pkgJson, { throw: false })
-  if (app !== undefined) {
-    res.json(app)
-  } else {
-    next(new E.NotFound())
-  }
+  App.getPackageJson(req.params.name, function (err, packageJson) {
+    if (err) return next(err)
+
+    res.json(packageJson)
+  })
 })
 
 router.get('/apps/:name/logo', function (req, res) {
@@ -39,7 +37,7 @@ router.get('/apps/:name/logo', function (req, res) {
     var appLogo = path.join(appRoot, app.logo)
     res.sendFile(appLogo)
   } catch (e) {
-    res.sendFile(path.join(config.publicDir, 'img/dflt.png'))
+    res.sendFile(path.join(config.publicDir, 'img/dflt.svg'))
   }
 })
 
@@ -61,18 +59,16 @@ router.get('/apps/:name/readme', function (req, res, next) {
 
   fs.readFile(readme, 'utf8', function (err, data) {
     if (err) return next(err)
-    var converter = new Showdown.converter(),
-    html = converter.makeHtml(data)
+    var converter = new Showdown.converter()
+    var html = converter.makeHtml(data)
     res.send(html)
   })
 })
 
-router.get('/apps/:name/package', function (req, res) {
-  var pkg = path.join(config.appsDir, req.params.name, 'package.json')
-  if (!fs.existsSync(pkg))
-  return res.send('Fatal: This app does not have a package.json')
+router.get('/apps/:name/package', function (req, res, next) {
+  App.getPackageJson(req.params.name, function (err, data) {
+    if (err) return next(err)
 
-  fs.readFile(pkg, 'utf8', function (err, data) {
     res.header('Content-Type', 'text/plain')
     res.send('' + data)
   })
@@ -84,36 +80,36 @@ router.post('/apps', installer.multer, installer.process, installer.git)
 router.delete('/apps/:name', function (req, res, next) {
   launcher.stop(req.params.name, function (err) {
     if (err) {
-      next(new Error('Launcher stopped'))
+      return next(new Error('Launcher could not stop the app'))
     } else {
-      Helper.deleteApp(req.params.name, function (err) {
+      App.delete(req.params.name, function (err) {
         if (err && err.code === 404) {
-          next(new E.NotFound('App not found'))
+          return next(new NotFound())
         } else if (err) {
-          next(new Error('Launcher stopped'))
+          return next(err)
         } else {
-          res.status(204).json('The app was deleted')
+          res.status(204).end()
         }
       })
     }
   })
 })
 
-
 router.put('/apps/:name', function (req, res, next) {
   var file = path.join(config.appsDir, req.params.name, 'package.json')
   fs.writeJson(file, req.body, function (err) {
-    if (err)
-    next(new E.InvalidFormat('Not a valid package.json'))
-    else
-    res.json(204)
+    if (err) {
+      next(new InvalidFormat('Not a valid package.json'))
+    } else {
+      res.status(204).end()
+    }
   })
 })
 
 // Proxy
-//======
+// ======
 var proxy = httpProxy.createProxyServer({ws: true})
-router.use('/i/:name?', function(req, res)  {
+router.use('/i/:name?', function (req, res) {
   var app, reqPath, referer, proxyUrl
   // Capture the referer to proxy the request
   // in case the path is not clear enaugh
@@ -123,8 +119,7 @@ router.use('/i/:name?', function(req, res)  {
   }
   // This block returns an app object
   // with the port where it is running
-  app = launcher.getApp(req.params.name)
-  || launcher.getApp(referer)
+  app = launcher.getApp(req.params.name) || launcher.getApp(referer)
 
   if (app) {
     // Here app is running

@@ -3,7 +3,7 @@
 var helper = require('../helpers')
 
 angular.module('Dashboard')
-.controller('LoginCtrl', ['$scope', '$http', '$location', '$rootScope', 
+.controller('User#login', ['$scope', '$http', '$location', '$rootScope', 
 	function ($scope, $http, $location, $rootScope) {
 		helper.setTitle('Sign in')
 		$scope.credentials = {}

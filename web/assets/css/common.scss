@@ -4,15 +4,11 @@
 	outline: none;
 }
 
-@font-face {
-	font-family: Muli;
-	src: url('/assets/fonts/Muli/Muli-Regular.ttf') format('truetype');
-}
-
 body, html {
 	height: 100%;
 	width: 100%;
-	font-family: "Muli",  Helvetica, arial;
+  background-color: $grey-lighter;
+  color: $black;
 }
 
 body {
@@ -32,9 +28,8 @@ nav {
 	width: 100%;
 	display: block;
 	position: fixed;
-	border: 1px solid $grey;
 	background-opacity: .5;
-	background-color: white;
+	background-color: $grey-lighter;
 
 	ul {
 		float: left;
@@ -64,6 +59,7 @@ nav {
 	height: 100%;
 	position: absolute;
 	padding: 20px 0 50px 0;
+  background-color: $grey-lighter;
 	.apps {
 		display: block;
 		border-radius: 3px;

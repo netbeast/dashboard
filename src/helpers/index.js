@@ -3,7 +3,7 @@ var broker = require('../helpers/broker')
 var fs = require('fs-extra')
 var config = require('../../config')
 
-Helper = {}
+var Helper = module.exports = {}
 
 // Returns array of app names
 Helper.getApps = function () {
@@ -29,7 +29,7 @@ Helper.deleteApp = function (app, callback) {
 
   console.log('Uninstalling ' + app)
   broker.emit('stdout', 'Uninstalling ' + app + '...')
-  fs.remove(PATH, function(err) {
+  fs.remove(PATH, function (err) {
     if (err)
       console.log(err)
     else
@@ -38,5 +38,3 @@ Helper.deleteApp = function (app, callback) {
     return callback.call(this, err)
   })
 }
-
-module.exports = Helper

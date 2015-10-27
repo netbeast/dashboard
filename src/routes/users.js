@@ -1,35 +1,26 @@
 var express = require('express')
-, request = require('request')
-, broker = require('../helpers/broker')
-, fs = require('fs-extra')
-, sha1 = require('sha1')
-, router = express.Router()
+var client = require('request')
+var crypto = require('crypto')
+var router = express.Router()
+
+const API_URL = 'https://market.netbeast.co'
 
 // Users
-//===========
-router.post('/login', function(req, response) {
-	request.post('http://market.netbeast.co/login', {
-		json: {
-			email: req.body.email,
-			password: sha1(req.body.password)
-		}
-	}, function (err, res, body) {
-		if (err) 
-			throw err
-		if (res.statusCode === 200)
-			fs.writeJsonSync('./config/user.json', body)
-	}).pipe(response) 
-})
+// =====
+router.post('/login', function (req, res, next) {
+  process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
+  var md5 = crypto.createHash('md5')
+  md5.update(req.body.password)
+  var opts = {
+    json: {
+      email: req.body.email,
+      password: md5.digest('hex')
+    }
+  }
 
-router.get('/logout', function(req, res) {
-	fs.remove('./config/user.json', function(err) {
-		if (err) {
-			throw err
-		} else {
-			broker.emit('success', 'Successfully logged out')
-			res.status(304).send()
-		}
-	})
+  client.post(API_URL + '/login', opts, function (err, resp, body) {
+    if (err) return next(err)
+  }).pipe(res)
 })
 
 module.exports = router

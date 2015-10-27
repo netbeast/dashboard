@@ -3,7 +3,7 @@
 var helper = require('../helpers')
 
 angular.module('Dashboard')
-.controller('RoutesCtrl', ['$scope', '$http',
+.controller('Routes#index', ['$scope', '$http',
   function ($scope, $http) {
     helper.setTitle('[Dev] API')
     helper.setNavColor('orange')
@@ -18,7 +18,7 @@ angular.module('Dashboard')
   }])
 
 angular.module('Dashboard')
-.controller('SettingsCtrl', ['$scope', '$http',
+.controller('Settings#index', ['$scope', '$http',
   function ($scope, $http) {
     helper.setTitle('Settings')
     helper.setNavColor('#777777')

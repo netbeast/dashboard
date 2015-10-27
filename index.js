@@ -2,6 +2,7 @@
 
 // Dependencies
 var app = require('./src')
+var _bootOnLoad = require('./src/boot-on-load')
 var forever = require('forever-monitor')
 var config = require('./config')
 var cmd = require('commander')
@@ -23,8 +24,9 @@ io = require('socket.io')(server)
 // Listen on provided port, on all network interfaces.
 server.listen(cmd.port || config.port, function () {
   console.log('Netbeast dashboard started on %s:%s',
-    server.address().address,
-    server.address().port)
+  server.address().address,
+  server.address().port)
+  _bootOnLoad()
 })
 
 // Start the deamon that recognises other netbeasts

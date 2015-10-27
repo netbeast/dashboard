@@ -1,7 +1,7 @@
 {
   "name": "nb-dashboard",
   "description": "netbeast os dashboard, IoT apps manager",
-  "version": "0.1.53",
+  "version": "0.1.54",
   "preferGlobal": "true",
   "dependencies": {
     "ascii-table": "0.0.8",

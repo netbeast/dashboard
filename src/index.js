@@ -11,7 +11,7 @@ var app = module.exports = express()
 app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(favicon(path.join(config.publicDir, 'img/xway.png')))
+app.use(favicon(path.join(config.publicDir, 'img/favicon.png')))
 
 app.use(express.static(config.publicDir))
 

@@ -30,3 +30,4 @@ Thumbs.db
 
 .sandbox/*
 config/user.json
+node_modules

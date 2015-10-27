@@ -22,12 +22,12 @@ io = require('socket.io')(server)
 
 // Listen on provided port, on all network interfaces.
 server.listen(cmd.port || config.port, function () {
-  console.log('xway dashboard started on %s:%s',
+  console.log('Netbeast dashboard started on %s:%s',
     server.address().address,
     server.address().port)
 })
 
-// Start the deamon that recognises other xways
+// Start the deamon that recognises other netbeasts
 var deamonBin = path.join(__dirname, 'bin/deamon.js')
 var deamon = new (forever.Monitor)(deamonBin, {max: 1})
 deamon.start()

@@ -4,6 +4,7 @@
 [![Build Status](https://travis-ci.org/netbeast-co/dashboard.svg)](https://travis-ci.org/netbeast-co/dashboard)
 [![npm version](https://badge.fury.io/js/dashboard.svg)](http://badge.fury.io/js/dashboard)
 
+
 ###Iot in html5.
 
 This is a web panel from you can install, manage or publish IoT applications. For Linux + node.js. You already tried the Netbeast dashboard or distro? Let us know http://bit.ly/1dQmFKt!
@@ -48,6 +49,7 @@ You can build IoT apps using only web technologies: javascript and HTML5! Also w
 
 ### Docs
 https://github.com/netbeast-co/docs
+
 
 ### Chat with us
 We are at gitter: http://bit.ly/1dQmFKt

@@ -29,7 +29,8 @@
     "socket.io": "^1.3.5"
   },
   "bin": {
-    "xy-dashboard": "index.js"
+    "dashboard": "index.js",
+    "nb-dashboard": "index.js"
   },
   "devDependencies": {
     "browserify": "^10.2.1",

@@ -1,7 +1,18 @@
-<a ng-right-click="toggleMenu($event)"
-class="apps" ng-href="#/apps/{{app}}">
-<div class="avatar">
-  <img ng-src="/apps/{{app}}/logo" alt="/apps/{{app}}/logo" />
-</div>
-<h5>{{app}}</h5>
+<a class="apps" ng-href="#/apps/{{app}}">
+  <div class="avatar">
+    <img ng-src="/apps/{{app}}/logo" alt="/apps/{{app}}/logo" />
+  </div>
+  <h5>{{app}}</h5>
 </a>
+
+<span ng-show="$parent.activities" ng-click="stop()">
+  <a  class="btn btn-warning" href="javascript:void(0)">
+    <i class="fa fa-ban"></i> Stop
+  </a>
+</span>
+
+<span ng-show="$parent.uninstall" ng-click="delete()">
+  <a class="btn btn-danger" href="javascript:void(0)">
+    <i class="fa fa-trash"></i> Uninstall
+  </a>
+</span>

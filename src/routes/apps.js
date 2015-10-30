@@ -30,8 +30,8 @@ router.get('/apps/:name', function (req, res, next) {
 
 router.get('/apps/:name/logo', function (req, res) {
   var pkgJson = path.join(config.appsDir, req.params.name, 'package.json')
-  var app = fs.readJsonSync(pkgJson, { throw: false })
   try {
+    var app = fs.readJsonSync(pkgJson)
     var appRoot = path.join(config.appsDir, app.name)
     var appLogo = path.join(appRoot, app.logo)
     res.sendFile(appLogo)

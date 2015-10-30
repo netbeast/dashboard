@@ -1,5 +1,5 @@
 var sort = require('../');
-var test = require('tape');
+var test = require('tap').test;
 var through = require('through2');
 
 test('dedupe index', function (t) {

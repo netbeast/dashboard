@@ -1,0 +1,15 @@
+<nb-title value="'People'"></nb-title>
+<nb-panel></nb-panel>
+	<div class="text-center" ng-repeat="user in users">
+		<a href="/#/users/{{user.alias}}"
+		class="col-xs-6 col-sm-4 col-md-3">
+		<div class="avatar">
+			<img ng-src="http://www.gravatar.com/avatar/{{user.gravatar}}?d=retro"
+			alt="{{user.alias}} gravatar">
+		</div>
+		<br/>
+		<div class="alias">
+			{{user.alias}} - {{user.apps.length}} apps
+		</div>
+	</a>
+</div>

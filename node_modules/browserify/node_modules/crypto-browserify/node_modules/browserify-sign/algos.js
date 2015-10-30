@@ -20,14 +20,14 @@ exports['RSA-SHA512'] = exports.sha512WithRSAEncryption = {
   id: new Buffer('3051300d060960864801650304020305000440', 'hex')
 }
 exports['RSA-SHA1'] = {
-	sign: 'rsa',
-	hash: 'sha1',
-	id: new Buffer('3021300906052b0e03021a05000414', 'hex')
+  sign: 'rsa',
+  hash: 'sha1',
+  id: new Buffer('3021300906052b0e03021a05000414', 'hex')
 }
 exports['ecdsa-with-SHA1'] = {
-	sign: 'ecdsa',
-	hash: 'sha1',
-	id: new Buffer('', 'hex')
+  sign: 'ecdsa',
+  hash: 'sha1',
+  id: new Buffer('', 'hex')
 }
 exports.DSA = exports['DSA-SHA1'] = exports['DSA-SHA'] = {
   sign: 'dsa',

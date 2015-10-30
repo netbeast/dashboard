@@ -2,7 +2,7 @@
  * In node.js `this` on the module root is the same as `exports`. Browser-pack
  * should act like it too.
  **/
-var test = require('tape');
+var test = require('tap').test;
 var pack = require('../');
 
 test('this', function (t) {

@@ -72,7 +72,7 @@ launcher.stop = function (appName, done) {
     children[appName].process.kill('SIGTERM')
     children[appName] = undefined
   }
-  done(this)
+  done()
 }
 
 launcher.getApps = function () {

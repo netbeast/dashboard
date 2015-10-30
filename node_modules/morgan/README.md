@@ -159,6 +159,17 @@ The URL of the request. This will use `req.originalUrl` if exists, otherwise `re
 
 The contents of the User-Agent header of the request.
 
+### morgan.compile(format)
+
+Compile a format string into a function for use by `morgan`. A format string
+is a string that represents a single log line and can utilize token syntax.
+Tokens are references by `:token-name`. If tokens accept arguments, they can
+be passed using `[]`, for example: `:token-name[pretty]` would pass the string
+`'pretty'` as an argument to the token `token-name`.
+
+Normally formats are defined using `morgan.format(name, format)`, but for certain
+advanced uses, this compile function is directly available.
+
 ## Examples
 
 ### express/connect
@@ -204,7 +215,10 @@ http.createServer(function (req, res) {
 
 ### write logs to a file
 
-Simple app that will log all request in the Apache combined format to the file "access.log"
+#### single file
+
+Simple app that will log all requests in the Apache combined format to the file
+`access.log`.
 
 ```js
 var express = require('express')
@@ -215,6 +229,39 @@ var app = express()
 
 // create a write stream (in append mode)
 var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'})
+
+// setup the logger
+app.use(morgan('combined', {stream: accessLogStream}))
+
+app.get('/', function (req, res) {
+  res.send('hello, world!')
+})
+```
+
+#### log file rotation
+
+Simple app that will log all requests in the Apache combined format to one log
+file per date in the `log/` directory using the
+[file-stream-rotator module](https://www.npmjs.com/package/file-stream-rotator).
+
+```js
+var FileStreamRotator = require('file-stream-rotator')
+var express = require('express')
+var fs = require('fs')
+var morgan = require('morgan')
+
+var app = express()
+var logDirectory = __dirname + '/log'
+
+// ensure log directory exists
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+
+// create a rotating write stream
+var accessLogStream = FileStreamRotator.getStream({
+  filename: logDirectory + '/access-%DATE%.log',
+  frequency: 'daily',
+  verbose: false
+})
 
 // setup the logger
 app.use(morgan('combined', {stream: accessLogStream}))
@@ -256,13 +303,13 @@ function assignId(req, res, next) {
 
 [MIT](LICENSE)
 
-[npm-image]: https://img.shields.io/npm/v/morgan.svg?style=flat
+[npm-image]: https://img.shields.io/npm/v/morgan.svg
 [npm-url]: https://npmjs.org/package/morgan
-[travis-image]: https://img.shields.io/travis/expressjs/morgan.svg?style=flat
+[travis-image]: https://img.shields.io/travis/expressjs/morgan/master.svg
 [travis-url]: https://travis-ci.org/expressjs/morgan
-[coveralls-image]: https://img.shields.io/coveralls/expressjs/morgan.svg?style=flat
+[coveralls-image]: https://img.shields.io/coveralls/expressjs/morgan/master.svg
 [coveralls-url]: https://coveralls.io/r/expressjs/morgan?branch=master
-[downloads-image]: https://img.shields.io/npm/dm/morgan.svg?style=flat
+[downloads-image]: https://img.shields.io/npm/dm/morgan.svg
 [downloads-url]: https://npmjs.org/package/morgan
-[gratipay-image]: https://img.shields.io/gratipay/dougwilson.svg?style=flat
+[gratipay-image]: https://img.shields.io/gratipay/dougwilson.svg
 [gratipay-url]: https://www.gratipay.com/dougwilson/

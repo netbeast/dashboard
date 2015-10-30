@@ -1,3 +1,5 @@
-require('./activities')
+require('./activity')
+require('./session')
 require('./auth')
-require('./apps')
+require('./user')
+require('./app')

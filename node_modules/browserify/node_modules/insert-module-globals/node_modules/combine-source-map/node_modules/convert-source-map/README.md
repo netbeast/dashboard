@@ -50,10 +50,13 @@ Returns source map converter from given `filename` by parsing `//# sourceMapping
 `filename` must point to a file that is found inside the `mapFileDir`. Most tools store this file right next to the
 generated file, i.e. the one containing the source map.
 
-### fromSource(source)
+### fromSource(source[, largeSource])
 
-Finds last sourcemap comment in file and returns source map converter or returns null if no source map comment was
-found.
+Finds last sourcemap comment in file and returns source map converter or returns null if no source map comment was found.
+
+If `largeSource` is set to `true`, an algorithm that does not use regex is applied to find the source map. This is faster and especially useful if you're running into "call stack size exceeded" errors with the default algorithm.
+
+However, it is less accurate and may match content that isn't a source map comment.
 
 ### fromMapFileSource(source, mapFileDir)
 
@@ -77,9 +80,14 @@ JSON string is generated.
 
 Converts source map to base64 encoded json string.
 
-### toComment()
+### toComment([options])
 
-Converts source map to base64 encoded json string prefixed with `//# sourceMappingURL=...`.
+Converts source map to an inline comment that can be appended to the source-file.
+
+By default, the comment is formatted like: `//# sourceMappingURL=...`, which you would
+normally see in a JS source file.
+
+When `options.multiline == true`, the comment is formatted like: `/*# sourceMappingURL=... */`, which you would find in a CSS source file.
 
 ### addProperty(key, value)
 
@@ -111,4 +119,3 @@ Returns the regex used to find source map comments pointing to map files.
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/thlorenz/convert-source-map/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-

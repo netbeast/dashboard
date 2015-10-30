@@ -2,7 +2,7 @@
 var packageJson = require('package-json');
 
 module.exports = function (name, cb) {
-	packageJson(name, 'latest', function (err, json) {
+	packageJson(name.toLowerCase(), 'latest', function (err, json) {
 		if (err) {
 			cb(err);
 			return;

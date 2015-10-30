@@ -1,5 +1,8 @@
 var assert = require('assert');
 var asn1 = require('..');
+var bn = asn1.bignum;
+var fixtures = require('./fixtures');
+var jsonEqual = fixtures.jsonEqual;
 
 var Buffer = require('buffer').Buffer;
 
@@ -159,7 +162,7 @@ describe('asn1.js error', function() {
           partial: true
         });
 
-        assert.deepEqual(decoded.result, expectedObj);
+        jsonEqual(decoded.result, expectedObj);
 
         assert.equal(decoded.errors.length, expectedErrs.length);
         expectedErrs.forEach(function(expected, i) {
@@ -179,7 +182,7 @@ describe('asn1.js error', function() {
           this.key('d').int()
         )
       );
-    }, '30073005300022012e', { a: { b: {}, d: 46 } }, [
+    }, '30073005300022012e', { a: { b: {}, d: new bn(46) } }, [
       /"int" at: \["a"\]\["b"\]\["c"\]/
     ]);
 
@@ -192,7 +195,7 @@ describe('asn1.js error', function() {
           this.key('d').int()
         )
       );
-    }, '30073005300322012e', { a: { b: { c: 46 } } }, [
+    }, '30073005300322012e', { a: { b: { c: new bn(46) } } }, [
       /"int" at: \["a"\]\["d"\]/
     ]);
   });

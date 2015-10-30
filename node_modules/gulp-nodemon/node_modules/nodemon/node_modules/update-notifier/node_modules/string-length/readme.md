@@ -7,29 +7,21 @@
 
 ## Install
 
-```sh
+```
 $ npm install --save string-length
-```
-
-```sh
-$ bower install --save string-length
-```
-
-```sh
-$ component install sindresorhus/string-length
 ```
 
 
 ## Usage
 
 ```js
-'𐌢'.length;
+'🐴'.length;
 //=> 2
 
-stringLength('𐌢');
+stringLength('🐴');
 //=> 1
 
-stringLength('\x1b[1municorn\x1b[22m');
+stringLength('\u001b[1municorn\u001b[22m');
 //=> 7
 ```
 

@@ -50,5 +50,73 @@ describe('asn1.js RFC3280', function() {
                      new asn1.bignum('462e4256bb1194dc', 16));
     assert.equal(tbs.signature.algorithm.join('.'),
                  '1.2.840.113549.1.1.5');
+    assert.equal(tbs.signature.parameters.toString('hex'), '0500');
+  });
+  it('should decode ECC Certificate', function() {
+/*
+  Symantec Class 3 ECC 256 bit Extended Validation CA from
+  https://knowledge.symantec.com/support/ssl-certificates-support/index?page=content&actp=CROSSLINK&id=AR1908
+*/
+    var data = new Buffer(
+      '308203e33082036aa00302010202104d955d20af85c49f6925fbab7c665f89300a0608' +
+      '2a8648ce3d0403033081ca310b300906035504061302555331173015060355040a130e' +
+      '566572695369676e2c20496e632e311f301d060355040b1316566572695369676e2054' +
+      '72757374204e6574776f726b313a3038060355040b1331286329203230303720566572' +
+      '695369676e2c20496e632e202d20466f7220617574686f72697a656420757365206f6e' +
+      '6c79314530430603550403133c566572695369676e20436c6173732033205075626c69' +
+      '63205072696d6172792043657274696669636174696f6e20417574686f72697479202d' +
+      '204734301e170d3132313232303030303030305a170d3232313231393233353935395a' +
+      '30818b310b3009060355040613025553311d301b060355040a131453796d616e746563' +
+      '20436f72706f726174696f6e311f301d060355040b131653796d616e74656320547275' +
+      '7374204e6574776f726b313c303a0603550403133353796d616e74656320436c617373' +
+      '203320454343203235362062697420457874656e6465642056616c69646174696f6e20' +
+      '43413059301306072a8648ce3d020106082a8648ce3d03010703420004dd043db2f290' +
+      '9397c6e9bbbc91db51f0a386edfbc6d38593320549e00483619651ff5721ae0bda0ee7' +
+      '04a17fdb2a1cbdca9835c5717340cde86aab54844326e2a382016d3082016930120603' +
+      '551d130101ff040830060101ff02010030370603551d1f0430302e302ca02aa0288626' +
+      '687474703a2f2f63726c2e77732e73796d616e7465632e636f6d2f706361332d67342e' +
+      '63726c300e0603551d0f0101ff040403020106303706082b06010505070101042b3029' +
+      '302706082b06010505073001861b687474703a2f2f6f6373702e77732e73796d616e74' +
+      '65632e636f6d30650603551d20045e305c305a0604551d20003052302606082b060105' +
+      '05070201161a687474703a2f2f7777772e73796d617574682e636f6d2f637073302806' +
+      '082b06010505070202301c1a1a687474703a2f2f7777772e73796d617574682e636f6d' +
+      '2f727061302a0603551d1104233021a41f301d311b30190603550403131253594d432d' +
+      '4543432d43412d703235362d33301d0603551d0e041604144813651794ec9e162a2a74' +
+      '5ce8532db4fb83eb8e301f0603551d23041830168014b31691fdeea66ee4b52e498f87' +
+      '788180ece5b1b5300a06082a8648ce3d040303036700306402305c9bee83a3764d8c2d' +
+      '054c8234bab3bece8fe8c33481fb4077e8346c5b172b3badd5a7a3d2f366c24fb2b0c8' +
+      '76988fbf02304fc22fce92c5a9bdce7d4ed41b3b6624ea4ecd82af544a88efe3bf3a93' +
+      '6354217d1230d232cdabc981b0a711437b4566',
+      'hex');
+    var SubjectPublicKeyInfo = rfc3280.SubjectPublicKeyInfo;
+    var res = rfc3280.Certificate.decode(data, 'der');
+
+    var tbs = res.tbsCertificate;
+    assert.equal(tbs.version, 'v3');
+    assert.deepEqual(tbs.serialNumber,
+                     new asn1.bignum('4d955d20af85c49f6925fbab7c665f89', 16));
+    assert.equal(tbs.signature.algorithm.join('.'),
+                 '1.2.840.10045.4.3.3');  // RFC5754
+    var spki = SubjectPublicKeyInfo.encode(tbs.subjectPublicKeyInfo, 'der');
+// spki check to the output of
+// openssl x509 -in ecc_cert.pem -pubkey -noout |
+// openssl pkey -pubin  -outform der | openssl base64
+    assert.equal(spki.toString('base64'),
+                 'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE3QQ9svKQk5fG6bu8kdtR8KO' +
+                 'G7fvG04WTMgVJ4ASDYZZR/1chrgvaDucEoX/bKhy9ypg1xXFzQM3oaqtUhE' +
+                 'Mm4g=='
+                );
+  });
+
+  it('should decode AuthorityInfoAccess', function() {
+    var data = new Buffer('305a302b06082b06010505073002861f687474703a2f2f70' +
+                          '6b692e676f6f676c652e636f6d2f47494147322e63727430' +
+                          '2b06082b06010505073001861f687474703a2f2f636c6965' +
+                          '6e7473312e676f6f676c652e636f6d2f6f637370',
+                          'hex');
+
+    var info = rfc3280.AuthorityInfoAccessSyntax.decode(data, 'der');
+
+    assert(info[0].accessMethod);
   });
 });

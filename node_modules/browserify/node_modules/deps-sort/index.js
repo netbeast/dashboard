@@ -1,6 +1,5 @@
 var through = require('through2');
 var shasum = require('shasum');
-var isarray = require('isarray');
 
 module.exports = function (opts) {
     if (!opts) opts = {};
@@ -18,7 +17,7 @@ module.exports = function (opts) {
 
 function sorter (rows, tr, opts) {
     var expose = opts.expose || {};
-    if (isarray(expose)) {
+    if (Array.isArray(expose)) {
         expose = expose.reduce(function (acc, key) {
             acc[key] = true;
             return acc;
@@ -81,7 +80,7 @@ function sorter (rows, tr, opts) {
         rows.forEach(function (row) { tr.push(row) });
     }
     tr.push(null);
-};
+}
 
 function cmp (a, b) {
     return a.id + a.hash < b.id + b.hash ? -1 : 1;
@@ -91,7 +90,7 @@ function has (obj, key) {
     return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
-function depCmp (hashes) {
+function depCmp () {
     var deps = {}, hashes = {};
     return { add: add, cmp: cmp }
     

@@ -42,6 +42,7 @@ function Pipeline (streams, opts) {
     this.splice.apply(this, [ 0, 0 ].concat(streams));
     
     this.once('finish', function () {
+        self._notEmpty();
         self._streams[0].end();
     });
 }

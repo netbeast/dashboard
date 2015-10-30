@@ -7,7 +7,7 @@ touch.touchSync = touch.sync = function (f, options) {
 }
 
 touch.ftouch = ftouch
-touch.ftouchSync = function (fd, options) {
+touch.ftouchSync = ftouch.sync = function (fd, options) {
   return ftouch(fd, options)
 }
 
@@ -19,16 +19,20 @@ function validOpts (options) {
   var now = new Date(options.time || Date.now())
   if (!options.atime && !options.mtime) {
     options.atime = options.mtime = now
-  } else if (true === options.atime) {
-    options.atime = now
-  } else if (true === options.mtime) {
-    options.mtime = now
+  } else {
+    if (true === options.atime) {
+      options.atime = now
+    }
+    if (true === options.mtime) {
+      options.mtime = now
+    }
   }
 
   var oflags = 0
   if (!options.force) {
     oflags = oflags | cons.O_RDWR
   }
+
   if (!options.nocreate) {
     oflags = oflags | cons.O_CREAT
   }

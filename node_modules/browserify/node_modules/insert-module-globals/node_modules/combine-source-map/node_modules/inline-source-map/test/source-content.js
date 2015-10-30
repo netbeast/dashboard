@@ -41,19 +41,19 @@ test('generated mappings', function (t) {
           "sourceRoot": "",
           "sourcesContent": [
             "function foo() {\n  var hello = 'hello';\n  var world = 'world';\n  console.log('%s %s', hello, world);\n}"
-          ]
+          ],
         }
       , 'includes source content'
     )
 
-    t.deepEqual(
-        decode(gen.base64Encode()) 
+    t.equal(
+        decode(gen.base64Encode())
       , '{"version":3,"sources":["foo.js"],"names":[],"mappings":"AAAA;AACA;AACA;AACA;AACA","file":"","sourceRoot":"","sourcesContent":["function foo() {\\n  var hello = \'hello\';\\n  var world = \'world\';\\n  console.log(\'%s %s\', hello, world);\\n}"]}'
       , 'encodes generated mappings including source content'
     )
     t.equal(
         gen.inlineMappingUrl()
-      , '//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZvby5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtBQUNBO0FBQ0E7QUFDQTtBQUNBIiwiZmlsZSI6IiIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzQ29udGVudCI6WyJmdW5jdGlvbiBmb28oKSB7XG4gIHZhciBoZWxsbyA9ICdoZWxsbyc7XG4gIHZhciB3b3JsZCA9ICd3b3JsZCc7XG4gIGNvbnNvbGUubG9nKCclcyAlcycsIGhlbGxvLCB3b3JsZCk7XG59Il19'
+      , '//# sourceMappingURL=data:application/json;charset:utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZvby5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtBQUNBO0FBQ0E7QUFDQTtBQUNBIiwiZmlsZSI6IiIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzQ29udGVudCI6WyJmdW5jdGlvbiBmb28oKSB7XG4gIHZhciBoZWxsbyA9ICdoZWxsbyc7XG4gIHZhciB3b3JsZCA9ICd3b3JsZCc7XG4gIGNvbnNvbGUubG9nKCclcyAlcycsIGhlbGxvLCB3b3JsZCk7XG59Il19'
       , 'returns correct inline mapping url including source content'
     )
     t.end()
@@ -80,19 +80,19 @@ test('generated mappings', function (t) {
           "sourcesContent": [
             "function foo() {\n  var hello = 'hello';\n  var world = 'world';\n  console.log('%s %s', hello, world);\n}",
             "function bar() {\n  console.log('yes?');\n}"
-          ]
+          ],
         }
       , 'includes source content for both files'
     )
 
     t.deepEqual(
-        decode(gen.base64Encode()) 
+        decode(gen.base64Encode())
       , '{"version":3,"sources":["foo.js","bar.js"],"names":[],"mappings":"ACAA,ADAA;ACCA,ADAA;ACCA,ADAA;AACA;AACA","file":"","sourceRoot":"","sourcesContent":["function foo() {\\n  var hello = \'hello\';\\n  var world = \'world\';\\n  console.log(\'%s %s\', hello, world);\\n}","function bar() {\\n  console.log(\'yes?\');\\n}"]}'
       , 'encodes generated mappings including source content'
     )
     t.equal(
         gen.inlineMappingUrl()
-      , '//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZvby5qcyIsImJhci5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUNBQSxBREFBO0FDQ0EsQURBQTtBQ0NBLEFEQUE7QUFDQTtBQUNBIiwiZmlsZSI6IiIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzQ29udGVudCI6WyJmdW5jdGlvbiBmb28oKSB7XG4gIHZhciBoZWxsbyA9ICdoZWxsbyc7XG4gIHZhciB3b3JsZCA9ICd3b3JsZCc7XG4gIGNvbnNvbGUubG9nKCclcyAlcycsIGhlbGxvLCB3b3JsZCk7XG59IiwiZnVuY3Rpb24gYmFyKCkge1xuICBjb25zb2xlLmxvZygneWVzPycpO1xufSJdfQ=='
+      , '//# sourceMappingURL=data:application/json;charset:utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZvby5qcyIsImJhci5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUNBQSxBREFBO0FDQ0EsQURBQTtBQ0NBLEFEQUE7QUFDQTtBQUNBIiwiZmlsZSI6IiIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzQ29udGVudCI6WyJmdW5jdGlvbiBmb28oKSB7XG4gIHZhciBoZWxsbyA9ICdoZWxsbyc7XG4gIHZhciB3b3JsZCA9ICd3b3JsZCc7XG4gIGNvbnNvbGUubG9nKCclcyAlcycsIGhlbGxvLCB3b3JsZCk7XG59IiwiZnVuY3Rpb24gYmFyKCkge1xuICBjb25zb2xlLmxvZygneWVzPycpO1xufSJdfQ=='
       , 'returns correct inline mapping url including source content'
     )
     t.end()
@@ -114,20 +114,20 @@ test('generated mappings', function (t) {
           ],
           "names": [],
           "mappings": "ACAA,ADAA;ACCA,ADAA;ACCA,ADAA;AACA;AACA",
-          "sourceRoot": "",
-          "sourcesContent": [ null, "function bar() {\n  console.log('yes?');\n}" ]
+          "sourcesContent": [ null, "function bar() {\n  console.log('yes?');\n}" ],
+          "sourceRoot": ""
         }
       , 'includes source content for the file with source content and [null] for the other file'
     )
 
     t.deepEqual(
-        decode(gen.base64Encode()) 
+        decode(gen.base64Encode())
       , '{"version":3,"sources":["foo.js","bar.js"],"names":[],"mappings":"ACAA,ADAA;ACCA,ADAA;ACCA,ADAA;AACA;AACA","file":"","sourceRoot":"","sourcesContent":[null,"function bar() {\\n  console.log(\'yes?\');\\n}"]}'
       , 'encodes generated mappings including source content'
     )
     t.equal(
         gen.inlineMappingUrl()
-      , '//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZvby5qcyIsImJhci5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUNBQSxBREFBO0FDQ0EsQURBQTtBQ0NBLEFEQUE7QUFDQTtBQUNBIiwiZmlsZSI6IiIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzQ29udGVudCI6W251bGwsImZ1bmN0aW9uIGJhcigpIHtcbiAgY29uc29sZS5sb2coJ3llcz8nKTtcbn0iXX0='
+      , '//# sourceMappingURL=data:application/json;charset:utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZvby5qcyIsImJhci5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUNBQSxBREFBO0FDQ0EsQURBQTtBQ0NBLEFEQUE7QUFDQTtBQUNBIiwiZmlsZSI6IiIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzQ29udGVudCI6W251bGwsImZ1bmN0aW9uIGJhcigpIHtcbiAgY29uc29sZS5sb2coJ3llcz8nKTtcbn0iXX0='
       , 'returns correct inline mapping url including source content'
     )
     t.end()

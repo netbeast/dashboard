@@ -2,9 +2,11 @@
  * serve-favicon
  * Copyright(c) 2010 Sencha Inc.
  * Copyright(c) 2011 TJ Holowaychuk
- * Copyright(c) 2014 Douglas Christopher Wilson
+ * Copyright(c) 2014-2015 Douglas Christopher Wilson
  * MIT Licensed
  */
+
+'use strict';
 
 /**
  * Module dependencies.
@@ -20,6 +22,13 @@ var path = require('path');
 var resolve = path.resolve;
 
 /**
+ * Module exports.
+ * @public
+ */
+
+module.exports = favicon;
+
+/**
  * Module variables.
  * @private
  */
@@ -31,16 +40,16 @@ var maxMaxAge = 60 * 60 * 24 * 365 * 1000; // 1 year
  *
  * @public
  * @param {String|Buffer} path
- * @param {Object} options
+ * @param {Object} [options]
  * @return {Function} middleware
  */
 
-module.exports = function favicon(path, options){
-  options = options || {};
+function favicon(path, options) {
+  var opts = options || {};
 
   var buf;
   var icon; // favicon cache
-  var maxAge = calcMaxAge(options.maxAge);
+  var maxAge = calcMaxAge(opts.maxAge);
   var stat;
 
   if (!path) throw new TypeError('path to favicon.ico is required');
@@ -64,9 +73,10 @@ module.exports = function favicon(path, options){
       return;
     }
 
-    if ('GET' !== req.method && 'HEAD' !== req.method) {
-      var status = 'OPTIONS' === req.method ? 200 : 405;
-      res.writeHead(status, {'Allow': 'GET, HEAD, OPTIONS'});
+    if (req.method !== 'GET' && req.method !== 'HEAD') {
+      res.statusCode = req.method === 'OPTIONS' ? 200 : 405;
+      res.setHeader('Allow', 'GET, HEAD, OPTIONS');
+      res.setHeader('Content-Length', '0');
       res.end();
       return;
     }
@@ -112,7 +122,7 @@ function createIcon(buf, maxAge) {
   return {
     body: buf,
     headers: {
-      'Cache-Control': 'public, max-age=' + ~~(maxAge / 1000),
+      'Cache-Control': 'public, max-age=' + Math.floor(maxAge / 1000),
       'ETag': etag(buf)
     }
   };

@@ -1,6 +1,6 @@
 var test = require('tape')
 
-var algorithms = ['sha1', 'sha224','sha256', 'sha384', 'sha512', 'md5', 'rmd160']
+var algorithms = ['sha1', 'sha224','sha256', 'sha384', 'sha512', 'SHA512', 'md5', 'rmd160']
 var formats = [undefined, 'base64', 'hex', 'binary']
 
 var vectors = require('hash-test-vectors/hmac')
@@ -21,7 +21,7 @@ algorithms.forEach(function (alg) {
         var output = new Buffer(formattedOutput, format)
 
         var truncated = input.truncate ? output.slice(0, input.truncate) : output
-        t.equal(truncated.toString('hex'), input[alg])
+        t.equal(truncated.toString('hex'), input[alg.toLowerCase()])
         t.end()
       })
     })
@@ -34,7 +34,7 @@ algorithms.forEach(function (alg) {
 
       var output = hmac.read()
       var truncated = input.truncate ? output.slice(0, input.truncate) : output
-      t.equal(truncated.toString('hex'), input[alg])
+      t.equal(truncated.toString('hex'), input[alg.toLowerCase()])
       t.end()
     })
   })

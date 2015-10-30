@@ -3,9 +3,21 @@
  * Copyright(c) 2010 Sencha Inc.
  * Copyright(c) 2011 TJ Holowaychuk
  * Copyright(c) 2014 Jonathan Ong
- * Copyright(c) 2014 Douglas Christopher Wilson
+ * Copyright(c) 2014-2015 Douglas Christopher Wilson
  * MIT Licensed
  */
+
+'use strict'
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = morgan
+module.exports.compile = compile
+module.exports.format = format
+module.exports.token = token
 
 /**
  * Module dependencies.
@@ -16,6 +28,7 @@ var auth = require('basic-auth')
 var debug = require('debug')('morgan')
 var deprecate = require('depd')('morgan')
 var onFinished = require('on-finished')
+var onHeaders = require('on-headers')
 
 /**
  * Array of CLF month names.
@@ -43,79 +56,70 @@ var defaultBufferDuration = 1000;
  * @return {Function} middleware
  */
 
-exports = module.exports = function morgan(format, options) {
-  if (typeof format === 'object') {
-    options = format
-    format = options.format || 'default'
+function morgan(format, options) {
+  var fmt = format
+  var opts = options || {}
+
+  if (format && typeof format === 'object') {
+    opts = format
+    fmt = opts.format || 'default'
 
     // smart deprecation message
-    deprecate('morgan(options): use morgan(' + (typeof format === 'string' ? JSON.stringify(format) : 'format') + ', options) instead')
+    deprecate('morgan(options): use morgan(' + (typeof fmt === 'string' ? JSON.stringify(fmt) : 'format') + ', options) instead')
   }
 
-  if (format === undefined) {
+  if (fmt === undefined) {
     deprecate('undefined format: specify a format')
   }
 
-  options = options || {}
-
   // output on request instead of response
-  var immediate = options.immediate;
+  var immediate = opts.immediate
 
   // check if log entry should be skipped
-  var skip = options.skip || function () { return false; };
+  var skip = opts.skip || false
 
   // format function
-  var fmt = compile(exports[format] || format || exports.default)
+  var formatLine = typeof fmt !== 'function'
+    ? getFormatFunction(fmt)
+    : fmt
 
-  // steam
-  var buffer = options.buffer
-  var stream = options.stream || process.stdout
+  // stream
+  var buffer = opts.buffer
+  var stream = opts.stream || process.stdout
 
   // buffering support
   if (buffer) {
     deprecate('buffer option')
 
-    var realStream = stream
-    var buf = []
-    var timer = null
-    var interval = 'number' == typeof buffer
-      ? buffer
-      : defaultBufferDuration
-
-    // flush function
-    var flush = function(){
-      timer = null
-
-      if (buf.length) {
-        realStream.write(buf.join(''));
-        buf.length = 0;
-      }
-    }
+    // flush interval
+    var interval = typeof buffer !== 'number'
+      ? defaultBufferDuration
+      : buffer
 
     // swap the stream
-    stream = {
-      write: function(str){
-        if (timer === null) {
-          timer = setTimeout(flush, interval)
-        }
-
-        buf.push(str);
-      }
-    };
+    stream = createBufferStream(stream, interval)
   }
 
   return function logger(req, res, next) {
-    req._startAt = process.hrtime();
-    req._startTime = new Date;
-    req._remoteAddress = getip(req);
+    // request data
+    req._startAt = undefined
+    req._startTime = undefined
+    req._remoteAddress = getip(req)
 
-    function logRequest(){
-      if (skip(req, res)) {
+    // response data
+    res._startAt = undefined
+    res._startTime = undefined
+
+    // record request start
+    recordStartTime.call(req)
+
+    function logRequest() {
+      if (skip !== false && skip(req, res)) {
         debug('skip request')
         return
       }
 
-      var line = fmt(exports, req, res)
+      var line = formatLine(morgan, req, res)
 
       if (null == line) {
         debug('skip line')
@@ -126,133 +130,94 @@ exports = module.exports = function morgan(format, options) {
       stream.write(line + '\n')
     };
 
-    // immediate
     if (immediate) {
-      logRequest();
+      // immediate log
+      logRequest()
     } else {
+      // record response start
+      onHeaders(res, recordStartTime)
+
+      // log when response finished
       onFinished(res, logRequest)
     }
 
     next();
   };
-};
-
-/**
- * Compile `format` into a function.
- *
- * @private
- * @param {Function|String} format
- * @return {Function}
- */
-
-function compile(format) {
-  if (typeof format === 'function') {
-    // already compiled
-    return format
-  }
-
-  if (typeof format !== 'string') {
-    throw new TypeError('argument format must be a function or string')
-  }
-
-  var fmt = format.replace(/"/g, '\\"')
-  var js = '  return "' + fmt.replace(/:([-\w]{2,})(?:\[([^\]]+)\])?/g, function(_, name, arg){
-    return '"\n    + (tokens["' + name + '"](req, res, ' + String(JSON.stringify(arg)) + ') || "-") + "';
-  }) + '";'
-
-  return new Function('tokens, req, res', js);
-};
-
-/**
- * Define a token function with the given `name`,
- * and callback `fn(req, res)`.
- *
- * @public
- * @param {String} name
- * @param {Function} fn
- * @return {Object} exports for chaining
- */
-
-exports.token = function(name, fn) {
-  exports[name] = fn;
-  return this;
-};
-
-/**
- * Define a `fmt` with the given `name`.
- *
- * @public
- * @param {String} name
- * @param {String|Function} fmt
- * @return {Object} exports for chaining
- */
-
-exports.format = function(name, fmt){
-  exports[name] = fmt;
-  return this;
-};
+}
 
 /**
  * Apache combined log format.
  */
 
-exports.format('combined', ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"')
+morgan.format('combined', ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"')
 
 /**
  * Apache common log format.
  */
 
-exports.format('common', ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length]')
+morgan.format('common', ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length]')
 
 /**
  * Default format.
  */
 
-exports.format('default', ':remote-addr - :remote-user [:date] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"');
-deprecate.property(exports, 'default', 'default format: use combined format')
+morgan.format('default', ':remote-addr - :remote-user [:date] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"')
+deprecate.property(morgan, 'default', 'default format: use combined format')
 
 /**
  * Short format.
  */
 
-exports.format('short', ':remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] - :response-time ms');
+morgan.format('short', ':remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] - :response-time ms')
 
 /**
  * Tiny format.
  */
 
-exports.format('tiny', ':method :url :status :res[content-length] - :response-time ms');
+morgan.format('tiny', ':method :url :status :res[content-length] - :response-time ms')
 
 /**
  * dev (colored)
  */
 
-exports.format('dev', function(tokens, req, res){
-  var color = 32; // green
-  var status = res.statusCode;
+morgan.format('dev', function developmentFormatLine(tokens, req, res) {
+  // get the status code if response written
+  var status = res._header
+    ? res.statusCode
+    : undefined
 
-  if (status >= 500) color = 31; // red
-  else if (status >= 400) color = 33; // yellow
-  else if (status >= 300) color = 36; // cyan
+  // get status color
+  var color = status >= 500 ? 31 // red
+    : status >= 400 ? 33 // yellow
+    : status >= 300 ? 36 // cyan
+    : status >= 200 ? 32 // green
+    : 0 // no color
 
-  var fn = compile('\x1b[0m:method :url \x1b[' + color + 'm:status \x1b[0m:response-time ms - :res[content-length]\x1b[0m');
+  // get colored function
+  var fn = developmentFormatLine[color]
 
-  return fn(tokens, req, res);
-});
+  if (!fn) {
+    // compile
+    fn = developmentFormatLine[color] = compile('\x1b[0m:method :url \x1b['
+      + color + 'm:status \x1b[0m:response-time ms - :res[content-length]\x1b[0m')
+  }
+
+  return fn(tokens, req, res)
+})
 
 /**
  * request url
  */
 
-exports.token('url', function(req){
-  return req.originalUrl || req.url;
-});
+morgan.token('url', function getUrlToken(req) {
+  return req.originalUrl || req.url
+})
 
 /**
  * request method
  */
 
-exports.token('method', function(req){
+morgan.token('method', function getMethodToken(req) {
   return req.method;
 });
 
@@ -260,23 +225,28 @@ exports.token('method', function(req){
  * response time in milliseconds
  */
 
-exports.token('response-time', function(req, res){
-  if (!res._header || !req._startAt) return '';
-  var diff = process.hrtime(req._startAt);
-  var ms = diff[0] * 1e3 + diff[1] * 1e-6;
-  return ms.toFixed(3);
-});
+morgan.token('response-time', function getResponseTimeToken(req, res) {
+  if (!req._startAt || !res._startAt) {
+    // missing request and/or response start time
+    return
+  }
+
+  // calculate diff
+  var ms = (res._startAt[0] - req._startAt[0]) * 1e3
+    + (res._startAt[1] - req._startAt[1]) * 1e-6
+
+  // return truncated value
+  return ms.toFixed(3)
+})
 
 /**
  * current date
  */
 
-exports.token('date', function(req, res, format){
-  format = format || 'web'
-
+morgan.token('date', function getDateToken(req, res, format) {
   var date = new Date()
 
-  switch (format) {
+  switch (format || 'web') {
     case 'clf':
       return clfdate(date)
     case 'iso':
@@ -290,15 +260,17 @@ exports.token('date', function(req, res, format){
  * response status code
  */
 
-exports.token('status', function(req, res){
-  return res._header ? res.statusCode : null;
-});
+morgan.token('status', function getStatusToken(req, res) {
+  return res._header
+    ? String(res.statusCode)
+    : undefined
+})
 
 /**
  * normalized referrer
  */
 
-exports.token('referrer', function(req){
+morgan.token('referrer', function getReferrerToken(req) {
   return req.headers['referer'] || req.headers['referrer'];
 });
 
@@ -306,31 +278,35 @@ exports.token('referrer', function(req){
  * remote address
  */
 
-exports.token('remote-addr', getip);
+morgan.token('remote-addr', getip)
 
 /**
  * remote user
  */
 
-exports.token('remote-user', function (req) {
-  var creds = auth(req)
-  var user = (creds && creds.name) || '-'
-  return user;
+morgan.token('remote-user', function getRemoteUserToken(req) {
+  // parse basic credentials
+  var credentials = auth(req)
+
+  // return username
+  return credentials
+    ? credentials.name
+    : undefined
 })
 
 /**
  * HTTP version
  */
 
-exports.token('http-version', function(req){
-  return req.httpVersionMajor + '.' + req.httpVersionMinor;
-});
+morgan.token('http-version', function getHttpVersionToken(req) {
+  return req.httpVersionMajor + '.' + req.httpVersionMinor
+})
 
 /**
  * UA string
  */
 
-exports.token('user-agent', function(req){
+morgan.token('user-agent', function getUserAgentToken(req) {
   return req.headers['user-agent'];
 });
 
@@ -338,17 +314,31 @@ exports.token('user-agent', function(req){
  * request header
  */
 
-exports.token('req', function(req, res, field){
-  return req.headers[field.toLowerCase()];
-});
+morgan.token('req', function getRequestToken(req, res, field) {
+  // get header
+  var header = req.headers[field.toLowerCase()]
+
+  return Array.isArray(header)
+    ? header.join(', ')
+    : header
+})
 
 /**
  * response header
  */
 
-exports.token('res', function(req, res, field){
-  return (res._headers || {})[field.toLowerCase()];
-});
+morgan.token('res', function getResponseTime(req, res, field) {
+  if (!res._header) {
+    return undefined
+  }
+
+  // get header
+  var header = res.getHeader(field)
+
+  return Array.isArray(header)
+    ? header.join(', ')
+    : header
+})
 
 /**
  * Format a Date in the common log format.
@@ -370,6 +360,90 @@ function clfdate(dateTime) {
   return pad2(date) + '/' + month + '/' + year
     + ':' + pad2(hour) + ':' + pad2(mins) + ':' + pad2(secs)
     + ' +0000'
+}
+
+/**
+ * Compile a format string into a function.
+ *
+ * @param {string} format
+ * @return {function}
+ * @public
+ */
+
+function compile(format) {
+  if (typeof format !== 'string') {
+    throw new TypeError('argument format must be a string')
+  }
+
+  var fmt = format.replace(/"/g, '\\"')
+  var js = '  return "' + fmt.replace(/:([-\w]{2,})(?:\[([^\]]+)\])?/g, function(_, name, arg) {
+    return '"\n    + (tokens["' + name + '"](req, res, ' + String(JSON.stringify(arg)) + ') || "-") + "'
+  }) + '";'
+
+  return new Function('tokens, req, res', js)
+}
+
+/**
+ * Create a basic buffering stream.
+ *
+ * @param {object} stream
+ * @param {number} interval
+ * @public
+ */
+
+function createBufferStream(stream, interval) {
+  var buf = []
+  var timer = null
+
+  // flush function
+  function flush() {
+    timer = null
+    stream.write(buf.join(''))
+    buf.length = 0
+  }
+
+  // write function
+  function write(str) {
+    if (timer === null) {
+      timer = setTimeout(flush, interval)
+    }
+
+    buf.push(str)
+  }
+
+  // return a minimal "stream"
+  return { write: write }
+}
+
+/**
+ * Define a format with the given name.
+ *
+ * @param {string} name
+ * @param {string|function} fmt
+ * @public
+ */
+
+function format(name, fmt) {
+  morgan[name] = fmt
+  return this
+}
+
+/**
+ * Lookup and compile a named format function.
+ *
+ * @param {string} name
+ * @return {function}
+ * @public
+ */
+
+function getFormatFunction(name) {
+  // lookup format
+  var fmt = morgan[name] || name || morgan.default
+
+  // return compiled format
+  return typeof fmt !== 'function'
+    ? compile(fmt)
+    : fmt
 }
 
 /**
@@ -400,4 +474,28 @@ function pad2(num) {
 
   return (str.length === 1 ? '0' : '')
     + str
+}
+
+/**
+ * Record the start time.
+ * @private
+ */
+
+function recordStartTime() {
+  this._startAt = process.hrtime()
+  this._startTime = new Date()
+}
+
+/**
+ * Define a token function with the given name,
+ * and callback fn(req, res).
+ *
+ * @param {string} name
+ * @param {function} fn
+ * @public
+ */
+
+function token(name, fn) {
+  morgan[name] = fn
+  return this
 }

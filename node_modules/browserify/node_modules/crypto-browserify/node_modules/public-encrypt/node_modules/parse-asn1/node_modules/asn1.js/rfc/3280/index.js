@@ -150,3 +150,50 @@ var AttributeValue = asn1.define('AttributeValue', function() {
   this.any();
 });
 exports.AttributeValue = AttributeValue;
+
+var GeneralNames = asn1.define('GeneralNames', function() {
+  this.seqof(GeneralName);
+});
+exports.GeneralNames = GeneralNames;
+
+var GeneralName = asn1.define('GeneralName', function() {
+  return this.choice({
+    otherName: this.implicit(0).use(AnotherName),
+    rfc822Name: this.implicit(1).ia5str(),
+    dNSName: this.implicit(2).ia5str(),
+    directoryName: this.implicit(4).use(Name),
+
+    // TODO(indutny): requires DirectoryString, ORAddress
+    // ediPartyName: this.implicit(5).use(EDIPartyName),
+    // x400Address: this.implicit(3).use(ORAddress),
+
+    uniformResourceIdentifier: this.implicit(6).ia5str(),
+    iPAddress: this.implicit(7).octstr(),
+    registeredID: this.implicit(8).objid()
+  });
+});
+exports.GeneralName = GeneralName;
+
+var AnotherName = asn1.define('AnotherName', function() {
+  return this.seq().obj(
+    this.key('type-id').objid(),
+    this.key('value').explicit(0).any()
+  );
+});
+exports.AnotherName = AnotherName;
+
+exports['id-pe-authorityInfoAccess'] = [ 1, 3, 6, 1, 5, 5, 7, 1, 1];
+
+var AuthorityInfoAccessSyntax = asn1.define('AuthorityInfoAccessSyntax',
+                                            function() {
+  this.seqof(AccessDescription);
+});
+exports.AuthorityInfoAccessSyntax = AuthorityInfoAccessSyntax;
+
+var AccessDescription = asn1.define('AccessDescription', function() {
+  this.seq().obj(
+    this.key('accessMethod').objid(),
+    this.key('accessLocation').use(GeneralName)
+  );
+});
+exports.AccessDescription = AccessDescription;

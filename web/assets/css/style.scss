@@ -5,7 +5,75 @@
 @import 'nb-bootstrap.css';
 @import '../../dist/fa/css/font-awesome.css';
 @import '../../../node_modules/dropzone/dist/dropzone.css';
-@import 'toastr.css';
+@import 'vendor/toastr.css';
+@import 'vendor/loading-bar';
 @import 'mixins';
 @import 'colors';
-@import 'common';
+@import 'navbar';
+@import 'apps';
+
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+
+body, html {
+  height: 100%;
+  width: 100%;
+  background-color: $grey-lighter;
+  color: $black;
+}
+
+#wrapper {
+  display: block;
+  float: left;
+}
+
+#brand {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  opacity: 0.4;
+  transition: all ease 0.5s;
+  img {
+    width: 200px;
+    height: auto;
+  }
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.blurry {
+  @include blur(5px);
+}
+
+.desaturated {
+  @include desaturate();
+}
+
+.filter-to-white {
+  -webkit-filter: brightness(0) invert(1);
+  filter: brightness(0) invert(1);
+}
+
+.slant {
+  @include slant();
+}
+
+z-bg {
+  position: relative;
+  z-index: 0;
+}
+
+z-front {
+  position: relative;
+  z-index: 10;
+}
+
+z-super {
+  position: relative;
+  z-index: 100;
+}

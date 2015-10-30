@@ -8,27 +8,36 @@ var browserify = require('browserify')
 var nodemon = require('gulp-nodemon')
 var sass = require('gulp-sass')
 var minify = require('gulp-minify-css')
+var livereload = require('gulp-livereload')
 
 gulp.task('default', ['serve'], function () {
+  livereload.listen()
   gulp.watch('./web/assets/css/**', ['sass'])
   gulp.watch('./web/assets/js/**', ['browserify'])
+  gulp.watch('**/*.html', function (files) {
+    livereload.changed(files)
+  })
 })
 
 gulp.task('serve', function () {
   nodemon({
     script: './index.js',
-    ignore: ['test', '.sandbox/*', '*.md', '*.txt', 'web/*'],
+    ignore: ['test/*', '.gulpfile', '.git', '.sandbox/*', '*.md', '*.txt', 'web/*'],
     env: { 'ENV': 'development' }
   })
 })
 
+gulp.task('build', ['sass', 'browserify'])
+
 gulp.task('sass', function () {
   gulp.src('./web/assets/css/style.scss')
+  .pipe(sass().on('error', sass.logError))
   .pipe(sourcemaps.init())
   .pipe(sass())
   .pipe(minify())
   .pipe(sourcemaps.write('./'))
   .pipe(gulp.dest('./web/dist/css'))
+  .pipe(livereload())
 })
 
 gulp.task('browserify', function () {
@@ -47,7 +56,8 @@ gulp.task('browserify', function () {
   })
   .pipe(source('bundle.js'))
   .pipe(buffer())
-  .pipe(sourcemaps.init({ loadMaps: true }))
+  .pipe(sourcemaps.init({loadMaps: true}))
   .pipe(sourcemaps.write('./'))
   .pipe(gulp.dest('./web/dist/js/'))
+  .pipe(livereload())
 })

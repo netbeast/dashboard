@@ -1,24 +1,18 @@
 'use strict'
 /* global angular */
 
-var helper = require('../helpers')
-
 angular.module('Dashboard')
 
-.controller('Activities#list', ['$scope', 'Activities',
-function ($scope, Activities) {
-  helper.setTitle('Apps running')
-  helper.setNavColor('yellow')
-  Activities.all().success(function (data) {
+.controller('Activities#list', ['$scope', 'Activity',
+function ($scope, Activity) {
+  Activity.all().success(function (data) {
     $scope.apps = data
   })
 
-  $scope.stop = Activities.stop
+  $scope.stop = Activity.stop
 }])
 
-.controller('Activities#live', ['$scope', '$routeParams', 'Activities',
-function ($scope, $routeParams, Activities) {
-  helper.setTitle($routeParams.name)
-  helper.setNavColor('green')
-  Activities.open($scope, $routeParams.name)
+.controller('Activities#live', ['$scope', '$routeParams', 'Activity',
+function ($scope, $routeParams, Activity) {
+  Activity.open($scope, $routeParams.name)
 }])

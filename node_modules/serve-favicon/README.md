@@ -2,11 +2,16 @@
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
-[![Build Status][travis-image]][travis-url]
+[![Linux Build][travis-image]][travis-url]
+[![Windows Build][appveyor-image]][appveyor-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 [![Gittip][gittip-image]][gittip-url]
 
 Node.js middleware for serving a favicon.
+
+A favicon is a visual cue that client software, like browsers, use to identify
+a site. For an example and more information, please visit
+[the Wikipedia article on favicons](https://en.wikipedia.org/wiki/Favicon).
 
 Why use this module?
 
@@ -18,6 +23,11 @@ Why use this module?
   - This module provides an `ETag` based on the contents of the icon, rather
     than file system properties.
   - This module will serve with the most compatible `Content-Type`.
+
+**Note** This module is exclusively for serving the "default, implicit favicon",
+which is `GET /favicon.ico`. For additional vendor-specific icons that require
+HTML markup, additional middleware is required to serve the relevant files, for
+example [serve-static](https://npmjs.org/package/serve-static).
 
 ## Install
 
@@ -38,7 +48,7 @@ Serve favicon accepts these properties in the options object.
 
 ##### maxAge
 
-The `cache-control` `max-age` directive in `ms`, defaulting to 1 day. This can
+The `cache-control` `max-age` directive in `ms`, defaulting to 1 year. This can
 also be a string accepted by the [ms](https://www.npmjs.org/package/ms#readme)
 module.
 
@@ -108,13 +118,15 @@ server.listen(3000);
 
 [MIT](LICENSE)
 
-[npm-image]: https://img.shields.io/npm/v/serve-favicon.svg?style=flat
+[npm-image]: https://img.shields.io/npm/v/serve-favicon.svg
 [npm-url]: https://npmjs.org/package/serve-favicon
-[travis-image]: https://img.shields.io/travis/expressjs/serve-favicon.svg?style=flat
+[travis-image]: https://img.shields.io/travis/expressjs/serve-favicon/master.svg?label=linux
 [travis-url]: https://travis-ci.org/expressjs/serve-favicon
-[coveralls-image]: https://img.shields.io/coveralls/expressjs/serve-favicon.svg?style=flat
+[appveyor-image]: https://img.shields.io/appveyor/ci/dougwilson/serve-favicon/master.svg?label=windows
+[appveyor-url]: https://ci.appveyor.com/project/dougwilson/serve-favicon
+[coveralls-image]: https://img.shields.io/coveralls/expressjs/serve-favicon.svg
 [coveralls-url]: https://coveralls.io/r/expressjs/serve-favicon?branch=master
-[downloads-image]: https://img.shields.io/npm/dm/serve-favicon.svg?style=flat
+[downloads-image]: https://img.shields.io/npm/dm/serve-favicon.svg
 [downloads-url]: https://npmjs.org/package/serve-favicon
-[gittip-image]: https://img.shields.io/gittip/dougwilson.svg?style=flat
+[gittip-image]: https://img.shields.io/gittip/dougwilson.svg
 [gittip-url]: https://www.gittip.com/dougwilson/

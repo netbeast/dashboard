@@ -5,6 +5,8 @@
  * MIT Licensed
  */
 
+'use strict';
+
 /**
  * Module dependencies.
  * @api private
@@ -13,6 +15,7 @@
 var contentDisposition = require('content-disposition');
 var contentType = require('content-type');
 var deprecate = require('depd')('express');
+var flatten = require('array-flatten');
 var mime = require('send').mime;
 var basename = require('path').basename;
 var etag = require('etag');
@@ -76,18 +79,8 @@ exports.isAbsolute = function(path){
  * @api private
  */
 
-exports.flatten = function(arr, ret){
-  ret = ret || [];
-  var len = arr.length;
-  for (var i = 0; i < len; ++i) {
-    if (Array.isArray(arr[i])) {
-      exports.flatten(arr[i], ret);
-    } else {
-      ret.push(arr[i]);
-    }
-  }
-  return ret;
-};
+exports.flatten = deprecate.function(flatten,
+  'utils.flatten: use array-flatten npm module instead');
 
 /**
  * Normalize the given `type`, for example "html" becomes "text/html".
@@ -216,7 +209,7 @@ exports.compileQueryParser = function compileQueryParser(val) {
       fn = newObject;
       break;
     case 'extended':
-      fn = qs.parse;
+      fn = parseExtendedQueryString;
       break;
     case 'simple':
       fn = querystring.parse;
@@ -280,6 +273,20 @@ exports.setCharset = function setCharset(type, charset) {
   // format type
   return contentType.format(parsed);
 };
+
+/**
+ * Parse an extended query string with qs.
+ *
+ * @return {Object}
+ * @private
+ */
+
+function parseExtendedQueryString(str) {
+  return qs.parse(str, {
+    allowDots: false,
+    allowPrototypes: true
+  });
+}
 
 /**
  * Return new empty object.

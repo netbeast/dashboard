@@ -1,48 +1,42 @@
 /* global angular, toastr,  $ */
 'use strict'
 
-var helper = require('../helpers')
 var Dropzone = require('Dropzone')
 
 angular.module('Dashboard')
 
-.controller('Apps#show', ['$scope', '$routeParams', 'Apps', 'Activities', '$sce',
-  function ($scope, $routeParams, Apps, Activities, $sce) {
+.controller('Apps#show', ['$scope', '$routeParams', 'App', 'Activity', '$sce',
+  function ($scope, $routeParams, App, Activity, $sce) {
     var appName = $routeParams.name
-    helper.setNavColor('blue')
-    helper.setTitle(appName)
 
-    Apps.getReadme(appName).success(function (data) {
+    App.getReadme(appName).success(function (data) {
       $scope.readme = $sce.trustAsHtml(data)
     })
 
-    Apps.get(appName).success(function (data) {
+    App.get(appName).success(function (data) {
       $scope.app = data
     })
 
-    Activities.launch(appName).success(function (data) {
+    Activity.launch(appName).success(function (data) {
       $scope.href = 'http://' + window.location.host + ':' + data.port
     })
 
     // pin app to boot
     $scope.update = function (bool) {
       $scope.app.bootOnLoad = bool
-      Apps.update(appName, $scope.app).success(function () {
+      App.update(appName, $scope.app).success(function () {
         toastr.success('App will start on load next time', 'Dashboard')
       })
     }
   }])
 
-.controller('Apps#list', ['$scope', 'Apps', '$location',
-  function ($scope, Apps, $location) {
-    helper.setTitle('Your apps drawer')
-    helper.setNavColor('blue')
-
-    Apps.all().success(function (data) {
+.controller('Apps#list', ['$scope', 'App', '$location',
+  function ($scope, App, $location) {
+    App.all().success(function (data) {
       $scope.apps = data
     })
 
-    var dz = new Dropzone('.drawer', {
+    var dz = new Dropzone('#drawer', {
       url: '/apps',
       clickable: false,
       dictDefaultMessage: '',
@@ -62,7 +56,7 @@ angular.module('Dashboard')
 
     dz.on('success', function (file) {
       dz.removeFile(file)
-      Apps.all().success(function (data) {
+      App.all().success(function (data) {
         $scope.apps = data
         $scope.$apply()
       })
@@ -73,11 +67,11 @@ angular.module('Dashboard')
     })
   }])
 
-.controller('Apps#edit', ['$scope', 'Apps', '$routeParams', '$sce',
-  function ($scope, Apps, $routeParams, $sce) {
+.controller('Apps#edit', ['$scope', 'App', '$routeParams', '$sce',
+  function ($scope, App, $routeParams, $sce) {
     var appName = $routeParams.name
 
-    Apps.get(appName).success(function (data) {
+    App.get(appName).success(function (data) {
       $scope.app = data
     })
 
@@ -92,7 +86,7 @@ angular.module('Dashboard')
 
     $scope.update = function () {
       var content = $('#content').text()
-      Apps.update(appName, content).success(function (data) {
+      App.update(appName, content).success(function (data) {
         toastr.success('Your app has been updated correctly', 'Dashboard')
       })
     }

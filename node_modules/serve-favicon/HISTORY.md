@@ -1,3 +1,26 @@
+2.3.0 / 2015-06-13
+==================
+
+  * Send non-chunked response for `OPTIONS`
+  * deps: etag@~1.7.0
+    - Always include entity length in ETags for hash length extensions
+    - Generate non-Stats ETags using MD5 only (no longer CRC32)
+    - Remove base64 padding in ETags to shorten
+  * deps: fresh@0.3.0
+    - Add weak `ETag` matching support
+  * perf: enable strict mode
+  * perf: remove argument reassignment
+  * perf: remove bitwise operations
+
+2.2.1 / 2015-05-14
+==================
+
+  * deps: etag@~1.6.0
+   - Improve support for JXcore
+   - Support "fake" stats objects in environments without `fs`
+  * deps: ms@0.7.1
+    - Prevent extraordinarily long inputs
+
 2.2.0 / 2014-12-18
 ==================
 

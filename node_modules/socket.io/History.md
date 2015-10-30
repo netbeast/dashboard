@@ -1,4 +1,15 @@
 
+1.3.7 / 2015-09-21
+==================
+
+  * package: bump `socket.io-client` for node4 compatibility
+  * package: bump `engine.io` for node4 compatibility
+
+1.3.6 / 2015-07-14
+==================
+
+  * package: bump `engine.io` to fix build on windows
+
 1.3.5 / 2015-03-03
 ==================
 

@@ -53,9 +53,7 @@ ECDH.prototype.computeSecret = function (other, inenc, enc) {
 	if (!Buffer.isBuffer(other)) {
 		other = new Buffer(other, inenc);
 	}
-	other = new BN(other);
-	other = other.toString(16);
-	var otherPub = this.curve.keyPair(other, 'hex').getPublic();
+	var otherPub = this.curve.keyFromPublic(other).getPublic();
 	var out = otherPub.mul(this.keys.getPrivate()).getX();
 	return formatReturnValue(out, enc, this.curveType.byteLength);
 };
@@ -81,9 +79,7 @@ ECDH.prototype.setPublicKey = function (pub, enc) {
 	if (!Buffer.isBuffer(pub)) {
 		pub = new Buffer(pub, enc);
 	}
-	var pkey = new BN(pub);
-	pkey = pkey.toArray();
-	this.keys._importPublicHex(pkey);
+	this.keys._importPublic(pub);
 	return this;
 };
 

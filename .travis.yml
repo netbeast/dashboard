@@ -4,7 +4,3 @@ node_js:
   - "0.12"
 before_script:
   - "gulp"
-before_install:
-  - pip install codecov
-after_success:
-  - codecov

@@ -15,8 +15,6 @@
     "forever-monitor": "^1.6.0",
     "fs-extra": "^0.18.0",
     "gift": "^0.6.1",
-    "gulp-livereload": "^3.8.1",
-    "gulp-sass": "^2.0.4",
     "http-proxy": "^1.10.1",
     "lodash": "^3.10.1",
     "morgan": "^1.5.2",
@@ -42,6 +40,7 @@
     "gulp-nodemon": "^2.0.3",
     "gulp-sass": "^2.0.1",
     "gulp-sourcemaps": "^1.5.2",
+    "gulp-livereload": "^3.8.1",
     "gulp-util": "^3.0.4",
     "istanbul": "^0.4.0",
     "mocha": "^2.3.3",
@@ -62,8 +61,7 @@
     "router"
   ],
   "scripts": {
-    "preinstall": "export ENV=production",
-    "postinstall": "mkdir .sandbox",
+    "postinstall": "mkdir -p .sandbox",
     "pretest": "export ENV=development",
     "test": "./node_modules/istanbul/lib/cli.js cover --dir ./test/coverage ./node_modules/mocha/bin/_mocha -- -R spec ",
     "build": "./node_modules/gulp/bin/gulp.js build",

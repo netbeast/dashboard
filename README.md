@@ -1,9 +1,10 @@
 # Netbeast dashboard
 
 [![Build Status](https://travis-ci.org/netbeast-co/dashboard.svg)](https://travis-ci.org/netbeast-co/dashboard)
-[![npm version](https://badge.fury.io/js/dashboard.svg)](http://badge.fury.io/js/dashboard)
+[![npm version](https://badge.fury.io/js/nb-dashboard.svg)](https://badge.fury.io/js/nb-dashboard)
 ![dependencies](https://david-dm.org/netbeast-co/dashboard.svg)
 [![devDependency](https://david-dm.org/netbeast-co/dashboard/dev-status.svg)](https://david-dm.org/netbeast-co/dashboard#info=devDependencies)
+[![codecov.io](https://codecov.io/github/netbeast-co/dashboard/coverage.svg?branch=master)](https://codecov.io/github/netbeast-co/dashboard?branch=master)
 
 [![Join the chat at https://gitter.im/netbeast-co/docs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast-co/docs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 

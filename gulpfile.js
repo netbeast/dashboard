@@ -14,7 +14,7 @@ gulp.task('default', ['serve'], function () {
   livereload.listen()
   gulp.watch('./web/assets/css/**', ['sass'])
   gulp.watch('./web/assets/js/**', ['browserify'])
-  gulp.watch('**/*.html', function (files) {
+  gulp.watch('./web/views/**/*.html', function (files) {
     livereload.changed(files)
   })
 })

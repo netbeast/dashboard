@@ -36,7 +36,6 @@
   "devDependencies": {
     "browserify": "^10.2.1",
     "chai": "^3.2.0",
-    "codecov.io": "^0.1.6",
     "dropzone": "^4.0.1",
     "gulp": "^3.9.0",
     "gulp-minify-css": "^1.1.1",
@@ -66,7 +65,7 @@
     "preinstall": "export ENV=production",
     "postinstall": "mkdir .sandbox",
     "pretest": "export ENV=development",
-    "test": "./test/index.sh",
+    "test": "./node_modules/istanbul/lib/cli.js cover --dir ./test/coverage ./node_modules/mocha/bin/_mocha -- -R spec ",
     "build": "./node_modules/gulp/bin/gulp.js build",
     "serve": "./node_modules/gulp/bin/gulp.js serve",
     "app": "./node_modules/gulp/bin/gulp.js"

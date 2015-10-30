@@ -1,26 +1,27 @@
+/* global angular, toastr, $ */
 
 angular.module('Dashboard')
 
-.directive('toolBox', function () {
+.directive('nbNavbar', function () {
+  console.log('loaded')
   return {
     restrict: 'E',
-    templateUrl: 'views/tool-box.html'
+    templateUrl: 'views/navbar.html'
   }
 })
 
-.directive('app', ['Apps', 'Activities', '$window',
-function (Apps, Activities, $window) {
+.directive('app', ['App', 'Activity', '$window',
+function (App, Activity, $window) {
   var self = {}
   self.scope = { app: '=app'	}
   self.restrict = 'E'
   self.templateUrl = 'views/apps/_app.html'
   self.controller = ['$scope', '$element', function ($scope, $element) {
     $scope.delete = function () {
-      var msg = 'Are you sure you want to uninstall '
-      + $scope.app + '?'
+      var msg = 'Are you sure you want to uninstall ' + $scope.app + '?'
 
-      if (confirm(msg)) {
-        Apps.delete($scope.app).success(function (data) {
+      if (window.confirm(msg)) {
+        App.delete($scope.app).success(function (data) {
           console.log('Success on removing -> %s', data)
           toastr.success($scope.app + ' succesfully removed')
           $element.hide()
@@ -29,14 +30,14 @@ function (Apps, Activities, $window) {
     }
 
     $scope.launch = function () {
-      Activities.launch($scope.app).success(function (data) {
+      Activity.launch($scope.app).success(function (data) {
         console.log('Success on launching -> %s', data)
         toastr.success($scope.app + ' launched', 'Dashboard')
       })
     }
 
     $scope.stop = function () {
-      Activities.stop($scope.app.name).success(function (data) {
+      Activity.stop($scope.app.name).success(function (data) {
         console.log('Success on stopping -> %s', data)
         // modify $e
       })
@@ -60,14 +61,34 @@ function (Apps, Activities, $window) {
   return self
 }]) // - directive
 
-.directive('ngRightClick', ['$parse', function ($parse) {
-  return function (scope, element, attrs) {
-    var fn = $parse(attrs.ngRightClick)
-    element.bind('contextmenu', function (event) {
-      scope.$apply(function () {
-        event.preventDefault()
-        fn.call(this, scope, {$event: event})
-      })
-    })
+// .directive('ngRightClick', ['$parse', function ($parse) {
+//   return function (scope, element, attrs) {
+//     var fn = $parse(attrs.ngRightClick)
+//     element.bind('contextmenu', function (event) {
+//       scope.$apply(function () {
+//         event.preventDefault()
+//         fn.call(this, scope, {$event: event})
+//       })
+//     })
+//   }
+// }])
+
+.directive('nbMetaDescription', function () {
+  return {
+    restrict: 'E',
+    scope: { value: '=content' },
+    link: function (scope) {
+      $('meta[name=description]').attr('content', scope.value)
+    }
+  }
+})
+
+.directive('nbTitle', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'E',
+    scope: { value: '=' },
+    controller: function ($scope) {
+      $rootScope.title = ' Netbeast | ' + $scope.value
+    }
   }
 }])

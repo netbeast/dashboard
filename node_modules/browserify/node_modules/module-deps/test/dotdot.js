@@ -1,5 +1,5 @@
 var mdeps = require('../');
-var test = require('tape');
+var test = require('tap').test;
 var through = require('through2');
 var path = require('path');
 

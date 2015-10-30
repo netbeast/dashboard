@@ -1,9 +1,11 @@
 # Netbeast dashboard
 
-[![Join the chat at https://gitter.im/netbeast-co/docs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast-co/docs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/netbeast-co/dashboard.svg)](https://travis-ci.org/netbeast-co/dashboard)
 [![npm version](https://badge.fury.io/js/dashboard.svg)](http://badge.fury.io/js/dashboard)
+![dependencies](https://david-dm.org/netbeast-co/dashboard.svg)
+[![devDependency](https://david-dm.org/netbeast-co/dashboard/dev-status.svg)](https://david-dm.org/netbeast-co/dashboard#info=devDependencies)
 
+[![Join the chat at https://gitter.im/netbeast-co/docs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast-co/docs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ###Iot in html5.
 
@@ -30,7 +32,6 @@ Compiling with npm the Dashboard node.js native modules may take a while. That i
 ```bash
 git clone -b master --single-branch https://github.com/netbeast-co/xy-dashboard/
 cd nb-dashboard
-npm link npm # npm package itself is needed but not included in production
 sudo ./www
 ```
 
@@ -46,13 +47,13 @@ Find them in our marketplace private beta. Invitations are open <a target="_blan
 
 You can build IoT apps using only web technologies: javascript and HTML5! Also we hace tutorials at our docs to build apps with python.
 
+## Contact
+* Visit our site [https://netbeast.co](https://netbeast.co)
+* Mail us: staff [at] netbeast.co
+* Report a bug or enter discussion at [issues](https://github.com/netbeast-co/docs/issues)
+* Other resources: [Docs](https://github.com/netbeast-co/docs/wiki), Netbeast [API](https://github.com/netbeast-co/API)
 
-### Docs
-https://github.com/netbeast-co/docs
-
-
-### Chat with us
-We are at gitter: http://bit.ly/1dQmFKt
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast-co/xway?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 
 <img src="https://github.com/netbeast-co/docs/blob/master/img/open-source.png?raw=true" height="140px" width="auto"/>

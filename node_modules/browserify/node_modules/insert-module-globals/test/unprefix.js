@@ -1,4 +1,4 @@
-var test = require('tap').test;
+var test = require('tape');
 var vm = require('vm');
 var concat = require('concat-stream');
 
@@ -10,7 +10,7 @@ test('unprefix - remove shebang and bom', function (t) {
     t.plan(3);
     
     var file = __dirname + '/unprefix/main.js';
-    var deps = mdeps({ transform: inserter });
+    var deps = mdeps();
     var pack = bpack({ raw: true });
     
     deps.pipe(pack);
@@ -21,9 +21,10 @@ test('unprefix - remove shebang and bom', function (t) {
         var x = c.require(file);
         t.equal(x.filename, '/hello.js');
         t.equal(x.dirname, '/');
-        t.notSimilar(src.toString(), /\ufeff/);
+        t.notOk(/\ufeff/.test(src.toString()));
     }));
     
+    deps.write({ transform: inserter, global: true });
     deps.end(file);
 });
 

@@ -1,10 +1,12 @@
 var fs = require('fs')
 var test = require('tape')
 
-var algorithms = ['sha1', 'sha224', 'sha256', 'sha384', 'sha512', 'md5', 'rmd160']
+var algorithms = ['sha1', 'sha224', 'sha256', 'sha384', 'sha512', 'md5', 'rmd160', 'ripemd160']
 var encodings = [/*'binary',*/ 'hex', 'base64'];
 var vectors = require('hash-test-vectors')
-
+vectors.forEach(function (vector) {
+  vector.ripemd160 = vector.rmd160
+})
 var createHash = require('./browser')
 
 algorithms.forEach(function (algorithm) {

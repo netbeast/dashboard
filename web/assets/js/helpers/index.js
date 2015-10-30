@@ -1,29 +1,51 @@
 // Some helper methods:
-//=====================
+// ====================
 
-exports.hideNav = function () {
-  nav = document.getElementsByTagName('nav')[0]
-  nav.style.height = 0
+/* global angular, toastr */
+
+var md5 = require('md5')
+
+var self = module.exports = {}
+
+self._validateUserForm = function (user) {
+  if (!user.alias) {
+    toastr.warning('Please type an alias')
+    return false
+  } else if (!user.email) {
+    toastr.warning('Please type a valid email address')
+    return false
+  } else if (self._validatePasswords(user)) {
+    return true
+  } else {
+    // unless passwords and all fields are validated
+    return false
+  }
 }
 
-exports.setNavColor = function setNavColor(str) {
-  var colors = {
-   blue :  "#73C5E1",
-   orange :  "#FBA827",
-   green :  "#1FDA9A",
-   pink :  "#EB65A0",
-   yellow :  "#FFD452",
-   grey :  "#F2F2F3",
-   black :  "#333333",
-   red :  "#e65656"
- }
- nav = document.getElementsByTagName('nav')[0]
- nav.style.height = '3px'
- nav.style.backgroundColor = colors[str] || str
+self._validatePasswords = function (user) {
+  if (!user.password) {
+    toastr.warning('Please type your password')
+    return false
+  } else if (user.password.length < 6) {
+    toastr.warning('It should have more characters', 'Password should be more secure')
+    return false
+  } else if (!user.password_confirmation) {
+    toastr.warning('Please confirm your password')
+    return false
+  } else if (user.password !== user.password_confirmation) {
+    toastr.warning('Passwords do not match')
+    return false
+  } else {
+    return true
+  }
 }
 
-exports.setTitle = function(str) {
-  document.title = ' Beta | ' + str
-  var tooldiv = document.getElementById('title')
-  tooldiv.innerHTML = '<span>' + str + '</span>'
+self._hashPasswords = function (user) {
+  var aux = {}
+  angular.copy(user, aux)
+  aux.password = md5(user.password)
+  if (user.password_confirmation) {
+    aux.password_confirmation = md5(user.password_confirmation)
+  }
+  return aux
 }

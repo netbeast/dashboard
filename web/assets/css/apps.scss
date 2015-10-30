@@ -1,0 +1,34 @@
+/* apps#index */
+.apps {
+  display: block;
+  border-radius: 3px;
+  padding: 40px 20px;
+  margin-top: 15px;
+  overflow: hidden;
+  h3 {
+    font-style: normal;
+  }
+  img {
+    width: auto;
+    max-height: 140px;
+  }
+  i.fa {
+    color: white;
+    font-size: 140px;
+  }
+}
+
+
+
+#app {
+  .avatar img {
+    max-height: 90%;
+    max-width: 90%;
+  }
+}
+
+iframe#live {
+  display: block;
+  width: 100%;
+  height: 100vh;
+}

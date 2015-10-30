@@ -1,5 +1,8 @@
 var assert = require('assert');
 var asn1 = require('..');
+var bn = asn1.bignum;
+var fixtures = require('./fixtures');
+var jsonEqual = fixtures.jsonEqual;
 
 var Buffer = require('buffer').Buffer;
 
@@ -18,11 +21,11 @@ describe('asn1.js models', function() {
         );
       });
 
-      var data = {a: 1, sub: {b: new Buffer("XXX")}};
+      var data = {a: new bn(1), sub: {b: new Buffer("XXX")}};
       var wire = Model.encode(data, 'der');
       assert.equal(wire.toString('hex'), '300a02010130050403585858');
       var back = Model.decode(wire, 'der');
-      assert.deepEqual(back, data);
+      jsonEqual(back, data);
     });
 
     it('should honour implicit tag from parent', function() {
@@ -38,12 +41,11 @@ describe('asn1.js models', function() {
         );
       });
 
-      var data = {a: 1, sub: {x: new Buffer("123")}};
+      var data = {a: new bn(1), sub: {x: new Buffer("123")}};
       var wire = Model.encode(data, 'der');
       assert.equal(wire.toString('hex'), '300a020101a0050403313233');
       var back = Model.decode(wire, 'der');
-      assert.deepEqual(back, data);
-
+      jsonEqual(back, data);
     });
 
     it('should honour explicit tag from parent', function() {
@@ -59,11 +61,11 @@ describe('asn1.js models', function() {
         );
       });
 
-      var data = {a: 1, sub: {x: new Buffer("123")}};
+      var data = {a: new bn(1), sub: {x: new Buffer("123")}};
       var wire = Model.encode(data, 'der');
       assert.equal(wire.toString('hex'), '300c020101a00730050403313233');
       var back = Model.decode(wire, 'der');
-      assert.deepEqual(back, data);
+      jsonEqual(back, data);
 
     });
 
@@ -83,11 +85,11 @@ describe('asn1.js models', function() {
         );
       });
 
-      var data = {a: 1, sub: {x: new Buffer("123")}};
+      var data = {a: new bn(1), sub: {x: new Buffer("123")}};
       var wire = Model.encode(data, 'der');
       assert.equal(wire.toString('hex'), '300a02010130050403313233');
       var back = Model.decode(wire, 'der');
-      assert.deepEqual(back, data);
+      jsonEqual(back, data);
 
     });
 
@@ -112,13 +114,13 @@ describe('asn1.js models', function() {
         'plain': false,
         'content': {
           'plain': true,
-          'content': 1
+          'content': new bn(1)
         }
       };
       var wire = RecursiveModel.encode(data, 'der');
       assert.equal(wire.toString('hex'), '300b01010030060101ff020101');
       var back = RecursiveModel.decode(wire, 'der');
-      assert.deepEqual(back, data);
+      jsonEqual(back, data);
     });
 
   });

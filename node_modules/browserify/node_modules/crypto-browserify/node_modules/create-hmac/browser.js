@@ -9,7 +9,7 @@ ZEROS.fill(0)
 
 function Hmac(alg, key) {
   Transform.call(this)
-
+  alg = alg.toLowerCase()
   if (typeof key === 'string') {
     key = new Buffer(key)
   }

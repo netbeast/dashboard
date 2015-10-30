@@ -1,18 +1,36 @@
-$blue: #0F6499;
-$blue-dark: #063C60;
-$orange: #FBA827;
-$green: #007F24;
-$green-dark: #004C1C;
-$yellow: #ead900;
-$yellow-dark: #818319;
+$grey:                   #575757 !default; // #555
+$grey-base:              darken($grey, 33.5%) !default;
+$grey-darker:            #0f0f0f !default; // #222
+$grey-dark:              #191919 !default;   // #333
+$grey-light:             #eaeaea !default; // #777
+$grey-lighter:           #f4f4f4 !default; // #eee
+
+//$brand-primary:         darken(#428bca, 6.5%) !default; // #337ab7
+$brand-primary:         #CC0000 !default; // #337ab7
+//$brand-success:         #5cb85c !default;
+$brand-success:         #2cac53 !default;
+//$brand-info:            #5bc0de !default;
+$brand-info:            #287DB4 !default;
+$brand-warning:         #f0ad4e !default;
+$brand-danger:          #d9534f !default;
+
+$blue: $brand-info;
+$blue-dark: darken($blue, 33.5%);
+
+$orange: $brand-danger;
+$orange-dark: darken($brand-danger, 33.5%);
+
+$green: $brand-success;
+$green-dark: darken($green, 33.5%);
+
+$yellow: $brand-warning;
+$yellow-dark: darken($brand-warning, 33.5%);
+
 $black: #181818;
 $black-dark: #181818; // redundant
-$red: #CC0000;
-$red-dark: #7A1013;
 
-$grey-dark: #c7c8c9;
-$grey: #c7c8c9;
-$grey-lighter: #eaeaea;
+$red: $brand-primary;
+$red-dark: darken($brand-primary, 33.5%);
 
 .text-yellow { color: $yellow }
 .text-black { color: $black }

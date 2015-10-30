@@ -1,6 +1,6 @@
 var parser = require('../');
-var test = require('tape');
-var stream = require('readable-stream');
+var test = require('tap').test;
+var through = require('through2');
 var path = require('path');
 
 // Test that p.options.expose is defined and that the row is properly exposed
@@ -15,7 +15,7 @@ test('row is exposed', function (t) {
     p.end({ file: common_path, expose: "whatever" });
     p.on('error', t.fail.bind(t));
 
-    p.pipe(new stream.PassThrough({ objectMode: true }));
+    p.pipe(through.obj());
 
     p.on('end', function () {
         // Note pathname with extension.

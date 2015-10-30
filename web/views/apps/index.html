@@ -1,28 +1,32 @@
-<section class="drawer container-fluid text-center">
-	<h1 ng-if="apps.length === 0">
-		It seems you have not installed any apps yet.<br/><br/>
-		Find some at the <a class="link" target="_blank"
-		href="//market.netbeast.co">marketplace</a>
-	</h1>
-	<i data-ng-repeat="app in apps | filter:search.text">
-		<app app="app" class="col-xs-12 col-sm-4 col-md-3">
-		</app>
-	</i>
+<section class="container">
+  <div id="drawer" class="container-fluid text-center">
+    <h1 ng-if="apps.length === 0">
+      It seems you have not installed any apps yet.<br/><br/>
+      Find some at the <a class="link" target="_blank"
+      href="//market.netbeast.co">marketplace</a>
+    </h1>
 
-	<!-- dropzone template, keep hidden with ng-hide -->
-	<div class="dz-template dz-preview dz-file-preview" ng-hide="true">
-		<article class="apps col-xs-12 col-sm-4 col-md-3">
-			<img src="/apps/dflt/logo" alt="default logo" />
-			<div class="dz-details">
-				<div class="dz-filename"><h3 data-dz-name></h3></div>
-				<div class="dz-size" data-dz-size></div>
-			</div>
-			<div class="dz-progress">
-				<span class="dz-upload" data-dz-uploadprogress></span>
-			</div>
-			<div class="dz-error-message">
-				<span data-dz-errormessage></span>
-			</div>
-		</div>
-	</article>
+    <span data-ng-repeat="app in apps | filter:search.text">
+      <app app="app" class="col-xs-12 col-sm-4 col-md-3">
+      </app>
+    </span>
+
+    <!-- dropzone template, keep hidden with ng-hide -->
+    <div class="dz-template dz-preview dz-file-preview" ng-hide="true">
+      <article class="apps col-xs-12 col-sm-4 col-md-3">
+        <img src="/apps/dflt/logo" alt="default logo" />
+        <div class="dz-details">
+          <div class="dz-filename"><h3 data-dz-name></h3></div>
+          <div class="dz-size" data-dz-size></div>
+        </div>
+        <div class="dz-progress">
+          <span class="dz-upload" data-dz-uploadprogress></span>
+        </div>
+        <div class="dz-error-message">
+          <span data-dz-errormessage></span>
+        </div>
+      </div>
+    </article>
+  </div>
+
 </section>

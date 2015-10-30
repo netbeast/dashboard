@@ -83,7 +83,6 @@ MillerRabin.prototype.getDivisor = function getDivisor(n, k) {
 
   var rn1 = n1.toRed(red);
 
-  var prime = true;
   for (; k > 0; k--) {
     var a = this._rand(n2);
 
@@ -110,5 +109,5 @@ MillerRabin.prototype.getDivisor = function getDivisor(n, k) {
     }
   }
 
-  return prime;
+  return false;
 };

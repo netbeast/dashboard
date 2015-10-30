@@ -9,7 +9,7 @@ var broker = require('./helpers/broker')
 
 const V = '/views/'
 
-angular.module('Dashboard', ['ngRoute'])
+angular.module('Dashboard', ['ngRoute', 'angular-loading-bar'])
 
 .config(['$routeProvider', function ($routeProvider) {
   $routeProvider
@@ -17,12 +17,16 @@ angular.module('Dashboard', ['ngRoute'])
   .when('/apps/:name', { templateUrl: V + 'apps/show.html', controller: 'Apps#show' })
   .when('/apps/:name/edit', { templateUrl: V + 'apps/edit.html', controller: 'Apps#edit' })
   .when('/i/:name', {templateUrl: V + 'apps/live.html', controller: 'Activities#live'})
-  .when('/remove', { templateUrl: V + 'apps/delete.html', controller: 'Apps#rm' })
   .when('/activities', { templateUrl: V + 'apps/activities.html', controller: 'Activities#list' })
-  .when('/signin', { templateUrl: V + 'users/signin.html', controller: 'User#login' })
+  .when('/login', { templateUrl: V + 'users/login.html', controller: 'Users#login' })
+  .when('/signup', { templateUrl: V + 'users/signup.html', controller: 'Users#signup' })
   .when('/routes', { templateUrl: V + 'misc/routes.html', controller: 'Routes#index' })
   .when('/settings', { templateUrl: V + 'misc/settings.html', controller: 'Settings#index' })
   .otherwise({ redirectTo: '/' })
+}])
+
+.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
+  cfpLoadingBarProvider.includeSpinner = false
 }])
 
 .run(function () {
@@ -35,7 +39,7 @@ require('./services')
 require('./directives')
 require('./controllers')
 
-},{"./controllers":77,"./directives":80,"./helpers/broker":81,"./services":85,"mqtt":25}],2:[function(require,module,exports){
+},{"./controllers":86,"./directives":89,"./helpers/broker":90,"./services":95,"mqtt":34}],2:[function(require,module,exports){
 
 /*
  *
@@ -4693,7 +4697,7 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"events":8,"inherits":9,"readable-stream/duplex.js":53,"readable-stream/passthrough.js":59,"readable-stream/readable.js":60,"readable-stream/transform.js":61,"readable-stream/writable.js":62}],16:[function(require,module,exports){
+},{"events":8,"inherits":9,"readable-stream/duplex.js":62,"readable-stream/passthrough.js":68,"readable-stream/readable.js":69,"readable-stream/transform.js":70,"readable-stream/writable.js":71}],16:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -6342,7 +6346,7 @@ Duplexify.prototype.end = function(data, enc, cb) {
 module.exports = Duplexify
 }).call(this,require('_process'),require("buffer").Buffer)
 
-},{"_process":10,"buffer":4,"end-of-stream":21,"readable-stream":60,"util":18}],21:[function(require,module,exports){
+},{"_process":10,"buffer":4,"end-of-stream":21,"readable-stream":69,"util":18}],21:[function(require,module,exports){
 var once = require('once');
 
 var noop = function() {};
@@ -6415,7 +6419,7 @@ var eos = function(stream, opts, callback) {
 };
 
 module.exports = eos;
-},{"once":51}],22:[function(require,module,exports){
+},{"once":60}],22:[function(require,module,exports){
 arguments[4][9][0].apply(exports,arguments)
 },{"dup":9}],23:[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
@@ -6423,6 +6427,246 @@ module.exports = Array.isArray || function (arr) {
 };
 
 },{}],24:[function(require,module,exports){
+var baseSlice = require('../internal/baseSlice'),
+    isIterateeCall = require('../internal/isIterateeCall');
+
+/* Native method references for those with the same name as other `lodash` methods. */
+var nativeCeil = Math.ceil,
+    nativeFloor = Math.floor,
+    nativeMax = Math.max;
+
+/**
+ * Creates an array of elements split into groups the length of `size`.
+ * If `collection` can't be split evenly, the final chunk will be the remaining
+ * elements.
+ *
+ * @static
+ * @memberOf _
+ * @category Array
+ * @param {Array} array The array to process.
+ * @param {number} [size=1] The length of each chunk.
+ * @param- {Object} [guard] Enables use as a callback for functions like `_.map`.
+ * @returns {Array} Returns the new array containing chunks.
+ * @example
+ *
+ * _.chunk(['a', 'b', 'c', 'd'], 2);
+ * // => [['a', 'b'], ['c', 'd']]
+ *
+ * _.chunk(['a', 'b', 'c', 'd'], 3);
+ * // => [['a', 'b', 'c'], ['d']]
+ */
+function chunk(array, size, guard) {
+  if (guard ? isIterateeCall(array, size, guard) : size == null) {
+    size = 1;
+  } else {
+    size = nativeMax(nativeFloor(size) || 1, 1);
+  }
+  var index = 0,
+      length = array ? array.length : 0,
+      resIndex = -1,
+      result = Array(nativeCeil(length / size));
+
+  while (index < length) {
+    result[++resIndex] = baseSlice(array, index, (index += size));
+  }
+  return result;
+}
+
+module.exports = chunk;
+
+},{"../internal/baseSlice":26,"../internal/isIterateeCall":30}],25:[function(require,module,exports){
+/**
+ * The base implementation of `_.property` without support for deep paths.
+ *
+ * @private
+ * @param {string} key The key of the property to get.
+ * @returns {Function} Returns the new function.
+ */
+function baseProperty(key) {
+  return function(object) {
+    return object == null ? undefined : object[key];
+  };
+}
+
+module.exports = baseProperty;
+
+},{}],26:[function(require,module,exports){
+/**
+ * The base implementation of `_.slice` without an iteratee call guard.
+ *
+ * @private
+ * @param {Array} array The array to slice.
+ * @param {number} [start=0] The start position.
+ * @param {number} [end=array.length] The end position.
+ * @returns {Array} Returns the slice of `array`.
+ */
+function baseSlice(array, start, end) {
+  var index = -1,
+      length = array.length;
+
+  start = start == null ? 0 : (+start || 0);
+  if (start < 0) {
+    start = -start > length ? 0 : (length + start);
+  }
+  end = (end === undefined || end > length) ? length : (+end || 0);
+  if (end < 0) {
+    end += length;
+  }
+  length = start > end ? 0 : ((end - start) >>> 0);
+  start >>>= 0;
+
+  var result = Array(length);
+  while (++index < length) {
+    result[index] = array[index + start];
+  }
+  return result;
+}
+
+module.exports = baseSlice;
+
+},{}],27:[function(require,module,exports){
+var baseProperty = require('./baseProperty');
+
+/**
+ * Gets the "length" property value of `object`.
+ *
+ * **Note:** This function is used to avoid a [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792)
+ * that affects Safari on at least iOS 8.1-8.3 ARM64.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {*} Returns the "length" value.
+ */
+var getLength = baseProperty('length');
+
+module.exports = getLength;
+
+},{"./baseProperty":25}],28:[function(require,module,exports){
+var getLength = require('./getLength'),
+    isLength = require('./isLength');
+
+/**
+ * Checks if `value` is array-like.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+ */
+function isArrayLike(value) {
+  return value != null && isLength(getLength(value));
+}
+
+module.exports = isArrayLike;
+
+},{"./getLength":27,"./isLength":31}],29:[function(require,module,exports){
+/** Used to detect unsigned integer values. */
+var reIsUint = /^\d+$/;
+
+/**
+ * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
+ * of an array-like value.
+ */
+var MAX_SAFE_INTEGER = 9007199254740991;
+
+/**
+ * Checks if `value` is a valid array-like index.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+ * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+ */
+function isIndex(value, length) {
+  value = (typeof value == 'number' || reIsUint.test(value)) ? +value : -1;
+  length = length == null ? MAX_SAFE_INTEGER : length;
+  return value > -1 && value % 1 == 0 && value < length;
+}
+
+module.exports = isIndex;
+
+},{}],30:[function(require,module,exports){
+var isArrayLike = require('./isArrayLike'),
+    isIndex = require('./isIndex'),
+    isObject = require('../lang/isObject');
+
+/**
+ * Checks if the provided arguments are from an iteratee call.
+ *
+ * @private
+ * @param {*} value The potential iteratee value argument.
+ * @param {*} index The potential iteratee index or key argument.
+ * @param {*} object The potential iteratee object argument.
+ * @returns {boolean} Returns `true` if the arguments are from an iteratee call, else `false`.
+ */
+function isIterateeCall(value, index, object) {
+  if (!isObject(object)) {
+    return false;
+  }
+  var type = typeof index;
+  if (type == 'number'
+      ? (isArrayLike(object) && isIndex(index, object.length))
+      : (type == 'string' && index in object)) {
+    var other = object[index];
+    return value === value ? (value === other) : (other !== other);
+  }
+  return false;
+}
+
+module.exports = isIterateeCall;
+
+},{"../lang/isObject":32,"./isArrayLike":28,"./isIndex":29}],31:[function(require,module,exports){
+/**
+ * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
+ * of an array-like value.
+ */
+var MAX_SAFE_INTEGER = 9007199254740991;
+
+/**
+ * Checks if `value` is a valid array-like length.
+ *
+ * **Note:** This function is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+ */
+function isLength(value) {
+  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+}
+
+module.exports = isLength;
+
+},{}],32:[function(require,module,exports){
+/**
+ * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+ * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(1);
+ * // => false
+ */
+function isObject(value) {
+  // Avoid a V8 JIT bug in Chrome 19-20.
+  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
+  var type = typeof value;
+  return !!value && (type == 'object' || type == 'function');
+}
+
+module.exports = isObject;
+
+},{}],33:[function(require,module,exports){
 (function (process,global){
 'use strict';
 /**
@@ -7284,7 +7528,7 @@ module.exports = MqttClient;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./store":29,"_process":10,"end-of-stream":30,"events":8,"inherits":33,"mqtt-packet":36,"readable-stream":49}],25:[function(require,module,exports){
+},{"./store":38,"_process":10,"end-of-stream":39,"events":8,"inherits":42,"mqtt-packet":45,"readable-stream":58}],34:[function(require,module,exports){
 (function (process){
 'use strict';
 var MqttClient = require('../client'),
@@ -7424,7 +7668,7 @@ module.exports.connect = connect;
 
 }).call(this,require('_process'))
 
-},{"../client":24,"./tcp":26,"./tls":27,"./ws":28,"_process":10,"url":16,"xtend":50}],26:[function(require,module,exports){
+},{"../client":33,"./tcp":35,"./tls":36,"./ws":37,"_process":10,"url":16,"xtend":59}],35:[function(require,module,exports){
 'use strict';
 var net = require('net');
 
@@ -7445,7 +7689,7 @@ function buildBuilder (client, opts) {
 
 module.exports = buildBuilder;
 
-},{"net":3}],27:[function(require,module,exports){
+},{"net":3}],36:[function(require,module,exports){
 'use strict';
 var tls = require('tls');
 
@@ -7502,7 +7746,7 @@ function buildBuilder (mqttClient, opts) {
 
 module.exports = buildBuilder;
 
-},{"tls":3}],28:[function(require,module,exports){
+},{"tls":3}],37:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -7579,7 +7823,7 @@ if ('browser' !== process.title) {
 
 }).call(this,require('_process'))
 
-},{"_process":10,"url":16,"websocket-stream":71}],29:[function(require,module,exports){
+},{"_process":10,"url":16,"websocket-stream":80}],38:[function(require,module,exports){
 (function (process){
 'use strict';
 var Readable = require('readable-stream').Readable,
@@ -7692,7 +7936,7 @@ module.exports = Store;
 
 }).call(this,require('_process'))
 
-},{"_process":10,"readable-stream":49}],30:[function(require,module,exports){
+},{"_process":10,"readable-stream":58}],39:[function(require,module,exports){
 var once = require('once');
 
 var noop = function() {};
@@ -7776,7 +8020,7 @@ var eos = function(stream, opts, callback) {
 };
 
 module.exports = eos;
-},{"once":32}],31:[function(require,module,exports){
+},{"once":41}],40:[function(require,module,exports){
 // Returns a wrapper function that returns a wrapped callback
 // The wrapper function should do some stuff, and return a
 // presumably different callback function.
@@ -7811,7 +8055,7 @@ function wrappy (fn, cb) {
   }
 }
 
-},{}],32:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 var wrappy = require('wrappy')
 module.exports = wrappy(once)
 
@@ -7834,9 +8078,9 @@ function once (fn) {
   return f
 }
 
-},{"wrappy":31}],33:[function(require,module,exports){
+},{"wrappy":40}],42:[function(require,module,exports){
 arguments[4][9][0].apply(exports,arguments)
-},{"dup":9}],34:[function(require,module,exports){
+},{"dup":9}],43:[function(require,module,exports){
 /* Protocol - protocol constants */
 
 /* Command code => mnemonic */
@@ -7890,7 +8134,7 @@ module.exports.WILL_QOS_SHIFT = 3;
 module.exports.WILL_FLAG_MASK = 0x04;
 module.exports.CLEAN_SESSION_MASK = 0x02;
 
-},{}],35:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 (function (Buffer){
 
 'use strict';
@@ -8503,14 +8747,14 @@ module.exports = generate
 
 }).call(this,require("buffer").Buffer)
 
-},{"./constants":34,"buffer":4}],36:[function(require,module,exports){
+},{"./constants":43,"buffer":4}],45:[function(require,module,exports){
 
 'use strict';
 
 exports.parser          = require('./parser')
 exports.generate        = require('./generate')
 
-},{"./generate":35,"./parser":39}],37:[function(require,module,exports){
+},{"./generate":44,"./parser":48}],46:[function(require,module,exports){
 (function (Buffer){
 var DuplexStream = require('readable-stream/duplex')
   , util         = require('util')
@@ -8731,7 +8975,7 @@ module.exports = BufferList
 
 }).call(this,require("buffer").Buffer)
 
-},{"buffer":4,"readable-stream/duplex":40,"util":18}],38:[function(require,module,exports){
+},{"buffer":4,"readable-stream/duplex":49,"util":18}],47:[function(require,module,exports){
 
 function Packet() {
   this.cmd = null
@@ -8745,7 +8989,7 @@ function Packet() {
 
 module.exports = Packet
 
-},{}],39:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 
 var bl        = require('bl')
   , inherits  = require('inherits')
@@ -9117,10 +9361,10 @@ Parser.prototype._parseNum = function() {
 
 module.exports = Parser
 
-},{"./constants":34,"./packet":38,"bl":37,"events":8,"inherits":33}],40:[function(require,module,exports){
+},{"./constants":43,"./packet":47,"bl":46,"events":8,"inherits":42}],49:[function(require,module,exports){
 module.exports = require("./lib/_stream_duplex.js")
 
-},{"./lib/_stream_duplex.js":41}],41:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":50}],50:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -9214,7 +9458,7 @@ function forEach (xs, f) {
 
 }).call(this,require('_process'))
 
-},{"./_stream_readable":43,"./_stream_writable":45,"_process":10,"core-util-is":46,"inherits":33}],42:[function(require,module,exports){
+},{"./_stream_readable":52,"./_stream_writable":54,"_process":10,"core-util-is":55,"inherits":42}],51:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -9262,7 +9506,7 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"./_stream_transform":44,"core-util-is":46,"inherits":33}],43:[function(require,module,exports){
+},{"./_stream_transform":53,"core-util-is":55,"inherits":42}],52:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -10249,7 +10493,7 @@ function indexOf (xs, x) {
 
 }).call(this,require('_process'))
 
-},{"_process":10,"buffer":4,"core-util-is":46,"events":8,"inherits":33,"isarray":47,"stream":15,"string_decoder/":48}],44:[function(require,module,exports){
+},{"_process":10,"buffer":4,"core-util-is":55,"events":8,"inherits":42,"isarray":56,"stream":15,"string_decoder/":57}],53:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -10461,7 +10705,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":41,"core-util-is":46,"inherits":33}],45:[function(require,module,exports){
+},{"./_stream_duplex":50,"core-util-is":55,"inherits":42}],54:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -10852,7 +11096,7 @@ function endWritable(stream, state, cb) {
 
 }).call(this,require('_process'))
 
-},{"./_stream_duplex":41,"_process":10,"buffer":4,"core-util-is":46,"inherits":33,"stream":15}],46:[function(require,module,exports){
+},{"./_stream_duplex":50,"_process":10,"buffer":4,"core-util-is":55,"inherits":42,"stream":15}],55:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -10963,9 +11207,9 @@ function objectToString(o) {
 }
 }).call(this,require("buffer").Buffer)
 
-},{"buffer":4}],47:[function(require,module,exports){
+},{"buffer":4}],56:[function(require,module,exports){
 arguments[4][23][0].apply(exports,arguments)
-},{"dup":23}],48:[function(require,module,exports){
+},{"dup":23}],57:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -11188,7 +11432,7 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":4}],49:[function(require,module,exports){
+},{"buffer":4}],58:[function(require,module,exports){
 var Stream = require('stream'); // hack to fix a circular dependency issue when used with browserify
 exports = module.exports = require('./lib/_stream_readable.js');
 exports.Stream = Stream;
@@ -11198,7 +11442,7 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":41,"./lib/_stream_passthrough.js":42,"./lib/_stream_readable.js":43,"./lib/_stream_transform.js":44,"./lib/_stream_writable.js":45,"stream":15}],50:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":50,"./lib/_stream_passthrough.js":51,"./lib/_stream_readable.js":52,"./lib/_stream_transform.js":53,"./lib/_stream_writable.js":54,"stream":15}],59:[function(require,module,exports){
 module.exports = extend
 
 function extend() {
@@ -11217,9 +11461,9 @@ function extend() {
     return target
 }
 
-},{}],51:[function(require,module,exports){
-arguments[4][32][0].apply(exports,arguments)
-},{"dup":32,"wrappy":72}],52:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
+arguments[4][41][0].apply(exports,arguments)
+},{"dup":41,"wrappy":81}],61:[function(require,module,exports){
 (function (process){
 'use strict';
 module.exports = nextTick;
@@ -11237,9 +11481,9 @@ function nextTick(fn) {
 
 }).call(this,require('_process'))
 
-},{"_process":10}],53:[function(require,module,exports){
-arguments[4][40][0].apply(exports,arguments)
-},{"./lib/_stream_duplex.js":54,"dup":40}],54:[function(require,module,exports){
+},{"_process":10}],62:[function(require,module,exports){
+arguments[4][49][0].apply(exports,arguments)
+},{"./lib/_stream_duplex.js":63,"dup":49}],63:[function(require,module,exports){
 // a duplex stream is just a stream that is both readable and writable.
 // Since JS doesn't have multiple prototypal inheritance, this class
 // prototypally inherits from Readable, and then parasitically from
@@ -11323,7 +11567,7 @@ function forEach (xs, f) {
   }
 }
 
-},{"./_stream_readable":56,"./_stream_writable":58,"core-util-is":19,"inherits":22,"process-nextick-args":52}],55:[function(require,module,exports){
+},{"./_stream_readable":65,"./_stream_writable":67,"core-util-is":19,"inherits":22,"process-nextick-args":61}],64:[function(require,module,exports){
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
@@ -11352,7 +11596,7 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"./_stream_transform":57,"core-util-is":19,"inherits":22}],56:[function(require,module,exports){
+},{"./_stream_transform":66,"core-util-is":19,"inherits":22}],65:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -12316,7 +12560,7 @@ function indexOf (xs, x) {
 
 }).call(this,require('_process'))
 
-},{"./_stream_duplex":54,"_process":10,"buffer":4,"core-util-is":19,"events":8,"inherits":22,"isarray":23,"process-nextick-args":52,"string_decoder/":63,"util":3}],57:[function(require,module,exports){
+},{"./_stream_duplex":63,"_process":10,"buffer":4,"core-util-is":19,"events":8,"inherits":22,"isarray":23,"process-nextick-args":61,"string_decoder/":72,"util":3}],66:[function(require,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -12515,7 +12759,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":54,"core-util-is":19,"inherits":22}],58:[function(require,module,exports){
+},{"./_stream_duplex":63,"core-util-is":19,"inherits":22}],67:[function(require,module,exports){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, cb), and it'll handle all
 // the drain event emission and buffering.
@@ -13037,10 +13281,10 @@ function endWritable(stream, state, cb) {
   state.ended = true;
 }
 
-},{"./_stream_duplex":54,"buffer":4,"core-util-is":19,"events":8,"inherits":22,"process-nextick-args":52,"util-deprecate":70}],59:[function(require,module,exports){
+},{"./_stream_duplex":63,"buffer":4,"core-util-is":19,"events":8,"inherits":22,"process-nextick-args":61,"util-deprecate":79}],68:[function(require,module,exports){
 module.exports = require("./lib/_stream_passthrough.js")
 
-},{"./lib/_stream_passthrough.js":55}],60:[function(require,module,exports){
+},{"./lib/_stream_passthrough.js":64}],69:[function(require,module,exports){
 var Stream = (function (){
   try {
     return require('st' + 'ream'); // hack to fix a circular dependency issue when used with browserify
@@ -13054,15 +13298,15 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":54,"./lib/_stream_passthrough.js":55,"./lib/_stream_readable.js":56,"./lib/_stream_transform.js":57,"./lib/_stream_writable.js":58}],61:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":63,"./lib/_stream_passthrough.js":64,"./lib/_stream_readable.js":65,"./lib/_stream_transform.js":66,"./lib/_stream_writable.js":67}],70:[function(require,module,exports){
 module.exports = require("./lib/_stream_transform.js")
 
-},{"./lib/_stream_transform.js":57}],62:[function(require,module,exports){
+},{"./lib/_stream_transform.js":66}],71:[function(require,module,exports){
 module.exports = require("./lib/_stream_writable.js")
 
-},{"./lib/_stream_writable.js":58}],63:[function(require,module,exports){
-arguments[4][48][0].apply(exports,arguments)
-},{"buffer":4,"dup":48}],64:[function(require,module,exports){
+},{"./lib/_stream_writable.js":67}],72:[function(require,module,exports){
+arguments[4][57][0].apply(exports,arguments)
+},{"buffer":4,"dup":57}],73:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -13156,7 +13400,7 @@ function forEach (xs, f) {
 
 }).call(this,require('_process'))
 
-},{"./_stream_readable":65,"./_stream_writable":67,"_process":10,"core-util-is":19,"inherits":22}],65:[function(require,module,exports){
+},{"./_stream_readable":74,"./_stream_writable":76,"_process":10,"core-util-is":19,"inherits":22}],74:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -14143,9 +14387,9 @@ function indexOf (xs, x) {
 
 }).call(this,require('_process'))
 
-},{"_process":10,"buffer":4,"core-util-is":19,"events":8,"inherits":22,"isarray":23,"stream":15,"string_decoder/":63}],66:[function(require,module,exports){
-arguments[4][44][0].apply(exports,arguments)
-},{"./_stream_duplex":64,"core-util-is":19,"dup":44,"inherits":22}],67:[function(require,module,exports){
+},{"_process":10,"buffer":4,"core-util-is":19,"events":8,"inherits":22,"isarray":23,"stream":15,"string_decoder/":72}],75:[function(require,module,exports){
+arguments[4][53][0].apply(exports,arguments)
+},{"./_stream_duplex":73,"core-util-is":19,"dup":53,"inherits":22}],76:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -14536,9 +14780,9 @@ function endWritable(stream, state, cb) {
 
 }).call(this,require('_process'))
 
-},{"./_stream_duplex":64,"_process":10,"buffer":4,"core-util-is":19,"inherits":22,"stream":15}],68:[function(require,module,exports){
-arguments[4][61][0].apply(exports,arguments)
-},{"./lib/_stream_transform.js":66,"dup":61}],69:[function(require,module,exports){
+},{"./_stream_duplex":73,"_process":10,"buffer":4,"core-util-is":19,"inherits":22,"stream":15}],77:[function(require,module,exports){
+arguments[4][70][0].apply(exports,arguments)
+},{"./lib/_stream_transform.js":75,"dup":70}],78:[function(require,module,exports){
 (function (process){
 var Transform = require('readable-stream/transform')
   , inherits  = require('util').inherits
@@ -14639,7 +14883,7 @@ module.exports.obj = through2(function (options, transform, flush) {
 
 }).call(this,require('_process'))
 
-},{"_process":10,"readable-stream/transform":68,"util":18,"xtend":74}],70:[function(require,module,exports){
+},{"_process":10,"readable-stream/transform":77,"util":18,"xtend":83}],79:[function(require,module,exports){
 (function (global){
 
 /**
@@ -14711,7 +14955,7 @@ function config (name) {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],71:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 (function (process,Buffer){
 var through = require('through2')
 var duplexify = require('duplexify')
@@ -14799,9 +15043,9 @@ function WebSocketStream(target, protocols) {
 
 }).call(this,require('_process'),require("buffer").Buffer)
 
-},{"_process":10,"buffer":4,"duplexify":20,"through2":69,"ws":73}],72:[function(require,module,exports){
-arguments[4][31][0].apply(exports,arguments)
-},{"dup":31}],73:[function(require,module,exports){
+},{"_process":10,"buffer":4,"duplexify":20,"through2":78,"ws":82}],81:[function(require,module,exports){
+arguments[4][40][0].apply(exports,arguments)
+},{"dup":40}],82:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -14846,80 +15090,68 @@ function ws(uri, protocols, opts) {
 
 if (WebSocket) ws.prototype = WebSocket.prototype;
 
-},{}],74:[function(require,module,exports){
-arguments[4][50][0].apply(exports,arguments)
-},{"dup":50}],75:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
+arguments[4][59][0].apply(exports,arguments)
+},{"dup":59}],84:[function(require,module,exports){
 'use strict'
 /* global angular */
 
-var helper = require('../helpers')
-
 angular.module('Dashboard')
 
-.controller('Activities#list', ['$scope', 'Activities',
-function ($scope, Activities) {
-  helper.setTitle('Apps running')
-  helper.setNavColor('yellow')
-  Activities.all().success(function (data) {
+.controller('Activities#list', ['$scope', 'Activity',
+function ($scope, Activity) {
+  Activity.all().success(function (data) {
     $scope.apps = data
   })
 
-  $scope.stop = Activities.stop
+  $scope.stop = Activity.stop
 }])
 
-.controller('Activities#live', ['$scope', '$routeParams', 'Activities',
-function ($scope, $routeParams, Activities) {
-  helper.setTitle($routeParams.name)
-  helper.setNavColor('green')
-  Activities.open($scope, $routeParams.name)
+.controller('Activities#live', ['$scope', '$routeParams', 'Activity',
+function ($scope, $routeParams, Activity) {
+  Activity.open($scope, $routeParams.name)
 }])
 
-},{"../helpers":82}],76:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 /* global angular, toastr,  $ */
 'use strict'
 
-var helper = require('../helpers')
 var Dropzone = require('Dropzone')
 
 angular.module('Dashboard')
 
-.controller('Apps#show', ['$scope', '$routeParams', 'Apps', 'Activities', '$sce',
-  function ($scope, $routeParams, Apps, Activities, $sce) {
+.controller('Apps#show', ['$scope', '$routeParams', 'App', 'Activity', '$sce',
+  function ($scope, $routeParams, App, Activity, $sce) {
     var appName = $routeParams.name
-    helper.setNavColor('blue')
-    helper.setTitle(appName)
 
-    Apps.getReadme(appName).success(function (data) {
+    App.getReadme(appName).success(function (data) {
       $scope.readme = $sce.trustAsHtml(data)
     })
 
-    Apps.get(appName).success(function (data) {
+    App.get(appName).success(function (data) {
       $scope.app = data
     })
 
-    Activities.launch(appName).success(function (data) {
+    Activity.launch(appName).success(function (data) {
       $scope.href = 'http://' + window.location.host + ':' + data.port
     })
 
     // pin app to boot
     $scope.update = function (bool) {
       $scope.app.bootOnLoad = bool
-      Apps.update(appName, $scope.app).success(function () {
+      App.update(appName, $scope.app).success(function () {
         toastr.success('App will start on load next time', 'Dashboard')
       })
     }
   }])
 
-.controller('Apps#list', ['$scope', 'Apps', '$location',
-  function ($scope, Apps, $location) {
-    helper.setTitle('Your apps drawer')
-    helper.setNavColor('blue')
-
-    Apps.all().success(function (data) {
+.controller('Apps#list', ['$scope', 'App', '$location',
+  function ($scope, App, $location) {
+    App.all().success(function (data) {
       $scope.apps = data
     })
 
-    var dz = new Dropzone('.drawer', {
+    var dz = new Dropzone('#drawer', {
       url: '/apps',
       clickable: false,
       dictDefaultMessage: '',
@@ -14939,7 +15171,7 @@ angular.module('Dashboard')
 
     dz.on('success', function (file) {
       dz.removeFile(file)
-      Apps.all().success(function (data) {
+      App.all().success(function (data) {
         $scope.apps = data
         $scope.$apply()
       })
@@ -14950,11 +15182,11 @@ angular.module('Dashboard')
     })
   }])
 
-.controller('Apps#edit', ['$scope', 'Apps', '$routeParams', '$sce',
-  function ($scope, Apps, $routeParams, $sce) {
+.controller('Apps#edit', ['$scope', 'App', '$routeParams', '$sce',
+  function ($scope, App, $routeParams, $sce) {
     var appName = $routeParams.name
 
-    Apps.get(appName).success(function (data) {
+    App.get(appName).success(function (data) {
       $scope.app = data
     })
 
@@ -14969,96 +15201,121 @@ angular.module('Dashboard')
 
     $scope.update = function () {
       var content = $('#content').text()
-      Apps.update(appName, content).success(function (data) {
+      App.update(appName, content).success(function (data) {
         toastr.success('Your app has been updated correctly', 'Dashboard')
       })
     }
   }])
 
-},{"../helpers":82,"Dropzone":2}],77:[function(require,module,exports){
+},{"Dropzone":2}],86:[function(require,module,exports){
 require('./activities')
 require('./apps')
 require('./users')
 require('./misc')
 
-
-},{"./activities":75,"./apps":76,"./misc":78,"./users":79}],78:[function(require,module,exports){
-'use strict'
-
-var helper = require('../helpers')
+},{"./activities":84,"./apps":85,"./misc":87,"./users":88}],87:[function(require,module,exports){
+/* global angular */
 
 angular.module('Dashboard')
-.controller('Routes#index', ['$scope', '$http',
-  function ($scope, $http) {
-    helper.setTitle('[Dev] API')
-    helper.setNavColor('orange')
-    $http.get('/routes').
-    success(function(data, status, headers, config) {
-      $scope.routes = data
-      $scope.keys = Object.keys
-    }).
-    error(function(data, status, headers, config) {
-      console.log(status + ' when GET /routes -> ' + data)
+.controller('Routes#index', ['$scope', '$http', function ($scope, $http) {
+  $http.get('/routes')
+  .success(function (data, status, headers, config) {
+    $scope.routes = data
+    $scope.keys = Object.keys
+  })
+  .error(function (data, status, headers, config) {
+    console.log(status + ' when GET /routes -> ' + data)
+  })
+}])
+
+angular.module('Dashboard')
+.controller('Settings#index', ['$scope', '$http', function ($scope, $http) {
+  $scope.update = function () {
+    $http.put('/update')
+  }
+}])
+
+},{}],88:[function(require,module,exports){
+/* global angular */
+
+var md5 = require('md5')
+var _chunk = require('lodash/array/chunk')
+
+angular.module('Dashboard')
+
+.controller('Users#index', ['$scope', 'User',
+function ($scope, User) {
+  User.all().success(function (data) {
+    data.forEach(function (user) {
+      user.gravatar = md5(user.email)
     })
-  }])
+    $scope.users = data
+  })
+}])
+
+.controller('Users#login', ['$scope', 'User', 'Session',
+function ($scope, User, Session) {
+  $scope.user = {}
+  User.redirectIfLogged()
+  $scope.login = Session.login
+}])
+
+.controller('Users#signup', ['$scope', 'User',
+function ($scope, User) {
+  $scope.user = {}
+  User.redirectIfLogged()
+  $scope.signup = User.signup
+}])
+
+.controller('Users#settings', ['$scope', 'User', 'Session',
+function ($scope, User, Session) {
+  User.authenticate()
+  $scope.currentUser = Session.getCurrentUser()
+  $scope.currentUser.gravatar = md5($scope.currentUser.email)
+  $scope.update = User.update
+  $scope.delete = User.remove
+}])
+
+.controller('InvitationCtrl', ['User', function (User) {
+  User.redirectIfLogged()
+}])
+
+.controller('Users#show', ['$scope', '$routeParams', 'User', 'Apps',
+function ($scope, $routeParams, User, Apps) {
+  User.get($routeParams.name).success(function (data) {
+    $scope.u = data
+    $scope.u.gravatar = md5(data.email)
+    Apps.from($routeParams.name).success(function (data) {
+      $scope.cols = _chunk(data, Math.ceil(data.length / 4))
+    })
+  })
+}])
+
+},{"lodash/array/chunk":24,"md5":98}],89:[function(require,module,exports){
+/* global angular, toastr, $ */
 
 angular.module('Dashboard')
-.controller('Settings#index', ['$scope', '$http',
-  function ($scope, $http) {
-    helper.setTitle('Settings')
-    helper.setNavColor('#777777')
 
-    $scope.update = function () {
-      $http.put('/update')
-    }
-  }])
-},{"../helpers":82}],79:[function(require,module,exports){
-'use strict'
-
-var helper = require('../helpers')
-
-angular.module('Dashboard')
-.controller('User#login', ['$scope', '$http', '$location', '$rootScope', 
-	function ($scope, $http, $location, $rootScope) {
-		helper.setTitle('Sign in')
-		$scope.credentials = {}
-		$scope.login = function (credentials) {
-			$http.post('/login', credentials)
-			.success(function(data, status, headers, config) {
-				console.log('POST  /login -> ')
-				console.log(data)
-				$rootScope.user = data           
-				$location.path("/")
-			})
-			.error(function(data, status, headers, config) {
-				toastr.error(data)
-			})
-		}
-	}])
-},{"../helpers":82}],80:[function(require,module,exports){
-
-angular.module('Dashboard')
-
-.directive('toolBox', function () {
+.directive('nbNavbar', function () {
+  console.log('loaded')
   return {
     restrict: 'E',
-    templateUrl: 'views/tool-box.html'
+    templateUrl: 'views/navbar.html'
   }
 })
 
-.directive('app', ['Apps', 'Activities', '$window',
-function (Apps, Activities, $window) {
+.directive('app', ['App', 'Activity', '$window',
+function (App, Activity, $window) {
   var self = {}
   self.scope = { app: '=app'	}
   self.restrict = 'E'
   self.templateUrl = 'views/apps/_app.html'
   self.controller = ['$scope', '$element', function ($scope, $element) {
     $scope.delete = function () {
-      var msg = 'Are you sure you want to uninstall '
-      + $scope.app + '?'
+      var msg = 'Are you sure you want to uninstall ' + $scope.app + '?'
 
-      if (confirm(msg)) {
-        Apps.delete($scope.app).success(function (data) {
+      if (window.confirm(msg)) {
+        App.delete($scope.app).success(function (data) {
           console.log('Success on removing -> %s', data)
           toastr.success($scope.app + ' succesfully removed')
           $element.hide()
@@ -15067,14 +15324,14 @@ function (Apps, Activities, $window) {
     }
 
     $scope.launch = function () {
-      Activities.launch($scope.app).success(function (data) {
+      Activity.launch($scope.app).success(function (data) {
         console.log('Success on launching -> %s', data)
         toastr.success($scope.app + ' launched', 'Dashboard')
       })
     }
 
     $scope.stop = function () {
-      Activities.stop($scope.app.name).success(function (data) {
+      Activity.stop($scope.app.name).success(function (data) {
         console.log('Success on stopping -> %s', data)
         // modify $e
       })
@@ -15098,19 +15355,39 @@ function (Apps, Activities, $window) {
   return self
 }]) // - directive
 
-.directive('ngRightClick', ['$parse', function ($parse) {
-  return function (scope, element, attrs) {
-    var fn = $parse(attrs.ngRightClick)
-    element.bind('contextmenu', function (event) {
-      scope.$apply(function () {
-        event.preventDefault()
-        fn.call(this, scope, {$event: event})
-      })
-    })
+// .directive('ngRightClick', ['$parse', function ($parse) {
+//   return function (scope, element, attrs) {
+//     var fn = $parse(attrs.ngRightClick)
+//     element.bind('contextmenu', function (event) {
+//       scope.$apply(function () {
+//         event.preventDefault()
+//         fn.call(this, scope, {$event: event})
+//       })
+//     })
+//   }
+// }])
+
+.directive('nbMetaDescription', function () {
+  return {
+    restrict: 'E',
+    scope: { value: '=content' },
+    link: function (scope) {
+      $('meta[name=description]').attr('content', scope.value)
+    }
+  }
+})
+
+.directive('nbTitle', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'E',
+    scope: { value: '=' },
+    controller: function ($scope) {
+      $rootScope.title = ' Netbeast | ' + $scope.value
+    }
   }
 }])
 
-},{}],81:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 
 // Broker.js is an instance for socket.io
 // that logs messages to refactor code
@@ -15130,46 +15407,68 @@ broker.handle = function (topic, msg) {
 		toastr.info(t.body, t.title)
 	}
 }
-},{}],82:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 // Some helper methods:
-//=====================
+// ====================
 
-exports.hideNav = function () {
-  nav = document.getElementsByTagName('nav')[0]
-  nav.style.height = 0
+/* global angular, toastr */
+
+var md5 = require('md5')
+
+var self = module.exports = {}
+
+self._validateUserForm = function (user) {
+  if (!user.alias) {
+    toastr.warning('Please type an alias')
+    return false
+  } else if (!user.email) {
+    toastr.warning('Please type a valid email address')
+    return false
+  } else if (self._validatePasswords(user)) {
+    return true
+  } else {
+    // unless passwords and all fields are validated
+    return false
+  }
 }
 
-exports.setNavColor = function setNavColor(str) {
-  var colors = {
-   blue :  "#73C5E1",
-   orange :  "#FBA827",
-   green :  "#1FDA9A",
-   pink :  "#EB65A0",
-   yellow :  "#FFD452",
-   grey :  "#F2F2F3",
-   black :  "#333333",
-   red :  "#e65656"
- }
- nav = document.getElementsByTagName('nav')[0]
- nav.style.height = '3px'
- nav.style.backgroundColor = colors[str] || str
+self._validatePasswords = function (user) {
+  if (!user.password) {
+    toastr.warning('Please type your password')
+    return false
+  } else if (user.password.length < 6) {
+    toastr.warning('It should have more characters', 'Password should be more secure')
+    return false
+  } else if (!user.password_confirmation) {
+    toastr.warning('Please confirm your password')
+    return false
+  } else if (user.password !== user.password_confirmation) {
+    toastr.warning('Passwords do not match')
+    return false
+  } else {
+    return true
+  }
 }
 
-exports.setTitle = function(str) {
-  document.title = ' Beta | ' + str
-  var tooldiv = document.getElementById('title')
-  tooldiv.innerHTML = '<span>' + str + '</span>'
+self._hashPasswords = function (user) {
+  var aux = {}
+  angular.copy(user, aux)
+  aux.password = md5(user.password)
+  if (user.password_confirmation) {
+    aux.password_confirmation = md5(user.password_confirmation)
+  }
+  return aux
 }
 
-},{}],83:[function(require,module,exports){
+},{"md5":98}],92:[function(require,module,exports){
 (function (__filename){
 'use strict'
 
 /* global angular, toastr */
 
 angular.module('Dashboard')
-.factory('Activities', ['$http', '$sce', '$location',
-  function ActivitiesFactory ($http, $sce, $location) {
+.factory('Activity', ['$http', '$sce', '$location',
+  function ActivityFactory ($http, $sce, $location) {
     var self = {}
     self.all = function () {
       return $http.get('/activities/').error(function (data) {
@@ -15219,65 +15518,729 @@ angular.module('Dashboard')
     return self
   }])
 
-}).call(this,"/web/assets/js/services/activities.js")
+}).call(this,"/web/assets/js/services/activity.js")
 
-},{}],84:[function(require,module,exports){
-(function (__filename){
+},{}],93:[function(require,module,exports){
+'use strict'
+/* global angular, toastr */
+
+angular.module('Dashboard')
+.factory('App', ['$http', '$sce', '$location',
+function AppFactory ($http, $sce, $location) {
+  var self = {}
+
+  self.get = function (app) {
+    return $http.get('/apps/' + app).error(function (data) {
+      console.log(data.toString())
+      toastr.error(data.toString())
+      $location.path('/')
+      $location.replace()
+    })
+  }
+
+  self.all = function () {
+    return self.get('')
+  }
+
+  self.getReadme = function (app) {
+    return $http.get('/apps/' + app + '/readme')
+    .error(function (data) {
+      toastr.error(data)
+    })
+  }
+
+  self.update = function (app, pkg) {
+    return $http.put('/apps/' + app, pkg)
+    .error(function (data, status) {
+      toastr.error(data)
+    })
+  }
+
+  self.remove = self.delete = function (app) {
+    return $http.delete('/apps/' + app)
+    .error(function (data, status) {
+      toastr.error(data)
+    })
+  }
+
+  return self
+}])
+
+},{}],94:[function(require,module,exports){
+/* global angular */
+
+var store = require('store')
+
+angular.module('Dashboard')
+.factory('httpRequestInterceptor', function () {
+  return {
+    request: function (config) {
+      var user = store.get('user')
+      if (!user) return config
+
+      var token = user.token
+      config.headers['Authorization'] = token
+      return config
+    }
+  }
+})
+
+.config(['$httpProvider', function ($httpProvider) {
+  $httpProvider.interceptors.push('httpRequestInterceptor')
+}])
+
+},{"store":102}],95:[function(require,module,exports){
+require('./activity')
+require('./session')
+require('./auth')
+require('./user')
+require('./app')
+
+},{"./activity":92,"./app":93,"./auth":94,"./session":96,"./user":97}],96:[function(require,module,exports){
+/* global angular, toastr */
+
+var store = require('store')
+var _hashPasswords = require('../helpers')._hashPasswords
+
+angular.module('Dashboard')
+.factory('Session', ['$http', '$rootScope', '$location',
+function SessionFactory ($http, $rootScope, $location) {
+  var self = {}
+  self.save = function (data) {
+    console.log('Saving session...')
+    $rootScope.user = data
+    store.set('user', data)
+    console.log(data)
+  }
+
+  self.login = function (credentials) {
+    console.log('login %s', credentials.toString())
+    var creds = _hashPasswords(credentials)
+    $http.post('/login', creds).success(function (data) {
+      $location.path('/')
+      toastr.success('Welcome ' + data.alias)
+      self.save(data)
+    })
+    .error(function (data) {
+      toastr.error(data)
+    })
+  }
+
+  self.update = function () {
+    console.log('Retrieving session...')
+    $http.get('/sessions').success(function (data) {
+      self.save(data)
+    })
+    .error(function (data) {
+      console.log('User does not exist [%s]', data)
+    })
+  }
+
+  self.load = self.getCurrentUser = function () {
+    var user = store.get('user')
+    console.log('Stored user is:')
+    console.log(user)
+    return user
+  }
+
+  self.logout = function () {
+    $http.get('/logout').then(function () {
+      store.remove('user')
+      delete $rootScope.user
+      toastr.success('See you soon :)')
+      $location.path('/')
+    })
+  }
+
+  self.update()
+
+  return self
+}])
+
+},{"../helpers":91,"store":102}],97:[function(require,module,exports){
+/* global angular, toastr */
+
 'use strict'
 
-angular.module("Dashboard")
-.factory("Apps", ['$http', '$sce', '$location',  
-  function ActivitiesFactory ($http, $sce, $location) {
+var _validateUserForm = require('../helpers')._validateUserForm
+var _hashPasswords = require('../helpers')._hashPasswords
 
-    var self = {}
-    
-    self.get = function(app) {
-      return $http.get('/apps/' + app).error(function(data) {
-        console.log(data.toString())  
-        toastr.error(data.toString())
-        $location.path('/')
-        $location.replace()
+angular.module('Dashboard')
+.factory('User', ['$http', '$location', 'Session', '$rootScope',
+function ActivitiesFactory ($http, $location, Session, $rootScope) {
+  var self = {}
+  self.get = function (alias) {
+    return $http.get('/users/' + alias)
+    .error(function (data, status, headers, config) {
+      console.log('error fetching user: %s', data.toString())
+      toastr.error('Error fetching user. ' + data.toString())
+    })
+  }
+  self.all = function () {
+    return self.get('')
+  }
+
+  self.signup = function (userForm) {
+    if (!_validateUserForm(userForm)) {
+      return false
+    } else {
+      var user = _hashPasswords(userForm)
+      return $http.post('/signup', user)
+      .success(function (data, status, headers, config) {
+        toastr.success('An activation code has been sent to ' + data.email)
+      })
+      .error(function (data, status, headers, config) {
+        toastr.error(data, 'Check again your fields')
       })
     }
+  }
 
-    self.all = function() {
-      return self.get('')
-    }
-
-    self.getReadme = function(app) {
-      return $http.get('/apps/' + app + '/readme')
-      .error(function(data) {
-        toastr.error(data, 'Dashboard')
-        console.error('%s @ self.remove() %s', __filename, data)  
+  self.update = function (userForm) {
+    if (!_validateUserForm(userForm)) {
+      return false
+    } else {
+      var user = _hashPasswords(userForm)
+      user._id = Session.load()._id
+      return $http.put('/users', user)
+      .success(function (data, status, headers, config) {
+        console.log('PUT  /users/ -> ')
+        console.log(userForm)
+        toastr.success('Your data has been successfully updated')
+        Session.save(user)
+      })
+      .error(function (data, status, headers, config) {
+        toastr.error(data, 'Check again your fields')
       })
     }
+  }
 
-    self.update = function (app, pkg) {
-      console.log(pkg)
-      return $http.put('/apps/' + app, pkg)
-      .error(function(data, status) {
-        toastr.error(data, 'An error has occurred when updating the app')
-        console.error('%s @ self.update() %s', __filename, data)
+  self.remove = function () {
+    if (window.confirm('Are you sure you want to delete your account?')) {
+      $http.delete('/users')
+      .success(function (data, status, headers, config) {
+        toastr.success('Sorry to see you go :[')
+        Session.logout()
+        return $location.path('/')
+      })
+      .error(function (data, status, headers, config) {
+        toastr.error(data, 'Could not perform the deletion :(')
       })
     }
-    
-    self.remove = self.delete = function (app) {
-      return $http.delete('/apps/' + app)
-      .error(function(data, status) {
-        toastr.error(data, 'An error has occurred when removing the app')
-        console.error('%s @ self.remove() %s', __filename, data)
-      })
+  }
+
+  self.getCurrentUser = function () {
+    return $rootScope.user
+  }
+
+  self.authenticate = function () {
+    if (!self.getCurrentUser()) {
+      console.log('User not logged in. Redirecting...')
+      $location.path('/login')
+    }
+  }
+
+  self.redirectIfLogged = function () {
+    if (self.getCurrentUser()) {
+      console.log('User is already logged. Redirecting...')
+      return $location.path('/apps')
+    }
+  }
+
+  return self
+}])
+
+},{"../helpers":91}],98:[function(require,module,exports){
+(function(){
+  var crypt = require('crypt'),
+      utf8 = require('charenc').utf8,
+      isBuffer = require('is-buffer'),
+      bin = require('charenc').bin,
+
+  // The core
+  md5 = function (message, options) {
+    // Convert to byte array
+    if (message.constructor == String)
+      if (options && options.encoding === 'binary')
+        message = bin.stringToBytes(message);
+      else
+        message = utf8.stringToBytes(message);
+    else if (isBuffer(message))
+      message = Array.prototype.slice.call(message, 0);
+    else if (!Array.isArray(message))
+      message = message.toString();
+    // else, assume byte array already
+
+    var m = crypt.bytesToWords(message),
+        l = message.length * 8,
+        a =  1732584193,
+        b = -271733879,
+        c = -1732584194,
+        d =  271733878;
+
+    // Swap endian
+    for (var i = 0; i < m.length; i++) {
+      m[i] = ((m[i] <<  8) | (m[i] >>> 24)) & 0x00FF00FF |
+             ((m[i] << 24) | (m[i] >>>  8)) & 0xFF00FF00;
     }
 
-    return self
-  }])
-}).call(this,"/web/assets/js/services/apps.js")
+    // Padding
+    m[l >>> 5] |= 0x80 << (l % 32);
+    m[(((l + 64) >>> 9) << 4) + 14] = l;
 
-},{}],85:[function(require,module,exports){
-'use strict'
-require('./activities')
-require('./apps')
-},{"./activities":83,"./apps":84}]},{},[1])
+    // Method shortcuts
+    var FF = md5._ff,
+        GG = md5._gg,
+        HH = md5._hh,
+        II = md5._ii;
+
+    for (var i = 0; i < m.length; i += 16) {
+
+      var aa = a,
+          bb = b,
+          cc = c,
+          dd = d;
+
+      a = FF(a, b, c, d, m[i+ 0],  7, -680876936);
+      d = FF(d, a, b, c, m[i+ 1], 12, -389564586);
+      c = FF(c, d, a, b, m[i+ 2], 17,  606105819);
+      b = FF(b, c, d, a, m[i+ 3], 22, -1044525330);
+      a = FF(a, b, c, d, m[i+ 4],  7, -176418897);
+      d = FF(d, a, b, c, m[i+ 5], 12,  1200080426);
+      c = FF(c, d, a, b, m[i+ 6], 17, -1473231341);
+      b = FF(b, c, d, a, m[i+ 7], 22, -45705983);
+      a = FF(a, b, c, d, m[i+ 8],  7,  1770035416);
+      d = FF(d, a, b, c, m[i+ 9], 12, -1958414417);
+      c = FF(c, d, a, b, m[i+10], 17, -42063);
+      b = FF(b, c, d, a, m[i+11], 22, -1990404162);
+      a = FF(a, b, c, d, m[i+12],  7,  1804603682);
+      d = FF(d, a, b, c, m[i+13], 12, -40341101);
+      c = FF(c, d, a, b, m[i+14], 17, -1502002290);
+      b = FF(b, c, d, a, m[i+15], 22,  1236535329);
+
+      a = GG(a, b, c, d, m[i+ 1],  5, -165796510);
+      d = GG(d, a, b, c, m[i+ 6],  9, -1069501632);
+      c = GG(c, d, a, b, m[i+11], 14,  643717713);
+      b = GG(b, c, d, a, m[i+ 0], 20, -373897302);
+      a = GG(a, b, c, d, m[i+ 5],  5, -701558691);
+      d = GG(d, a, b, c, m[i+10],  9,  38016083);
+      c = GG(c, d, a, b, m[i+15], 14, -660478335);
+      b = GG(b, c, d, a, m[i+ 4], 20, -405537848);
+      a = GG(a, b, c, d, m[i+ 9],  5,  568446438);
+      d = GG(d, a, b, c, m[i+14],  9, -1019803690);
+      c = GG(c, d, a, b, m[i+ 3], 14, -187363961);
+      b = GG(b, c, d, a, m[i+ 8], 20,  1163531501);
+      a = GG(a, b, c, d, m[i+13],  5, -1444681467);
+      d = GG(d, a, b, c, m[i+ 2],  9, -51403784);
+      c = GG(c, d, a, b, m[i+ 7], 14,  1735328473);
+      b = GG(b, c, d, a, m[i+12], 20, -1926607734);
+
+      a = HH(a, b, c, d, m[i+ 5],  4, -378558);
+      d = HH(d, a, b, c, m[i+ 8], 11, -2022574463);
+      c = HH(c, d, a, b, m[i+11], 16,  1839030562);
+      b = HH(b, c, d, a, m[i+14], 23, -35309556);
+      a = HH(a, b, c, d, m[i+ 1],  4, -1530992060);
+      d = HH(d, a, b, c, m[i+ 4], 11,  1272893353);
+      c = HH(c, d, a, b, m[i+ 7], 16, -155497632);
+      b = HH(b, c, d, a, m[i+10], 23, -1094730640);
+      a = HH(a, b, c, d, m[i+13],  4,  681279174);
+      d = HH(d, a, b, c, m[i+ 0], 11, -358537222);
+      c = HH(c, d, a, b, m[i+ 3], 16, -722521979);
+      b = HH(b, c, d, a, m[i+ 6], 23,  76029189);
+      a = HH(a, b, c, d, m[i+ 9],  4, -640364487);
+      d = HH(d, a, b, c, m[i+12], 11, -421815835);
+      c = HH(c, d, a, b, m[i+15], 16,  530742520);
+      b = HH(b, c, d, a, m[i+ 2], 23, -995338651);
+
+      a = II(a, b, c, d, m[i+ 0],  6, -198630844);
+      d = II(d, a, b, c, m[i+ 7], 10,  1126891415);
+      c = II(c, d, a, b, m[i+14], 15, -1416354905);
+      b = II(b, c, d, a, m[i+ 5], 21, -57434055);
+      a = II(a, b, c, d, m[i+12],  6,  1700485571);
+      d = II(d, a, b, c, m[i+ 3], 10, -1894986606);
+      c = II(c, d, a, b, m[i+10], 15, -1051523);
+      b = II(b, c, d, a, m[i+ 1], 21, -2054922799);
+      a = II(a, b, c, d, m[i+ 8],  6,  1873313359);
+      d = II(d, a, b, c, m[i+15], 10, -30611744);
+      c = II(c, d, a, b, m[i+ 6], 15, -1560198380);
+      b = II(b, c, d, a, m[i+13], 21,  1309151649);
+      a = II(a, b, c, d, m[i+ 4],  6, -145523070);
+      d = II(d, a, b, c, m[i+11], 10, -1120210379);
+      c = II(c, d, a, b, m[i+ 2], 15,  718787259);
+      b = II(b, c, d, a, m[i+ 9], 21, -343485551);
+
+      a = (a + aa) >>> 0;
+      b = (b + bb) >>> 0;
+      c = (c + cc) >>> 0;
+      d = (d + dd) >>> 0;
+    }
+
+    return crypt.endian([a, b, c, d]);
+  };
+
+  // Auxiliary functions
+  md5._ff  = function (a, b, c, d, x, s, t) {
+    var n = a + (b & c | ~b & d) + (x >>> 0) + t;
+    return ((n << s) | (n >>> (32 - s))) + b;
+  };
+  md5._gg  = function (a, b, c, d, x, s, t) {
+    var n = a + (b & d | c & ~d) + (x >>> 0) + t;
+    return ((n << s) | (n >>> (32 - s))) + b;
+  };
+  md5._hh  = function (a, b, c, d, x, s, t) {
+    var n = a + (b ^ c ^ d) + (x >>> 0) + t;
+    return ((n << s) | (n >>> (32 - s))) + b;
+  };
+  md5._ii  = function (a, b, c, d, x, s, t) {
+    var n = a + (c ^ (b | ~d)) + (x >>> 0) + t;
+    return ((n << s) | (n >>> (32 - s))) + b;
+  };
+
+  // Package private blocksize
+  md5._blocksize = 16;
+  md5._digestsize = 16;
+
+  module.exports = function (message, options) {
+    if(typeof message == 'undefined')
+      return;
+
+    var digestbytes = crypt.wordsToBytes(md5(message, options));
+    return options && options.asBytes ? digestbytes :
+        options && options.asString ? bin.bytesToString(digestbytes) :
+        crypt.bytesToHex(digestbytes);
+  };
+
+})();
+
+},{"charenc":99,"crypt":100,"is-buffer":101}],99:[function(require,module,exports){
+var charenc = {
+  // UTF-8 encoding
+  utf8: {
+    // Convert a string to a byte array
+    stringToBytes: function(str) {
+      return charenc.bin.stringToBytes(unescape(encodeURIComponent(str)));
+    },
+
+    // Convert a byte array to a string
+    bytesToString: function(bytes) {
+      return decodeURIComponent(escape(charenc.bin.bytesToString(bytes)));
+    }
+  },
+
+  // Binary encoding
+  bin: {
+    // Convert a string to a byte array
+    stringToBytes: function(str) {
+      for (var bytes = [], i = 0; i < str.length; i++)
+        bytes.push(str.charCodeAt(i) & 0xFF);
+      return bytes;
+    },
+
+    // Convert a byte array to a string
+    bytesToString: function(bytes) {
+      for (var str = [], i = 0; i < bytes.length; i++)
+        str.push(String.fromCharCode(bytes[i]));
+      return str.join('');
+    }
+  }
+};
+
+module.exports = charenc;
+
+},{}],100:[function(require,module,exports){
+(function() {
+  var base64map
+      = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+
+  crypt = {
+    // Bit-wise rotation left
+    rotl: function(n, b) {
+      return (n << b) | (n >>> (32 - b));
+    },
+
+    // Bit-wise rotation right
+    rotr: function(n, b) {
+      return (n << (32 - b)) | (n >>> b);
+    },
+
+    // Swap big-endian to little-endian and vice versa
+    endian: function(n) {
+      // If number given, swap endian
+      if (n.constructor == Number) {
+        return crypt.rotl(n, 8) & 0x00FF00FF | crypt.rotl(n, 24) & 0xFF00FF00;
+      }
+
+      // Else, assume array and swap all items
+      for (var i = 0; i < n.length; i++)
+        n[i] = crypt.endian(n[i]);
+      return n;
+    },
+
+    // Generate an array of any length of random bytes
+    randomBytes: function(n) {
+      for (var bytes = []; n > 0; n--)
+        bytes.push(Math.floor(Math.random() * 256));
+      return bytes;
+    },
+
+    // Convert a byte array to big-endian 32-bit words
+    bytesToWords: function(bytes) {
+      for (var words = [], i = 0, b = 0; i < bytes.length; i++, b += 8)
+        words[b >>> 5] |= bytes[i] << (24 - b % 32);
+      return words;
+    },
+
+    // Convert big-endian 32-bit words to a byte array
+    wordsToBytes: function(words) {
+      for (var bytes = [], b = 0; b < words.length * 32; b += 8)
+        bytes.push((words[b >>> 5] >>> (24 - b % 32)) & 0xFF);
+      return bytes;
+    },
+
+    // Convert a byte array to a hex string
+    bytesToHex: function(bytes) {
+      for (var hex = [], i = 0; i < bytes.length; i++) {
+        hex.push((bytes[i] >>> 4).toString(16));
+        hex.push((bytes[i] & 0xF).toString(16));
+      }
+      return hex.join('');
+    },
+
+    // Convert a hex string to a byte array
+    hexToBytes: function(hex) {
+      for (var bytes = [], c = 0; c < hex.length; c += 2)
+        bytes.push(parseInt(hex.substr(c, 2), 16));
+      return bytes;
+    },
+
+    // Convert a byte array to a base-64 string
+    bytesToBase64: function(bytes) {
+      for (var base64 = [], i = 0; i < bytes.length; i += 3) {
+        var triplet = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
+        for (var j = 0; j < 4; j++)
+          if (i * 8 + j * 6 <= bytes.length * 8)
+            base64.push(base64map.charAt((triplet >>> 6 * (3 - j)) & 0x3F));
+          else
+            base64.push('=');
+      }
+      return base64.join('');
+    },
+
+    // Convert a base-64 string to a byte array
+    base64ToBytes: function(base64) {
+      // Remove non-base-64 characters
+      base64 = base64.replace(/[^A-Z0-9+\/]/ig, '');
+
+      for (var bytes = [], i = 0, imod4 = 0; i < base64.length;
+          imod4 = ++i % 4) {
+        if (imod4 == 0) continue;
+        bytes.push(((base64map.indexOf(base64.charAt(i - 1))
+            & (Math.pow(2, -2 * imod4 + 8) - 1)) << (imod4 * 2))
+            | (base64map.indexOf(base64.charAt(i)) >>> (6 - imod4 * 2)));
+      }
+      return bytes;
+    }
+  };
+
+  module.exports = crypt;
+})();
+
+},{}],101:[function(require,module,exports){
+/**
+ * Determine if an object is Buffer
+ *
+ * Author:   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * License:  MIT
+ *
+ * `npm install is-buffer`
+ */
+
+module.exports = function (obj) {
+  return !!(
+    obj != null &&
+    obj.constructor &&
+    typeof obj.constructor.isBuffer === 'function' &&
+    obj.constructor.isBuffer(obj)
+  )
+}
+
+},{}],102:[function(require,module,exports){
+;(function(win){
+	var store = {},
+		doc = win.document,
+		localStorageName = 'localStorage',
+		scriptTag = 'script',
+		storage
+
+	store.disabled = false
+	store.version = '1.3.17'
+	store.set = function(key, value) {}
+	store.get = function(key, defaultVal) {}
+	store.has = function(key) { return store.get(key) !== undefined }
+	store.remove = function(key) {}
+	store.clear = function() {}
+	store.transact = function(key, defaultVal, transactionFn) {
+		if (transactionFn == null) {
+			transactionFn = defaultVal
+			defaultVal = null
+		}
+		if (defaultVal == null) {
+			defaultVal = {}
+		}
+		var val = store.get(key, defaultVal)
+		transactionFn(val)
+		store.set(key, val)
+	}
+	store.getAll = function() {}
+	store.forEach = function() {}
+
+	store.serialize = function(value) {
+		return JSON.stringify(value)
+	}
+	store.deserialize = function(value) {
+		if (typeof value != 'string') { return undefined }
+		try { return JSON.parse(value) }
+		catch(e) { return value || undefined }
+	}
+
+	// Functions to encapsulate questionable FireFox 3.6.13 behavior
+	// when about.config::dom.storage.enabled === false
+	// See https://github.com/marcuswestin/store.js/issues#issue/13
+	function isLocalStorageNameSupported() {
+		try { return (localStorageName in win && win[localStorageName]) }
+		catch(err) { return false }
+	}
+
+	if (isLocalStorageNameSupported()) {
+		storage = win[localStorageName]
+		store.set = function(key, val) {
+			if (val === undefined) { return store.remove(key) }
+			storage.setItem(key, store.serialize(val))
+			return val
+		}
+		store.get = function(key, defaultVal) {
+			var val = store.deserialize(storage.getItem(key))
+			return (val === undefined ? defaultVal : val)
+		}
+		store.remove = function(key) { storage.removeItem(key) }
+		store.clear = function() { storage.clear() }
+		store.getAll = function() {
+			var ret = {}
+			store.forEach(function(key, val) {
+				ret[key] = val
+			})
+			return ret
+		}
+		store.forEach = function(callback) {
+			for (var i=0; i<storage.length; i++) {
+				var key = storage.key(i)
+				callback(key, store.get(key))
+			}
+		}
+	} else if (doc.documentElement.addBehavior) {
+		var storageOwner,
+			storageContainer
+		// Since #userData storage applies only to specific paths, we need to
+		// somehow link our data to a specific path.  We choose /favicon.ico
+		// as a pretty safe option, since all browsers already make a request to
+		// this URL anyway and being a 404 will not hurt us here.  We wrap an
+		// iframe pointing to the favicon in an ActiveXObject(htmlfile) object
+		// (see: http://msdn.microsoft.com/en-us/library/aa752574(v=VS.85).aspx)
+		// since the iframe access rules appear to allow direct access and
+		// manipulation of the document element, even for a 404 page.  This
+		// document can be used instead of the current document (which would
+		// have been limited to the current path) to perform #userData storage.
+		try {
+			storageContainer = new ActiveXObject('htmlfile')
+			storageContainer.open()
+			storageContainer.write('<'+scriptTag+'>document.w=window</'+scriptTag+'><iframe src="/favicon.ico"></iframe>')
+			storageContainer.close()
+			storageOwner = storageContainer.w.frames[0].document
+			storage = storageOwner.createElement('div')
+		} catch(e) {
+			// somehow ActiveXObject instantiation failed (perhaps some special
+			// security settings or otherwse), fall back to per-path storage
+			storage = doc.createElement('div')
+			storageOwner = doc.body
+		}
+		var withIEStorage = function(storeFunction) {
+			return function() {
+				var args = Array.prototype.slice.call(arguments, 0)
+				args.unshift(storage)
+				// See http://msdn.microsoft.com/en-us/library/ms531081(v=VS.85).aspx
+				// and http://msdn.microsoft.com/en-us/library/ms531424(v=VS.85).aspx
+				storageOwner.appendChild(storage)
+				storage.addBehavior('#default#userData')
+				storage.load(localStorageName)
+				var result = storeFunction.apply(store, args)
+				storageOwner.removeChild(storage)
+				return result
+			}
+		}
+
+		// In IE7, keys cannot start with a digit or contain certain chars.
+		// See https://github.com/marcuswestin/store.js/issues/40
+		// See https://github.com/marcuswestin/store.js/issues/83
+		var forbiddenCharsRegex = new RegExp("[!\"#$%&'()*+,/\\\\:;<=>?@[\\]^`{|}~]", "g")
+		function ieKeyFix(key) {
+			return key.replace(/^d/, '___$&').replace(forbiddenCharsRegex, '___')
+		}
+		store.set = withIEStorage(function(storage, key, val) {
+			key = ieKeyFix(key)
+			if (val === undefined) { return store.remove(key) }
+			storage.setAttribute(key, store.serialize(val))
+			storage.save(localStorageName)
+			return val
+		})
+		store.get = withIEStorage(function(storage, key, defaultVal) {
+			key = ieKeyFix(key)
+			var val = store.deserialize(storage.getAttribute(key))
+			return (val === undefined ? defaultVal : val)
+		})
+		store.remove = withIEStorage(function(storage, key) {
+			key = ieKeyFix(key)
+			storage.removeAttribute(key)
+			storage.save(localStorageName)
+		})
+		store.clear = withIEStorage(function(storage) {
+			var attributes = storage.XMLDocument.documentElement.attributes
+			storage.load(localStorageName)
+			for (var i=0, attr; attr=attributes[i]; i++) {
+				storage.removeAttribute(attr.name)
+			}
+			storage.save(localStorageName)
+		})
+		store.getAll = function(storage) {
+			var ret = {}
+			store.forEach(function(key, val) {
+				ret[key] = val
+			})
+			return ret
+		}
+		store.forEach = withIEStorage(function(storage, callback) {
+			var attributes = storage.XMLDocument.documentElement.attributes
+			for (var i=0, attr; attr=attributes[i]; ++i) {
+				callback(attr.name, store.deserialize(storage.getAttribute(attr.name)))
+			}
+		})
+	}
+
+	try {
+		var testKey = '__storejs__'
+		store.set(testKey, testKey)
+		if (store.get(testKey) != testKey) { store.disabled = true }
+		store.remove(testKey)
+	} catch(e) {
+		store.disabled = true
+	}
+	store.enabled = !store.disabled
+
+	if (typeof module != 'undefined' && module.exports && this.module !== module) { module.exports = store }
+	else if (typeof define === 'function' && define.amd) { define(store) }
+	else { win.store = store }
+
+})(Function('return this')());
+
+},{}]},{},[1])
 
 
 //# sourceMappingURL=bundle.js.map

@@ -2,7 +2,7 @@
 
 var store = require('store')
 
-angular.module('Netbeast')
+angular.module('Dashboard')
 .factory('httpRequestInterceptor', function () {
   return {
     request: function (config) {

@@ -6,7 +6,6 @@ var path = require('path')
 var installer = require('../installer')
 var launcher = require('../launcher')
 var httpProxy = require('http-proxy')
-var broker = require('../helpers/broker')
 var App = require('../models/app')
 var NotFound = require('../util/not-found')
 var InvalidFormat = require('../util/invalid-format')
@@ -37,7 +36,7 @@ router.get('/apps/:name/logo', function (req, res) {
     var appLogo = path.join(appRoot, app.logo)
     res.sendFile(appLogo)
   } catch (e) {
-    res.sendFile(path.join(config.publicDir, 'img/dflt.svg'))
+    res.sendFile(path.join(config.publicDir, 'img/dflt.png'))
   }
 })
 

@@ -14,6 +14,19 @@ Reporter.prototype.isError = function isError(obj) {
   return obj instanceof ReporterError;
 };
 
+Reporter.prototype.save = function save() {
+  var state = this._reporterState;
+
+  return { obj: state.obj, pathLen: state.path.length };
+};
+
+Reporter.prototype.restore = function restore(data) {
+  var state = this._reporterState;
+
+  state.obj = data.obj;
+  state.path = state.path.slice(0, data.pathLen);
+};
+
 Reporter.prototype.enterKey = function enterKey(key) {
   return this._reporterState.path.push(key);
 };

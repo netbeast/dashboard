@@ -1,4 +1,4 @@
-var util = require('util');
+var inherits = require('inherits');
 
 var NestedError = function (message, nested) {
     Error.call(this);
@@ -31,7 +31,7 @@ var NestedError = function (message, nested) {
     });
 };
 
-util.inherits(NestedError, Error);
+inherits(NestedError, Error);
 NestedError.prototype.name = 'NestedError';
 
 

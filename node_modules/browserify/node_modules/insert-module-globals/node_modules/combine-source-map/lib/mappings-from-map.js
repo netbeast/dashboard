@@ -13,10 +13,10 @@ module.exports = function (map) {
   consumer.eachMapping(function (mapping) {
     // only set source if we have original position to handle edgecase (see inline-source-map tests)
     mappings.push({
-      original: {
+      original: mapping.originalColumn != null ? {
         column: mapping.originalColumn
       , line: mapping.originalLine
-      }
+      } : undefined
     , generated: {
         column: mapping.generatedColumn
       , line: mapping.generatedLine

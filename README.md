@@ -31,9 +31,10 @@ sudo nb-dashboard --port 80
 Compiling with npm the Dashboard node.js native modules may take a while. That is why we precompile them weekly and push them to this repo production branch. You can have it on your Raspberry Pi in less than a minute:
 
 ```bash
-git clone -b master --single-branch https://github.com/netbeast-co/xy-dashboard/
-cd nb-dashboard
-sudo ./www
+git clone -b master --single-branch https://github.com/netbeast-co/dashboard/
+cd dashboard
+npm i # by default, dependencies are ignored
+sudo ./index.js
 ```
 
 We also prepared a <u>very lightweight Raspberry Pi distro with the dashboard already installed</u> is published every two weeks here http://bit.ly/1HjkWo2. Available for Rpi 1 and 2 versions.

@@ -8,7 +8,7 @@ var broker = require('./helpers/broker')
 
 const V = '/views/'
 
-angular.module('Dashboard', ['ngRoute', 'angular-loading-bar'])
+angular.module('Dashboard', ['ngRoute', 'angular-loading-bar', 'cfp.loadingBar'])
 
 .config(['$routeProvider', function ($routeProvider) {
   $routeProvider

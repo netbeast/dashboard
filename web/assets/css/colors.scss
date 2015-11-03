@@ -36,11 +36,13 @@ $red-dark: darken($brand-primary, 33.5%);
 .text-black { color: $black }
 .text-red { color: $red }
 .text-green { color: $green }
-.text-white { color: $grey }
+.text-white { color: $grey-lighter }
+.text-blue { color: $blue }
 
 .bg-yellow { background-color: $yellow }
 .bg-red { background-color: $red }
 .bg-green { background-color: $green }
 .bg-black { background-color: $black }
+.bg-blue { background-color: $blue }
 
 .stroke-black { text-shadow: 0 0 2px $black; }

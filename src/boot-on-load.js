@@ -1,27 +1,26 @@
-var launcher = require('./launcher')
-var App = require('./models/app')
-var config = require('../config')
 var async = require('async')
-var path = require('path')
-var fs = require('fs')
+
+var App = require('./models/app')
+var launcher = require('./launcher')
 
 // start apps that must be initialized on boot
 module.exports = function _bootOnLoad () {
-  fs.readdir(config.appsDir, function (err, files) {
+  App.all(function (err, apps) {
     if (err) throw err
 
-    async.mapSeries(files, function (file, callback) {
-      App.getPackageJson(path.join(config.appsDir, file, 'package.json'),
-      function (err, data) {
-        if (err) return callback(err)
+    async.map(apps, function (app, done) {
+      if (!app.bootOnLoad) return done(null)
 
-        if (data.bootOnLoad) {
-          launcher.boot(file, function (err, port) {
-            if (err) return callback(err)
-            console.info('launched app on port %s', port)
-          })
-        }
+      console.log('Launching %s', app.name)
+      launcher.boot(app.name, function (err, port) {
+        if (err) return done(err)
+
+        console.info('%s launched on port %s', app.name, port)
+        done(null, port)
       })
+    },
+    function (err) {
+      if (err) throw err
     })
   })
 }

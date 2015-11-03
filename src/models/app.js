@@ -1,5 +1,7 @@
 var path = require('path')
 var fs = require('fs-extra')
+var async = require('async')
+
 var config = require('../../config')
 var broker = require('../helpers/broker')
 var NotFound = require('../util/not-found')
@@ -12,11 +14,7 @@ App.all = function (done) {
   fs.readdir(config.appsDir, function (err, files) {
     if (err) return done(err)
 
-    files = files.filter(function (app) {
-      return fs.existsSync(path.join(config.appsDir, app, 'package.json'))
-    })
-
-    done(null, files)
+    async.map(files, App.getPackageJson, done)
   })
 }
 

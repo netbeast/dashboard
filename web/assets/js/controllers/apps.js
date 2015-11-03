@@ -30,8 +30,8 @@ function ($scope, $routeParams, App, Activity, $sce) {
   }
 }])
 
-.controller('Apps#list', ['$scope', 'App', '$location',
-function ($scope, App, $location) {
+.controller('Apps#list', ['$scope', 'App', '$location', 'cfpLoadingBar',
+function ($scope, App, $location, cfpLoadingBar) {
   App.all().success(function (data) {
     $scope.apps = data
   })
@@ -42,6 +42,7 @@ function ($scope, App, $location) {
     dictDefaultMessage: '',
     previewTemplate: $('.dz-template').html(),
     accept: function (file, done) {
+      cfpLoadingBar.start()
       var fname = file.name
       var ext = [fname.split('.')[1], fname.split('.')[2]].join('.')
       if (ext === 'tar.gz' || ext === 'tgz.') {
@@ -62,7 +63,12 @@ function ($scope, App, $location) {
     })
   })
 
+  dz.on('complete', cfpLoadingBar.complete)
+
+  dz.on('uploadprogress', cfpLoadingBar.inc)
+
   dz.on('error', function (file, error, xhr) {
+    cfpLoadingBar.complete()
     toastr.error(error, 'Dashboard')
   })
 }])
@@ -75,6 +81,7 @@ function ($scope, App, $routeParams, $sce) {
     $scope.app = data
   })
 
+  // could not get this to work with $http
   $.ajax('/apps/' + appName + '/package')
   .done(function (data) {
     $scope.package = $sce.trustAsHtml(data)

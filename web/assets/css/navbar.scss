@@ -3,7 +3,6 @@ $navbar-width: 80px;
 nav {
   height: 100%;
   display: block;
-  float: left;
   background-color: $black;
   width: $navbar-width;
 }
@@ -13,6 +12,7 @@ nav {
   width: $navbar-width;
   background-color: inherit;
   position: fixed;
+  z-index: 100;
   ul {
     li {
       display: block;

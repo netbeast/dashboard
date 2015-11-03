@@ -4,7 +4,7 @@
 
 @import 'nb-bootstrap.css';
 @import '../../dist/fa/css/font-awesome.css';
-@import '../../../node_modules/dropzone/dist/dropzone.css';
+@import 'vendor/dropzone.css';
 @import 'vendor/toastr.css';
 @import 'vendor/loading-bar';
 @import 'mixins';
@@ -28,7 +28,11 @@ body, html {
 
 #wrapper {
   display: block;
-  float: left;
+  position: absolute;
+  width: 100%;
+  min-height: 100vh;
+  top: 0; left: 0;
+  padding-left: $navbar-width;
 }
 
 #brand {
@@ -61,6 +65,14 @@ body, html {
 
 .slant {
   @include slant();
+}
+
+.rotate-45 {
+  @include transform-rotate(45deg);
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 z-bg {

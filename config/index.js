@@ -7,7 +7,7 @@ var path = require('path')
 var root = path.join(__dirname, '..')
 
 var config = module.exports = {}
-config.port = process.env.ENV !== 'development' ? 80 : 8000
+config.port = process.env.ENV === 'development' ? 8000 : 80
 config.tmpDir = '/tmp'
 config.configDir = __dirname
 config.publicDir = path.join(root, './web')

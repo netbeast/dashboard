@@ -1,10 +1,11 @@
-var spawn = require('child_process').spawn
-var broker = require('./helpers/broker')
-var portfinder = require('portfinder')
-var fs = require('fs-extra')
-var events = require('events')
-var chalk = require('chalk')
 var path = require('path')
+var events = require('events')
+var spawn = require('child_process').spawn
+
+var portfinder = require('portfinder')
+var chalk = require('chalk')
+
+var broker = require('./helpers/broker')
 var App = require('./models/app')
 var config = require('../config')
 
@@ -75,38 +76,39 @@ launcher.stop = function (appName, done) {
   done()
 }
 
-launcher.getApps = function () {
-  var data = []
-  fs.readdirSync(config.appsDir).forEach(function (app) {
-    if (children[app]) data.push(app)
+launcher.getApps = function (done) {
+  App.all(function (err, apps) {
+    if (err) return done(err)
+    console.log(apps)
+
+    apps = apps.filter(function (app) {
+      console.log(app)
+
+      return children[app.name]
+    })
+
+    done(null, apps)
   })
-  return data
 }
 
 launcher.boot = function (appName, done) {
   var app = { name: appName }
 
-  if (!children[app.name]) {
-    console.log('[booting] Looking for a free port for %s...', app.name)
-    portfinder.getPort(function (err, port) {
-      if (err) {
-        done(new Error('Not enough ports'))
-      } else {
-        app.port = port
-        console.log('[booting] Found port for %s at %s.', app.name, app.port)
-        launcher.emit('start', app)
-        done(null, port)
-      }
-    })
-  } else if (children[app.name]) {
-    done(null, children[app.name].port)
-  } else {
-    done(new Error('Server crashed when booting app'))
+  if (children[app.name]) {
+    return done(null, children[app.name].port)
   }
-}
 
-launcher.getApp = function (appName) {
-  return children[appName]
+  console.log('[booting] Looking for a free port for %s...', app.name)
+  portfinder.getPort(function (err, port) {
+    if (err) {
+      done(new Error('Not enough ports'))
+    } else {
+      app.port = port
+      console.log('[booting] Found port for %s at %s.', app.name, app.port)
+      launcher.emit('start', app)
+      done(null, port)
+    }
+  })
 }
 
 module.exports = launcher

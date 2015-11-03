@@ -1,9 +1,12 @@
-<a class="apps" ng-href="#/apps/{{app}}">
-  <div class="avatar">
-    <img ng-src="/apps/{{app}}/logo" alt="/apps/{{app}}/logo" />
+<div class="apps">
+  <div class="avatar clickable ng-click="open()"">
+    <img ng-src="/apps/{{app.name}}/logo" alt="/apps/{{app.name}}/logo" />
   </div>
-  <h5>{{app}}</h5>
-</a>
+
+  <pins app="app"></pins>
+
+  <h4 class="text-red clickable" ng-click="open()">{{app.name}}</h4>
+</div>
 
 <span ng-show="$parent.activities" ng-click="stop()">
   <a  class="btn btn-warning" href="javascript:void(0)">

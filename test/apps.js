@@ -13,6 +13,9 @@ var fs = require('fs')
 var s = 1000 // seconds
 
 const URL = 'http://localhost:' + config.port
+const GITHUB_REPO = 'https://github.com/netbeast/get-started'
+
+console.log('### %s ###', process.env.ENV)
 
 // Test styling
 // http://chaijs.com/guide/styles/
@@ -59,11 +62,10 @@ describe('Apps', function () {
       })
     })
     var form = req.form()
-    var app = 'https://github.com/netbeast-co/get-started'
-    form.append('url', app)
+    form.append('url', GITHUB_REPO)
   })
 
-  it('should return all apps names', function (done) {
+  it("should return all apps' package.json", function (done) {
     request(URL + '/apps', function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200)

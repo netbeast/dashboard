@@ -1,5 +1,7 @@
 language: node_js
-sudo: required
+sudo: false
+env:
+  - ENV="development"
 node_js:
   - "4.2.1"
 before_script:

@@ -28,7 +28,6 @@ describe('Apps', function () {
     this.timeout(8 * s) // this takes time
     var req = request.post(URL + '/apps', function (err, resp, body) {
       should.not.exist(err)
-      body.should.equal('')
       expect(resp.statusCode).to.equal(204)
       fs.stat(path.join(config.appsDir, 'myapp'), function (err, stats) {
         should.not.exist(err)
@@ -48,6 +47,14 @@ describe('Apps', function () {
       expect(JSON.parse(body)).to.be.an('Object')
       done()
     })
+  })
+
+  it.skip('should not accept bad-packaged app', function (done) {
+    done()
+  })
+
+  it.skip('should not accept bad-formed package.json', function (done) {
+    done()
   })
 
   it('should upload app @ github to repo', function (done) {
@@ -78,7 +85,6 @@ describe('Apps', function () {
     request.del(URL + '/apps/myapp', function (err, resp, body) {
       should.not.exist(err)
       expect(resp.statusCode).to.equal(204)
-      body.should.equal('')
       done()
     })
   })
@@ -87,7 +93,6 @@ describe('Apps', function () {
     request.del(URL + '/apps/xy-get-started', function (err, resp, body) {
       should.not.exist(err)
       expect(resp.statusCode).to.equal(204)
-      body.should.equal('')
       done()
     })
   })
@@ -96,7 +101,6 @@ describe('Apps', function () {
     request.del(URL + '/apps/tsaebten', function (err, resp, body) {
       should.not.exist(err)
       expect(resp.statusCode).to.equal(404)
-      body.should.be.a('String')
       done()
     })
   })

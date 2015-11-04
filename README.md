@@ -1,12 +1,12 @@
 # Netbeast dashboard
 
-[![Build Status](https://travis-ci.org/netbeast-co/dashboard.svg)](https://travis-ci.org/netbeast-co/dashboard)
+[![Build Status](https://travis-ci.org/netbeast/dashboard.svg)](https://travis-ci.org/netbeast/dashboard)
 [![npm version](https://badge.fury.io/js/nb-dashboard.svg)](https://badge.fury.io/js/nb-dashboard)
-![dependencies](https://david-dm.org/netbeast-co/dashboard.svg)
-[![devDependency](https://david-dm.org/netbeast-co/dashboard/dev-status.svg)](https://david-dm.org/netbeast-co/dashboard#info=devDependencies)
-[![codecov.io](https://codecov.io/github/netbeast-co/dashboard/coverage.svg?branch=master)](https://codecov.io/github/netbeast-co/dashboard?branch=master)
+![dependencies](https://david-dm.org/netbeast/dashboard.svg)
+[![devDependency](https://david-dm.org/netbeast/dashboard/dev-status.svg)](https://david-dm.org/netbeast/dashboard#info=devDependencies)
+[![codecov.io](https://codecov.io/github/netbeast/dashboard/coverage.svg?branch=master)](https://codecov.io/github/netbeast/dashboard?branch=master)
 
-[![Join the chat at https://gitter.im/netbeast-co/docs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast-co/docs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/netbeast/docs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast/docs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ###Iot in html5.
 
@@ -14,7 +14,7 @@ This is a web panel from you can install, manage or publish IoT applications. Fo
 
 ## Try it locally
 Find it live at `http://localhost`
-<img src="https://github.com/netbeast-co/docs/blob/master/img/dashboard-cap.png?raw=true"></img>
+<img src="https://github.com/netbeast/docs/blob/master/img/dashboard-cap.png?raw=true"></img>
 
 ### Install
 ``` bash
@@ -31,7 +31,7 @@ sudo nb-dashboard --port 80
 Compiling with npm the Dashboard node.js native modules may take a while. That is why we precompile them weekly and push them to this repo production branch. You can have it on your Raspberry Pi in less than a minute:
 
 ```bash
-git clone -b master --single-branch https://github.com/netbeast-co/xy-dashboard/
+git clone -b master --single-branch https://github.com/netbeast/xy-dashboard/
 cd nb-dashboard
 sudo ./www
 ```
@@ -51,11 +51,11 @@ You can build IoT apps using only web technologies: javascript and HTML5! Also w
 ## Contact
 * Visit our site [https://netbeast.co](https://netbeast.co)
 * Mail us: staff [at] netbeast.co
-* Report a bug or enter discussion at [issues](https://github.com/netbeast-co/docs/issues)
-* Other resources: [Docs](https://github.com/netbeast-co/docs/wiki), Netbeast [API](https://github.com/netbeast-co/API)
+* Report a bug or enter discussion at [issues](https://github.com/netbeast/docs/issues)
+* Other resources: [Docs](https://github.com/netbeast/docs/wiki), Netbeast [API](https://github.com/netbeast/API)
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast-co/xway?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast/xway?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 
-<img src="https://github.com/netbeast-co/docs/blob/master/img/open-source.png?raw=true" height="140px" width="auto"/>
-<img src="https://github.com/netbeast-co/docs/blob/master/img/open-hw.png?raw=true" height="140px" width="auto"/>
+<img src="https://github.com/netbeast/docs/blob/master/img/open-source.png?raw=true" height="140px" width="auto"/>
+<img src="https://github.com/netbeast/docs/blob/master/img/open-hw.png?raw=true" height="140px" width="auto"/>

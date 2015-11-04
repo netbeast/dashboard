@@ -2,7 +2,7 @@ var path = require('path')
 var broker = require('./helpers/broker')
 var multer = require('multer')
 var config = require('../config')
-var error = require('./error')
+var error = require('./util/error')
 var App = require('./models/app')
 
 module.exports.multer = multer({
@@ -36,7 +36,7 @@ module.exports.process = function (req, res, next) {
 module.exports.git = function (req, res, next) {
   if (!req.body.url) return next()
 
-  broker.emit('stdout', 'Installing from git...')
+  broker.notify('Installing from git...')
   App.install(req.body.url, function (err, repo) {
     if (err) return next(err)
     res.status(204).end()

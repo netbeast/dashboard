@@ -13,48 +13,61 @@ client.on('error', function (data) {
   console.log(data)
 })
 
-// Method to emit info as Dashboard and parse it easily
-broker.emit = function (emphasis, data) {
-  var args = [].slice.call(arguments, 1)
-  var notif = {title: 'Dashboard'}
+broker.notify = function (notification) {
+  var _n = notification
 
-  // Log io.emit through console
-  console.log(chalk.bgCyan('ws') + chalk.bgYellow(args))
+  // Log notification through console
+  var msg = chalk.bgCyan('ws')
+  switch (_n.emphasis) {
+    case 'error':
+    msg = msg + chalk.bgRed(_n.body)
+    break
+    case 'warning':
+    msg = msg + chalk.bgYellow(_n.body)
+    break
+    case 'info':
+    msg = msg + chalk.bgBlue(_n.body)
+    break
+    case 'success':
+    msg = msg + chalk.bgGreen(_n.body)
+    break
+    default:
+  }
 
-  // Enable broker to emit a string as
-  // console.log fashion
-  if (typeof data === 'String') data = _parse(args)
-
-  notif.body = data
-  notif.emphasis = emphasis
-  client.publish('notifications', JSON.stringify(notif))
+  console.log(msg)
+  client.publish('notifications', JSON.stringify(_n))
 }
 
-broker.notify = function (notification) {
-  // Log notification through console
-  console.log(chalk.bgCyan('ws') + chalk.bgYellow(JSON.stringify(notification)))
-  client.publish('notifications', JSON.stringify(notification))
+broker.info = function (notification) {
+  if (typeof notification === 'string') {
+    broker.notify({ emphasis: 'info', body: notification })
+  } else {
+    broker.notify(_extend(notification, { emphasis: 'info' }))
+  }
 }
 
 broker.error = function (notification) {
-  broker.notify(_extend(notification, { emphasis: 'error' }))
+  if (typeof notification === 'string') {
+    broker.notify({ emphasis: 'error', body: notification })
+  } else {
+    broker.notify(_extend(notification, { emphasis: 'error' }))
+  }
 }
 
 broker.success = function (notification) {
-  broker.notify(_extend(notification, { emphasis: 'success' }))
+  if (typeof notification === 'string') {
+    broker.notify({ emphasis: 'success', body: notification })
+  } else {
+    broker.notify(_extend(notification, { emphasis: 'success' }))
+  }
 }
 
 broker.warning = function (notification) {
-  broker.notify(_extend(notification, { emphasis: 'warning' }))
+  if (typeof notification === 'string') {
+    broker.notify({ emphasis: 'warning', body: notification })
+  } else {
+    broker.notify(_extend(notification, { emphasis: 'warning' }))
+  }
 }
 
 broker.info = broker.notify // alias
-
-function _parse (str) {
-  var args = [].slice.call(arguments, 1)
-  var i = 0
-
-  return str.replace(/%s/g, function () {
-    return args[i++]
-  })
-}

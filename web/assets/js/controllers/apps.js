@@ -2,6 +2,7 @@
 'use strict'
 
 var Dropzone = require('Dropzone')
+var marked = require('marked')
 
 angular.module('Dashboard')
 
@@ -10,7 +11,7 @@ function ($scope, $routeParams, App, Activity, $sce) {
   var appName = $routeParams.name
 
   App.getReadme(appName).success(function (data) {
-    $scope.readme = $sce.trustAsHtml(data)
+    $scope.readme = $sce.trustAsHtml(marked(data))
   })
 
   App.get(appName).success(function (data) {

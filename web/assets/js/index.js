@@ -3,9 +3,6 @@
 // by jesus@netbeast
 // =============================
 
-var mqtt = require('mqtt')
-var broker = require('./helpers/broker')
-
 const V = '/views/'
 
 angular.module('Dashboard', ['ngRoute', 'angular-loading-bar', 'cfp.loadingBar'])
@@ -29,12 +26,7 @@ angular.module('Dashboard', ['ngRoute', 'angular-loading-bar', 'cfp.loadingBar']
   cfpLoadingBarProvider.includeSpinner = false
 }])
 
-.run(function () {
-  var ws = mqtt.connect('ws://localhost:1883')
-  ws.subscribe('notifications')
-  ws.on('message', broker.handle)
-})
-
+require('./broker')
 require('./services')
 require('./directives')
 require('./controllers')

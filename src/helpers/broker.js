@@ -2,72 +2,66 @@
 // Broker.js is an instance for socket.io
 // that logs messages to refactor code
 
-var mqtt = require('mqtt')
 var chalk = require('chalk')
-var _ = require('lodash')
+var client = require('socket.io')()
+
+var io = client.listen(1883)
+
+io.on('connection', function (socket) {
+  console.log(chalk.grey('user connected'))
+
+  socket.on('push', function (from, str) {
+    console.log('I received a private message by ', from, ' saying ', str)
+    console.log('routing...')
+    io.emit('news', str)
+  })
+
+  socket.on('disconnect', function () {
+    console.log(chalk.grey('user disconnected'))
+  })
+})
 
 var broker = module.exports = {}
 
-var client = mqtt.connect('ws://localhost:1883')
-client.on('error', function (data) {
-  console.log(data)
-})
+// title is optional
+broker.info = function (body, title) {
+  broker.emit({ emphasis: 'info', body: body, title: title })
+}
 
-broker.notify = function (notification) {
-  var _n = notification
+broker.error = function (body, title) {
+  broker.emit({ emphasis: 'error', body: body, title: title })
+}
 
+broker.success = function (body, title) {
+  broker.emit({ emphasis: 'success', body: body, title: title })
+}
+
+broker.warning = function (body, title) {
+  broker.emit({ emphasis: 'warning', body: body, title: title })
+}
+
+broker.emit = function (msg) {
   // Log notification through console
-  var msg = chalk.bgCyan('ws')
-  switch (_n.emphasis) {
+  var str = chalk.bgCyan('ws') +
+  chalk.bold.bgCyan(msg.title || '::')
+
+  switch (msg.emphasis) {
     case 'error':
-    msg = msg + chalk.bgRed(_n.body)
-    break
+      str = str + chalk.bgRed(msg.body)
+      break
     case 'warning':
-    msg = msg + chalk.bgYellow(_n.body)
-    break
+      str = str + chalk.bgYellow(msg.body)
+      break
     case 'info':
-    msg = msg + chalk.bgBlue(_n.body)
-    break
+      str = str + chalk.bgBlue(msg.body)
+      break
     case 'success':
-    msg = msg + chalk.bgGreen(_n.body)
-    break
+      str = str + chalk.bgGreen(msg.body)
+      break
     default:
+      break
   }
 
-  console.log(msg)
-  client.publish('notifications', JSON.stringify(_n))
+  console.log(str)
+  io.emit('news', msg)
 }
-
-broker.info = function (notification) {
-  if (typeof notification === 'string') {
-    broker.notify({ emphasis: 'info', body: notification })
-  } else {
-    broker.notify(_.extend(notification, { emphasis: 'info' }))
-  }
-}
-
-broker.error = function (notification) {
-  if (typeof notification === 'string') {
-    broker.notify({ emphasis: 'error', body: notification })
-  } else {
-    broker.notify(_.extend(notification, { emphasis: 'error' }))
-  }
-}
-
-broker.success = function (notification) {
-  if (typeof notification === 'string') {
-    broker.notify({ emphasis: 'success', body: notification })
-  } else {
-    broker.notify(_.extend(notification, { emphasis: 'success' }))
-  }
-}
-
-broker.warning = function (notification) {
-  if (typeof notification === 'string') {
-    broker.notify({ emphasis: 'warning', body: notification })
-  } else {
-    broker.notify(_.extend(notification, { emphasis: 'warning' }))
-  }
-}
-
-broker.info = broker.notify // alias

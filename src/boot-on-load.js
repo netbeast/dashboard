@@ -4,7 +4,7 @@ var App = require('./models/app')
 var Activity = require('./models/activity')
 
 // start apps that must be initialized on boot
-module.exports = function _bootOnLoad () {
+module.exports = function bootOnload () {
   App.all(function (err, apps) {
     if (err) throw err
 

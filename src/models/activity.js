@@ -114,7 +114,7 @@ self.on('start', function (app) {
   if (children[app.name]) return
 
   App.getPackageJson(app.name, function (err, pkgJson) {
-    if (err) return broker.error({ body: err.toString })
+    if (err) return broker.error(err.toString())
 
     // child management
     var entryPoint = path.join(config.appsDir, app.name, pkgJson.main)
@@ -127,13 +127,11 @@ self.on('start', function (app) {
     })
 
     child.stderr.on('data', function (data) {
-      broker.error({ title: app.name, body: data })
+      broker.error(data, app.name)
     })
 
     child.on('close', function (code) {
-      broker.info({
-        title: app.name, body: ' exited with code ' + code || 0
-      })
+      broker.info(' exited with code ' + code || 0, app.name)
       children[app.name] = undefined
     })
 

@@ -1,10 +1,12 @@
-var express = require('express')
 var path = require('path')
+
 var fs = require('fs-extra')
 var logger = require('morgan')
-var config = require('../config')
 var favicon = require('serve-favicon')
 var bodyParser = require('body-parser')
+var express = require('express')
+
+var config = require('config')
 
 var app = module.exports = express()
 

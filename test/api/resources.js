@@ -1,9 +1,10 @@
 /* global describe, before, it*/
 
-var Resource = require('../src/models/resource')
 var should = require('Chai').should()
 var expect = require('Chai').expect
-var helper = require('../src/lib/resource')
+
+var Resource = require('src/models/resource')
+var helper = require('src/lib/resource')
 
 describe('Resources', function () {
   before(function (done) {

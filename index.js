@@ -1,13 +1,17 @@
 #!/usr/bin/env node
 
 // Dependencies
-var app = require('./src')
-var _bootOnLoad = require('./src/boot-on-load')
 var forever = require('forever-monitor')
-var config = require('./config')
 var cmd = require('commander')
 var http = require('http')
 var path = require('path')
+
+require('app-module-path')
+.addPath(__dirname)
+
+var app = require('src')
+var config = require('config')
+var _bootOnLoad = require('src/boot-on-load')
 
 // Variables
 var io, server

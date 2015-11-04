@@ -42,7 +42,7 @@ broker.info = function (notification) {
   if (typeof notification === 'string') {
     broker.notify({ emphasis: 'info', body: notification })
   } else {
-    broker.notify(_extend(notification, { emphasis: 'info' }))
+    broker.notify(_.extend(notification, { emphasis: 'info' }))
   }
 }
 
@@ -50,7 +50,7 @@ broker.error = function (notification) {
   if (typeof notification === 'string') {
     broker.notify({ emphasis: 'error', body: notification })
   } else {
-    broker.notify(_extend(notification, { emphasis: 'error' }))
+    broker.notify(_.extend(notification, { emphasis: 'error' }))
   }
 }
 
@@ -58,7 +58,7 @@ broker.success = function (notification) {
   if (typeof notification === 'string') {
     broker.notify({ emphasis: 'success', body: notification })
   } else {
-    broker.notify(_extend(notification, { emphasis: 'success' }))
+    broker.notify(_.extend(notification, { emphasis: 'success' }))
   }
 }
 
@@ -66,7 +66,7 @@ broker.warning = function (notification) {
   if (typeof notification === 'string') {
     broker.notify({ emphasis: 'warning', body: notification })
   } else {
-    broker.notify(_extend(notification, { emphasis: 'warning' }))
+    broker.notify(_.extend(notification, { emphasis: 'warning' }))
   }
 }
 

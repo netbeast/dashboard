@@ -6,9 +6,10 @@ var should = chai.should()
 var expect = chai.expect
 
 var request = require('request')
-var config = require('../config')
 var path = require('path')
 var fs = require('fs')
+
+var config = require('config')
 
 var s = 1000 // seconds
 

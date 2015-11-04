@@ -5,10 +5,11 @@ var chai = require('chai')
 var should = chai.should()
 
 var request = require('request')
-var App = require('../src/models/app')
-var config = require('../config')
 var fs = require('fs-extra')
 var path = require('path')
+
+var App = require('src/models/app')
+var config = require('config')
 
 const URL = 'http://localhost:' + config.port
 const APP_PATH = './test/app.tar.gz'

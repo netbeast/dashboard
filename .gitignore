@@ -30,6 +30,9 @@ Thumbs.db
 
 .sandbox/*
 config/user.json
-node_modules
+node_modules/*
+!node_modules/.src
+!node_modules/.config
+
 test/coverage
 .errorlog

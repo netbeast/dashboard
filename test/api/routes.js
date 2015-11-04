@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /* global describe, it*/
 
+var request = require('request')
 var chai = require('chai')
 var should = chai.should()
 var expect = chai.expect
-var config = require('../config')
 
-var request = require('request')
+var config = require('config')
 
 const URL = 'http://localhost:' + config.port
 

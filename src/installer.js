@@ -1,9 +1,10 @@
 var path = require('path')
-var broker = require('./helpers/broker')
 var multer = require('multer')
-var config = require('../config')
-var error = require('./util/error')
-var App = require('./models/app')
+
+var config = require('config')
+var broker = require('src/helpers/broker')
+var error = require('src/util/error')
+var App = require('src/models/app')
 
 module.exports.multer = multer({
   dest: config.tmpDir,

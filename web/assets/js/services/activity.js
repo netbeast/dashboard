@@ -45,9 +45,7 @@ function ActivityFactory ($http, $sce, $location) {
 
   self.launch = function (app) {
     return $http.post('/activities/' + app)
-    .success(function () {
-      $location.path('/#/i/' + app)
-    })
+
     .error(function (data, status, headers, config) {
       toastr.error(data, 'Dashboard')
       console.log(status + ' when PUT /launch/' + app + ' -> ' + data)

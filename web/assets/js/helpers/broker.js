@@ -10,7 +10,6 @@ var broker = module.exports = {}
 
 broker.handle = function (topic, msg) {
   var t = JSON.parse(msg.toString())
-  console.log('%s\n%--%s: %s', topic, t.emphasis, t.title || 'title', t.body)
   switch (t.emphasis) {
     case 'error':
     case 'warning':

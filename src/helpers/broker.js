@@ -4,7 +4,7 @@
 
 var mqtt = require('mqtt')
 var chalk = require('chalk')
-var _extend = require('lodash/object/extend')
+var _ = require('lodash')
 
 var broker = module.exports = {}
 
@@ -37,15 +37,15 @@ broker.notify = function (notification) {
 }
 
 broker.error = function (notification) {
-  broker.notify(_extend(notification, { emphasis: 'error' }))
+  broker.notify(_.extend(notification, { emphasis: 'error' }))
 }
 
 broker.success = function (notification) {
-  broker.notify(_extend(notification, { emphasis: 'success' }))
+  broker.notify(_.extend(notification, { emphasis: 'success' }))
 }
 
 broker.warning = function (notification) {
-  broker.notify(_extend(notification, { emphasis: 'warning' }))
+  broker.notify(_.extend(notification, { emphasis: 'warning' }))
 }
 
 broker.info = broker.notify // alias

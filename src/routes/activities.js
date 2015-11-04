@@ -1,4 +1,4 @@
-var launcher = require('../launcher')
+var Activity = require('../models/activity')
 var httpProxy = require('http-proxy')
 var express = require('express')
 var router = express.Router()
@@ -6,15 +6,15 @@ var router = express.Router()
 // Activities
 // ==========
 router.get('/activities', function (req, res, next) {
-  launcher.getApps(function (err, apps) {
+  Activity.all(function (err, apps) {
     if (err) return next(err)
     res.json(apps)
   })
 })
 
 router.route('/activities/:name')
-.delete(launcher.close)
-.post(launcher.start)
+.delete(Activity.close)
+.post(Activity.start)
 
 var proxy = httpProxy.createProxyServer({ws: true})
 router.use('/i/:name?', function (req, res) {
@@ -27,7 +27,7 @@ router.use('/i/:name?', function (req, res) {
   }
   // This block returns an app object
   // with the port where it is running
-  app = launcher.getApp(req.params.name) || launcher.getApp(referer)
+  app = Activity.get(req.params.name) || Activity.get(referer)
 
   if (app) {
     // Here app is running

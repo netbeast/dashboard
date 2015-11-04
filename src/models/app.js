@@ -22,7 +22,7 @@ App.delete = function (app, done) {
   var _path = path.join(config.appsDir, app)
   if (!fs.existsSync(_path)) return done(new NotFound(app + ' is not installed'))
 
-  broker.emit('stdout', 'Uninstalling ' + app + '...')
+  broker.info('Uninstalling ' + app + '...')
   fs.remove(_path, done)
 }
 

@@ -5761,7 +5761,7 @@ function indexOf (xs, x) {
 
 }).call(this,require('_process'))
 
-},{"./_stream_duplex":14,"_process":8,"buffer":3,"core-util-is":28,"events":7,"inherits":33,"isarray":35,"stream":23,"string_decoder/":78,"util":2}],17:[function(require,module,exports){
+},{"./_stream_duplex":14,"_process":8,"buffer":3,"core-util-is":28,"events":7,"inherits":33,"isarray":35,"stream":23,"string_decoder/":79,"util":2}],17:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -8383,7 +8383,7 @@ Duplexify.prototype.end = function(data, enc, cb) {
 module.exports = Duplexify
 }).call(this,require('_process'),require("buffer").Buffer)
 
-},{"_process":8,"buffer":3,"end-of-stream":31,"readable-stream":76,"util":26}],31:[function(require,module,exports){
+},{"_process":8,"buffer":3,"end-of-stream":31,"readable-stream":77,"util":26}],31:[function(require,module,exports){
 var once = require('once');
 
 var noop = function() {};
@@ -8456,7 +8456,7 @@ var eos = function(stream, opts, callback) {
 };
 
 module.exports = eos;
-},{"once":69}],32:[function(require,module,exports){
+},{"once":70}],32:[function(require,module,exports){
 var once = require('once');
 
 var noop = function() {};
@@ -8540,7 +8540,7 @@ var eos = function(stream, opts, callback) {
 };
 
 module.exports = eos;
-},{"once":69}],33:[function(require,module,exports){
+},{"once":70}],33:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -8830,6 +8830,1296 @@ function isObject(value) {
 module.exports = isObject;
 
 },{}],45:[function(require,module,exports){
+(function (global){
+/**
+ * marked - a markdown parser
+ * Copyright (c) 2011-2014, Christopher Jeffrey. (MIT Licensed)
+ * https://github.com/chjj/marked
+ */
+
+;(function() {
+
+/**
+ * Block-Level Grammar
+ */
+
+var block = {
+  newline: /^\n+/,
+  code: /^( {4}[^\n]+\n*)+/,
+  fences: noop,
+  hr: /^( *[-*_]){3,} *(?:\n+|$)/,
+  heading: /^ *(#{1,6}) *([^\n]+?) *#* *(?:\n+|$)/,
+  nptable: noop,
+  lheading: /^([^\n]+)\n *(=|-){2,} *(?:\n+|$)/,
+  blockquote: /^( *>[^\n]+(\n(?!def)[^\n]+)*\n*)+/,
+  list: /^( *)(bull) [\s\S]+?(?:hr|def|\n{2,}(?! )(?!\1bull )\n*|\s*$)/,
+  html: /^ *(?:comment *(?:\n|\s*$)|closed *(?:\n{2,}|\s*$)|closing *(?:\n{2,}|\s*$))/,
+  def: /^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +["(]([^\n]+)[")])? *(?:\n+|$)/,
+  table: noop,
+  paragraph: /^((?:[^\n]+\n?(?!hr|heading|lheading|blockquote|tag|def))+)\n*/,
+  text: /^[^\n]+/
+};
+
+block.bullet = /(?:[*+-]|\d+\.)/;
+block.item = /^( *)(bull) [^\n]*(?:\n(?!\1bull )[^\n]*)*/;
+block.item = replace(block.item, 'gm')
+  (/bull/g, block.bullet)
+  ();
+
+block.list = replace(block.list)
+  (/bull/g, block.bullet)
+  ('hr', '\\n+(?=\\1?(?:[-*_] *){3,}(?:\\n+|$))')
+  ('def', '\\n+(?=' + block.def.source + ')')
+  ();
+
+block.blockquote = replace(block.blockquote)
+  ('def', block.def)
+  ();
+
+block._tag = '(?!(?:'
+  + 'a|em|strong|small|s|cite|q|dfn|abbr|data|time|code'
+  + '|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo'
+  + '|span|br|wbr|ins|del|img)\\b)\\w+(?!:/|[^\\w\\s@]*@)\\b';
+
+block.html = replace(block.html)
+  ('comment', /<!--[\s\S]*?-->/)
+  ('closed', /<(tag)[\s\S]+?<\/\1>/)
+  ('closing', /<tag(?:"[^"]*"|'[^']*'|[^'">])*?>/)
+  (/tag/g, block._tag)
+  ();
+
+block.paragraph = replace(block.paragraph)
+  ('hr', block.hr)
+  ('heading', block.heading)
+  ('lheading', block.lheading)
+  ('blockquote', block.blockquote)
+  ('tag', '<' + block._tag)
+  ('def', block.def)
+  ();
+
+/**
+ * Normal Block Grammar
+ */
+
+block.normal = merge({}, block);
+
+/**
+ * GFM Block Grammar
+ */
+
+block.gfm = merge({}, block.normal, {
+  fences: /^ *(`{3,}|~{3,})[ \.]*(\S+)? *\n([\s\S]*?)\s*\1 *(?:\n+|$)/,
+  paragraph: /^/,
+  heading: /^ *(#{1,6}) +([^\n]+?) *#* *(?:\n+|$)/
+});
+
+block.gfm.paragraph = replace(block.paragraph)
+  ('(?!', '(?!'
+    + block.gfm.fences.source.replace('\\1', '\\2') + '|'
+    + block.list.source.replace('\\1', '\\3') + '|')
+  ();
+
+/**
+ * GFM + Tables Block Grammar
+ */
+
+block.tables = merge({}, block.gfm, {
+  nptable: /^ *(\S.*\|.*)\n *([-:]+ *\|[-| :]*)\n((?:.*\|.*(?:\n|$))*)\n*/,
+  table: /^ *\|(.+)\n *\|( *[-:]+[-| :]*)\n((?: *\|.*(?:\n|$))*)\n*/
+});
+
+/**
+ * Block Lexer
+ */
+
+function Lexer(options) {
+  this.tokens = [];
+  this.tokens.links = {};
+  this.options = options || marked.defaults;
+  this.rules = block.normal;
+
+  if (this.options.gfm) {
+    if (this.options.tables) {
+      this.rules = block.tables;
+    } else {
+      this.rules = block.gfm;
+    }
+  }
+}
+
+/**
+ * Expose Block Rules
+ */
+
+Lexer.rules = block;
+
+/**
+ * Static Lex Method
+ */
+
+Lexer.lex = function(src, options) {
+  var lexer = new Lexer(options);
+  return lexer.lex(src);
+};
+
+/**
+ * Preprocessing
+ */
+
+Lexer.prototype.lex = function(src) {
+  src = src
+    .replace(/\r\n|\r/g, '\n')
+    .replace(/\t/g, '    ')
+    .replace(/\u00a0/g, ' ')
+    .replace(/\u2424/g, '\n');
+
+  return this.token(src, true);
+};
+
+/**
+ * Lexing
+ */
+
+Lexer.prototype.token = function(src, top, bq) {
+  var src = src.replace(/^ +$/gm, '')
+    , next
+    , loose
+    , cap
+    , bull
+    , b
+    , item
+    , space
+    , i
+    , l;
+
+  while (src) {
+    // newline
+    if (cap = this.rules.newline.exec(src)) {
+      src = src.substring(cap[0].length);
+      if (cap[0].length > 1) {
+        this.tokens.push({
+          type: 'space'
+        });
+      }
+    }
+
+    // code
+    if (cap = this.rules.code.exec(src)) {
+      src = src.substring(cap[0].length);
+      cap = cap[0].replace(/^ {4}/gm, '');
+      this.tokens.push({
+        type: 'code',
+        text: !this.options.pedantic
+          ? cap.replace(/\n+$/, '')
+          : cap
+      });
+      continue;
+    }
+
+    // fences (gfm)
+    if (cap = this.rules.fences.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'code',
+        lang: cap[2],
+        text: cap[3] || ''
+      });
+      continue;
+    }
+
+    // heading
+    if (cap = this.rules.heading.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'heading',
+        depth: cap[1].length,
+        text: cap[2]
+      });
+      continue;
+    }
+
+    // table no leading pipe (gfm)
+    if (top && (cap = this.rules.nptable.exec(src))) {
+      src = src.substring(cap[0].length);
+
+      item = {
+        type: 'table',
+        header: cap[1].replace(/^ *| *\| *$/g, '').split(/ *\| */),
+        align: cap[2].replace(/^ *|\| *$/g, '').split(/ *\| */),
+        cells: cap[3].replace(/\n$/, '').split('\n')
+      };
+
+      for (i = 0; i < item.align.length; i++) {
+        if (/^ *-+: *$/.test(item.align[i])) {
+          item.align[i] = 'right';
+        } else if (/^ *:-+: *$/.test(item.align[i])) {
+          item.align[i] = 'center';
+        } else if (/^ *:-+ *$/.test(item.align[i])) {
+          item.align[i] = 'left';
+        } else {
+          item.align[i] = null;
+        }
+      }
+
+      for (i = 0; i < item.cells.length; i++) {
+        item.cells[i] = item.cells[i].split(/ *\| */);
+      }
+
+      this.tokens.push(item);
+
+      continue;
+    }
+
+    // lheading
+    if (cap = this.rules.lheading.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'heading',
+        depth: cap[2] === '=' ? 1 : 2,
+        text: cap[1]
+      });
+      continue;
+    }
+
+    // hr
+    if (cap = this.rules.hr.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'hr'
+      });
+      continue;
+    }
+
+    // blockquote
+    if (cap = this.rules.blockquote.exec(src)) {
+      src = src.substring(cap[0].length);
+
+      this.tokens.push({
+        type: 'blockquote_start'
+      });
+
+      cap = cap[0].replace(/^ *> ?/gm, '');
+
+      // Pass `top` to keep the current
+      // "toplevel" state. This is exactly
+      // how markdown.pl works.
+      this.token(cap, top, true);
+
+      this.tokens.push({
+        type: 'blockquote_end'
+      });
+
+      continue;
+    }
+
+    // list
+    if (cap = this.rules.list.exec(src)) {
+      src = src.substring(cap[0].length);
+      bull = cap[2];
+
+      this.tokens.push({
+        type: 'list_start',
+        ordered: bull.length > 1
+      });
+
+      // Get each top-level item.
+      cap = cap[0].match(this.rules.item);
+
+      next = false;
+      l = cap.length;
+      i = 0;
+
+      for (; i < l; i++) {
+        item = cap[i];
+
+        // Remove the list item's bullet
+        // so it is seen as the next token.
+        space = item.length;
+        item = item.replace(/^ *([*+-]|\d+\.) +/, '');
+
+        // Outdent whatever the
+        // list item contains. Hacky.
+        if (~item.indexOf('\n ')) {
+          space -= item.length;
+          item = !this.options.pedantic
+            ? item.replace(new RegExp('^ {1,' + space + '}', 'gm'), '')
+            : item.replace(/^ {1,4}/gm, '');
+        }
+
+        // Determine whether the next list item belongs here.
+        // Backpedal if it does not belong in this list.
+        if (this.options.smartLists && i !== l - 1) {
+          b = block.bullet.exec(cap[i + 1])[0];
+          if (bull !== b && !(bull.length > 1 && b.length > 1)) {
+            src = cap.slice(i + 1).join('\n') + src;
+            i = l - 1;
+          }
+        }
+
+        // Determine whether item is loose or not.
+        // Use: /(^|\n)(?! )[^\n]+\n\n(?!\s*$)/
+        // for discount behavior.
+        loose = next || /\n\n(?!\s*$)/.test(item);
+        if (i !== l - 1) {
+          next = item.charAt(item.length - 1) === '\n';
+          if (!loose) loose = next;
+        }
+
+        this.tokens.push({
+          type: loose
+            ? 'loose_item_start'
+            : 'list_item_start'
+        });
+
+        // Recurse.
+        this.token(item, false, bq);
+
+        this.tokens.push({
+          type: 'list_item_end'
+        });
+      }
+
+      this.tokens.push({
+        type: 'list_end'
+      });
+
+      continue;
+    }
+
+    // html
+    if (cap = this.rules.html.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: this.options.sanitize
+          ? 'paragraph'
+          : 'html',
+        pre: !this.options.sanitizer
+          && (cap[1] === 'pre' || cap[1] === 'script' || cap[1] === 'style'),
+        text: cap[0]
+      });
+      continue;
+    }
+
+    // def
+    if ((!bq && top) && (cap = this.rules.def.exec(src))) {
+      src = src.substring(cap[0].length);
+      this.tokens.links[cap[1].toLowerCase()] = {
+        href: cap[2],
+        title: cap[3]
+      };
+      continue;
+    }
+
+    // table (gfm)
+    if (top && (cap = this.rules.table.exec(src))) {
+      src = src.substring(cap[0].length);
+
+      item = {
+        type: 'table',
+        header: cap[1].replace(/^ *| *\| *$/g, '').split(/ *\| */),
+        align: cap[2].replace(/^ *|\| *$/g, '').split(/ *\| */),
+        cells: cap[3].replace(/(?: *\| *)?\n$/, '').split('\n')
+      };
+
+      for (i = 0; i < item.align.length; i++) {
+        if (/^ *-+: *$/.test(item.align[i])) {
+          item.align[i] = 'right';
+        } else if (/^ *:-+: *$/.test(item.align[i])) {
+          item.align[i] = 'center';
+        } else if (/^ *:-+ *$/.test(item.align[i])) {
+          item.align[i] = 'left';
+        } else {
+          item.align[i] = null;
+        }
+      }
+
+      for (i = 0; i < item.cells.length; i++) {
+        item.cells[i] = item.cells[i]
+          .replace(/^ *\| *| *\| *$/g, '')
+          .split(/ *\| */);
+      }
+
+      this.tokens.push(item);
+
+      continue;
+    }
+
+    // top-level paragraph
+    if (top && (cap = this.rules.paragraph.exec(src))) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'paragraph',
+        text: cap[1].charAt(cap[1].length - 1) === '\n'
+          ? cap[1].slice(0, -1)
+          : cap[1]
+      });
+      continue;
+    }
+
+    // text
+    if (cap = this.rules.text.exec(src)) {
+      // Top-level should never reach here.
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'text',
+        text: cap[0]
+      });
+      continue;
+    }
+
+    if (src) {
+      throw new
+        Error('Infinite loop on byte: ' + src.charCodeAt(0));
+    }
+  }
+
+  return this.tokens;
+};
+
+/**
+ * Inline-Level Grammar
+ */
+
+var inline = {
+  escape: /^\\([\\`*{}\[\]()#+\-.!_>])/,
+  autolink: /^<([^ >]+(@|:\/)[^ >]+)>/,
+  url: noop,
+  tag: /^<!--[\s\S]*?-->|^<\/?\w+(?:"[^"]*"|'[^']*'|[^'">])*?>/,
+  link: /^!?\[(inside)\]\(href\)/,
+  reflink: /^!?\[(inside)\]\s*\[([^\]]*)\]/,
+  nolink: /^!?\[((?:\[[^\]]*\]|[^\[\]])*)\]/,
+  strong: /^__([\s\S]+?)__(?!_)|^\*\*([\s\S]+?)\*\*(?!\*)/,
+  em: /^\b_((?:[^_]|__)+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,
+  code: /^(`+)\s*([\s\S]*?[^`])\s*\1(?!`)/,
+  br: /^ {2,}\n(?!\s*$)/,
+  del: noop,
+  text: /^[\s\S]+?(?=[\\<!\[_*`]| {2,}\n|$)/
+};
+
+inline._inside = /(?:\[[^\]]*\]|[^\[\]]|\](?=[^\[]*\]))*/;
+inline._href = /\s*<?([\s\S]*?)>?(?:\s+['"]([\s\S]*?)['"])?\s*/;
+
+inline.link = replace(inline.link)
+  ('inside', inline._inside)
+  ('href', inline._href)
+  ();
+
+inline.reflink = replace(inline.reflink)
+  ('inside', inline._inside)
+  ();
+
+/**
+ * Normal Inline Grammar
+ */
+
+inline.normal = merge({}, inline);
+
+/**
+ * Pedantic Inline Grammar
+ */
+
+inline.pedantic = merge({}, inline.normal, {
+  strong: /^__(?=\S)([\s\S]*?\S)__(?!_)|^\*\*(?=\S)([\s\S]*?\S)\*\*(?!\*)/,
+  em: /^_(?=\S)([\s\S]*?\S)_(?!_)|^\*(?=\S)([\s\S]*?\S)\*(?!\*)/
+});
+
+/**
+ * GFM Inline Grammar
+ */
+
+inline.gfm = merge({}, inline.normal, {
+  escape: replace(inline.escape)('])', '~|])')(),
+  url: /^(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/,
+  del: /^~~(?=\S)([\s\S]*?\S)~~/,
+  text: replace(inline.text)
+    (']|', '~]|')
+    ('|', '|https?://|')
+    ()
+});
+
+/**
+ * GFM + Line Breaks Inline Grammar
+ */
+
+inline.breaks = merge({}, inline.gfm, {
+  br: replace(inline.br)('{2,}', '*')(),
+  text: replace(inline.gfm.text)('{2,}', '*')()
+});
+
+/**
+ * Inline Lexer & Compiler
+ */
+
+function InlineLexer(links, options) {
+  this.options = options || marked.defaults;
+  this.links = links;
+  this.rules = inline.normal;
+  this.renderer = this.options.renderer || new Renderer;
+  this.renderer.options = this.options;
+
+  if (!this.links) {
+    throw new
+      Error('Tokens array requires a `links` property.');
+  }
+
+  if (this.options.gfm) {
+    if (this.options.breaks) {
+      this.rules = inline.breaks;
+    } else {
+      this.rules = inline.gfm;
+    }
+  } else if (this.options.pedantic) {
+    this.rules = inline.pedantic;
+  }
+}
+
+/**
+ * Expose Inline Rules
+ */
+
+InlineLexer.rules = inline;
+
+/**
+ * Static Lexing/Compiling Method
+ */
+
+InlineLexer.output = function(src, links, options) {
+  var inline = new InlineLexer(links, options);
+  return inline.output(src);
+};
+
+/**
+ * Lexing/Compiling
+ */
+
+InlineLexer.prototype.output = function(src) {
+  var out = ''
+    , link
+    , text
+    , href
+    , cap;
+
+  while (src) {
+    // escape
+    if (cap = this.rules.escape.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += cap[1];
+      continue;
+    }
+
+    // autolink
+    if (cap = this.rules.autolink.exec(src)) {
+      src = src.substring(cap[0].length);
+      if (cap[2] === '@') {
+        text = cap[1].charAt(6) === ':'
+          ? this.mangle(cap[1].substring(7))
+          : this.mangle(cap[1]);
+        href = this.mangle('mailto:') + text;
+      } else {
+        text = escape(cap[1]);
+        href = text;
+      }
+      out += this.renderer.link(href, null, text);
+      continue;
+    }
+
+    // url (gfm)
+    if (!this.inLink && (cap = this.rules.url.exec(src))) {
+      src = src.substring(cap[0].length);
+      text = escape(cap[1]);
+      href = text;
+      out += this.renderer.link(href, null, text);
+      continue;
+    }
+
+    // tag
+    if (cap = this.rules.tag.exec(src)) {
+      if (!this.inLink && /^<a /i.test(cap[0])) {
+        this.inLink = true;
+      } else if (this.inLink && /^<\/a>/i.test(cap[0])) {
+        this.inLink = false;
+      }
+      src = src.substring(cap[0].length);
+      out += this.options.sanitize
+        ? this.options.sanitizer
+          ? this.options.sanitizer(cap[0])
+          : escape(cap[0])
+        : cap[0]
+      continue;
+    }
+
+    // link
+    if (cap = this.rules.link.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.inLink = true;
+      out += this.outputLink(cap, {
+        href: cap[2],
+        title: cap[3]
+      });
+      this.inLink = false;
+      continue;
+    }
+
+    // reflink, nolink
+    if ((cap = this.rules.reflink.exec(src))
+        || (cap = this.rules.nolink.exec(src))) {
+      src = src.substring(cap[0].length);
+      link = (cap[2] || cap[1]).replace(/\s+/g, ' ');
+      link = this.links[link.toLowerCase()];
+      if (!link || !link.href) {
+        out += cap[0].charAt(0);
+        src = cap[0].substring(1) + src;
+        continue;
+      }
+      this.inLink = true;
+      out += this.outputLink(cap, link);
+      this.inLink = false;
+      continue;
+    }
+
+    // strong
+    if (cap = this.rules.strong.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.renderer.strong(this.output(cap[2] || cap[1]));
+      continue;
+    }
+
+    // em
+    if (cap = this.rules.em.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.renderer.em(this.output(cap[2] || cap[1]));
+      continue;
+    }
+
+    // code
+    if (cap = this.rules.code.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.renderer.codespan(escape(cap[2], true));
+      continue;
+    }
+
+    // br
+    if (cap = this.rules.br.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.renderer.br();
+      continue;
+    }
+
+    // del (gfm)
+    if (cap = this.rules.del.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.renderer.del(this.output(cap[1]));
+      continue;
+    }
+
+    // text
+    if (cap = this.rules.text.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.renderer.text(escape(this.smartypants(cap[0])));
+      continue;
+    }
+
+    if (src) {
+      throw new
+        Error('Infinite loop on byte: ' + src.charCodeAt(0));
+    }
+  }
+
+  return out;
+};
+
+/**
+ * Compile Link
+ */
+
+InlineLexer.prototype.outputLink = function(cap, link) {
+  var href = escape(link.href)
+    , title = link.title ? escape(link.title) : null;
+
+  return cap[0].charAt(0) !== '!'
+    ? this.renderer.link(href, title, this.output(cap[1]))
+    : this.renderer.image(href, title, escape(cap[1]));
+};
+
+/**
+ * Smartypants Transformations
+ */
+
+InlineLexer.prototype.smartypants = function(text) {
+  if (!this.options.smartypants) return text;
+  return text
+    // em-dashes
+    .replace(/---/g, '\u2014')
+    // en-dashes
+    .replace(/--/g, '\u2013')
+    // opening singles
+    .replace(/(^|[-\u2014/(\[{"\s])'/g, '$1\u2018')
+    // closing singles & apostrophes
+    .replace(/'/g, '\u2019')
+    // opening doubles
+    .replace(/(^|[-\u2014/(\[{\u2018\s])"/g, '$1\u201c')
+    // closing doubles
+    .replace(/"/g, '\u201d')
+    // ellipses
+    .replace(/\.{3}/g, '\u2026');
+};
+
+/**
+ * Mangle Links
+ */
+
+InlineLexer.prototype.mangle = function(text) {
+  if (!this.options.mangle) return text;
+  var out = ''
+    , l = text.length
+    , i = 0
+    , ch;
+
+  for (; i < l; i++) {
+    ch = text.charCodeAt(i);
+    if (Math.random() > 0.5) {
+      ch = 'x' + ch.toString(16);
+    }
+    out += '&#' + ch + ';';
+  }
+
+  return out;
+};
+
+/**
+ * Renderer
+ */
+
+function Renderer(options) {
+  this.options = options || {};
+}
+
+Renderer.prototype.code = function(code, lang, escaped) {
+  if (this.options.highlight) {
+    var out = this.options.highlight(code, lang);
+    if (out != null && out !== code) {
+      escaped = true;
+      code = out;
+    }
+  }
+
+  if (!lang) {
+    return '<pre><code>'
+      + (escaped ? code : escape(code, true))
+      + '\n</code></pre>';
+  }
+
+  return '<pre><code class="'
+    + this.options.langPrefix
+    + escape(lang, true)
+    + '">'
+    + (escaped ? code : escape(code, true))
+    + '\n</code></pre>\n';
+};
+
+Renderer.prototype.blockquote = function(quote) {
+  return '<blockquote>\n' + quote + '</blockquote>\n';
+};
+
+Renderer.prototype.html = function(html) {
+  return html;
+};
+
+Renderer.prototype.heading = function(text, level, raw) {
+  return '<h'
+    + level
+    + ' id="'
+    + this.options.headerPrefix
+    + raw.toLowerCase().replace(/[^\w]+/g, '-')
+    + '">'
+    + text
+    + '</h'
+    + level
+    + '>\n';
+};
+
+Renderer.prototype.hr = function() {
+  return this.options.xhtml ? '<hr/>\n' : '<hr>\n';
+};
+
+Renderer.prototype.list = function(body, ordered) {
+  var type = ordered ? 'ol' : 'ul';
+  return '<' + type + '>\n' + body + '</' + type + '>\n';
+};
+
+Renderer.prototype.listitem = function(text) {
+  return '<li>' + text + '</li>\n';
+};
+
+Renderer.prototype.paragraph = function(text) {
+  return '<p>' + text + '</p>\n';
+};
+
+Renderer.prototype.table = function(header, body) {
+  return '<table>\n'
+    + '<thead>\n'
+    + header
+    + '</thead>\n'
+    + '<tbody>\n'
+    + body
+    + '</tbody>\n'
+    + '</table>\n';
+};
+
+Renderer.prototype.tablerow = function(content) {
+  return '<tr>\n' + content + '</tr>\n';
+};
+
+Renderer.prototype.tablecell = function(content, flags) {
+  var type = flags.header ? 'th' : 'td';
+  var tag = flags.align
+    ? '<' + type + ' style="text-align:' + flags.align + '">'
+    : '<' + type + '>';
+  return tag + content + '</' + type + '>\n';
+};
+
+// span level renderer
+Renderer.prototype.strong = function(text) {
+  return '<strong>' + text + '</strong>';
+};
+
+Renderer.prototype.em = function(text) {
+  return '<em>' + text + '</em>';
+};
+
+Renderer.prototype.codespan = function(text) {
+  return '<code>' + text + '</code>';
+};
+
+Renderer.prototype.br = function() {
+  return this.options.xhtml ? '<br/>' : '<br>';
+};
+
+Renderer.prototype.del = function(text) {
+  return '<del>' + text + '</del>';
+};
+
+Renderer.prototype.link = function(href, title, text) {
+  if (this.options.sanitize) {
+    try {
+      var prot = decodeURIComponent(unescape(href))
+        .replace(/[^\w:]/g, '')
+        .toLowerCase();
+    } catch (e) {
+      return '';
+    }
+    if (prot.indexOf('javascript:') === 0 || prot.indexOf('vbscript:') === 0) {
+      return '';
+    }
+  }
+  var out = '<a href="' + href + '"';
+  if (title) {
+    out += ' title="' + title + '"';
+  }
+  out += '>' + text + '</a>';
+  return out;
+};
+
+Renderer.prototype.image = function(href, title, text) {
+  var out = '<img src="' + href + '" alt="' + text + '"';
+  if (title) {
+    out += ' title="' + title + '"';
+  }
+  out += this.options.xhtml ? '/>' : '>';
+  return out;
+};
+
+Renderer.prototype.text = function(text) {
+  return text;
+};
+
+/**
+ * Parsing & Compiling
+ */
+
+function Parser(options) {
+  this.tokens = [];
+  this.token = null;
+  this.options = options || marked.defaults;
+  this.options.renderer = this.options.renderer || new Renderer;
+  this.renderer = this.options.renderer;
+  this.renderer.options = this.options;
+}
+
+/**
+ * Static Parse Method
+ */
+
+Parser.parse = function(src, options, renderer) {
+  var parser = new Parser(options, renderer);
+  return parser.parse(src);
+};
+
+/**
+ * Parse Loop
+ */
+
+Parser.prototype.parse = function(src) {
+  this.inline = new InlineLexer(src.links, this.options, this.renderer);
+  this.tokens = src.reverse();
+
+  var out = '';
+  while (this.next()) {
+    out += this.tok();
+  }
+
+  return out;
+};
+
+/**
+ * Next Token
+ */
+
+Parser.prototype.next = function() {
+  return this.token = this.tokens.pop();
+};
+
+/**
+ * Preview Next Token
+ */
+
+Parser.prototype.peek = function() {
+  return this.tokens[this.tokens.length - 1] || 0;
+};
+
+/**
+ * Parse Text Tokens
+ */
+
+Parser.prototype.parseText = function() {
+  var body = this.token.text;
+
+  while (this.peek().type === 'text') {
+    body += '\n' + this.next().text;
+  }
+
+  return this.inline.output(body);
+};
+
+/**
+ * Parse Current Token
+ */
+
+Parser.prototype.tok = function() {
+  switch (this.token.type) {
+    case 'space': {
+      return '';
+    }
+    case 'hr': {
+      return this.renderer.hr();
+    }
+    case 'heading': {
+      return this.renderer.heading(
+        this.inline.output(this.token.text),
+        this.token.depth,
+        this.token.text);
+    }
+    case 'code': {
+      return this.renderer.code(this.token.text,
+        this.token.lang,
+        this.token.escaped);
+    }
+    case 'table': {
+      var header = ''
+        , body = ''
+        , i
+        , row
+        , cell
+        , flags
+        , j;
+
+      // header
+      cell = '';
+      for (i = 0; i < this.token.header.length; i++) {
+        flags = { header: true, align: this.token.align[i] };
+        cell += this.renderer.tablecell(
+          this.inline.output(this.token.header[i]),
+          { header: true, align: this.token.align[i] }
+        );
+      }
+      header += this.renderer.tablerow(cell);
+
+      for (i = 0; i < this.token.cells.length; i++) {
+        row = this.token.cells[i];
+
+        cell = '';
+        for (j = 0; j < row.length; j++) {
+          cell += this.renderer.tablecell(
+            this.inline.output(row[j]),
+            { header: false, align: this.token.align[j] }
+          );
+        }
+
+        body += this.renderer.tablerow(cell);
+      }
+      return this.renderer.table(header, body);
+    }
+    case 'blockquote_start': {
+      var body = '';
+
+      while (this.next().type !== 'blockquote_end') {
+        body += this.tok();
+      }
+
+      return this.renderer.blockquote(body);
+    }
+    case 'list_start': {
+      var body = ''
+        , ordered = this.token.ordered;
+
+      while (this.next().type !== 'list_end') {
+        body += this.tok();
+      }
+
+      return this.renderer.list(body, ordered);
+    }
+    case 'list_item_start': {
+      var body = '';
+
+      while (this.next().type !== 'list_item_end') {
+        body += this.token.type === 'text'
+          ? this.parseText()
+          : this.tok();
+      }
+
+      return this.renderer.listitem(body);
+    }
+    case 'loose_item_start': {
+      var body = '';
+
+      while (this.next().type !== 'list_item_end') {
+        body += this.tok();
+      }
+
+      return this.renderer.listitem(body);
+    }
+    case 'html': {
+      var html = !this.token.pre && !this.options.pedantic
+        ? this.inline.output(this.token.text)
+        : this.token.text;
+      return this.renderer.html(html);
+    }
+    case 'paragraph': {
+      return this.renderer.paragraph(this.inline.output(this.token.text));
+    }
+    case 'text': {
+      return this.renderer.paragraph(this.parseText());
+    }
+  }
+};
+
+/**
+ * Helpers
+ */
+
+function escape(html, encode) {
+  return html
+    .replace(!encode ? /&(?!#?\w+;)/g : /&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function unescape(html) {
+  return html.replace(/&([#\w]+);/g, function(_, n) {
+    n = n.toLowerCase();
+    if (n === 'colon') return ':';
+    if (n.charAt(0) === '#') {
+      return n.charAt(1) === 'x'
+        ? String.fromCharCode(parseInt(n.substring(2), 16))
+        : String.fromCharCode(+n.substring(1));
+    }
+    return '';
+  });
+}
+
+function replace(regex, opt) {
+  regex = regex.source;
+  opt = opt || '';
+  return function self(name, val) {
+    if (!name) return new RegExp(regex, opt);
+    val = val.source || val;
+    val = val.replace(/(^|[^\[])\^/g, '$1');
+    regex = regex.replace(name, val);
+    return self;
+  };
+}
+
+function noop() {}
+noop.exec = noop;
+
+function merge(obj) {
+  var i = 1
+    , target
+    , key;
+
+  for (; i < arguments.length; i++) {
+    target = arguments[i];
+    for (key in target) {
+      if (Object.prototype.hasOwnProperty.call(target, key)) {
+        obj[key] = target[key];
+      }
+    }
+  }
+
+  return obj;
+}
+
+
+/**
+ * Marked
+ */
+
+function marked(src, opt, callback) {
+  if (callback || typeof opt === 'function') {
+    if (!callback) {
+      callback = opt;
+      opt = null;
+    }
+
+    opt = merge({}, marked.defaults, opt || {});
+
+    var highlight = opt.highlight
+      , tokens
+      , pending
+      , i = 0;
+
+    try {
+      tokens = Lexer.lex(src, opt)
+    } catch (e) {
+      return callback(e);
+    }
+
+    pending = tokens.length;
+
+    var done = function(err) {
+      if (err) {
+        opt.highlight = highlight;
+        return callback(err);
+      }
+
+      var out;
+
+      try {
+        out = Parser.parse(tokens, opt);
+      } catch (e) {
+        err = e;
+      }
+
+      opt.highlight = highlight;
+
+      return err
+        ? callback(err)
+        : callback(null, out);
+    };
+
+    if (!highlight || highlight.length < 3) {
+      return done();
+    }
+
+    delete opt.highlight;
+
+    if (!pending) return done();
+
+    for (; i < tokens.length; i++) {
+      (function(token) {
+        if (token.type !== 'code') {
+          return --pending || done();
+        }
+        return highlight(token.text, token.lang, function(err, code) {
+          if (err) return done(err);
+          if (code == null || code === token.text) {
+            return --pending || done();
+          }
+          token.text = code;
+          token.escaped = true;
+          --pending || done();
+        });
+      })(tokens[i]);
+    }
+
+    return;
+  }
+  try {
+    if (opt) opt = merge({}, marked.defaults, opt);
+    return Parser.parse(Lexer.lex(src, opt), opt);
+  } catch (e) {
+    e.message += '\nPlease report this to https://github.com/chjj/marked.';
+    if ((opt || marked.defaults).silent) {
+      return '<p>An error occured:</p><pre>'
+        + escape(e.message + '', true)
+        + '</pre>';
+    }
+    throw e;
+  }
+}
+
+/**
+ * Options
+ */
+
+marked.options =
+marked.setOptions = function(opt) {
+  merge(marked.defaults, opt);
+  return marked;
+};
+
+marked.defaults = {
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: false,
+  sanitizer: null,
+  mangle: true,
+  smartLists: false,
+  silent: false,
+  highlight: null,
+  langPrefix: 'lang-',
+  smartypants: false,
+  headerPrefix: '',
+  renderer: new Renderer,
+  xhtml: false
+};
+
+/**
+ * Expose
+ */
+
+marked.Parser = Parser;
+marked.parser = Parser.parse;
+
+marked.Renderer = Renderer;
+
+marked.Lexer = Lexer;
+marked.lexer = Lexer.lex;
+
+marked.InlineLexer = InlineLexer;
+marked.inlineLexer = InlineLexer.output;
+
+marked.parse = marked;
+
+if (typeof module !== 'undefined' && typeof exports === 'object') {
+  module.exports = marked;
+} else if (typeof define === 'function' && define.amd) {
+  define(function() { return marked; });
+} else {
+  this.marked = marked;
+}
+
+}).call(function() {
+  return this || (typeof window !== 'undefined' ? window : global);
+}());
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
+},{}],46:[function(require,module,exports){
 (function(){
   var crypt = require('crypt'),
       utf8 = require('charenc').utf8,
@@ -8991,7 +10281,7 @@ module.exports = isObject;
 
 })();
 
-},{"charenc":27,"crypt":29,"is-buffer":46}],46:[function(require,module,exports){
+},{"charenc":27,"crypt":29,"is-buffer":47}],47:[function(require,module,exports){
 /**
  * Determine if an object is Buffer
  *
@@ -9010,7 +10300,7 @@ module.exports = function (obj) {
   )
 }
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 /* Protocol - protocol constants */
 
 /* Command code => mnemonic */
@@ -9064,7 +10354,7 @@ module.exports.WILL_QOS_SHIFT = 3;
 module.exports.WILL_FLAG_MASK = 0x04;
 module.exports.CLEAN_SESSION_MASK = 0x02;
 
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 (function (Buffer){
 
 'use strict';
@@ -9683,14 +10973,14 @@ module.exports = generate
 
 }).call(this,require("buffer").Buffer)
 
-},{"./constants":47,"buffer":3}],49:[function(require,module,exports){
+},{"./constants":48,"buffer":3}],50:[function(require,module,exports){
 
 'use strict';
 
 exports.parser          = require('./parser')
 exports.generate        = require('./generate')
 
-},{"./generate":48,"./parser":56}],50:[function(require,module,exports){
+},{"./generate":49,"./parser":57}],51:[function(require,module,exports){
 (function (Buffer){
 var DuplexStream = require('readable-stream/duplex')
   , util         = require('util')
@@ -9911,9 +11201,9 @@ module.exports = BufferList
 
 }).call(this,require("buffer").Buffer)
 
-},{"buffer":3,"readable-stream/duplex":51,"util":26}],51:[function(require,module,exports){
+},{"buffer":3,"readable-stream/duplex":52,"util":26}],52:[function(require,module,exports){
 arguments[4][13][0].apply(exports,arguments)
-},{"./lib/_stream_duplex.js":52,"dup":13}],52:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":53,"dup":13}],53:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -10007,7 +11297,7 @@ function forEach (xs, f) {
 
 }).call(this,require('_process'))
 
-},{"./_stream_readable":53,"./_stream_writable":54,"_process":8,"core-util-is":28,"inherits":33}],53:[function(require,module,exports){
+},{"./_stream_readable":54,"./_stream_writable":55,"_process":8,"core-util-is":28,"inherits":33}],54:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -10994,7 +12284,7 @@ function indexOf (xs, x) {
 
 }).call(this,require('_process'))
 
-},{"_process":8,"buffer":3,"core-util-is":28,"events":7,"inherits":33,"isarray":35,"stream":23,"string_decoder/":78}],54:[function(require,module,exports){
+},{"_process":8,"buffer":3,"core-util-is":28,"events":7,"inherits":33,"isarray":35,"stream":23,"string_decoder/":79}],55:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -11385,7 +12675,7 @@ function endWritable(stream, state, cb) {
 
 }).call(this,require('_process'))
 
-},{"./_stream_duplex":52,"_process":8,"buffer":3,"core-util-is":28,"inherits":33,"stream":23}],55:[function(require,module,exports){
+},{"./_stream_duplex":53,"_process":8,"buffer":3,"core-util-is":28,"inherits":33,"stream":23}],56:[function(require,module,exports){
 
 function Packet() {
   this.cmd = null
@@ -11399,7 +12689,7 @@ function Packet() {
 
 module.exports = Packet
 
-},{}],56:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 
 var bl        = require('bl')
   , inherits  = require('inherits')
@@ -11771,7 +13061,7 @@ Parser.prototype._parseNum = function() {
 
 module.exports = Parser
 
-},{"./constants":47,"./packet":55,"bl":50,"events":7,"inherits":33}],57:[function(require,module,exports){
+},{"./constants":48,"./packet":56,"bl":51,"events":7,"inherits":33}],58:[function(require,module,exports){
 (function (process,global){
 'use strict';
 /**
@@ -12635,7 +13925,7 @@ module.exports = MqttClient;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./store":62,"_process":8,"end-of-stream":32,"events":7,"inherits":33,"mqtt-packet":49,"readable-stream":68}],58:[function(require,module,exports){
+},{"./store":63,"_process":8,"end-of-stream":32,"events":7,"inherits":33,"mqtt-packet":50,"readable-stream":69}],59:[function(require,module,exports){
 (function (process){
 'use strict';
 var MqttClient = require('../client'),
@@ -12775,7 +14065,7 @@ module.exports.connect = connect;
 
 }).call(this,require('_process'))
 
-},{"../client":57,"./tcp":59,"./tls":60,"./ws":61,"_process":8,"url":24,"xtend":89}],59:[function(require,module,exports){
+},{"../client":58,"./tcp":60,"./tls":61,"./ws":62,"_process":8,"url":24,"xtend":90}],60:[function(require,module,exports){
 'use strict';
 var net = require('net');
 
@@ -12796,7 +14086,7 @@ function buildBuilder (client, opts) {
 
 module.exports = buildBuilder;
 
-},{"net":2}],60:[function(require,module,exports){
+},{"net":2}],61:[function(require,module,exports){
 'use strict';
 var tls = require('tls');
 
@@ -12846,7 +14136,7 @@ function buildBuilder (mqttClient, opts) {
 
 module.exports = buildBuilder;
 
-},{"tls":2}],61:[function(require,module,exports){
+},{"tls":2}],62:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -12923,7 +14213,7 @@ if ('browser' !== process.title) {
 
 }).call(this,require('_process'))
 
-},{"_process":8,"url":24,"websocket-stream":86}],62:[function(require,module,exports){
+},{"_process":8,"url":24,"websocket-stream":87}],63:[function(require,module,exports){
 (function (process){
 'use strict';
 var Readable = require('readable-stream').Readable,
@@ -13036,7 +14326,7 @@ module.exports = Store;
 
 }).call(this,require('_process'))
 
-},{"_process":8,"readable-stream":68}],63:[function(require,module,exports){
+},{"_process":8,"readable-stream":69}],64:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -13130,9 +14420,9 @@ function forEach (xs, f) {
 
 }).call(this,require('_process'))
 
-},{"./_stream_readable":65,"./_stream_writable":67,"_process":8,"core-util-is":28,"inherits":33}],64:[function(require,module,exports){
+},{"./_stream_readable":66,"./_stream_writable":68,"_process":8,"core-util-is":28,"inherits":33}],65:[function(require,module,exports){
 arguments[4][15][0].apply(exports,arguments)
-},{"./_stream_transform":66,"core-util-is":28,"dup":15,"inherits":33}],65:[function(require,module,exports){
+},{"./_stream_transform":67,"core-util-is":28,"dup":15,"inherits":33}],66:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -14119,7 +15409,7 @@ function indexOf (xs, x) {
 
 }).call(this,require('_process'))
 
-},{"_process":8,"buffer":3,"core-util-is":28,"events":7,"inherits":33,"isarray":35,"stream":23,"string_decoder/":78}],66:[function(require,module,exports){
+},{"_process":8,"buffer":3,"core-util-is":28,"events":7,"inherits":33,"isarray":35,"stream":23,"string_decoder/":79}],67:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -14331,7 +15621,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":63,"core-util-is":28,"inherits":33}],67:[function(require,module,exports){
+},{"./_stream_duplex":64,"core-util-is":28,"inherits":33}],68:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -14722,7 +16012,7 @@ function endWritable(stream, state, cb) {
 
 }).call(this,require('_process'))
 
-},{"./_stream_duplex":63,"_process":8,"buffer":3,"core-util-is":28,"inherits":33,"stream":23}],68:[function(require,module,exports){
+},{"./_stream_duplex":64,"_process":8,"buffer":3,"core-util-is":28,"inherits":33,"stream":23}],69:[function(require,module,exports){
 var Stream = require('stream'); // hack to fix a circular dependency issue when used with browserify
 exports = module.exports = require('./lib/_stream_readable.js');
 exports.Stream = Stream;
@@ -14732,7 +16022,7 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":63,"./lib/_stream_passthrough.js":64,"./lib/_stream_readable.js":65,"./lib/_stream_transform.js":66,"./lib/_stream_writable.js":67,"stream":23}],69:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":64,"./lib/_stream_passthrough.js":65,"./lib/_stream_readable.js":66,"./lib/_stream_transform.js":67,"./lib/_stream_writable.js":68,"stream":23}],70:[function(require,module,exports){
 var wrappy = require('wrappy')
 module.exports = wrappy(once)
 
@@ -14755,7 +16045,7 @@ function once (fn) {
   return f
 }
 
-},{"wrappy":87}],70:[function(require,module,exports){
+},{"wrappy":88}],71:[function(require,module,exports){
 (function (process){
 'use strict';
 module.exports = nextTick;
@@ -14773,7 +16063,7 @@ function nextTick(fn) {
 
 }).call(this,require('_process'))
 
-},{"_process":8}],71:[function(require,module,exports){
+},{"_process":8}],72:[function(require,module,exports){
 // a duplex stream is just a stream that is both readable and writable.
 // Since JS doesn't have multiple prototypal inheritance, this class
 // prototypally inherits from Readable, and then parasitically from
@@ -14857,7 +16147,7 @@ function forEach (xs, f) {
   }
 }
 
-},{"./_stream_readable":73,"./_stream_writable":75,"core-util-is":28,"inherits":33,"process-nextick-args":70}],72:[function(require,module,exports){
+},{"./_stream_readable":74,"./_stream_writable":76,"core-util-is":28,"inherits":33,"process-nextick-args":71}],73:[function(require,module,exports){
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
@@ -14886,7 +16176,7 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"./_stream_transform":74,"core-util-is":28,"inherits":33}],73:[function(require,module,exports){
+},{"./_stream_transform":75,"core-util-is":28,"inherits":33}],74:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -15850,7 +17140,7 @@ function indexOf (xs, x) {
 
 }).call(this,require('_process'))
 
-},{"./_stream_duplex":71,"_process":8,"buffer":3,"core-util-is":28,"events":7,"inherits":33,"isarray":35,"process-nextick-args":70,"string_decoder/":78,"util":2}],74:[function(require,module,exports){
+},{"./_stream_duplex":72,"_process":8,"buffer":3,"core-util-is":28,"events":7,"inherits":33,"isarray":35,"process-nextick-args":71,"string_decoder/":79,"util":2}],75:[function(require,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -16049,7 +17339,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":71,"core-util-is":28,"inherits":33}],75:[function(require,module,exports){
+},{"./_stream_duplex":72,"core-util-is":28,"inherits":33}],76:[function(require,module,exports){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, cb), and it'll handle all
 // the drain event emission and buffering.
@@ -16571,7 +17861,7 @@ function endWritable(stream, state, cb) {
   state.ended = true;
 }
 
-},{"./_stream_duplex":71,"buffer":3,"core-util-is":28,"events":7,"inherits":33,"process-nextick-args":70,"util-deprecate":85}],76:[function(require,module,exports){
+},{"./_stream_duplex":72,"buffer":3,"core-util-is":28,"events":7,"inherits":33,"process-nextick-args":71,"util-deprecate":86}],77:[function(require,module,exports){
 var Stream = (function (){
   try {
     return require('st' + 'ream'); // hack to fix a circular dependency issue when used with browserify
@@ -16585,7 +17875,7 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":71,"./lib/_stream_passthrough.js":72,"./lib/_stream_readable.js":73,"./lib/_stream_transform.js":74,"./lib/_stream_writable.js":75}],77:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":72,"./lib/_stream_passthrough.js":73,"./lib/_stream_readable.js":74,"./lib/_stream_transform.js":75,"./lib/_stream_writable.js":76}],78:[function(require,module,exports){
 ;(function(win){
 	var store = {},
 		doc = win.document,
@@ -16762,7 +18052,7 @@ exports.PassThrough = require('./lib/_stream_passthrough.js');
 
 })(Function('return this')());
 
-},{}],78:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -16985,7 +18275,7 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":3}],79:[function(require,module,exports){
+},{"buffer":3}],80:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -17079,7 +18369,7 @@ function forEach (xs, f) {
 
 }).call(this,require('_process'))
 
-},{"./_stream_readable":80,"./_stream_writable":82,"_process":8,"core-util-is":28,"inherits":33}],80:[function(require,module,exports){
+},{"./_stream_readable":81,"./_stream_writable":83,"_process":8,"core-util-is":28,"inherits":33}],81:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -18066,9 +19356,9 @@ function indexOf (xs, x) {
 
 }).call(this,require('_process'))
 
-},{"_process":8,"buffer":3,"core-util-is":28,"events":7,"inherits":33,"isarray":35,"stream":23,"string_decoder/":78}],81:[function(require,module,exports){
-arguments[4][66][0].apply(exports,arguments)
-},{"./_stream_duplex":79,"core-util-is":28,"dup":66,"inherits":33}],82:[function(require,module,exports){
+},{"_process":8,"buffer":3,"core-util-is":28,"events":7,"inherits":33,"isarray":35,"stream":23,"string_decoder/":79}],82:[function(require,module,exports){
+arguments[4][67][0].apply(exports,arguments)
+},{"./_stream_duplex":80,"core-util-is":28,"dup":67,"inherits":33}],83:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -18459,9 +19749,9 @@ function endWritable(stream, state, cb) {
 
 }).call(this,require('_process'))
 
-},{"./_stream_duplex":79,"_process":8,"buffer":3,"core-util-is":28,"inherits":33,"stream":23}],83:[function(require,module,exports){
+},{"./_stream_duplex":80,"_process":8,"buffer":3,"core-util-is":28,"inherits":33,"stream":23}],84:[function(require,module,exports){
 arguments[4][21][0].apply(exports,arguments)
-},{"./lib/_stream_transform.js":81,"dup":21}],84:[function(require,module,exports){
+},{"./lib/_stream_transform.js":82,"dup":21}],85:[function(require,module,exports){
 (function (process){
 var Transform = require('readable-stream/transform')
   , inherits  = require('util').inherits
@@ -18562,7 +19852,7 @@ module.exports.obj = through2(function (options, transform, flush) {
 
 }).call(this,require('_process'))
 
-},{"_process":8,"readable-stream/transform":83,"util":26,"xtend":89}],85:[function(require,module,exports){
+},{"_process":8,"readable-stream/transform":84,"util":26,"xtend":90}],86:[function(require,module,exports){
 (function (global){
 
 /**
@@ -18634,7 +19924,7 @@ function config (name) {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],86:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
 (function (process,Buffer){
 var through = require('through2')
 var duplexify = require('duplexify')
@@ -18722,7 +20012,7 @@ function WebSocketStream(target, protocols) {
 
 }).call(this,require('_process'),require("buffer").Buffer)
 
-},{"_process":8,"buffer":3,"duplexify":30,"through2":84,"ws":88}],87:[function(require,module,exports){
+},{"_process":8,"buffer":3,"duplexify":30,"through2":85,"ws":89}],88:[function(require,module,exports){
 // Returns a wrapper function that returns a wrapped callback
 // The wrapper function should do some stuff, and return a
 // presumably different callback function.
@@ -18757,7 +20047,7 @@ function wrappy (fn, cb) {
   }
 }
 
-},{}],88:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -18802,7 +20092,7 @@ function ws(uri, protocols, opts) {
 
 if (WebSocket) ws.prototype = WebSocket.prototype;
 
-},{}],89:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 module.exports = extend
 
 function extend() {
@@ -18821,7 +20111,7 @@ function extend() {
     return target
 }
 
-},{}],90:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 'use strict'
 /* global angular */
 
@@ -18839,11 +20129,12 @@ function ($scope, $routeParams, Activity) {
   Activity.open($scope, $routeParams.name)
 }])
 
-},{}],91:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
 /* global angular, toastr,  $ */
 'use strict'
 
 var Dropzone = require('Dropzone')
+var marked = require('marked')
 
 angular.module('Dashboard')
 
@@ -18852,7 +20143,7 @@ function ($scope, $routeParams, App, Activity, $sce) {
   var appName = $routeParams.name
 
   App.getReadme(appName).success(function (data) {
-    $scope.readme = $sce.trustAsHtml(data)
+    $scope.readme = $sce.trustAsHtml(marked(data))
   })
 
   App.get(appName).success(function (data) {
@@ -18949,13 +20240,13 @@ function ($scope, App) {
   })
 }])
 
-},{"Dropzone":1}],92:[function(require,module,exports){
+},{"Dropzone":1,"marked":45}],93:[function(require,module,exports){
 require('./activities')
 require('./apps')
 require('./users')
 require('./misc')
 
-},{"./activities":90,"./apps":91,"./misc":93,"./users":94}],93:[function(require,module,exports){
+},{"./activities":91,"./apps":92,"./misc":94,"./users":95}],94:[function(require,module,exports){
 /* global angular */
 
 angular.module('Dashboard')
@@ -18977,7 +20268,7 @@ angular.module('Dashboard')
   }
 }])
 
-},{}],94:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 /* global angular */
 
 var md5 = require('md5')
@@ -19033,8 +20324,8 @@ function ($scope, $routeParams, User, Apps) {
   })
 }])
 
-},{"lodash/array/chunk":36,"md5":45}],95:[function(require,module,exports){
-/* global angular, toastr, $ */
+},{"lodash/array/chunk":36,"md5":46}],96:[function(require,module,exports){
+/* global angular, toastr */
 
 angular.module('Dashboard')
 .directive('app', ['App', 'Activity', '$window', '$location',
@@ -19048,8 +20339,9 @@ function (App, Activity, $window, $location) {
     var app = $scope.app
 
     $scope.open = function () {
-      console.log('open')
-      $location.path('/apps/' + app.name)
+      Activity.launch(app.name).success(function () {
+        $location.path('/i/' + app.name)
+      })
     }
 
     $scope.delete = function () {
@@ -19103,7 +20395,7 @@ angular.module('Dashboard')
   return self
 }]) // - directive
 
-},{}],96:[function(require,module,exports){
+},{}],97:[function(require,module,exports){
 /* global angular $ */
 
 require('./app')
@@ -19150,27 +20442,32 @@ angular.module('Dashboard')
   }
 }])
 
-},{"./app":95}],97:[function(require,module,exports){
+},{"./app":96}],98:[function(require,module,exports){
+/* global toastr*/
 
 // Broker.js is an instance for socket.io
 // that logs messages to refactor code
 
-module.exports = broker = {}
+// REVISION THIS IN ORDER TO CHANGE OR NOT TOWARDS WEBSOCKETS
+// -- CHANCES ARE THAT YES
+
+var broker = module.exports = {}
 
 broker.handle = function (topic, msg) {
-	var t = JSON.parse(msg.toString())
-	console.log('%s\n%s', topic, msg.toString())
-	switch (t.emphasis) {
-		case 'error':
-		case 'warning':
-		case 'success':
-		toastr[t.emphasis](t.body, t.title)
-		break
-		default:
-		toastr.info(t.body, t.title)
-	}
+  var t = JSON.parse(msg.toString())
+  console.log('%s\n%--%s: %s', topic, t.emphasis, t.title || 'title', t.body)
+  switch (t.emphasis) {
+    case 'error':
+    case 'warning':
+    case 'success':
+      toastr[t.emphasis](t.body.toString(), t.title)
+      break
+    default:
+      toastr.info(t.body, t.title)
+  }
 }
-},{}],98:[function(require,module,exports){
+
+},{}],99:[function(require,module,exports){
 // Some helper methods:
 // ====================
 
@@ -19223,7 +20520,7 @@ self._hashPasswords = function (user) {
   return aux
 }
 
-},{"md5":45}],99:[function(require,module,exports){
+},{"md5":46}],100:[function(require,module,exports){
 /* global angular */
 // Angular core of dashboard app
 // by jesus@netbeast
@@ -19265,7 +20562,7 @@ require('./services')
 require('./directives')
 require('./controllers')
 
-},{"./controllers":92,"./directives":96,"./helpers/broker":97,"./services":103,"mqtt":58}],100:[function(require,module,exports){
+},{"./controllers":93,"./directives":97,"./helpers/broker":98,"./services":104,"mqtt":59}],101:[function(require,module,exports){
 (function (__filename){
 'use strict'
 
@@ -19273,59 +20570,62 @@ require('./controllers')
 
 angular.module('Dashboard')
 .factory('Activity', ['$http', '$sce', '$location',
-  function ActivityFactory ($http, $sce, $location) {
-    var self = {}
-    self.all = function () {
-      return $http.get('/activities/').error(function (data) {
-        toastr.error(data)
-      })
-    }
+function ActivityFactory ($http, $sce, $location) {
+  var self = {}
+  self.all = function () {
+    return $http.get('/activities/').error(function (data) {
+      toastr.error(data)
+    })
+  }
 
-    self.stop = function (app) {
-      return $http.delete('/activities/' + app)
-      .success(function (data, status) {
-        toastr.success(app + ' succesfully stopped')
-        var icon = document.getElementById(app)
-        icon.parentElement.removeChild(icon)
-      })
-      .error(function (data, status) {
-        toastr.error(data, 'An error has occurred when stopping the app')
-        console.error(__filename + ' @ self.stop()')
-        console.log(data)
-      })
-    }
+  self.stop = function (app) {
+    return $http.delete('/activities/' + app)
+    .success(function (data, status) {
+      toastr.success(app + ' succesfully stopped')
+      var icon = document.getElementById(app)
+      icon.parentElement.removeChild(icon)
+    })
+    .error(function (data, status) {
+      toastr.error(data, 'An error has occurred when stopping the app')
+      console.error(__filename + ' @ self.stop()')
+      console.log(data)
+    })
+  }
 
-    self.open = function (scope, app) {
-      $http.get('/apps/' + app + '/port')
-      .success(function (data, status) {
-        console.log('GET /apps/' + app + '/port ->' + data)
-        var aux = window.location.host
-        aux = aux.substring(0, aux.indexOf(':'))
-        scope.url = 'http://' + aux + ':' + data
-        scope.href = $sce.trustAsResourceUrl(scope.url)
-      })
-      .error(function (data, status, headers, config) {
-        toastr.error(data)
-        console.error('%s %s', status, data)
-        $location.path('/')
-        $location.replace()
-      })
-    }
+  self.open = function (scope, app) {
+    $http.get('/apps/' + app + '/port')
+    .success(function (data, status) {
+      console.log('GET /apps/' + app + '/port ->' + data)
+      var aux = window.location.host
+      aux = aux.substring(0, aux.indexOf(':'))
+      scope.url = 'http://' + aux + ':' + data
+      scope.href = $sce.trustAsResourceUrl(scope.url)
+    })
+    .error(function (data, status, headers, config) {
+      toastr.error(data)
+      console.error('%s %s', status, data)
+      $location.path('/')
+      $location.replace()
+    })
+  }
 
-    self.launch = function (app) {
-      return $http.post('/activities/' + app)
-      .error(function (data, status, headers, config) {
-        toastr.error(data, 'Dashboard')
-        console.log(status + ' when PUT /launch/' + app + ' -> ' + data)
-      })
-    }
+  self.launch = function (app) {
+    return $http.post('/activities/' + app)
+    .success(function () {
+      $location.path('/#/i/' + app)
+    })
+    .error(function (data, status, headers, config) {
+      toastr.error(data, 'Dashboard')
+      console.log(status + ' when PUT /launch/' + app + ' -> ' + data)
+    })
+  }
 
-    return self
-  }])
+  return self
+}])
 
 }).call(this,"/web/assets/js/services/activity.js")
 
-},{}],101:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 'use strict'
 /* global angular, toastr */
 
@@ -19371,7 +20671,7 @@ function AppFactory ($http, $sce, $location) {
   return self
 }])
 
-},{}],102:[function(require,module,exports){
+},{}],103:[function(require,module,exports){
 /* global angular */
 
 var store = require('store')
@@ -19394,14 +20694,14 @@ angular.module('Dashboard')
   $httpProvider.interceptors.push('httpRequestInterceptor')
 }])
 
-},{"store":77}],103:[function(require,module,exports){
+},{"store":78}],104:[function(require,module,exports){
 require('./activity')
 require('./session')
 require('./auth')
 require('./user')
 require('./app')
 
-},{"./activity":100,"./app":101,"./auth":102,"./session":104,"./user":105}],104:[function(require,module,exports){
+},{"./activity":101,"./app":102,"./auth":103,"./session":105,"./user":106}],105:[function(require,module,exports){
 /* global angular, toastr */
 
 var store = require('store')
@@ -19462,7 +20762,7 @@ function SessionFactory ($http, $rootScope, $location) {
   return self
 }])
 
-},{"../helpers":98,"store":77}],105:[function(require,module,exports){
+},{"../helpers":99,"store":78}],106:[function(require,module,exports){
 /* global angular, toastr */
 
 'use strict'
@@ -19554,7 +20854,7 @@ function ActivitiesFactory ($http, $location, Session, $rootScope) {
   return self
 }])
 
-},{"../helpers":98}]},{},[99])
+},{"../helpers":99}]},{},[100])
 
 
 //# sourceMappingURL=bundle.js.map

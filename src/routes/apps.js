@@ -1,11 +1,10 @@
 var express = require('express')
-var Showdown = require('showdown')
 var config = require('../../config')
 var fs = require('fs-extra')
 var path = require('path')
 var installer = require('../installer')
-var launcher = require('../launcher')
 var App = require('../models/app')
+var Activity = require('../models/activity')
 var NotFound = require('../util/not-found')
 var InvalidFormat = require('../util/invalid-format')
 var router = express.Router()
@@ -40,9 +39,9 @@ router.route('/apps/:name')
   })
 })
 .delete(function (req, res, next) {
-  launcher.stop(req.params.name, function (err) {
+  Activity.stop(req.params.name, function (err) {
     if (err) {
-      return next(new Error('Launcher could not stop the app'))
+      return next(new Error('Activity could not stop the app'))
     } else {
       App.delete(req.params.name, function (err) {
         if (err && err.code === 404) {
@@ -70,7 +69,7 @@ router.get('/apps/:name/logo', function (req, res) {
 })
 
 router.get('/apps/:name/port?', function (req, res) {
-  var app = launcher.getApp(req.params.name)
+  var app = Activity.get(req.params.name)
   if (app) {
     console.dir(app.port)
     res.json(app.port)
@@ -85,12 +84,7 @@ router.get('/apps/:name/readme', function (req, res, next) {
     return res.send('This app does not have a README.md')
   }
 
-  fs.readFile(readme, 'utf8', function (err, data) {
-    if (err) return next(err)
-    var converter = new Showdown.converter()
-    var html = converter.makeHtml(data)
-    res.send(html)
-  })
+  res.sendFile(readme)
 })
 
 router.get('/apps/:name/package', function (req, res, next) {

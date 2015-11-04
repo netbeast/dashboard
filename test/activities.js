@@ -12,7 +12,6 @@ var path = require('path')
 
 const URL = 'http://localhost:' + config.port
 const APP_PATH = './test/app.tar.gz'
-const s = 1000 // seconds
 
 // Test styling
 // http://chaijs.com/guide/styles/
@@ -31,6 +30,16 @@ describe('Activities', function () {
     })
   })
 
+  after('it should remove myapp', function (done) {
+    fs.remove(path.join(config.appsDir, 'myapp'), function (err) {
+      should.not.exist(err)
+      fs.copy(APP_PATH + '.bck', APP_PATH, function (err) {
+        should.not.exist(err)
+        done()
+      })
+    })
+  })
+
   it('should not be running', function (done) {
     request(URL + '/activities/myapp', function (err, resp, body) {
       should.not.exist(err)
@@ -43,19 +52,17 @@ describe('Activities', function () {
     request(URL + '/activities/', function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200)
-      // expect(body).to.have.length.above(1)
       JSON.parse(body).should.have.length.below(1)
       done()
     })
   })
 
-  after('it should remove myapp', function (done) {
-    fs.remove(path.join(config.appsDir, 'myapp'), function (err) {
+  it.skip('should test when activity is ready', function (done) {
+    request(URL + '/activities/', function (err, resp, body) {
       should.not.exist(err)
-      fs.copy(APP_PATH + '.bck', APP_PATH, function (err) {
-        should.not.exist(err)
-        done()
-      })
+      resp.statusCode.should.equal(200)
+      JSON.parse(body).should.have.length.below(1)
+      done()
     })
   })
 })

@@ -1,7 +1,7 @@
 var async = require('async')
 
 var App = require('./models/app')
-var launcher = require('./launcher')
+var Activity = require('./models/activity')
 
 // start apps that must be initialized on boot
 module.exports = function _bootOnLoad () {
@@ -12,7 +12,7 @@ module.exports = function _bootOnLoad () {
       if (!app.bootOnLoad) return done(null)
 
       console.log('Launching %s', app.name)
-      launcher.boot(app.name, function (err, port) {
+      Activity.boot(app.name, function (err, port) {
         if (err) return done(err)
 
         console.info('%s launched on port %s', app.name, port)

@@ -1,4 +1,4 @@
-/* global angular, toastr, $ */
+/* global angular, toastr */
 
 angular.module('Dashboard')
 .directive('app', ['App', 'Activity', '$window', '$location',
@@ -12,8 +12,9 @@ function (App, Activity, $window, $location) {
     var app = $scope.app
 
     $scope.open = function () {
-      console.log('open')
-      $location.path('/apps/' + app.name)
+      Activity.launch(app.name).success(function () {
+        $location.path('/i/' + app.name)
+      })
     }
 
     $scope.delete = function () {

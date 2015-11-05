@@ -1,0 +1,46 @@
+{
+  "name": "philips-hue",
+  "version": "1.0.0",
+  "description": "Allows developers to control Philips Hue devices",
+  "main": "index.js",
+  "netbeast": {
+    "bootOnLoad": true,
+    "type": "service"
+  },
+  "dependencies": {
+    "async": "^1.4.2",
+    "body-parser": "^1.14.0",
+    "chai": "^3.2.0",
+    "commander": "^2.8.1",
+    "express": "^4.13.3",
+    "fs": "0.0.2",
+    "http": "0.0.0",
+    "mocha": "^2.3.2",
+    "morgan": "^1.6.1",
+    "request": "^2.62.0",
+    "socket.io": "^1.3.7",
+    "wemo-client": "^0.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/netbeast/dashboard"
+  },
+  "keywords": [
+    "xway",
+    "iot",
+    "netbeast",
+    "netbeast.co",
+    "api"
+  ],
+  "author": "pablo@netbeast.co",
+  "license": "GPL 3",
+  "bugs": {
+    "url": "https://github.com/netbeast/dashboard/issues"
+  },
+  "homepage": "https://github.com/netbeast/dashboard"
+}

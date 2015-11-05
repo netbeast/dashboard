@@ -1,4 +1,4 @@
-<a class="apps" ng-href="#/apps/{{app}}">
+<a class="apps" ng-if="app.netbeast.type !== service" ng-href="#/apps/{{app}}">
   <div class="avatar">
     <img ng-src="/apps/{{app}}/logo" alt="/apps/{{app}}/logo" />
   </div>

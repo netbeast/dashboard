@@ -1,6 +1,5 @@
 var acorn = require('acorn');
 var walk = require('acorn/dist/walk');
-var escodegen = require('escodegen');
 var defined = require('defined');
 
 var requireRe = /\brequire\b/;
@@ -44,19 +43,28 @@ exports.find = function (src, opts) {
     
     var ast = parse(src, opts.parse);
     
-    walk.simple(ast, {
-        CallExpression: function (node) {
-            if (!isRequire(node)) return;
+    function visit(node, st, c) {
+        var hasRequire = wordRe.test(src.slice(node.start, node.end));
+        if (!hasRequire) return;
+        walk.base[node.type](node, st, c);
+        if (node.type !== 'CallExpression') return;
+        if (isRequire(node)) {
             if (node.arguments.length) {
-                if (node.arguments[0].type === 'Literal') {
-                    modules.strings.push(node.arguments[0].value);
+                var arg = node.arguments[0];
+                if (arg.type === 'Literal') {
+                    modules.strings.push(arg.value);
                 }
                 else {
-                    modules.expressions.push(escodegen.generate(node.arguments[0]));
+                    modules.expressions.push(src.slice(arg.start, arg.end));
                 }
             }
             if (opts.nodes) modules.nodes.push(node);
         }
+    }
+    
+    walk.recursive(ast, null, {
+        Statement: visit,
+        Expression: visit
     });
     
     return modules;

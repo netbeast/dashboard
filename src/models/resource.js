@@ -28,7 +28,6 @@ Resource.prototype.destroy = function (callback) {
 Resource.find = function (query, callback) {
   var result = []
   helper.findAction(query, function (err, row) {
-    console.log(row)
     if (err) callback.call(this, 'err')
     else if (row == '') callback.call(this, 'No Row Finded!')
     else {

@@ -15,7 +15,7 @@ module.exports = function _bootOnLoad () {
       function (err, data) {
         if (err) return callback(err)
 
-        if (data.bootOnLoad) {
+        if (data.netbeast && data.netbeast.bootOnLoad) {
           launcher.boot(file, function (err, port) {
             if (err) return callback(err)
             console.info('launched app on port %s', port)

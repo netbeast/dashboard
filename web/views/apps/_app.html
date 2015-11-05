@@ -1,4 +1,5 @@
-<div class="apps">
+
+<div class="apps" ng-if="app.netbeast.type !== service">
   <div class="avatar clickable" ng-click="open()">
     <img ng-src="/apps/{{app.name}}/logo" alt="/apps/{{app.name}}/logo" />
   </div>

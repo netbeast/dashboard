@@ -66,7 +66,7 @@ describe('Activities', function () {
     })
   })
 
-  it('app should be running', function (done) {
+  it('myapp should be running', function (done) {
     request(URL + '/activities/myapp', function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200) // app is running

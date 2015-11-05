@@ -29,6 +29,8 @@ Thumbs.db
 .sass-cache/
 
 .sandbox/*
+!.sandbox/philips-hue/*
+|.sandbox/belkin-wemo/*
 config/user.json
 node_modules/*
 !node_modules/.src

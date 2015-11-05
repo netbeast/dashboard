@@ -1,4 +1,5 @@
 var async = require('async')
+var chalk = require('chalk')
 
 var App = require('./models/app')
 var Activity = require('./models/activity')
@@ -9,18 +10,20 @@ module.exports = function bootOnload () {
     if (err) throw err
 
     async.map(apps, function (app, done) {
-      if (!app.bootOnLoad) return done(null)
+      if (!app.netbeast || !app.netbeast.bootOnLoad) return done(null)
 
-      console.log('Launching %s', app.name)
+      console.log(chalk.bold('\n🚀  Booting ' + app.name + 'on load'))
+
       Activity.boot(app.name, function (err, port) {
         if (err) return done(err)
 
+        console.log(chalk.bold('\n🚀  ' + app.name + 'launched on port' + port))
         console.info('%s launched on port %s', app.name, port)
         done(null, port)
+      },
+      function (err) {
+        if (err) throw err
       })
-    },
-    function (err) {
-      if (err) throw err
     })
   })
 }

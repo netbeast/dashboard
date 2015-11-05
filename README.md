@@ -14,7 +14,7 @@ This is a web panel from you can install, manage or publish IoT applications. Fo
 
 ## Try it locally
 Find it live at `http://localhost`
-<img src="//github.com/netbeast/dashboard/blob/development/web/img/general_demo.gif?raw=true">
+<img src="https://github.com/netbeast/dashboard/blob/master/web/img/general_demo.gif?raw=true">
 </img>
 
 ### Install

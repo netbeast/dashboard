@@ -15,6 +15,7 @@ router.get('/activities', function (req, res, next) {
 router.route('/activities/:name')
 .delete(Activity.close)
 .post(Activity.start)
+.get(Activity.status)
 
 var proxy = httpProxy.createProxyServer({ws: true})
 router.use('/i/:name?', function (req, res) {

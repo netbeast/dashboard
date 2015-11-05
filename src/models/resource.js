@@ -30,7 +30,7 @@ Resource.find = function (query, callback) {
   helper.findAction(query, function (err, row) {
     console.log(row)
     if (err) callback.call(this, 'err')
-    else if (row == '') callback.call(this, 'No Row Finded!')
+    else if (row.length < 1) callback.call(this, 'No Row Found!')
     else {
       row.forEach(function (action) {
         result.push(new Resource(action))
@@ -43,7 +43,7 @@ Resource.find = function (query, callback) {
 Resource.findOne = function (query, callback) {
   helper.findAction(query, function (err, row) {
     if (err) callback.call(this, err)
-    else if (row == '') callback.call(this, 'No Row Finded!')
+    else if (row.length < 1) callback.call(this, 'No Row Found!')
     else callback.call(this, null, new Resource(row[row.length - 1]))
   })
 }

@@ -64,7 +64,7 @@ describe('Resources', function () {
         //  .then...
         Resource.find({id: item.id}, function (err, item) {
           expect(item).to.be.empty
-          expect(err).to.equal('No Row Finded!')
+          expect(err).to.equal('No Row Found!')
           done()
         })
       })

@@ -3,10 +3,8 @@
 // Broker.js is an instance for socket.io
 // that logs messages to refactor code
 
-const WS_URI = 'ws://localhost:1883'
-
 var io = require('socket.io-client')
-var socket = io.connect(WS_URI)
+var socket = io.connect()
 
 angular.module('Dashboard')
 .run(function () {

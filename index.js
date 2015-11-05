@@ -6,6 +6,7 @@ var http = require('http')
 
 // NPM dependencies
 var forever = require('forever-monitor')
+var io = require('socket.io')()
 var cmd = require('commander')
 require('app-module-path')
 .addPath(__dirname)
@@ -29,6 +30,9 @@ server.listen(cmd.port || config.port, function () {
   server.address().port)
   bootOnload()
 })
+
+io.listen(server)
+io.on('connection', require('src/broker'))
 
 // Start the deamon that recognises other netbeasts
 var deamonBin = path.join(__dirname, 'bin/deamon.js')

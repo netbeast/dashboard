@@ -37,7 +37,7 @@ module.exports.process = function (req, res, next) {
 module.exports.git = function (req, res, next) {
   if (!req.body.url) return next()
 
-  broker.notify('Installing from git...')
+  broker.info('Installing from git...')
   App.install(req.body.url, function (err, repo) {
     if (err) return next(err)
     res.status(204).end()

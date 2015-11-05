@@ -3,23 +3,10 @@
 // that logs messages to refactor code
 
 var chalk = require('chalk')
-var client = require('socket.io')()
+var config = require('config')
 
-var io = client.listen(1883)
-
-io.on('connection', function (socket) {
-  console.log(chalk.grey('user connected'))
-
-  socket.on('push', function (from, str) {
-    console.log('I received a private message by ', from, ' saying ', str)
-    console.log('routing...')
-    io.emit('news', str)
-  })
-
-  socket.on('disconnect', function () {
-    console.log(chalk.grey('user disconnected'))
-  })
-})
+var io = require('socket.io-client')
+var socket = io.connect(config.LOCAL_URL)
 
 var broker = module.exports = {}
 
@@ -63,5 +50,5 @@ broker.emit = function (msg) {
   }
 
   console.log(str)
-  io.emit('news', msg)
+  socket.emit('push', msg)
 }

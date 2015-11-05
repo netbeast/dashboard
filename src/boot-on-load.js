@@ -12,14 +12,14 @@ module.exports = function bootOnload () {
     async.map(apps, function (app, done) {
       if (!app.netbeast || !app.netbeast.bootOnLoad) return done(null)
 
-      console.log(chalk.bold('\n🚀  Booting ' + app.name + 'on load'))
+      console.log(chalk.bold('\n🚀  Booting ' + app.name + ' on load'))
 
       Activity.boot(app.name, function (err, port) {
         if (err) return done(err)
 
-        console.log(chalk.bold('\n🚀  ' + app.name + 'launched on port' + port))
-        console.info('%s launched on port %s', app.name, port)
-        done(null, port)
+        console.log(chalk.bold('\n🚀  ' + app.name + ' launched on port ' + port.port))
+        console.info(' %s launched on port %s ', app.name, port.port)
+        done(null, port.port)
       },
       function (err) {
         if (err) throw err

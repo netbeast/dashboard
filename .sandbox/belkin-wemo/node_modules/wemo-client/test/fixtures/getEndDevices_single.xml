@@ -1,0 +1,40 @@
+<s:Envelope s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <u:GetEndDevicesResponse xmlns:u="urn:Belkin:service:bridge:1">
+      <DeviceLists>
+        &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        &lt;DeviceLists&gt;
+          &lt;DeviceList&gt;
+            &lt;DeviceListType&gt;Paired&lt;/DeviceListType&gt;
+            &lt;DeviceInfos&gt;
+              &lt;DeviceInfo&gt;
+                &lt;DeviceIndex&gt;0&lt;/DeviceIndex&gt;
+                &lt;DeviceID&gt;AEFD3EF6BF421AEF&lt;/DeviceID&gt;
+                &lt;FriendlyName&gt;First&lt;/FriendlyName&gt;
+                &lt;IconVersion&gt;1&lt;/IconVersion&gt;
+                &lt;FirmwareVersion&gt;7E&lt;/FirmwareVersion&gt;
+                &lt;CapabilityIDs&gt;10006,10008,30008,30009,3000A&lt;/CapabilityIDs&gt;
+                &lt;CurrentState&gt;1,255:0,0:0,,&lt;/CurrentState&gt;
+                &lt;Manufacturer&gt;MRVL&lt;/Manufacturer&gt;
+                &lt;ModelCode&gt;MZ100&lt;/ModelCode&gt;
+                &lt;WeMoCertified&gt;YES&lt;/WeMoCertified&gt;
+              &lt;/DeviceInfo&gt;
+              &lt;DeviceInfo&gt;
+                &lt;DeviceIndex&gt;1&lt;/DeviceIndex&gt;
+                &lt;DeviceID&gt;AEFD3EF6BF422AEF&lt;/DeviceID&gt;
+                &lt;FriendlyName&gt;Second&lt;/FriendlyName&gt;
+                &lt;IconVersion&gt;1&lt;/IconVersion&gt;
+                &lt;FirmwareVersion&gt;7E&lt;/FirmwareVersion&gt;
+                &lt;CapabilityIDs&gt;10006,10008,30008,30009,3000A&lt;/CapabilityIDs&gt;
+                &lt;CurrentState&gt;1,255:0,0:0,,&lt;/CurrentState&gt;
+                &lt;Manufacturer&gt;MRVL&lt;/Manufacturer&gt;
+                &lt;ModelCode&gt;MZ100&lt;/ModelCode&gt;
+                &lt;WeMoCertified&gt;YES&lt;/WeMoCertified&gt;
+              &lt;/DeviceInfo&gt;
+            &lt;/DeviceInfos&gt;
+          &lt;/DeviceList&gt;
+        &lt;/DeviceLists&gt;
+      </DeviceLists>
+    </u:GetEndDevicesResponse>
+  </s:Body>
+</s:Envelope>

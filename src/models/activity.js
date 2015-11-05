@@ -7,8 +7,8 @@ var portfinder = require('portfinder')
 var chalk = require('chalk')
 var async = require('async')
 
-var broker = require('../helpers/broker')
-var config = require('../../config')
+var broker = require('src/helpers/broker')
+var config = require('config')
 var App = require('./app')
 
 portfinder.basePort = 3000
@@ -19,14 +19,24 @@ var children = {}
 var self = new events.EventEmitter()
 
 self.start = function (req, res, next) {
-  self.boot(req.params.name, function (err, port) {
+  self.boot(req.params.name, function (err, child) {
     if (err) return next(err)
-    self.ready(port, function (err) {
+    self.ready(child, function (err, activity) {
       if (err) return next(err)
 
-      broker.success('app initiated at port ' + port)
-      res.json({ port: port })
+      broker.success('child initiated at port ' + child.port)
+      res.json(activity)
     })
+  })
+}
+
+self.status = function (req, res, next) {
+  var child = children[req.params.name]
+  if (!child) return next(new Error('App not running'))
+
+  self.ready(child, function (err, activity) {
+    if (err) return next(err)
+    res.status(200).json(activity)
   })
 }
 
@@ -62,10 +72,13 @@ self.all = function (done) {
   })
 }
 
-self.ready = function (appPort, done) {
-  const APP_URL = 'http://localhost:' + appPort
+self.ready = function (child, done) {
+  if (child.ready) return done(child)
+
+  const APP_URL = 'http://localhost:' + child.port
   const MAX_TRIALS = 9
   var k = 0
+
   function keepTrying () { return k < MAX_TRIALS }
 
   async.whilst(keepTrying, function (callback) {
@@ -86,26 +99,27 @@ self.ready = function (appPort, done) {
       return done(new Error('Impossible to launch the application'))
     }
 
-    return done()
+    child.ready = true
+    return done(null, child)
   })
 }
 
 self.boot = function (appName, done) {
-  var app = { name: appName }
+  var child = { name: appName }
 
-  if (children[app.name]) {
-    return done(null, children[app.name].port)
+  if (children[appName]) {
+    return done(null, children[child.name])
   }
 
-  console.log('[booting] Looking for a free port for %s...', app.name)
+  console.log('[booting] Looking for a free port for %s...', child.name)
   portfinder.getPort(function (err, port) {
     if (err) {
       done(new Error('Not enough ports'))
     } else {
-      app.port = port
-      console.log('[booting] Found port for %s at %s.', app.name, app.port)
-      self.emit('start', app)
-      done(null, port)
+      child.port = port
+      console.log('[booting] Found port for %s at %s.', child.name, child.port)
+      self.emit('start', child)
+      done(null, child)
     }
   })
 }
@@ -114,7 +128,7 @@ self.on('start', function (app) {
   if (children[app.name]) return
 
   App.getPackageJson(app.name, function (err, pkgJson) {
-    if (err) return broker.error({ body: err.toString })
+    if (err) return broker.error(err.toString())
 
     // child management
     var entryPoint = path.join(config.appsDir, app.name, pkgJson.main)
@@ -127,20 +141,16 @@ self.on('start', function (app) {
     })
 
     child.stderr.on('data', function (data) {
-      broker.error({ title: app.name, body: data })
+      broker.error(data, app.name)
     })
 
     child.on('close', function (code) {
-      broker.info({
-        title: app.name, body: ' exited with code ' + code || 0
-      })
+      broker.info(' exited with code ' + code || 0, app.name)
       children[app.name] = undefined
     })
 
     child.on('error', function (code) {
-      broker.error({
-        title: app.name, body: ' exited with code ' + code || 0
-      })
+      broker.error(' exited with code ' + code || 0, app.name)
       children[app.name] = undefined
     })
 

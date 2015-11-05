@@ -41,15 +41,15 @@ describe('Activities', function () {
     })
   })
 
-  it('should not be running', function (done) {
+  it('myapp should not be running', function (done) {
     request(URL + '/activities/myapp', function (err, resp, body) {
       should.not.exist(err)
-      resp.statusCode.should.equal(404)
+      resp.statusCode.should.equal(500)
       done()
     })
   })
 
-  it.skip('should show no apps running', function (done) {
+  it('should show no apps running', function (done) {
     request(URL + '/activities/', function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200)
@@ -58,11 +58,18 @@ describe('Activities', function () {
     })
   })
 
-  it.skip('should test when activity is ready', function (done) {
-    request(URL + '/activities/', function (err, resp, body) {
+  it('should start correctly myapp', function (done) {
+    request.post(URL + '/activities/myapp', function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200)
-      JSON.parse(body).should.have.length.below(1)
+      done()
+    })
+  })
+
+  it('app should be running', function (done) {
+    request(URL + '/activities/myapp', function (err, resp, body) {
+      should.not.exist(err)
+      resp.statusCode.should.equal(200) // app is running
       done()
     })
   })

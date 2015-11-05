@@ -14,7 +14,8 @@ This is a web panel from you can install, manage or publish IoT applications. Fo
 
 ## Try it locally
 Find it live at `http://localhost`
-<img src="https://github.com/netbeast/docs/blob/master/img/dashboard-cap.png?raw=true"></img>
+<img src="//github.com/netbeast/dashboard/blob/development/web/img/general_demo.gif?raw=true">
+</img>
 
 ### Install
 ``` bash
@@ -31,7 +32,6 @@ sudo nb-dashboard --port 80
 Compiling with npm the Dashboard node.js native modules may take a while. That is why we precompile them weekly and push them to this repo production branch. You can have it on your Raspberry Pi in less than a minute:
 
 ```bash
-
 git clone -b master --single-branch https://github.com/netbeast/dashboard/
 cd dashboard
 npm i # by default, dependencies are ignored

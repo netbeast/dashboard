@@ -13,7 +13,9 @@ var App = module.exports = {}
 App.all = function (done) {
   fs.readdir(config.appsDir, function (err, files) {
     if (err) return done(err)
-
+    files = files.filter(function (file) {
+      return file !== 'installed_apps_live_here'
+    })
     async.map(files, App.getPackageJson, done)
   })
 }

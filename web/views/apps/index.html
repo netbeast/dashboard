@@ -15,12 +15,12 @@
   </h2>
 
   <span ng-hide="activities" data-ng-repeat="app in apps">
-    <app app="app" class="col-xs-12 col-sm-4 col-md-3">
+    <app app="app" ng-hide="app.netbeast.type === service" class="col-xs-12 col-sm-4 col-md-3">
     </app>
   </span>
 
   <span data-ng-repeat="activity in activities">
-    <app app="activity" class="col-xs-12 col-sm-4 col-md-3">
+    <app app="activity" ng-hide="app.netbeast.type === service" class="col-xs-12 col-sm-4 col-md-3">
     </app>
   </span>
 

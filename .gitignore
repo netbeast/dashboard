@@ -30,11 +30,7 @@ Thumbs.db
 
 .sandbox/*
 !.sandbox/philips-hue/*
-|.sandbox/belkin-wemo/*
-config/user.json
-node_modules/*
-!node_modules/.src
-!node_modules/.config
+!.sandbox/belkin-wemo/*
 
 test/coverage
 .errorlog

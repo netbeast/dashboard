@@ -28,7 +28,7 @@ Thumbs.db
 .log
 .sass-cache/
 
-.sandbox/*
+!.sandbox/installed_apps_live_here
 !.sandbox/philips-hue/
 !.sandbox/belkin-wemo/
 

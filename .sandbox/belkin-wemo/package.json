@@ -1,7 +1,7 @@
 {
-  "name": "philips-hue",
+  "name": "belkin-wemo",
   "version": "1.0.0",
-  "description": "Allows developers to control Philips Hue devices",
+  "description": "Allows developers to control Belkin WeMo devices",
   "main": "index.js",
   "netbeast": {
     "bootOnLoad": true,

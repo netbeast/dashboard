@@ -25,7 +25,7 @@ loadAction(function (err, api) {
       })
     })
 
-    router.get('/philips-hue/discover', function (req, res, next) {
+    router.get('/discover', function (req, res, next) {
       loadAction(function (err, api) {
         if (err) res.status(500).send({ error: err, data: {} })
         api.lights(function (err, lights) {

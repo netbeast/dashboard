@@ -55,7 +55,6 @@ function ($scope, App, $location, cfpLoadingBar) {
       }
     }
   })
-
   dz.on('success', function (file) {
     dz.removeFile(file)
     App.all().success(function (data) {
@@ -63,11 +62,8 @@ function ($scope, App, $location, cfpLoadingBar) {
       $scope.$apply()
     })
   })
-
   dz.on('complete', cfpLoadingBar.complete)
-
   dz.on('uploadprogress', cfpLoadingBar.inc)
-
   dz.on('error', function (file, error, xhr) {
     cfpLoadingBar.complete()
     toastr.error(error, 'Dashboard')
@@ -105,5 +101,42 @@ function ($scope, App) {
   $scope.uninstall = true
   App.all().success(function (data) {
     $scope.apps = data
+  })
+}])
+
+.controller('Apps#install', ['$scope', 'App', '$location', 'cfpLoadingBar',
+function ($scope, App, $location, cfpLoadingBar) {
+  var dz = new Dropzone('#dz-install', {
+    url: '/apps',
+    dictDefaultMessage: '',
+    previewTemplate: $('.dz-template').html(),
+    accept: function (file, done) {
+      cfpLoadingBar.start()
+      var fname = file.name
+      var ext = [fname.split('.')[1], fname.split('.')[2]].join('.')
+      if (ext === 'tar.gz' || ext === 'tgz.') {
+        console.log('Uploading file with extension ' + ext)
+        done()
+      } else {
+        done('Invalid file type. Must be a tar.gz')
+        this.removeFile(file)
+      }
+    }
+  })
+  dz.on('success', function (file) {
+    dz.removeFile(file)
+    App.all().success(function (data) {
+      $scope.apps = data
+      $scope.$apply()
+    })
+  })
+  dz.on('complete', function () {
+    $location.path('/')
+    cfpLoadingBar.complete()
+  })
+  dz.on('uploadprogress', cfpLoadingBar.inc)
+  dz.on('error', function (file, error, xhr) {
+    cfpLoadingBar.complete()
+    toastr.error(error, 'Dashboard')
   })
 }])

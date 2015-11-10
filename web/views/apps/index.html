@@ -20,7 +20,7 @@
   </span>
 
   <span data-ng-repeat="activity in activities">
-    <app app="activity" ng-hide="app.netbeast.type === 'service'" class="col-xs-12 col-sm-4 col-md-3">
+    <app app="activity" ng-hide="activity.netbeast.type === 'service'" class="col-xs-12 col-sm-4 col-md-3">
     </app>
   </span>
 
@@ -29,12 +29,12 @@
     <article class="col-xs-12 col-sm-4 col-md-3">
       <div class="apps">
 
-      <div class="avatar">
-        <img src="/img/dflt.png" alt="Upload app" />
-      </div>
-      <div class="dz-details">
-        <div class="dz-size badge bg-blue text-white" data-dz-size>data-dz-size</div>
-        <div class="dz-filename"><h4 data-dz-name class="text-red">data-dz-name</hh4></div>
+        <div class="avatar">
+          <img src="/img/dflt.png" alt="Upload app" />
+        </div>
+        <div class="dz-details">
+          <div class="dz-size badge bg-blue text-white" data-dz-size>data-dz-size</div>
+          <div class="dz-filename"><h4 data-dz-name class="text-red">data-dz-name</h4></div>
         </div>
 
         <div class="dz-error-message">
@@ -42,7 +42,7 @@
         </div>
       </div>
 
-      </article>
-    </div>
+    </article>
+  </div>
 
-  </section>
+</section>

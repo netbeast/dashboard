@@ -1,0 +1,44 @@
+<section class="text-center container-fluid">
+  <br>
+  <br>
+  <div id="dz-install" class="container">
+    <div class="dz-message" data-dz-message>
+      <h1>Drop your bundled app here</h1>
+      <h2>yourapp.tar.gz</h2>
+      – or – <br/>
+      <br/>
+      <a class="btn btn-primary btn-lg" href="javascript:void()">Click here to select manually</a>
+      <br/>
+      <br/>
+    </div>
+  </div>
+
+  <div class="container">
+    <blockquote class="text-left">
+      <br/>
+      <b>** Pro tip:</b>
+      You can drag and drop apps directly to the dashboard homepage.
+    </blockquote>
+  </div>
+
+</section>
+
+<!-- dropzone template, keep hidden with ng-hide -->
+<div class="dz-template dz-preview dz-file-preview" ng-hide="true">
+  <article class="col-xs-12 col-sm-4 col-md-3">
+    <div class="apps">
+      <div class="avatar">
+        <img src="/img/dflt.png" alt="Upload app" />
+      </div>
+      <div class="dz-details">
+        <div class="dz-size badge bg-blue text-white" data-dz-size>data-dz-size</div>
+        <div class="dz-filename"><h4 data-dz-name class="text-red">data-dz-name</h4></div>
+      </div>
+
+      <div class="dz-error-message">
+        <span data-dz-errormessage alert alert-danger>data-dz-errormessage</span>
+      </div>
+    </div>
+  </article>
+</div>
+</div>

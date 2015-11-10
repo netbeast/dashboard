@@ -10815,6 +10815,7 @@ angular.module('Dashboard')
 .controller('Activities#list', ['$scope', 'Activity',
 function ($scope, Activity) {
   Activity.all().success(function (data) {
+    console.log(data)
     $scope.activities = data
   })
 }])
@@ -10882,7 +10883,6 @@ function ($scope, App, $location, cfpLoadingBar) {
       }
     }
   })
-
   dz.on('success', function (file) {
     dz.removeFile(file)
     App.all().success(function (data) {
@@ -10890,11 +10890,8 @@ function ($scope, App, $location, cfpLoadingBar) {
       $scope.$apply()
     })
   })
-
   dz.on('complete', cfpLoadingBar.complete)
-
   dz.on('uploadprogress', cfpLoadingBar.inc)
-
   dz.on('error', function (file, error, xhr) {
     cfpLoadingBar.complete()
     toastr.error(error, 'Dashboard')
@@ -10932,6 +10929,43 @@ function ($scope, App) {
   $scope.uninstall = true
   App.all().success(function (data) {
     $scope.apps = data
+  })
+}])
+
+.controller('Apps#install', ['$scope', 'App', '$location', 'cfpLoadingBar',
+function ($scope, App, $location, cfpLoadingBar) {
+  var dz = new Dropzone('#dz-install', {
+    url: '/apps',
+    dictDefaultMessage: '',
+    previewTemplate: $('.dz-template').html(),
+    accept: function (file, done) {
+      cfpLoadingBar.start()
+      var fname = file.name
+      var ext = [fname.split('.')[1], fname.split('.')[2]].join('.')
+      if (ext === 'tar.gz' || ext === 'tgz.') {
+        console.log('Uploading file with extension ' + ext)
+        done()
+      } else {
+        done('Invalid file type. Must be a tar.gz')
+        this.removeFile(file)
+      }
+    }
+  })
+  dz.on('success', function (file) {
+    dz.removeFile(file)
+    App.all().success(function (data) {
+      $scope.apps = data
+      $scope.$apply()
+    })
+  })
+  dz.on('complete', function () {
+    $location.path('/')
+    cfpLoadingBar.complete()
+  })
+  dz.on('uploadprogress', cfpLoadingBar.inc)
+  dz.on('error', function (file, error, xhr) {
+    cfpLoadingBar.complete()
+    toastr.error(error, 'Dashboard')
   })
 }])
 
@@ -11101,7 +11135,10 @@ angular.module('Dashboard')
   console.log('loaded')
   return {
     restrict: 'E',
-    templateUrl: 'views/navbar.html'
+    templateUrl: 'views/navbar.html',
+    controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
+      $scope.user = $rootScope.user
+    }]
   }
 })
 
@@ -11208,11 +11245,16 @@ angular.module('Dashboard', ['ngRoute', 'angular-loading-bar', 'cfp.loadingBar']
   .when('/i/:name', {templateUrl: V + 'apps/live.html', controller: 'Activities#live'})
   .when('/activities', { templateUrl: V + 'apps/index.html', controller: 'Activities#list' })
   .when('/uninstall', { templateUrl: V + 'apps/index.html', controller: 'Apps#rm' })
+  .when('/install', { templateUrl: V + 'apps/install.html', controller: 'Apps#install' })
   .when('/login', { templateUrl: V + 'users/login.html', controller: 'Users#login' })
   .when('/signup', { templateUrl: V + 'users/signup.html', controller: 'Users#signup' })
   .when('/routes', { templateUrl: V + 'misc/routes.html', controller: 'Routes#index' })
   .when('/settings', { templateUrl: V + 'misc/settings.html', controller: 'Settings#index' })
   .otherwise({ redirectTo: '/' })
+}])
+
+.run(['Session', function (Session) {
+  Session.update()
 }])
 
 .config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {

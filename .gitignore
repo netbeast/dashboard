@@ -29,6 +29,7 @@ Thumbs.db
 .sass-cache/
 
 .sandbox/*
+resources
 
 test/coverage
 .errorlog

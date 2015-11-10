@@ -24,7 +24,6 @@ self.start = function (req, res, next) {
     self.ready(child, function (err, activity) {
       if (err) return next(err)
 
-      broker.success('child initiated at port ' + child.port)
       res.json(activity)
     })
   })
@@ -145,7 +144,7 @@ self.on('start', function (app) {
     })
 
     child.on('close', function (code) {
-      broker.info(' exited with code ' + code || 0, app.name)
+      // broker.info(' exited with code ' + code || 0, app.name)
       children[app.name] = undefined
     })
 

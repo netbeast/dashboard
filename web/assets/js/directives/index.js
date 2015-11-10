@@ -8,7 +8,10 @@ angular.module('Dashboard')
   console.log('loaded')
   return {
     restrict: 'E',
-    templateUrl: 'views/navbar.html'
+    templateUrl: 'views/navbar.html',
+    controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
+      $scope.user = $rootScope.user
+    }]
   }
 })
 

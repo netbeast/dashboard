@@ -55,17 +55,21 @@ $link-hover-decoration: underline !default;
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-// Google fonts
-@import url(https://fonts.googleapis.com/css?family=Montserrat);
-
 @font-face {
-font-family: 'Bebas Neue';
-font-style: normal;
-font-weight: normal;
-src: local('Bebas Neue'), url('../fonts/bebas/BebasNeue.woff') format('woff');
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Bebas Neue'), url('../fonts/bebas/BebasNeue-Regular.otf') format('otf');
 }
 
-$font-family-sans-serif:  'Montserrat', "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Roboto'), url('../fonts/roboto/Roboto-Regular.ttf') format('ttf');
+}
+
+$font-family-sans-serif:  'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 $font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default;

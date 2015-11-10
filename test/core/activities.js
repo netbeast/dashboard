@@ -53,7 +53,10 @@ describe('Activities', function () {
     request(URL + '/activities/', function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200)
-      JSON.parse(body).should.have.length.below(1)
+      body = JSON.parse(body).filter(function (app) {
+        return app.netbeast && app.netbeast.type !== 'service' && !app.netbeast.bootOnLoad
+      })
+      body.should.have.length.below(1)
       done()
     })
   })

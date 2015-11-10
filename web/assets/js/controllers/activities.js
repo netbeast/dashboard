@@ -6,6 +6,7 @@ angular.module('Dashboard')
 .controller('Activities#list', ['$scope', 'Activity',
 function ($scope, Activity) {
   Activity.all().success(function (data) {
+    console.log(data)
     $scope.activities = data
   })
 }])

@@ -29,8 +29,6 @@ Thumbs.db
 .sass-cache/
 
 .sandbox/*
-!.sandbox/philips-hue/
-!.sandbox/belkin-wemo/
 
 test/coverage
 .errorlog

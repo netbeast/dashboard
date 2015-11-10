@@ -104,7 +104,7 @@ loadAction(function (err, devices) {
     }
   })
 
-  router.get('/belkin-wemo/discover', function (req, res, next) {
+  router.get('/discover', function (req, res, next) {
     loadAction(function (err, devices) {
       if (err) res.status(500).send({ error: err, data: {} })
       else res.json({error: {}, data: devices})

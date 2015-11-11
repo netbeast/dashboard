@@ -35,6 +35,9 @@ function ($scope, $routeParams, App, Activity, $sce) {
 function ($scope, App, $location, cfpLoadingBar) {
   App.all().success(function (data) {
     $scope.apps = data
+    $scope._apps = data.filter(function (app) {
+      return !app.netbeast || app.netbeast && app.netbeast.type !== 'service'
+    })
   })
 
   var dz = new Dropzone('#drawer', {
@@ -101,11 +104,20 @@ function ($scope, App) {
   $scope.uninstall = true
   App.all().success(function (data) {
     $scope.apps = data
+    $scope._apps = data.filter(function (app) {
+      return !app.netbeast || app.netbeast && app.netbeast.type !== 'service'
+    })
   })
 }])
 
 .controller('Apps#install', ['$scope', 'App', '$location', 'cfpLoadingBar',
 function ($scope, App, $location, cfpLoadingBar) {
+  $scope.clone = function (url) {
+    App.install(url).success(function (data) {
+      $location.path('/')
+    })
+  }
+
   var dz = new Dropzone('#dz-install', {
     url: '/apps',
     dictDefaultMessage: '',

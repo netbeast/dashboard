@@ -1,26 +1,30 @@
 <section id="drawer" style="min-height: 100vh" class="container-fluid text-center">
 
-  <h2 ng-hide="activities" ng-if="apps.length === 0">
-    <br/><br/>
-    It seems you have not installed any apps yet.<br/><br/>
-    Find some at the <a class="link" target="_blank"
-    href="//market.netbeast.co">marketplace</a>
-  </h2>
+  <div ng-hide="activities" ng-if="_apps.length === 0" class="text-left container">
+    <h2>
+      <br/><br/>
+      It seems you have not installed any apps yet.<br/>
+      Find some at the <a class="link" target="_blank"
+      href="//netbeast.co">marketplace</a>.
+    </h2>
+    <h4>(Release coming soon)</h4>
+  </div>
 
-  <h2 ng-show="activities" ng-if="activities.length === 0">
-    <br/><br/>
-    It seems you have not any apps runnning.<br/><br/>
-    Install some from the <a class="link" target="_blank"
-    href="//netbeast.co">marketplace</a> or launch them from this Dashboard
-  </h2>
+  <div ng-show="activities" ng-if="_activities.length === 0" class="text-left container">
+    <h2>
+      <br/><br/>
+      It seems you have not any apps runnning.<br/>
+      Click on some from the <a href="/">dashboard!</a>
+    </h2>
+  </div>
 
-  <span ng-hide="activities" data-ng-repeat="app in apps">
-    <app app="app" ng-hide="app.netbeast.type === 'service'" class="col-xs-12 col-sm-4 col-md-3">
+  <span ng-hide="activities" data-ng-repeat="app in _apps">
+    <app app="app" class="col-xs-12 col-sm-4 col-md-3">
     </app>
   </span>
 
-  <span data-ng-repeat="activity in activities">
-    <app app="activity" ng-hide="activity.netbeast.type === 'service'" class="col-xs-12 col-sm-4 col-md-3">
+  <span data-ng-repeat="activity in _activities">
+    <app app="activity" class="col-xs-12 col-sm-4 col-md-3">
     </app>
   </span>
 

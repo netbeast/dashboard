@@ -28,6 +28,7 @@ Thumbs.db
 .log
 .sass-cache/
 
+node_modules
 .sandbox/*
 resources
 

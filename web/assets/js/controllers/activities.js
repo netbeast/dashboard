@@ -8,6 +8,9 @@ function ($scope, Activity) {
   Activity.all().success(function (data) {
     console.log(data)
     $scope.activities = data
+    $scope._activities = data.filter(function (app) {
+      return !app.netbeast || app.netbeast && app.netbeast.type !== 'service'
+    })
   })
 }])
 

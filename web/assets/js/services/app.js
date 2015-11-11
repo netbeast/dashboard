@@ -40,5 +40,14 @@ function AppFactory ($http, $sce, $location) {
     })
   }
 
+  self.install = function (url) {
+    if (!url) {
+      return toastr.warning('Git Repo URL field is empty')
+    }
+    return $http.post('/apps', {url: url}).error(function (data) {
+      toastr.error(data)
+    })
+  }
+
   return self
 }])

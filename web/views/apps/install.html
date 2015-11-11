@@ -14,13 +14,27 @@
   </div>
 
   <div class="container">
-    <blockquote class="text-left">
+    <blockquote>
       <br/>
-      <b>** Pro tip:</b>
+      <b>* Pro tip:</b>
       You can drag and drop apps directly to the dashboard homepage.
+      <br/>
+      ** Or directly, install from a public <i class="fa fa-git"></i> repo:
     </blockquote>
+    <img style="max-height: 30px; width: auto;" src="/img/icons/ArrowdownIcon.png" alt="go" />
   </div>
 
+  <div class="col-md-offset-3 col-md-6">
+    <br/>
+    <h3> <i class="fa fa-github"></i> Install app from GIT </h3>
+    <form ng-submit="clone(url)" method="post">
+      <input class="form-control input-lg" type="url" ng-model="url" placeholder="public git repo URL">
+      <br/>
+      <button type="subit" class="btn btn-primary btn-lg btn-block">Install</button>
+    </form>
+    <br/><br/><br/><br/><br/>
+    <br/><br/>
+  </div>
 </section>
 
 <!-- dropzone template, keep hidden with ng-hide -->

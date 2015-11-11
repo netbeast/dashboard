@@ -37,12 +37,12 @@ body, html {
 
 #brand {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  bottom: 15px;
+  right: 20px;
   opacity: 0.4;
   transition: all ease 0.5s;
   img {
-    width: 200px;
+    width: 120px;
     height: auto;
   }
   &:hover {

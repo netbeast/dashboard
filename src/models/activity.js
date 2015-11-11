@@ -89,7 +89,7 @@ self.ready = function (child, done) {
       } else if (resp && resp.statusCode < 400) {
         return done()
       } else {
-        setTimeout(callback, 200)
+        setTimeout(callback, 300)
       }
     })
   }, function (err) {

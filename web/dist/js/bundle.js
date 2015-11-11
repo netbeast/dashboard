@@ -10817,6 +10817,9 @@ function ($scope, Activity) {
   Activity.all().success(function (data) {
     console.log(data)
     $scope.activities = data
+    $scope._activities = data.filter(function (app) {
+      return !app.netbeast || app.netbeast && app.netbeast.type !== 'service'
+    })
   })
 }])
 
@@ -10863,6 +10866,9 @@ function ($scope, $routeParams, App, Activity, $sce) {
 function ($scope, App, $location, cfpLoadingBar) {
   App.all().success(function (data) {
     $scope.apps = data
+    $scope._apps = data.filter(function (app) {
+      return !app.netbeast || app.netbeast && app.netbeast.type !== 'service'
+    })
   })
 
   var dz = new Dropzone('#drawer', {
@@ -10929,11 +10935,20 @@ function ($scope, App) {
   $scope.uninstall = true
   App.all().success(function (data) {
     $scope.apps = data
+    $scope._apps = data.filter(function (app) {
+      return !app.netbeast || app.netbeast && app.netbeast.type !== 'service'
+    })
   })
 }])
 
 .controller('Apps#install', ['$scope', 'App', '$location', 'cfpLoadingBar',
 function ($scope, App, $location, cfpLoadingBar) {
+  $scope.clone = function (url) {
+    App.install(url).success(function (data) {
+      $location.path('/')
+    })
+  }
+
   var dz = new Dropzone('#dz-install', {
     url: '/apps',
     dictDefaultMessage: '',
@@ -11299,10 +11314,8 @@ function ActivityFactory ($http, $sce, $location) {
   self.open = function (scope, app) {
     $http.get('/apps/' + app + '/port')
     .success(function (data, status) {
-      console.log('GET /apps/' + app + '/port ->' + data)
-      var aux = window.location.host
-      aux = aux.substring(0, aux.indexOf(':'))
-      scope.url = 'http://' + aux + ':' + data
+      console.log('GET /activities/' + app + '/port ->' + data)
+      scope.url = '/i/' + app
       scope.href = $sce.trustAsResourceUrl(scope.url)
     })
     .error(function (data, status, headers, config) {
@@ -11366,6 +11379,15 @@ function AppFactory ($http, $sce, $location) {
   self.remove = self.delete = function (app) {
     return $http.delete('/apps/' + app)
     .error(function (data, status) {
+      toastr.error(data)
+    })
+  }
+
+  self.install = function (url) {
+    if (!url) {
+      return toastr.warning('Git Repo URL field is empty')
+    }
+    return $http.post('/apps', {url: url}).error(function (data) {
       toastr.error(data)
     })
   }

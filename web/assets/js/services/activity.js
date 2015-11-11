@@ -29,10 +29,8 @@ function ActivityFactory ($http, $sce, $location) {
   self.open = function (scope, app) {
     $http.get('/apps/' + app + '/port')
     .success(function (data, status) {
-      console.log('GET /apps/' + app + '/port ->' + data)
-      var aux = window.location.host
-      aux = aux.substring(0, aux.indexOf(':'))
-      scope.url = 'http://' + aux + ':' + data
+      console.log('GET /activities/' + app + '/port ->' + data)
+      scope.url = '/i/' + app
       scope.href = $sce.trustAsResourceUrl(scope.url)
     })
     .error(function (data, status, headers, config) {

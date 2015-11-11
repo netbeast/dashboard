@@ -1,6 +1,6 @@
 var Activity = require('../models/activity')
-var httpProxy = require('http-proxy')
 var express = require('express')
+var request = require('request')
 var router = express.Router()
 
 // Activities
@@ -17,7 +17,6 @@ router.route('/activities/:name')
 .post(Activity.start)
 .get(Activity.status)
 
-var proxy = httpProxy.createProxyServer({ws: true})
 router.use('/i/:name?', function (req, res) {
   var app, reqPath, referer, proxyUrl
   // Capture the referer to proxy the request
@@ -44,8 +43,15 @@ router.use('/i/:name?', function (req, res) {
 
     // This block of code actually pipes the request
     // to the running app and pass it to the client
-    proxyUrl = req.protocol + '://localhost:' + app.port
-    proxy.web(req, res, { target: proxyUrl })
+    proxyUrl = req.protocol + '://localhost:' + app.port + req.url
+
+    request({
+      url: proxyUrl,
+      method: req.method,
+      qs: req.query,
+      json: req.body
+    }).pipe(res)
+
   } else {
     // Here app is not running
     res.status(404).json('App not running')

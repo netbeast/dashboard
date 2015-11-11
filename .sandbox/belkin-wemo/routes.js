@@ -50,7 +50,7 @@ loadAction(function (err, devices) {
         elem.capabilities) return true
     })
     if (device.length > 0) {
-      if (!req.query.key) res.json({ error: {}, data: device })
+      if (!req.query.key) res.json({ error: {}, data: device[0] })
       else if (bulbvalues[req.query.key]) res.json({ error: {}, data: device[0][bulbvalues[req.query.key]] })
       else res.status(400).send({ error: 'Value ' + req.query.key + ' not available', data: {} })
     } else {
@@ -144,6 +144,8 @@ loadAction(function (err, devices) {
       Object.keys(req.body).forEach(function (key) {
         // Comprobar si este valor se le puede asignar a esta bombilla
         if (bulbvalues[key]) {
+          if (req.body[key] === true) req.body[key] = 1
+          else if (req.body[key] === false) req.body[key] = 0
           client.setDeviceStatus(req.params.id, bulbvalues[key], req.body[key])
         }
       })

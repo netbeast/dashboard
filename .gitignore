@@ -32,5 +32,7 @@ node_modules
 .sandbox/*
 resources
 
+node_modules
+
 test/coverage
 .errorlog

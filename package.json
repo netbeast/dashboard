@@ -47,7 +47,6 @@
     "istanbul": "^0.4.0",
     "md5": "^2.0.0",
     "mocha": "^2.3.3",
-    "socket.io-client": "^1.3.7",
     "store": "^1.3.17",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"

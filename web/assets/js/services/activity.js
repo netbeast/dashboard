@@ -26,13 +26,8 @@ function ActivityFactory ($http, $sce, $location) {
     })
   }
 
-  self.open = function (scope, app) {
-    $http.get('/apps/' + app + '/port')
-    .success(function (data, status) {
-      console.log('GET /activities/' + app + '/port ->' + data)
-      scope.url = '/i/' + app
-      scope.href = $sce.trustAsResourceUrl(scope.url)
-    })
+  self.open = function (app) {
+    return $http.get('/activities/' + app)
     .error(function (data, status, headers, config) {
       toastr.error(data)
       console.error('%s %s', status, data)

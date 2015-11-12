@@ -14,7 +14,13 @@ function ($scope, Activity) {
   })
 }])
 
-.controller('Activities#live', ['$scope', '$routeParams', 'Activity',
-function ($scope, $routeParams, Activity) {
-  Activity.open($scope, $routeParams.name)
+.controller('Activities#live', ['$scope', '$routeParams', 'Activity', '$sce',
+function ($scope, $routeParams, Activity, $sce) {
+  Activity.open($routeParams.name)
+  .success(function (data, status) {
+    var aux = window.location.host
+    aux = aux.substring(0, aux.indexOf(':'))
+    $scope.url = 'http://' + aux + ':' + data.port
+    $scope.href = $sce.trustAsResourceUrl($scope.url)
+  })
 }])

@@ -18,7 +18,7 @@ router.route('/activities/:name')
 .get(Activity.status)
 
 router.use('/i/:name?', function (req, res) {
-  var app, reqPath, referer, proxyUrl
+  var app, reqUrl, referer, proxyUrl
   // Capture the referer to proxy the request
   // in case the path is not clear enaugh
   if (req.get('referer') !== undefined) {
@@ -29,33 +29,40 @@ router.use('/i/:name?', function (req, res) {
   // with the port where it is running
   app = Activity.get(req.params.name) || Activity.get(referer)
 
-  if (app) {
-    // Here app is running
-    // In case the path is /i/:name
-    // instead of /i/:name/ you need this block
-    req.url = (req.url === '/') ? '' : req.url
-    reqPath = (referer !== undefined)
-    ? '/' + req.params.name + req.url
-    : req.url
-
-    req.url = reqPath.replace('/i/', '/')
-    req.url = req.url.replace('/' + app.name, '')
-
-    // This block of code actually pipes the request
-    // to the running app and pass it to the client
-    proxyUrl = req.protocol + '://localhost:' + app.port + req.url
-
-    request({
-      url: proxyUrl,
-      method: req.method,
-      qs: req.query,
-      json: req.body
-    }).pipe(res)
-
-  } else {
-    // Here app is not running
-    res.status(404).json('App not running')
+  if (!app) {
+    return res.status(404).json('App not running')
   }
+  // Here app is running
+  // In case the path is /i/:name
+  // instead of /i/:name/ you need this block
+
+  console.log('===================')
+  console.log('before::::')
+  console.log('referer', referer)
+  console.log('req.originalUrl %s', reqUrl)
+  console.log('===================')
+
+  reqUrl = req.originalUrl.replace('/i/', '/')
+  if (referer !== app.name) {
+    reqUrl = reqUrl.replace('/' + app.name, '')
+  }
+
+  // This block of code actually pipes the request
+  // to the running app and pass it to the client
+  proxyUrl = req.protocol + '://localhost:' + app.port + reqUrl
+
+  console.log('\n===================')
+  console.log('referer', referer)
+  console.log('reqUrl %s', reqUrl)
+  console.log('proxied URL %s', proxyUrl)
+  console.log('===================\n')
+
+  request({
+    url: proxyUrl,
+    method: req.method,
+    qs: req.query,
+    json: req.body
+  }).pipe(res)
 })
 
 module.exports = router

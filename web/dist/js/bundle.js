@@ -10823,9 +10823,15 @@ function ($scope, Activity) {
   })
 }])
 
-.controller('Activities#live', ['$scope', '$routeParams', 'Activity',
-function ($scope, $routeParams, Activity) {
-  Activity.open($scope, $routeParams.name)
+.controller('Activities#live', ['$scope', '$routeParams', 'Activity', '$sce',
+function ($scope, $routeParams, Activity, $sce) {
+  Activity.open($routeParams.name)
+  .success(function (data, status) {
+    var aux = window.location.host
+    aux = aux.substring(0, aux.indexOf(':'))
+    $scope.url = 'http://' + aux + ':' + data.port
+    $scope.href = $sce.trustAsResourceUrl($scope.url)
+  })
 }])
 
 },{}],67:[function(require,module,exports){
@@ -11311,13 +11317,8 @@ function ActivityFactory ($http, $sce, $location) {
     })
   }
 
-  self.open = function (scope, app) {
-    $http.get('/apps/' + app + '/port')
-    .success(function (data, status) {
-      console.log('GET /activities/' + app + '/port ->' + data)
-      scope.url = '/i/' + app
-      scope.href = $sce.trustAsResourceUrl(scope.url)
-    })
+  self.open = function (app) {
+    return $http.get('/activities/' + app)
     .error(function (data, status, headers, config) {
       toastr.error(data)
       console.error('%s %s', status, data)

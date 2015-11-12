@@ -2,6 +2,7 @@ var path = require('path')
 var events = require('events')
 var spawn = require('child_process').spawn
 
+var _ = require('lodash')
 var request = require('request')
 var portfinder = require('portfinder')
 var chalk = require('chalk')
@@ -24,7 +25,7 @@ self.start = function (req, res, next) {
     self.ready(child, function (err, activity) {
       if (err) return next(err)
 
-      res.json(activity)
+      res.json(_.pick(activity, ['name', 'port']))
     })
   })
 }
@@ -32,10 +33,10 @@ self.start = function (req, res, next) {
 self.status = function (req, res, next) {
   var child = children[req.params.name]
   if (!child) return next(new Error('App not running'))
-
   self.ready(child, function (err, activity) {
     if (err) return next(err)
-    res.status(200).json(activity)
+    console.log(_.pick(activity, ['name', 'port']))
+    res.json(_.pick(activity, ['name', 'port']))
   })
 }
 
@@ -72,7 +73,7 @@ self.all = function (done) {
 }
 
 self.ready = function (child, done) {
-  if (child.ready) return done(child)
+  if (child.ready) return done(null, child)
 
   const APP_URL = 'http://localhost:' + child.port
   const MAX_TRIALS = 9
@@ -87,7 +88,7 @@ self.ready = function (child, done) {
       if (err && err.code !== 'ECONNREFUSED') {
         return done(err)
       } else if (resp && resp.statusCode < 400) {
-        return done()
+        return done(null, child)
       } else {
         setTimeout(callback, 300)
       }
@@ -140,7 +141,8 @@ self.on('start', function (app) {
     })
 
     child.stderr.on('data', function (data) {
-      broker.error(data, app.name)
+      console.log(chalk.red('[%s] %s'), app.name, data)
+      // broker.error(data.toString(), app.name)
     })
 
     child.on('close', function (code) {

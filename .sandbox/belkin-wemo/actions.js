@@ -31,7 +31,6 @@ module.exports = function (callback) {
           location: 'none',
           topic: 'bridge',
           groupname: 'none',
-          method: 'get',
           hook: '/wemoBridge/' + deviceInfo.macAddress
         }},
         function (err, resp, body) {
@@ -54,20 +53,6 @@ module.exports = function (callback) {
               location: 'none',
               topic: 'lights',
               groupname: 'none',
-              method: 'get',
-              hook: '/wemoLights/' + lights.deviceId
-            }},
-            function (err, resp, body) {
-              if (err) callback(err, null)
-            })
-
-            request.post({url: config.LOCAL_URL + '/resources',
-            json: {
-              app: 'belkin-wemo',
-              location: 'none',
-              topic: 'lights',
-              groupname: 'none',
-              method: 'set',
               hook: '/wemoLights/' + lights.deviceId
             }},
             function (err, resp, body) {
@@ -78,7 +63,7 @@ module.exports = function (callback) {
       })
     } else if ((deviceInfo.deviceType === Wemo.DEVICE_TYPE.Insight) || (deviceInfo.deviceType === Wemo.DEVICE_TYPE.Switch)) {
       devices.push(deviceInfo)
-      var indx = objects.indexOf('/wemoSwitch/' + deviceInfo.macAddress)
+      indx = objects.indexOf('/wemoSwitch/' + deviceInfo.macAddress)
       if (indx >= 0) {
         objects.splice(indx, 1)
       } else {
@@ -88,20 +73,6 @@ module.exports = function (callback) {
           location: 'none',
           topic: 'switch',
           groupname: 'none',
-          method: 'get',
-          hook: '/wemoSwitch/' + deviceInfo.macAddress
-        }},
-        function (err, resp, body) {
-          if (err) callback(err, null)
-        })
-
-        request.post({url: config.LOCAL_URL + '/resources',
-        json: {
-          app: 'belkin-wemo',
-          location: 'none',
-          topic: 'switch',
-          groupname: 'none',
-          method: 'set',
           hook: '/wemoSwitch/' + deviceInfo.macAddress
         }},
         function (err, resp, body) {

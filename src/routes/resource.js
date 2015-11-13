@@ -15,12 +15,12 @@ router.get('/resources', function (req, res) {
 //  POST
 router.post('/resources', function (req, res) {
   Resource.findOne(req.body, function (err, resource) {
-    if (resource === undefined || err === 'No Row Finded!') {
+    if (resource === undefined || err === 'No Row Found!') {
       Resource.create(req.body, function (err, item) {
         if (err) res.status(500).send({ error: err, data: {} })
         else res.status(204).end()
       })
-    } else if (err && err !== 'No Row Finded!') res.status(500).send({ error: err, data: {} })
+    } else if (err && err !== 'No Row Found!') res.status(500).send({ error: err, data: {} })
     else res.status(500).send({ error: 'This action exists!', data: {} })
   })
 })

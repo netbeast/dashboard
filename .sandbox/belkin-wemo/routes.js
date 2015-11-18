@@ -49,9 +49,10 @@ loadAction(function (err, devices) {
       if (elem.deviceId === req.params.id && elem.currentState &&
         elem.capabilities) return true
     })
+
     if (device.length > 0) {
       if (!req.query.key) res.json({ error: {}, data: device[0] })
-      else if (bulbvalues[req.query.key]) res.json({ error: {}, data: device[0][bulbvalues[req.query.key]] })
+      else if (bulbvalues[req.query.key]) res.json({ error: {}, data: device[0].internalState[bulbvalues[req.query.key]] })
       else res.status(400).send({ error: 'Value ' + req.query.key + ' not available', data: {} })
     } else {
       res.status(404).send({ error: 'Not found', data: {} })

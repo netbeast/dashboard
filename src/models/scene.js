@@ -29,7 +29,7 @@ Scene.find = function (query, callback) {
   var result = []
   helper.findDevice(query, function (err, row) {
     if (err) callback.call(this, err)
-    else if (row == '') callback.call(this, 'No Row Finded!')
+    else if (row == '') callback.call(this, 'No Row Found!')
     else {
       row.forEach(function (action) {
         result.push(new Scene(action))
@@ -42,7 +42,7 @@ Scene.find = function (query, callback) {
 Scene.findOne = function (query, callback) {
   helper.findDevice(query, function (err, row) {
     if (err) callback.call(this, err)
-    else if (row == '') callback.call(this, 'No Row Finded!')
+    else if (row == '') callback.call(this, 'No Row Found!')
     else callback.call(this, null, new Scene(row[row.length - 1]))
   })
 }

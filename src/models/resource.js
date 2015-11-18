@@ -10,7 +10,6 @@ function Resource (item) {
   this.location = item.location
   this.topic = item.topic
   this.groupname = item.groupname
-  this.method = item.method
   this.hook = item.hook
 }
 
@@ -29,7 +28,7 @@ Resource.find = function (query, callback) {
   var result = []
   helper.findAction(query, function (err, row) {
     if (err) callback.call(this, 'err')
-    else if (row.length < 1) callback.call(this, 'No Row Found!')
+    else if (row == '') callback.call(this, 'No Row Found!')
     else {
       row.forEach(function (action) {
         result.push(new Resource(action))
@@ -54,7 +53,6 @@ Resource.prototype.save = function (callback) {
     location: this.location,
     topic: this.topic,
     groupname: this.groupname,
-    method: this.method,
     hook: this.hook
   }
   helper.insertAction(schema,	function (err) {

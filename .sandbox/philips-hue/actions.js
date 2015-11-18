@@ -31,20 +31,6 @@ module.exports = function (callback) {
               location: 'none',
               topic: 'lights',
               groupname: 'none',
-              method: 'get',
-              hook: '/hueLights/' + item.id
-            }},
-            function (err, resp, body) {
-              if (err) callback(err, null)
-            })
-
-            request.post({url: config.LOCAL_URL + '/resources',
-            json: {
-              app: 'philips-hue',
-              location: 'none',
-              topic: 'lights',
-              groupname: 'none',
-              method: 'set',
               hook: '/hueLights/' + item.id
             }},
             function (err, resp, body) {

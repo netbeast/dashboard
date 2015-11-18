@@ -10,7 +10,6 @@ helper.createTable = function(callback) {
   + 'location TEXT NOT NULL, '
   + 'topic TEXT NOT NULL, '
   + 'groupname TEXT NOT NULL, '
-  + 'method TEXT NOT NULL, '
   + 'hook TEXT NOT NULL)',
   callback)
 
@@ -18,9 +17,9 @@ helper.createTable = function(callback) {
 
 helper.insertAction = function(query, callback) {
   var statement = db.prepare ("INSERT INTO actions ("
-  + "'app', 'location', 'topic', 'groupname', 'method', 'hook') "
-  + "VALUES (?,?,?,?,?,?)")
-  statement.run(query.app, query.location, query.topic, query.groupname, query.method, query.hook,
+  + "'app', 'location', 'topic', 'groupname', 'hook') "
+  + "VALUES (?,?,?,?,?)")
+  statement.run(query.app, query.location, query.topic, query.groupname, query.hook,
     callback)
     statement.finalize()
   }

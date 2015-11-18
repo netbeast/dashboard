@@ -15,8 +15,8 @@ router.get('/scenes', function (req, res) {
 //  POST
 router.post('/scenes', function (req, res) {
   Scene.findOne(req.body, function (err, device) {
-    if (err) res.status(500).send({ error: err, data: {} })
-    else if (device === undefined) {
+    if (err && err !== 'No Row Found!') res.status(500).send({ error: err, data: {} })
+    else if (device === undefined || err === 'No Row Found!') {
       Scene.create(req.body, function (err, item) {
         if (err) res.status(500).send({ error: err, data: {} })
         else res.status(204).end()

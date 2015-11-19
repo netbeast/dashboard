@@ -12,6 +12,6 @@ config.port = process.env.ENV === 'development' ? 8000 : 80
 config.LOCAL_URL = 'http://localhost:' + config.port
 config.tmpDir = '/tmp'
 config.configDir = __dirname
-config.publicDir = path.join(root, './web')
+config.publicDir = path.join(root, './public')
 config.viewsDir = path.join(config.publicDir, 'views')
 config.appsDir = path.join(root, './.sandbox')

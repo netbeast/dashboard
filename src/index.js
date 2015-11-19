@@ -5,8 +5,9 @@ var logger = require('morgan')
 var favicon = require('serve-favicon')
 var bodyParser = require('body-parser')
 var express = require('express')
+var broker = require('./helpers/broker')
 
-var config = require('config')
+var config = require('../config')
 
 var app = module.exports = express()
 
@@ -27,5 +28,6 @@ app.use(function (err, req, res, next) {
   if (!err.statusCode || err.statusCode === 500) {
     fs.appendFile('./.errorlog', err.stack)
   }
+  broker.error(err.message)
   res.status(err.statusCode || 500).send(err.message)
 })

@@ -2,12 +2,12 @@ var path = require('path')
 var express = require('express')
 var fs = require('fs-extra')
 
-var config = require('config')
-var installer = require('src/installer')
-var App = require('src/models/app')
-var Activity = require('src/models/activity')
-var NotFound = require('src/util/not-found')
-var InvalidFormat = require('src/util/invalid-format')
+var config = require('../../config')
+var installer = require('../installer')
+var App = require('../models/app')
+var Activity = require('../models/activity')
+var NotFound = require('../util/not-found')
+var InvalidFormat = require('../util/invalid-format')
 
 var router = express.Router()
 

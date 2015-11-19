@@ -36,7 +36,7 @@ App.getPackageJson = function (app, done) {
 }
 
 App.install = function (bundle, done) {
-  if (_isUrl(bundle)) return _install.from.git(bundle, done)
+  if (_isUrl(bundle)) return _install.from.url(bundle, done)
 
   fs.lstat(bundle, function (err, stats) {
     if (err) return done(err)

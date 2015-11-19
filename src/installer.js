@@ -1,10 +1,10 @@
 var path = require('path')
 var multer = require('multer')
 
-var config = require('config')
-var broker = require('src/helpers/broker')
-var error = require('src/util/error')
-var App = require('src/models/app')
+var config = require('../config')
+var error = require('./util/invalid-format')
+var App = require('./models/app')
+var broker = require('./helpers/broker')
 
 module.exports.multer = multer({
   dest: config.tmpDir,
@@ -15,7 +15,7 @@ module.exports.multer = multer({
     var fname = file.name
     var ext = [fname.split('.')[1], fname.split('.')[2]].join('.')
     if (ext !== 'tar.gz' && ext !== 'tgz.') {
-      error.handle('errorMime', res)
+      res.status(403).send('Invalid Package. Must be ')
       return false
     }
   },
@@ -25,20 +25,23 @@ module.exports.multer = multer({
 })
 
 module.exports.process = function (req, res, next) {
+  console.log(req.originalUrl)
   if (!req.uploadedFile) return next()
 
   var tarball = path.join(config.tmpDir, req.uploadedFile.name)
-  App.install(tarball, function (err) {
+  App.install(tarball, function (err, appJson) {
+    broker.success(appJson.name + ' installed')
     if (err) return error.handle(err, res)
     res.status(204).end()
   })
 }
 
 module.exports.git = function (req, res, next) {
+  console.log(req.originalUrl)
   if (!req.body.url) return next()
 
-  broker.info('Installing from git...')
-  App.install(req.body.url, function (err, repo) {
+  App.install(req.body.url, function (err, appJson) {
+    broker.success(appJson.name + ' installed')
     if (err) return next(err)
     res.status(204).end()
   })

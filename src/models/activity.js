@@ -8,8 +8,8 @@ var portfinder = require('portfinder')
 var chalk = require('chalk')
 var async = require('async')
 
-var broker = require('src/helpers/broker')
-var config = require('config')
+var broker = require('../helpers/broker')
+var config = require('../../config')
 var App = require('./app')
 
 portfinder.basePort = 3000

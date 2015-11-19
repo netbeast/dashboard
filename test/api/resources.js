@@ -20,7 +20,6 @@ describe('Resources', function () {
       topic: 'topic',
       location: 'loc',
       groupname: 'group',
-      method: 'meth',
       hook: 'hook'
     }
 
@@ -36,7 +35,7 @@ describe('Resources', function () {
       should.not.exist(err)
       resources.forEach(function (item) {
         expect(item).to.have.all.keys(
-          'id', 'app', 'topic', 'location', 'groupname', 'method', 'hook')
+          'id', 'app', 'topic', 'location', 'groupname', 'hook')
       })
       done()
     })

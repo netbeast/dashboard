@@ -7,12 +7,7 @@ function AppFactory ($http, $sce, $location) {
   var self = {}
 
   self.get = function (app) {
-    return $http.get('/apps/' + app).error(function (data) {
-      console.log(data.toString())
-      toastr.error(data.toString())
-      $location.path('/')
-      $location.replace()
-    })
+    return $http.get('/apps/' + app)
   }
 
   self.all = function () {
@@ -21,32 +16,21 @@ function AppFactory ($http, $sce, $location) {
 
   self.getReadme = function (app) {
     return $http.get('/apps/' + app + '/readme')
-    .error(function (data) {
-      toastr.error(data)
-    })
   }
 
   self.update = function (app, pkg) {
     return $http.put('/apps/' + app, pkg)
-    .error(function (data, status) {
-      toastr.error(data)
-    })
   }
 
   self.remove = self.delete = function (app) {
     return $http.delete('/apps/' + app)
-    .error(function (data, status) {
-      toastr.error(data)
-    })
   }
 
   self.install = function (url) {
     if (!url) {
       return toastr.warning('Git Repo URL field is empty')
     }
-    return $http.post('/apps', {url: url}).error(function (data) {
-      toastr.error(data)
-    })
+    return $http.post('/apps', {url: url})
   }
 
   return self

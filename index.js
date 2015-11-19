@@ -8,13 +8,11 @@ var http = require('http')
 var forever = require('forever-monitor')
 var io = require('socket.io')()
 var cmd = require('commander')
-require('app-module-path')
-.addPath(__dirname)
 
 // Project libraries
-var app = require('src')
-var config = require('config')
-var bootOnload = require('src/boot-on-load')
+var app = require('./src')
+var config = require('./config')
+var bootOnload = require('./src/boot-on-load')
 
 cmd
 .version('0.1.42')
@@ -32,9 +30,9 @@ server.listen(cmd.port || config.port, function () {
 })
 
 io.listen(server)
-io.on('connection', require('src/broker'))
+io.on('connection', require('./src/broker'))
 
 // Start the deamon that recognises other netbeasts
-var deamonBin = path.join(__dirname, 'bin/deamon.js')
+var deamonBin = path.join(__dirname, './bin/deamon.js')
 var deamon = new (forever.Monitor)(deamonBin, {max: 1})
 deamon.start()

@@ -11288,7 +11288,6 @@ require('./directives')
 require('./controllers')
 
 },{"./broker":65,"./controllers":68,"./directives":72,"./services":78}],75:[function(require,module,exports){
-(function (__filename){
 'use strict'
 
 /* global angular, toastr */
@@ -11298,9 +11297,7 @@ angular.module('Dashboard')
 function ActivityFactory ($http, $sce, $location) {
   var self = {}
   self.all = function () {
-    return $http.get('/activities/').error(function (data) {
-      toastr.error(data)
-    })
+    return $http.get('/activities/')
   }
 
   self.stop = function (app) {
@@ -11310,18 +11307,11 @@ function ActivityFactory ($http, $sce, $location) {
       var icon = document.getElementById(app)
       icon.parentElement.removeChild(icon)
     })
-    .error(function (data, status) {
-      toastr.error(data, 'An error has occurred when stopping the app')
-      console.error(__filename + ' @ self.stop()')
-      console.log(data)
-    })
   }
 
   self.open = function (app) {
     return $http.get('/activities/' + app)
     .error(function (data, status, headers, config) {
-      toastr.error(data)
-      console.error('%s %s', status, data)
       $location.path('/')
       $location.replace()
     })
@@ -11329,17 +11319,10 @@ function ActivityFactory ($http, $sce, $location) {
 
   self.launch = function (app) {
     return $http.post('/activities/' + app)
-
-    .error(function (data, status, headers, config) {
-      toastr.error(data, 'Dashboard')
-      console.log(status + ' when PUT /launch/' + app + ' -> ' + data)
-    })
   }
 
   return self
 }])
-
-}).call(this,"/web/assets/js/services/activity.js")
 
 },{}],76:[function(require,module,exports){
 'use strict'
@@ -11351,12 +11334,7 @@ function AppFactory ($http, $sce, $location) {
   var self = {}
 
   self.get = function (app) {
-    return $http.get('/apps/' + app).error(function (data) {
-      console.log(data.toString())
-      toastr.error(data.toString())
-      $location.path('/')
-      $location.replace()
-    })
+    return $http.get('/apps/' + app)
   }
 
   self.all = function () {
@@ -11365,32 +11343,21 @@ function AppFactory ($http, $sce, $location) {
 
   self.getReadme = function (app) {
     return $http.get('/apps/' + app + '/readme')
-    .error(function (data) {
-      toastr.error(data)
-    })
   }
 
   self.update = function (app, pkg) {
     return $http.put('/apps/' + app, pkg)
-    .error(function (data, status) {
-      toastr.error(data)
-    })
   }
 
   self.remove = self.delete = function (app) {
     return $http.delete('/apps/' + app)
-    .error(function (data, status) {
-      toastr.error(data)
-    })
   }
 
   self.install = function (url) {
     if (!url) {
       return toastr.warning('Git Repo URL field is empty')
     }
-    return $http.post('/apps', {url: url}).error(function (data) {
-      toastr.error(data)
-    })
+    return $http.post('/apps', {url: url})
   }
 
   return self
@@ -11451,18 +11418,12 @@ function SessionFactory ($http, $rootScope, $location) {
       toastr.success('Welcome ' + data.alias)
       self.save(data)
     })
-    .error(function (data) {
-      toastr.error(data)
-    })
   }
 
   self.update = function () {
     console.log('Retrieving session...')
     $http.get('/sessions').success(function (data) {
       self.save(data)
-    })
-    .error(function (data) {
-      console.log('User does not exist [%s]', data)
     })
   }
 
@@ -11499,13 +11460,11 @@ angular.module('Dashboard')
 .factory('User', ['$http', '$location', 'Session', '$rootScope',
 function ActivitiesFactory ($http, $location, Session, $rootScope) {
   var self = {}
+  
   self.get = function (alias) {
     return $http.get('/users/' + alias)
-    .error(function (data, status, headers, config) {
-      console.log('error fetching user: %s', data.toString())
-      toastr.error('Error fetching user. ' + data.toString())
-    })
   }
+
   self.all = function () {
     return self.get('')
   }
@@ -11518,9 +11477,6 @@ function ActivitiesFactory ($http, $location, Session, $rootScope) {
       return $http.post('/signup', user)
       .success(function (data, status, headers, config) {
         toastr.success('An activation code has been sent to ' + data.email)
-      })
-      .error(function (data, status, headers, config) {
-        toastr.error(data, 'Check again your fields')
       })
     }
   }
@@ -11538,9 +11494,6 @@ function ActivitiesFactory ($http, $location, Session, $rootScope) {
         toastr.success('Your data has been successfully updated')
         Session.save(user)
       })
-      .error(function (data, status, headers, config) {
-        toastr.error(data, 'Check again your fields')
-      })
     }
   }
 
@@ -11551,9 +11504,6 @@ function ActivitiesFactory ($http, $location, Session, $rootScope) {
         toastr.success('Sorry to see you go :[')
         Session.logout()
         return $location.path('/')
-      })
-      .error(function (data, status, headers, config) {
-        toastr.error(data, 'Could not perform the deletion :(')
       })
     }
   }

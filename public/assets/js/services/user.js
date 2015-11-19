@@ -9,13 +9,11 @@ angular.module('Dashboard')
 .factory('User', ['$http', '$location', 'Session', '$rootScope',
 function ActivitiesFactory ($http, $location, Session, $rootScope) {
   var self = {}
+  
   self.get = function (alias) {
     return $http.get('/users/' + alias)
-    .error(function (data, status, headers, config) {
-      console.log('error fetching user: %s', data.toString())
-      toastr.error('Error fetching user. ' + data.toString())
-    })
   }
+
   self.all = function () {
     return self.get('')
   }
@@ -28,9 +26,6 @@ function ActivitiesFactory ($http, $location, Session, $rootScope) {
       return $http.post('/signup', user)
       .success(function (data, status, headers, config) {
         toastr.success('An activation code has been sent to ' + data.email)
-      })
-      .error(function (data, status, headers, config) {
-        toastr.error(data, 'Check again your fields')
       })
     }
   }
@@ -48,9 +43,6 @@ function ActivitiesFactory ($http, $location, Session, $rootScope) {
         toastr.success('Your data has been successfully updated')
         Session.save(user)
       })
-      .error(function (data, status, headers, config) {
-        toastr.error(data, 'Check again your fields')
-      })
     }
   }
 
@@ -61,9 +53,6 @@ function ActivitiesFactory ($http, $location, Session, $rootScope) {
         toastr.success('Sorry to see you go :[')
         Session.logout()
         return $location.path('/')
-      })
-      .error(function (data, status, headers, config) {
-        toastr.error(data, 'Could not perform the deletion :(')
       })
     }
   }

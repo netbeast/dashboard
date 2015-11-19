@@ -22,18 +22,12 @@ function SessionFactory ($http, $rootScope, $location) {
       toastr.success('Welcome ' + data.alias)
       self.save(data)
     })
-    .error(function (data) {
-      toastr.error(data)
-    })
   }
 
   self.update = function () {
     console.log('Retrieving session...')
     $http.get('/sessions').success(function (data) {
       self.save(data)
-    })
-    .error(function (data) {
-      console.log('User does not exist [%s]', data)
     })
   }
 

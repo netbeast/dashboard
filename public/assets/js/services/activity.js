@@ -7,9 +7,7 @@ angular.module('Dashboard')
 function ActivityFactory ($http, $sce, $location) {
   var self = {}
   self.all = function () {
-    return $http.get('/activities/').error(function (data) {
-      toastr.error(data)
-    })
+    return $http.get('/activities/')
   }
 
   self.stop = function (app) {
@@ -19,18 +17,11 @@ function ActivityFactory ($http, $sce, $location) {
       var icon = document.getElementById(app)
       icon.parentElement.removeChild(icon)
     })
-    .error(function (data, status) {
-      toastr.error(data, 'An error has occurred when stopping the app')
-      console.error(__filename + ' @ self.stop()')
-      console.log(data)
-    })
   }
 
   self.open = function (app) {
     return $http.get('/activities/' + app)
     .error(function (data, status, headers, config) {
-      toastr.error(data)
-      console.error('%s %s', status, data)
       $location.path('/')
       $location.replace()
     })
@@ -38,11 +29,6 @@ function ActivityFactory ($http, $sce, $location) {
 
   self.launch = function (app) {
     return $http.post('/activities/' + app)
-
-    .error(function (data, status, headers, config) {
-      toastr.error(data, 'Dashboard')
-      console.log(status + ' when PUT /launch/' + app + ' -> ' + data)
-    })
   }
 
   return self

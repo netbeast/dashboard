@@ -3,7 +3,7 @@
 // that logs messages to refactor code
 
 var chalk = require('chalk')
-var config = require('config')
+var config = require('../../config')
 
 var io = require('socket.io-client')
 var socket = io.connect(config.LOCAL_URL)

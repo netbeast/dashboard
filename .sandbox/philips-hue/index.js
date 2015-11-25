@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
 var app = require('./src')
-,	  cmd = require('commander')
-, 	http = require('http')
-
+var cmd = require('commander')
+var http = require('http')
 
 cmd
 .version('0.1.42')
@@ -16,7 +15,6 @@ app.set('port', port)
 
 // Launch server with web sockets
 var server = http.createServer(app)
-var io = require('socket.io')(server)
 
 // Listen on provided port, on all network interfaces.
 server.listen(port)
@@ -37,14 +35,14 @@ server.on('error', function (error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-    console.error(bind + ' requires elevated privileges')
-    process.exit(1)
-    break
+      console.error(bind + ' requires elevated privileges')
+      process.exit(1)
+      break
     case 'EADDRINUSE':
-    console.error(bind + ' is already in use')
-    process.exit(1)
-    break
+      console.error(bind + ' is already in use')
+      process.exit(1)
+      break
     default:
-    throw error
+      throw error
   }
 })

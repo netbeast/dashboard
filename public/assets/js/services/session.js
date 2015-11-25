@@ -8,10 +8,10 @@ angular.module('Dashboard')
 function SessionFactory ($http, $rootScope, $location) {
   var self = {}
   self.save = function (data) {
-    console.log('Saving session...')
+    // console.log('Saving session...')
     $rootScope.user = data
     store.set('user', data)
-    console.log(data)
+    // console.log(data)
   }
 
   self.login = function (credentials) {

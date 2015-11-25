@@ -76,7 +76,7 @@ self.ready = function (child, done) {
   if (child.ready) return done(null, child)
 
   const APP_URL = 'http://localhost:' + child.port
-  const MAX_TRIALS = 9
+  const MAX_TRIALS = 20
   var k = 0
 
   function keepTrying () { return k < MAX_TRIALS }
@@ -90,7 +90,7 @@ self.ready = function (child, done) {
       } else if (resp && resp.statusCode < 400) {
         return done(null, child)
       } else {
-        setTimeout(callback, 300)
+        setTimeout(callback, 400)
       }
     })
   }, function (err) {

@@ -9,12 +9,12 @@ $grey-lighter:           lighten($grey-base, 93.5%) !default; // #eee*/
   font-family: 'Roboto';
   font-style: normal;
   font-weight: normal;
-  src: local("Roboto"), url("../fonts/bebas/Roboto.ttf") format("ttf"); }
+  src: local("Roboto"), url("/dist/fonts/roboto/Roboto.ttf") format("ttf"); }
 @font-face {
   font-family: 'Bebas Neue';
   font-style: normal;
   font-weight: normal;
-  src: local("Bebas Neue"), url("../fonts/bebas/BebasNeue.woff") format("woff"); }
+  src: local("Bebas Neue"), url("/dist/fonts/bebas/BebasNeue-Regular.otf") format("opentype"); }
 /*$font-size-h1:            floor(($font-size-base * 2.6)) !default; // ~36px
 $font-size-h2:            floor(($font-size-base * 2.15)) !default; // ~30px
 $font-size-h3:            ceil(($font-size-base * 1.7)) !default; // ~24px

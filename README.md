@@ -56,7 +56,7 @@ You can build IoT apps using only web technologies: javascript and HTML5! Also w
 * Report a bug or enter discussion at [issues](https://github.com/netbeast/docs/issues)
 * Other resources: [Docs](https://github.com/netbeast/docs/wiki), Netbeast [API](https://github.com/netbeast/API)
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast/xway?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast/docs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 
 <img src="https://github.com/netbeast/docs/blob/master/img/open-source.png?raw=true" height="140px" width="auto"/>

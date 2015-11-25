@@ -10829,6 +10829,7 @@ function ($scope, $routeParams, Activity, $sce) {
   .success(function (data, status) {
     var aux = window.location.host
     aux = aux.substring(0, aux.indexOf(':'))
+    aux = aux || window.location.host // recover if empty string
     $scope.url = 'http://' + aux + ':' + data.port
     $scope.href = $sce.trustAsResourceUrl($scope.url)
   })
@@ -11404,10 +11405,10 @@ angular.module('Dashboard')
 function SessionFactory ($http, $rootScope, $location) {
   var self = {}
   self.save = function (data) {
-    console.log('Saving session...')
+    // console.log('Saving session...')
     $rootScope.user = data
     store.set('user', data)
-    console.log(data)
+    // console.log(data)
   }
 
   self.login = function (credentials) {

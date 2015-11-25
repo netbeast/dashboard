@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-var app = require('./src'),
-  cmd = require('commander'),
-  http = require('http')
+var app = require('./src')
+var cmd = require('commander')
+var http = require('http')
 
 cmd
   .version('0.1.42')
@@ -15,7 +15,6 @@ app.set('port', port)
 
 // Launch server with web sockets
 var server = http.createServer(app)
-var io = require('socket.io')(server)
 
 // Listen on provided port, on all network interfaces.
 server.listen(port)

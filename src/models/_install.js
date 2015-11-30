@@ -47,9 +47,8 @@ function _installFromTar (tarball, done) {
   var tmpDir = path.join(config.tmpDir, '' + new Date().getTime())
 
   broker.info('Unbundling the app...')
-  new Decompress({mode: '755'}).src(tarball)
-  .dest(tmpDir).use(Decompress.targz({strip: 1}))
-  .run(function (err) {
+  new Decompress().src(tarball).dest(tmpDir)
+  .use(Decompress.targz({ strip: 1 })).run(function (err) {
     if (err) return done(err)
 
     _installFromDir(tmpDir, function (err, appJson) {

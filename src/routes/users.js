@@ -3,7 +3,7 @@ var client = require('request')
 // var crypto = require('crypto')
 var router = express.Router()
 
-const API_URL = 'https://market.netbeast.co'
+const API_URL = 'https://netbeast.co/api'
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 

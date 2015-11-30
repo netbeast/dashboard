@@ -1,4 +1,4 @@
-var helper = require('../lib/resource')
+var helper = require('../helpers/resource')
 
 helper.createTable(function (err, data) {
   if (err) throw err

@@ -1,4 +1,4 @@
-var helper = require('../lib/scene')
+var helper = require('../helpers/scene')
 
 helper.createTable(function (err, data) {
   if (err) throw err

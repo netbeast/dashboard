@@ -132,6 +132,7 @@ self.on('start', function (app) {
 
     // child management
     var entryPoint = path.join(config.appsDir, app.name, pkgJson.main)
+    console.log(entryPoint)
     var child = spawn(entryPoint, ['--port', app.port], {
       cwd: path.join(config.appsDir, app.name)
     })

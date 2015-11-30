@@ -3,7 +3,7 @@ var express = require('express')
 var fs = require('fs-extra')
 
 var config = require('../../config')
-var installer = require('../installer')
+var installer = require('../middleware/installer')
 var App = require('../models/app')
 var Activity = require('../models/activity')
 var NotFound = require('../util/not-found')

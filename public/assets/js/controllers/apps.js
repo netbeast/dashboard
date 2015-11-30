@@ -58,14 +58,14 @@ function ($scope, App, $location, cfpLoadingBar) {
       }
     }
   })
-  dz.on('success', function (file) {
+  dz.on('complete', function (file) {
     dz.removeFile(file)
+    cfpLoadingBar.complete()
     App.all().success(function (data) {
       $scope.apps = data
       $scope.$apply()
     })
   })
-  dz.on('complete', cfpLoadingBar.complete)
   dz.on('uploadprogress', cfpLoadingBar.inc)
   dz.on('error', function (file, error, xhr) {
     cfpLoadingBar.complete()

@@ -1,0 +1,35 @@
+{
+  "name": "xy-get-started",
+  "version": "1.0.0",
+  "description": "A repo with code about how to make simple Netbeast apps.",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.12.3",
+    "minimist": "^1.1.0",
+    "netbeast": "^0.0.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node server.js --port 31416",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/netbeast-co/get-started"
+  },
+  "keywords": [
+    "RaspberryPi",
+    "Raspberry",
+    "pi",
+    "smart home",
+    "iot",
+    "netbeast",
+    "netbeast.co"
+  ],
+  "author": "jesus@netbeast.co",
+  "license": "GPL 2",
+  "bugs": {
+    "url": "https://github.com/netbeast-co/get-started/issues"
+  },
+  "homepage": "https://github.com/netbeast-co/get-started"
+}

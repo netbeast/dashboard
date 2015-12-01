@@ -1,10 +1,10 @@
 var path = require('path')
 var multer = require('multer')
 
-var config = require('../config')
-var error = require('./util/invalid-format')
-var App = require('./models/app')
-var broker = require('./helpers/broker')
+var config = require('../../config')
+var error = require('../util/invalid-format')
+var App = require('../models/app')
+var broker = require('../helpers/broker')
 
 module.exports.multer = multer({
   dest: config.tmpDir,

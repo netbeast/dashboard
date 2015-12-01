@@ -7,15 +7,18 @@
 
 var path = require('path')
 
-var inquirer = require('inquirer')
 var cli = require('commander')
 var fs = require('fs-extra')
+var forever = require('forever-monitor')
 
 var App = require('../lib/app')
 var scan = require('../lib/scan')
 var install = require('../lib/install')
 var publish = require('../lib/publish')
 var pkg = require('../package.json')
+
+const DASHBOARD_BIN = path.join(__dirname, '../index.js')
+const DASHBOARD_DEAMON = path.join(__dirname, './deamon.js')
 
 cli.version(pkg.version)
 
@@ -40,7 +43,7 @@ cli.command('unpackage [app]').alias('unpkg')
 .description('Uncompress your app from tar.gz')
 .action(App.unpackage)
 
-cli.command('publish <file>').alias('upload')
+cli.command('publish <file>')
 .description("Upload your app to the netbeast's repos")
 .action(publish)
 
@@ -50,37 +53,7 @@ cli.command('scan').alias('discover')
 
 cli.command('install <file> [host]')
 .description('Upload an app to a Netbeast remotely')
-.action(function (file, host) {
-  // 1st param forces silent prompt when not null (jesus, 01/08/15)
-  // --dont remember what this comment means (jesus, 03/09/15)
-
-  if (host) {
-    return install(file, host)
-  }
-
-  scan(function (beasts) {
-    if (beasts.length === 0) {
-      return // no beasts found
-    } else if (beasts.length === 1) {
-      install(file, beasts[0])
-    } else {
-      var question = {
-        name: 'netbeast', // question name hash
-        message: 'Where do you want to install ' + file + '?',
-        choices: beasts.concat('Cancel'),
-        type: 'list'
-      }
-
-      inquirer.prompt(question, function (answers) {
-        if (answers.netbeast === 'Cancel') {
-          return console.log('\nBye!\n')
-        }
-
-        install(file, answers.netbeast)
-      })
-    }
-  })
-})
+.action(install)
 
 cli.command('forget')
 .description('Reset netbeast-cli configuration')
@@ -88,13 +61,26 @@ cli.command('forget')
   fs.removeSync(__dirname + '/.nconf')
 })
 
+cli.command('start')
+.description('Launches netbeast dashboard')
+.option('--silent', 'Capture dashboard output on console')
+.option('-p, --port <n>', 'Port to start the HTTP server', parseInt)
+.action(function (options) {
+  var opts = {}
+  opts.max = 1
+  opts.silent = options.silent
+  opts.killTree = true
+  opts.cwd = __dirname + '/../'
+  opts.args = ['--port', options.port || 8000]
+  var dashboard = new (forever.Monitor)(DASHBOARD_BIN, opts)
+  dashboard.start()
+  var deamon = new (forever.Monitor)(DASHBOARD_DEAMON, opts)
+  deamon.start()
+})
+
 cli.parse(process.argv)
 
-// Check the cli.args obj
-const NO_COMMAND_SPECIFIED = cli.args.length === 0
-
-// Handle it however you like
-if (NO_COMMAND_SPECIFIED) {
-  // e.g. display usage
+// No command specified
+if (cli.args.length === 0) {
   cli.help()
 }

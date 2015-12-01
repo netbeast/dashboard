@@ -1,5 +1,3 @@
-var config = require('config')
-
 var sqlite3 = require('sqlite3').verbose()
 var db = new sqlite3.Database('resources')
 

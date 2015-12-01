@@ -4,7 +4,7 @@ var should = require('Chai').should()
 var expect = require('Chai').expect
 
 var Resource = require('src/models/resource')
-var helper = require('src/lib/resource')
+var helper = require('src/helpers/resource')
 
 describe('Resources', function () {
   before(function (done) {

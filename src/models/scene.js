@@ -14,40 +14,39 @@ function Scene (item) {
   this.sat = item.sat
 }
 
-Scene.create = function (item, callback) {
-  return (new Scene(item)).save(callback)
+Scene.create = function (item, done) {
+  return (new Scene(item)).save(done)
 }
 
-Scene.prototype.destroy = function (callback) {
+Scene.prototype.destroy = function (done) {
   helper.deleteDevice(this, function (err) {
-    if (err) callback.call(this, err)
-    else callback.call(this, null)
+    if (err) return done(err)
+    return done()
   })
 }
 
-Scene.find = function (query, callback) {
+Scene.find = function (query, done) {
   var result = []
   helper.findDevice(query, function (err, row) {
-    if (err) callback.call(this, err)
-    else if (row == '') callback.call(this, 'No Row Found!')
-    else {
-      row.forEach(function (action) {
-        result.push(new Scene(action))
-      })
-      callback.call(this, null, result)
-    }
+    if (err) return done(err)
+    if (!row) return done('No Row Found!')
+
+    row.forEach(function (action) {
+      result.push(new Scene(action))
+    })
+    return done(null, result)
   })
 }
 
-Scene.findOne = function (query, callback) {
+Scene.findOne = function (query, done) {
   helper.findDevice(query, function (err, row) {
-    if (err) callback.call(this, err)
-    else if (row == '') callback.call(this, 'No Row Found!')
-    else callback.call(this, null, new Scene(row[row.length - 1]))
+    if (err) done(err)
+    else if (!row) done('No Row Found!')
+    else done(null, new Scene(row[row.length - 1]))
   })
 }
 
-Scene.prototype.save = function (callback) {
+Scene.prototype.save = function (done) {
   var self = this
   var schema = {
     id: this.id,
@@ -59,15 +58,17 @@ Scene.prototype.save = function (callback) {
     sat: this.sat
   }
   helper.insertDevice(schema,	function (err) {
-    if (err) callback.call(this, err)
-    else Scene.findOne({id: self.id}, callback)
+    if (err) return done(err)
+
+    return Scene.findOne({id: self.id}, done)
   })
 }
 
-Scene.update = function (query, value, callback) {
+Scene.update = function (query, value, done) {
   helper.updateDevice(query, value, function (err) {
-    if (err) callback.call(this, err)
-    else callback.call(this, null)
+    if (err) return done(err)
+
+    return done()
   })
 }
 

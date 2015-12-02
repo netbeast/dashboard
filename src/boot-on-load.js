@@ -13,7 +13,7 @@ module.exports = function bootOnload () {
       if (!app.netbeast || !app.netbeast.bootOnLoad) return done(null)
 
       console.log(chalk.bold('\n🚀  Booting ' + app.name + ' on load'))
-      
+
       Activity.boot(app.name, function (err, port) {
         if (err) return done(err)
 

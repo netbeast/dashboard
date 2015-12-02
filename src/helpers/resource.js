@@ -30,83 +30,21 @@ helper.insertAction = function(query, callback) {
   }
 
   helper.findAction = function(query, callback) {
-    switch(Object.keys(query).length) {
-      case 0:
+    if (Object.keys(query).length < 1) {
       // Devuelve los diferentes Hooks que identifican al objeto
-      db.all("SELECT DISTINCT hook FROM actions", callback)
-      break
-
-      case 1:
-      db.all("SELECT * FROM actions WHERE "
-      + Object.keys(query)[0] + " = '"
-      + query[Object.keys(query)[0]] + "'", callback)
-      break
-
-      case 2:
-      db.all("SELECT * FROM actions WHERE "
-      + Object.keys(query)[0] + " = '"
-      + query[Object.keys(query)[0]] + "' AND "
-      + Object.keys(query)[1] + " = '"
-      + query[Object.keys(query)[1]] + "'", callback)
-      break
-
-      case 3:
-      db.all("SELECT * FROM actions WHERE "
-      + Object.keys(query)[0] + " = '"
-      + query[Object.keys(query)[0]] + "' AND "
-      + Object.keys(query)[1] + " = '"
-      + query[Object.keys(query)[1]] + "' AND "
-      + Object.keys(query)[2] + " = '"
-      + query[Object.keys(query)[2]] + "'", callback)
-      break
-
-      case 4:
-      db.all("SELECT * FROM actions WHERE "
-      + Object.keys(query)[0] + " = '"
-      + query[Object.keys(query)[0]] + "' AND "
-      + Object.keys(query)[1] + " = '"
-      + query[Object.keys(query)[1]] + "' AND "
-      + Object.keys(query)[2] + " = '"
-      + query[Object.keys(query)[2]] + "' AND "
-      + Object.keys(query)[3] + " = '"
-      + query[Object.keys(query)[3]] + "'", callback)
-      break
-
-      case 5:
-      db.all("SELECT * FROM actions WHERE "
-      + Object.keys(query)[0] + " = '"
-      + query[Object.keys(query)[0]] + "' AND "
-      + Object.keys(query)[1] + " = '"
-      + query[Object.keys(query)[1]] + "' AND "
-      + Object.keys(query)[2] + " = '"
-      + query[Object.keys(query)[2]] + "' AND "
-      + Object.keys(query)[3] + " = '"
-      + query[Object.keys(query)[3]] + "' AND "
-      + Object.keys(query)[4] + " = '"
-      + query[Object.keys(query)[4]] + "'", callback)
-      break
-
-      case 6:
-      db.all("SELECT * FROM actions WHERE "
-      + Object.keys(query)[0] + " = '"
-      + query[Object.keys(query)[0]] + "' AND "
-      + Object.keys(query)[1] + " = '"
-      + query[Object.keys(query)[1]] + "' AND "
-      + Object.keys(query)[2] + " = '"
-      + query[Object.keys(query)[2]] + "' AND "
-      + Object.keys(query)[3] + " = '"
-      + query[Object.keys(query)[3]] + "' AND "
-      + Object.keys(query)[4] + " = '"
-      + query[Object.keys(query)[4]] + "' AND "
-      + Object.keys(query)[5] + " = '"
-      + query[Object.keys(query)[5]] + "'", callback)
-      break
-
-      default:
-      console.log("wrong query, too long")
-      break
+      db.all('SELECT DISTINCT hook FROM actions', callback)
+    } else {
+      var sql_statement = 'SELECT * FROM actions WHERE '
+      for (var field in query) {
+        sql_statement += field + "='" + query[field] + "' AND "
+      }
+      var aux = sql_statement.lastIndexOf('AND')
+      sql_statement = sql_statement.substring(0, aux)
+      console.log('[sql helper] %s', sql_statement)
+      db.all(sql_statement, callback)
     }
   }
+
 
   helper.updateAction = function(query, value, callback) {
     var key = Object.keys(query)[0]

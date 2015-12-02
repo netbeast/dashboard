@@ -9,16 +9,13 @@ var path = require('path')
 
 var cli = require('commander')
 var fs = require('fs-extra')
-var forever = require('forever-monitor')
-
 var App = require('../lib/app')
 var scan = require('../lib/scan')
 var install = require('../lib/install')
 var publish = require('../lib/publish')
-var pkg = require('../package.json')
+var start = require('../lib/start')
 
-const DASHBOARD_BIN = path.join(__dirname, '../index.js')
-const DASHBOARD_DEAMON = path.join(__dirname, './deamon.js')
+var pkg = require('../package.json')
 
 cli.version(pkg.version)
 
@@ -65,18 +62,7 @@ cli.command('start')
 .description('Launches netbeast dashboard')
 .option('--silent', 'Capture dashboard output on console')
 .option('-p, --port <n>', 'Port to start the HTTP server', parseInt)
-.action(function (options) {
-  var opts = {}
-  opts.max = 1
-  opts.silent = options.silent
-  opts.killTree = true
-  opts.cwd = __dirname + '/../'
-  opts.args = ['--port', options.port || 8000]
-  var dashboard = new (forever.Monitor)(DASHBOARD_BIN, opts)
-  dashboard.start()
-  var deamon = new (forever.Monitor)(DASHBOARD_DEAMON, opts)
-  deamon.start()
-})
+.action(start)
 
 cli.parse(process.argv)
 

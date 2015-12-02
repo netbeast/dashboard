@@ -10,6 +10,8 @@ var config = module.exports = {}
 
 config.port = process.env.ENV === 'development' ? 8000 : 80
 config.LOCAL_URL = 'http://localhost:' + config.port
+config.DATABASE_URI = '.database.sqlite'
+
 config.tmpDir = '/tmp'
 config.configDir = __dirname
 config.publicDir = path.join(root, './public')

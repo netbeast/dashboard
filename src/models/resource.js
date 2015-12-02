@@ -13,40 +13,41 @@ function Resource (item) {
   this.hook = item.hook
 }
 
-Resource.create = function (item, callback) {
-  return (new Resource(item)).save(callback)
+Resource.create = function (item, done) {
+  return (new Resource(item)).save(done)
 }
 
-Resource.prototype.destroy = function (callback) {
+Resource.prototype.destroy = function (done) {
   helper.deleteAction(this.id, function (err) {
-    if (err) callback.call(this, err)
-    else callback.call(this, null)
+    if (err) return done(err)
+
+    return done(null)
   })
 }
 
-Resource.find = function (query, callback) {
+Resource.find = function (query, done) {
   var result = []
   helper.findAction(query, function (err, row) {
-    if (err) callback.call(this, 'err')
-    else if (row == '') callback.call(this, 'No Row Found!')
-    else {
-      row.forEach(function (action) {
-        result.push(new Resource(action))
-      })
-      callback.call(this, null, result)
-    }
+    if (err) return done(err)
+    if (!row) return done('No Row Found!')
+
+    row.forEach(function (action) {
+      result.push(new Resource(action))
+    })
+    return done(null, result)
   })
 }
 
-Resource.findOne = function (query, callback) {
+Resource.findOne = function (query, done) {
   helper.findAction(query, function (err, row) {
-    if (err) callback.call(this, err)
-    else if (row.length < 1) callback.call(this, 'No Row Found!')
-    else callback.call(this, null, new Resource(row[row.length - 1]))
+    if (err) return done(err)
+    if (row.length < 1) return done('No Row Found!')
+
+    return done(null, new Resource(row[row.length - 1]))
   })
 }
 
-Resource.prototype.save = function (callback) {
+Resource.prototype.save = function (done) {
   var self = this
   var schema = {
     app: this.app,
@@ -56,15 +57,17 @@ Resource.prototype.save = function (callback) {
     hook: this.hook
   }
   helper.insertAction(schema,	function (err) {
-    if (err) callback.call(this, err)
-    else Resource.findOne({app: self.app}, callback)
+    if (err) return done(err)
+
+    Resource.findOne({app: self.app}, done)
   })
 }
 
-Resource.update = function (query, value, callback) {
+Resource.update = function (query, value, done) {
   helper.updateAction(query, value, function (err) {
-    if (err) callback.call(this, err)
-    else callback.call(this, null)
+    if (err) return done(err)
+
+    return done()
   })
 }
 

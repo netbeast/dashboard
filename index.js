@@ -22,7 +22,8 @@ cmd
 // Launch server with web sockets
 var server = module.exports = http.createServer(app)
 
-server.listen(cmd.port || config.port, function () {
+config.port = cmd.port || config.port
+server.listen(config.port, function () {
   console.log('Netbeast dashboard started on %s:%s',
   server.address().address,
   server.address().port)
@@ -31,8 +32,3 @@ server.listen(cmd.port || config.port, function () {
 
 io.listen(server)
 io.on('connection', require('./src/broker'))
-
-// Start the deamon that recognises other netbeasts
-var deamonBin = path.join(__dirname, './bin/deamon.js')
-var deamon = new (forever.Monitor)(deamonBin, {max: 1})
-deamon.start()

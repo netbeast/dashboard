@@ -1,5 +1,8 @@
 var sqlite3 = require('sqlite3').verbose()
-var db = new sqlite3.Database('resources')
+
+var config = require('../../config')
+
+var db = new sqlite3.Database(config.DATABASE_URI)
 
 var helper = {}
 

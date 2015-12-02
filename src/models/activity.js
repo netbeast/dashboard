@@ -132,7 +132,7 @@ self.on('start', function (app) {
 
     // child management
     var entryPoint = path.join(config.appsDir, app.name, pkgJson.main)
-    console.log(entryPoint)
+
     var child = spawn(entryPoint, ['--port', app.port], {
       cwd: path.join(config.appsDir, app.name)
     })
@@ -147,7 +147,6 @@ self.on('start', function (app) {
     })
 
     child.on('close', function (code) {
-      // broker.info(' exited with code ' + code || 0, app.name)
       children[app.name] = undefined
     })
 
@@ -158,6 +157,12 @@ self.on('start', function (app) {
 
     app.process = child
     children[app.name] = app
+  })
+})
+
+process.on('exit', function () {
+  children.forEach(function (child) {
+    child.process.kill('SIGTERM')
   })
 })
 

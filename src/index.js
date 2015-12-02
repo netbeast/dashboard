@@ -20,6 +20,7 @@ app.use(favicon(path.join(config.publicDir, 'img/favicon.png')))
 
 app.use(express.static(config.publicDir))
 
+app.use(require('./middleware/cors'))
 app.use(require('./routes'))
 
 // error with Error classes

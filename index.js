@@ -14,6 +14,8 @@ var app = require('./src')
 var config = require('./config')
 var bootOnload = require('./src/boot-on-load')
 
+const DASHBOARD_DEAMON = path.join(__dirname, './bin/deamon.js')
+
 cmd
 .version('0.1.42')
 .option('-p, --port <n>', 'Port to start the HTTP server', parseInt)
@@ -24,7 +26,7 @@ var server = module.exports = http.createServer(app)
 
 config.port = cmd.port || config.port
 server.listen(config.port, function () {
-  console.log('Netbeast dashboard started on %s:%s',
+  console.log('👾  Netbeast dashboard started on %s:%s',
   server.address().address,
   server.address().port)
   bootOnload()
@@ -32,3 +34,11 @@ server.listen(config.port, function () {
 
 io.listen(server)
 io.on('connection', require('./src/broker'))
+
+var deamon = new (forever.Monitor)(DASHBOARD_DEAMON, {
+  env: { 'NETBEAST_PORT': config.port },
+  max: 1
+})
+
+deamon.title = 'netbeast'
+deamon.start()

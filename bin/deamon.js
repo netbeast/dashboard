@@ -10,7 +10,7 @@ deamon.bind(16180, function () {
 
 deamon.on('listening', function () {
   var addr = deamon.address()
-  console.log('deamon ready at %s:%s', addr.address, addr.port)
+  console.log('\n 👾  Netbeast deamon ready at %s:%s', addr.address, addr.port)
 })
 
 deamon.on('message', function (msg, req) {

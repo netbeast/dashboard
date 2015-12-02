@@ -61,9 +61,9 @@ describe('Resources', function () {
       item.destroy(function (err) {
         should.not.exist(err)
         //  .then...
-        Resource.find({id: item.id}, function (err, item) {
+        Resource.find({ id: item.id }, function (err, item) {
+          should.not.exist(err)
           expect(item).to.be.empty
-          expect(err).to.equal('No Row Found!')
           done()
         })
       })

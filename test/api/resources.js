@@ -1,10 +1,10 @@
 /* global describe, before, it*/
 
-var should = require('Chai').should()
-var expect = require('Chai').expect
+var should = require('chai').should()
+var expect = require('chai').expect
 
 var Resource = require('src/models/resource')
-var helper = require('src/lib/resource')
+var helper = require('src/helpers/resource')
 
 describe('Resources', function () {
   before(function (done) {
@@ -61,9 +61,9 @@ describe('Resources', function () {
       item.destroy(function (err) {
         should.not.exist(err)
         //  .then...
-        Resource.find({id: item.id}, function (err, item) {
+        Resource.find({ id: item.id }, function (err, item) {
+          should.not.exist(err)
           expect(item).to.be.empty
-          expect(err).to.equal('No Row Found!')
           done()
         })
       })

@@ -36,12 +36,6 @@ router.use('/i/:name?', function (req, res) {
   // In case the path is /i/:name
   // instead of /i/:name/ you need this block
 
-  console.log('===================')
-  console.log('before::::')
-  console.log('referer', referer)
-  console.log('req.originalUrl %s', reqUrl)
-  console.log('===================')
-
   reqUrl = req.originalUrl.replace('/i/', '/')
   if (referer !== app.name) {
     reqUrl = reqUrl.replace('/' + app.name, '')
@@ -50,12 +44,6 @@ router.use('/i/:name?', function (req, res) {
   // This block of code actually pipes the request
   // to the running app and pass it to the client
   proxyUrl = req.protocol + '://localhost:' + app.port + reqUrl
-
-  console.log('\n===================')
-  console.log('referer', referer)
-  console.log('reqUrl %s', reqUrl)
-  console.log('proxied URL %s', proxyUrl)
-  console.log('===================\n')
 
   request({
     url: proxyUrl,

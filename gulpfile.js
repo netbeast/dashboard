@@ -12,8 +12,8 @@ var livereload = require('gulp-livereload')
 
 gulp.task('default', ['serve'], function () {
   livereload.listen()
-  gulp.watch('./public/assets/css/**', ['sass'])
-  gulp.watch('./public/assets/js/**', ['browserify'])
+  gulp.watch('./public/css/**', ['sass'])
+  gulp.watch('./public/js/**', ['browserify'])
   gulp.watch('./public/views/**/*.html', function (files) {
     livereload.changed(files)
   })
@@ -30,7 +30,7 @@ gulp.task('serve', function () {
 gulp.task('build', ['sass', 'browserify'])
 
 gulp.task('sass', function () {
-  gulp.src('./public/assets/css/style.scss')
+  gulp.src('./public/css/style.scss')
   .pipe(sass().on('error', sass.logError))
   .pipe(sourcemaps.init())
   .pipe(sass())
@@ -43,7 +43,7 @@ gulp.task('sass', function () {
 gulp.task('browserify', function () {
   // set up the browserify instance on a task basis
   var bundler = browserify({
-    entries: './public/assets/js/index.js',
+    entries: './public/js/index.js',
     debug: true
   })
 

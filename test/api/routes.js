@@ -12,8 +12,8 @@ const URL = 'http://localhost:' + config.port
 
 console.log(URL + '/resources')
 
-describe.skip('RESTful Resources API', function () {
-  it('#POST should insert a new action in db', function (done) {
+describe('RESTful Resources API', function () {
+  it('should insert a new action in db', function (done) {
     request.post({url: URL + '/resources',
     json: {
       app: 'app',
@@ -29,7 +29,7 @@ describe.skip('RESTful Resources API', function () {
     })
   })
 
-  it('#GET should return all specified actions from db', function (done) {
+  it('should return all specified actions from db', function (done) {
     var q = 'app=app&topic=topic'
     request.get(URL + '/resources?' + q, function (err, resp, body) {
       should.not.exist(err)
@@ -43,7 +43,7 @@ describe.skip('RESTful Resources API', function () {
     })
   })
 
-  it('#UPDATE should update the speified action from db', function (done) {
+  it('should update the speified action from db', function (done) {
     var q = 'app=app&topic=topic'
     request.patch({url: URL + '/resources?' + q, json: {app: 'app2'}}, function (err, resp, body) {
       should.not.exist(err)
@@ -53,7 +53,7 @@ describe.skip('RESTful Resources API', function () {
     })
   })
 
-  it('#DELETE should delete the speified action from db', function (done) {
+  it('should delete the speified action from db', function (done) {
     var q = 'hook=hook'
     request.del(URL + '/resources?' + q, function (err, resp, body) {
       should.not.exist(err)

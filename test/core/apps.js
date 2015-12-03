@@ -37,7 +37,7 @@ describe('Apps', function () {
       })
     })
     var form = req.form()
-    var app = path.join(__dirname, 'app.tar.gz')
+    var app = path.join(__dirname, '../app.tar.gz')
     form.append('file', fs.createReadStream(app))
   })
 

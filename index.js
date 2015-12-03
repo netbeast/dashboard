@@ -25,6 +25,7 @@ cmd
 var server = module.exports = http.createServer(app)
 
 config.port = cmd.port || config.port
+config.LOCAL_URL = 'http://localhost:' + config.port
 server.listen(config.port, function () {
   console.log('👾  Netbeast dashboard started on %s:%s',
   server.address().address,

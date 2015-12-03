@@ -1,5 +1,8 @@
 var sqlite3 = require('sqlite3').verbose()
-var db = new sqlite3.Database('resources')
+
+var config = require('../../config')
+
+var db = new sqlite3.Database(config.DATABASE_URI)
 
 var helper = {}
 
@@ -38,7 +41,6 @@ helper.findAction = function (query, done) {
     }
     var aux = sql_statement.lastIndexOf('AND')
     sql_statement = sql_statement.substring(0, aux)
-    console.log('[sql helper] %s', sql_statement)
     db.all(sql_statement, done)
   }
 }

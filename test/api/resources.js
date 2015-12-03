@@ -1,7 +1,7 @@
 /* global describe, before, it*/
 
-var should = require('Chai').should()
-var expect = require('Chai').expect
+var should = require('chai').should()
+var expect = require('chai').expect
 
 var Resource = require('src/models/resource')
 var helper = require('src/helpers/resource')

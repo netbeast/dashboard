@@ -70,7 +70,6 @@
     "router"
   ],
   "scripts": {
-    "preinstall": "export ENV=production",
     "test": "./test/coverage.sh",
     "build": "./node_modules/gulp/bin/gulp.js build",
     "serve": "./node_modules/gulp/bin/gulp.js serve",

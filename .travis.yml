@@ -2,6 +2,7 @@ language: node_js
 sudo: false
 env:
   - ENV="development"
+  - NODE=".:$NODE"
 node_js:
   - "4.2.1"
 before_script:

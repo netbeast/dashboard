@@ -4,7 +4,5 @@ env:
   - ENV="development"
 node_js:
   - "4.2.1"
-env:
-  - ENV=development
-before_script:
+services:
   - "./index.js"

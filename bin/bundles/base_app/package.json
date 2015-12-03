@@ -1,5 +1,5 @@
 {
-  "name": "xy-get-started",
+  "name": "get-started",
   "version": "1.0.0",
   "description": "A repo with code about how to make simple Netbeast apps.",
   "main": "server.js",
@@ -26,8 +26,8 @@
     "netbeast",
     "netbeast.co"
   ],
-  "author": "jesus@netbeast.co",
-  "license": "GPL 2",
+  "author": "your@email.com",
+  "license": "AGPL-3.0",
   "bugs": {
     "url": "https://github.com/netbeast-co/get-started/issues"
   },

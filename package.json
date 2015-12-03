@@ -71,8 +71,7 @@
   ],
   "scripts": {
     "preinstall": "export ENV=production",
-    "test": "export ENV=development; export NODE_PATH=.:$NODE_PATH; ./node_modules/.bin/_mocha -R spec --bail --recursive",
-    "coverage": "./test/coverage.sh",
+    "test": "./test/coverage.sh",
     "build": "./node_modules/gulp/bin/gulp.js build",
     "serve": "./node_modules/gulp/bin/gulp.js serve",
     "app": "./node_modules/gulp/bin/gulp.js"

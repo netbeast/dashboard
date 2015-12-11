@@ -30,7 +30,7 @@ Thumbs.db
 
 node_modules
 .sandbox/*
-.sqlite
+*.sqlite
 
 node_modules
 

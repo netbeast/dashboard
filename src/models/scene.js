@@ -8,10 +8,10 @@ function Scene (item) {
   this.id = item.id
   this.sceneid = item.sceneid
   this.location = item.location
-  this.status = item.status
-  this.bri = item.bri
+  this.power = item.power
+  this.brightness = item.brightness
   this.hue = item.hue
-  this.sat = item.sat
+  this.saturation = item.saturation
 }
 
 Scene.create = function (item, done) {
@@ -52,10 +52,10 @@ Scene.prototype.save = function (done) {
     id: this.id,
     sceneid: this.sceneid,
     location: this.location,
-    status: this.status,
-    bri: this.bri,
+    power: this.power,
+    brightness: this.brightness,
     hue: this.hue,
-    sat: this.sat
+    saturation: this.saturation
   }
   helper.insertDevice(schema,	function (err) {
     if (err) return done(err)

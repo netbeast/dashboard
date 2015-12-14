@@ -3,9 +3,10 @@ var chalk = require('chalk')
 module.exports = function (socket) {
   console.log(chalk.grey('ws:// user connected'))
 
-  socket.on('push', function (str) {
-    console.log('Received push of %s', str)
-    socket.broadcast.emit('news', str)
+  socket.on('push', function (msg) {
+    console.log('Received push of:', msg)
+    console.log(msg)
+    socket.broadcast.emit('news', msg)
   })
 
   socket.on('disconnect', function () {

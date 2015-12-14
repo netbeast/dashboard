@@ -3,42 +3,49 @@
 // File to unit tests web sockets
 // jesus@netbeast.co
 
-var broker = require('src/helpers/broker')
+var crypto = require('crypto')
+
 var io = require('socket.io-client')
+var chai = require('chai')
+var expect = chai.expect
+
+var broker = require('src/helpers/broker')
 var config = require('config')
 
-const TEST_MSG_BODY = 'testing code/broker.js'
+const TEST_ERR_MSG_BODY = crypto.createHash('sha1')
+.update(Math.random().toString())
+.digest('hex')
 
-var socket = io.connect(config.LOCAL_URL)
+const TEST_WARN_MSG_BODY = crypto.createHash('sha1')
+.update(Math.random().toString())
+.digest('hex')
+
+var socket = io.connect(config.LOCAL_URL, { 'force new connection': true })
 
 describe('Web sockets broker', function () {
-  it.skip('should connect to Netbeast', function (done) {
-    console.log(config.LOCAL_URL)
-    socket.on('connect', function () {
-      console.log('ws:// connected')
-      done()
-    })
+  it('should connect to Netbeast', function (done) {
+    socket.on('connect', done)
   })
 
-  it.skip('should emit a warning', function (done) {
-    broker.warning(TEST_MSG_BODY)
+  it('should emit a warning', function (done) {
     socket.on('news', function (notification) {
-      console.log(notification)
-      if (notification.body === TEST_MSG_BODY) {
-        notification.emphasis.should.equal('warning')
+      if (notification.body === TEST_WARN_MSG_BODY) {
+        expect(notification.emphasis).to.exist
+        expect(notification.emphasis).to.equal('warning')
         done()
       }
     })
+    broker.warning(TEST_WARN_MSG_BODY)
   })
 
-  it.skip('should emit an error', function (done) {
-    broker.error('this is a test error')
+  it('should emit an error', function (done) {
     socket.on('news', function (notification) {
-      console.log(notification)
-      if (notification.body === TEST_MSG_BODY) {
-        notification.emphasis.should.equal('error')
+      if (notification.body === TEST_ERR_MSG_BODY) {
+        expect(notification.emphasis).to.exist
+        expect(notification.emphasis).to.equal('error')
         done()
       }
     })
+    broker.error(TEST_ERR_MSG_BODY)
   })
 })

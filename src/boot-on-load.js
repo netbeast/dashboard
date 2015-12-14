@@ -17,7 +17,7 @@ module.exports = function bootOnload () {
       Activity.boot(app.name, function (err, port) {
         if (err) return done(err)
 
-        console.info(' %s launched on port %s ', app.name, port.port)
+        console.info('[booting] %s launched on port %s ', app.name, port.port)
         done(null, port.port)
       },
       function (err) {

@@ -10,7 +10,7 @@ var broker = require('../helpers/broker')
 var config = require('../../config')
 
 function _installFromDir (dir, done) {
-  var file, pkgJson, appRoot, main
+  var file, appJson, appRoot, main
   file = path.join(dir, 'package.json')
 
   broker.info('Setting everything up for you...')
@@ -19,18 +19,18 @@ function _installFromDir (dir, done) {
     return done(new Error('App does not have a package.json'))
   }
 
-  pkgJson = fs.readJsonSync(file, {throws: false})
-  if (!pkgJson) {
+  appJson = fs.readJsonSync(file, {throws: false})
+  if (!appJson) {
     return done(new Error("App's package.json is malformed"))
   }
 
-  appRoot = path.join(config.appsDir, pkgJson.name)
+  appRoot = path.join(config.appsDir, appJson.name)
   if (fs.existsSync(appRoot)) {
     return done(new Error('App already exists'))
   }
 
   // Check if main is an executable file
-  main = path.resolve(dir, pkgJson.main)
+  main = path.resolve(dir, appJson.main)
   if (!fs.existsSync(main)) {
     return done(new Error('App does not have a main executable'))
   } else {
@@ -39,7 +39,7 @@ function _installFromDir (dir, done) {
 
   fs.move(dir, appRoot, function (err) {
     if (err) return done(err)
-    done(null, pkgJson)
+    done(null, appJson)
   })
 }
 
@@ -71,10 +71,7 @@ function _installFromGit (url, done) {
   git.clone(url, tmpDir, function (err, repo) {
     if (err) return done(err)
 
-    _installFromDir(repo.path, function (err, appJson) {
-      if (err) return done(err)
-      return done(null, appJson)
-    })
+    _installFromDir(repo.path, done)
   })
 }
 

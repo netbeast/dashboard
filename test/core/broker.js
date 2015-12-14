@@ -1,4 +1,4 @@
-/* global describe it */
+/* global describe, it, before, after */
 
 // File to unit tests web sockets
 // jesus@netbeast.co
@@ -20,11 +20,18 @@ const TEST_WARN_MSG_BODY = crypto.createHash('sha1')
 .update(Math.random().toString())
 .digest('hex')
 
-var socket = io.connect(config.LOCAL_URL, { 'force new connection': true })
+console.log('### %s ###', config.LOCAL_URL)
 
-describe('Web sockets broker', function () {
-  it('should connect to Netbeast', function (done) {
+var socket
+
+describe('Broker', function () {
+  before('should connect to Netbeast', function (done) {
+    socket = io.connect(config.LOCAL_URL, { 'force new connection': true })
     socket.on('connect', done)
+  })
+
+  after('should close socket', function () {
+    socket.close()
   })
 
   it('should emit a warning', function (done) {

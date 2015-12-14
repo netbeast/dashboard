@@ -50,13 +50,9 @@ describe('Apps', function () {
     })
   })
 
-  it.skip('should not accept bad-packaged app', function (done) {
-    done()
-  })
+  it.skip('should not accept bad-packaged app')
 
-  it.skip('should not accept bad-formed package.json', function (done) {
-    done()
-  })
+  it.skip('should not accept bad-formed package.json')
 
   it('should upload app @ github to repo', function (done) {
     this.timeout(20 * s) // this also takes time

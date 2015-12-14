@@ -6,7 +6,7 @@
   "dependencies": {
     "app-module-path": "^1.0.4",
     "ascii-table": "0.0.8",
-    "async": "^1.4.2",
+    "async": "^1.5.0",
     "body-parser": "^1.12.2",
     "chalk": "^1.1.1",
     "cli-spinner": "^0.2.1",
@@ -39,6 +39,7 @@
     "netbeast": "bin/cli.js"
   },
   "devDependencies": {
+    "async": "^1.5.0",
     "browserify": "^12.0.1",
     "chai": "^3.2.0",
     "dropzone": "^4.0.1",

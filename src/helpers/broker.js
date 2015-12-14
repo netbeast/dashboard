@@ -6,7 +6,7 @@ var chalk = require('chalk')
 var config = require('../../config')
 
 var io = require('socket.io-client')
-var socket = io.connect(config.LOCAL_URL)
+var socket = socket || io.connect(config.LOCAL_URL)
 
 var broker = module.exports = {}
 

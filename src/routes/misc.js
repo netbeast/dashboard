@@ -1,11 +1,12 @@
 var express	 = require('express')
-var broker		 = require('../helpers/broker')
+var spawn		 = require('child_process').spawn
+var AsciiTable = require('ascii-table')
+
 var apps 	 	 = require('./apps')
 var users 	 = require('./users')
-var spawn		 = require('child_process').spawn
-var config 	 = require('../../config')
 var activities = require('./activities')
-var AsciiTable = require('ascii-table')
+var config 	 = require('../../config')
+var broker		 = require('../helpers/broker')
 
 var router = express.Router()
 
@@ -14,11 +15,11 @@ router.get('/config', function (req, res) {
 })
 
 router.put('/update', function (req, res) {
-  broker.warning('Updating dashboard to last version.')
-  var child = spawn('git', ['pull'])
+  broker.warning('Updating dashboard to last version')
+  var child = spawn('git', ['pull', 'origin', 'master'])
   // child management
   child.stdout.on('data', function (data) {
-    broker.info(data)
+    broker.info('data')
   })
 
   child.stderr.on('data', function (data) {

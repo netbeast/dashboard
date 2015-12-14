@@ -43,3 +43,7 @@ var deamon = new (forever.Monitor)(DASHBOARD_DEAMON, {
 
 deamon.title = 'netbeast'
 deamon.start()
+
+process.on('exit', function () {
+  deamon.kill()
+})

@@ -4,6 +4,7 @@ module.exports = function (socket) {
   console.log(chalk.grey('ws:// user connected'))
 
   socket.on('push', function (str) {
+    console.log('Received push of %s', str)
     socket.broadcast.emit('news', str)
   })
 

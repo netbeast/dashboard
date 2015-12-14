@@ -10,7 +10,7 @@ module.exports = function bootOnload () {
     if (err) throw err
 
     async.map(apps, function (app, done) {
-      if (!app.netbeast || !app.netbeast.bootOnLoad) return done(null)
+      if (!app.netbeast || !app.netbeast.bootOnLoad) return done()
 
       console.log(chalk.bold('\n🚀  Booting ' + app.name + ' on load'))
 

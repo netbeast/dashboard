@@ -33,10 +33,7 @@ describe('Command Line Interface: package', function () {
     var pathToPkg = process.cwd()
     fs.access(pathToPkg + '/testAppO.tar.gz', fs.F_OK, function (err) {
       should.not.exist(err)
-      exec('rm -rf testAppO.tar.gz', function (err, stdout, stderr) {
-        should.not.exist(err)
-        done()
-      })
+      done()
     })
   })
   // package app with option --to
@@ -50,7 +47,41 @@ describe('Command Line Interface: package', function () {
     var pathToPkg = process.cwd()
     fs.access(pathToPkg + '/testAppTO.tar.gz', fs.F_OK, function (err) {
       should.not.exist(err)
-      exec('rm -rf testAppTO.tar.gz testApp', function (err, stdout, stderr) {
+      exec('rm -rf testApp', function (err, stdout, stderr) {
+        should.not.exist(err)
+        done()
+      })
+    })
+  })
+  // unpkg option -o
+  before(function (done) {
+    exec('beast unpkg testAppO.tar.gz -o testAppO', function (err, stdout, stderr) {
+      should.not.exist(err)
+      done()
+    })
+  })
+  it('should create a testApp folder result of the uncompression of testApp.tar.gz (option -o)', function (done) {
+    var pathToPkg = process.cwd()
+    fs.access(pathToPkg + '/testAppO', fs.F_OK, function (err) {
+      should.not.exist(err)
+      exec('rm -rf testAppO', function (err, stdout, stderr) {
+        should.not.exist(err)
+        done()
+      })
+    })
+  })
+  // unpkg option --to
+  before(function (done) {
+    exec('beast unpkg testAppTO.tar.gz --to testAppTO', function (err, stdout, stderr) {
+      should.not.exist(err)
+      done()
+    })
+  })
+  it('should create a testApp folder result of the uncompression of testApp.tar.gz (option --to)', function (done) {
+    var pathToPkg = process.cwd()
+    fs.access(pathToPkg + '/testAppTO', fs.F_OK, function (err) {
+      should.not.exist(err)
+      exec('rm -rf testAppTO testAppO testAppTO.tar.gz testAppO.tar.gz', function (err, stdout, stderr) {
         should.not.exist(err)
         done()
       })

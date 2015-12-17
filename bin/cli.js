@@ -16,7 +16,7 @@ var publish = require('../lib/publish')
 var start = require('../lib/start')
 var didYouMean = require('didYouMean')
 
-var list = ['new', 'package', 'unpackage', 'publish', 'scan', 'install', 'forget', 'start']
+var list = ['new', 'create', 'package', 'pkg', 'unpackage', 'unpkg', 'publish', 'scan', 'install', 'forget', 'start']
 
 var pkg = require('../package.json')
 

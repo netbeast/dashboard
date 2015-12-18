@@ -14,9 +14,9 @@ var scan = require('../lib/scan')
 var install = require('../lib/install')
 var publish = require('../lib/publish')
 var start = require('../lib/start')
-var didYouMean = require('didYouMean')
+var didYouMean = require('didyoumean')
 
-var list = ['new', 'create', 'package', 'pkg', 'unpackage', 'unpkg', 'publish', 'scan', 'install', 'forget', 'start']
+const ACTIONS_LIST = ['new', 'create', 'package', 'pkg', 'unpackage', 'unpkg', 'publish', 'scan', 'install', 'forget', 'start']
 
 var pkg = require('../package.json')
 
@@ -73,14 +73,13 @@ cli.parse(process.argv)
 if (cli.args.length === 0) {
   cli.help()
 }
-if (list.indexOf(process.argv[2]) === -1) {
+if (ACTIONS_LIST.indexOf(process.argv[2]) === -1) {
   didYouMean.threshold = null
-  var matched = didYouMean(process.argv[2], list)
+  var matched = didYouMean(process.argv[2], ACTIONS_LIST)
   if (matched != null) {
-    console.log('\n\tDid you mean "' + didYouMean(process.argv[2], list) + '"?')
+    console.log('\n\tDid you mean "' + didYouMean(process.argv[2], ACTIONS_LIST) + '"?')
     console.log('\n\tType "beast ' + matched + ' -h" to know its parameters' + '\n')
-  }
-  else {
+  } else {
     cli.help()
   }
 }

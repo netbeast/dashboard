@@ -1,9 +1,9 @@
-/* global describe, before, it*/
+/* global describe, before, after, it*/
 
 var should = require('chai').should()
 
 var exec = require('child_process').exec
-var fs = require('fs')
+var fs = require('fs-extra')
 
 describe('Command Line Interface: package', function () {
   before(function (done) {

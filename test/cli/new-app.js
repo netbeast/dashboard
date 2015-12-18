@@ -5,15 +5,16 @@ var expect = require('chai').expect
 var async = require('async')
 
 var exec = require('child_process').exec
-var fs = require('fs')
+var fs = require('fs-extra')
 
 describe('Command Line Interface', function () {
-  before(function (done) {
+  before('Create app to test', function (done) {
     exec('beast new testApp', function (err, stdout, stderr) {
       should.not.exist(err)
       done()
     })
   })
+
   it('should create an app called testApp', function (done) {
     var pathToApp = process.cwd() + '/testApp'
 

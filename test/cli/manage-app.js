@@ -3,7 +3,7 @@
 var should = require('chai').should()
 var exec = require('child_process').exec
 
-var output, install_output = ''
+var output
 
 describe('Command Line Interface: scan dashboard and uploads app', function () {
   before(function (done) {

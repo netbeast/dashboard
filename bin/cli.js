@@ -14,6 +14,9 @@ var scan = require('../lib/scan')
 var install = require('../lib/install')
 var publish = require('../lib/publish')
 var start = require('../lib/start')
+var didYouMean = require('didYouMean')
+
+var list = ['new', 'create', 'package', 'pkg', 'unpackage', 'unpkg', 'publish', 'scan', 'install', 'forget', 'start']
 
 var pkg = require('../package.json')
 
@@ -66,7 +69,18 @@ cli.command('start')
 
 cli.parse(process.argv)
 
-// No command specified
+// No command specified or unrecognaized command
 if (cli.args.length === 0) {
   cli.help()
+}
+if (list.indexOf(process.argv[2]) === -1) {
+  didYouMean.threshold = null
+  var matched = didYouMean(process.argv[2], list)
+  if (matched != null) {
+    console.log('\n\tDid you mean "' + didYouMean(process.argv[2], list) + '"?')
+    console.log('\n\tType "beast ' + matched + ' -h" to know its parameters' + '\n')
+  }
+  else {
+    cli.help()
+  }
 }

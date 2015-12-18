@@ -4,7 +4,6 @@
 [![npm version](https://badge.fury.io/js/nb-dashboard.svg)](https://badge.fury.io/js/nb-dashboard)
 ![dependencies](https://david-dm.org/netbeast/dashboard.svg)
 [![devDependency](https://david-dm.org/netbeast/dashboard/dev-status.svg)](https://david-dm.org/netbeast/dashboard#info=devDependencies)
-[![codecov.io](https://codecov.io/github/netbeast/dashboard/coverage.svg?branch=master)](https://codecov.io/github/netbeast/dashboard?branch=master)
 
 [![Join the chat at https://gitter.im/netbeast/docs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast/docs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 

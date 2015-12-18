@@ -22,19 +22,17 @@ cmd
 .parse(process.argv)
 
 // Launch server with web sockets
-var server = module.exports = http.createServer(app)
+var server = http.createServer(app)
 
 config.port = cmd.port || config.port
 config.LOCAL_URL = 'http://localhost:' + config.port
+
 server.listen(config.port, function () {
   console.log('👾  Netbeast dashboard started on %s:%s',
   server.address().address,
   server.address().port)
   bootOnload()
 })
-
-io.listen(server)
-io.on('connection', require('./src/broker'))
 
 var deamon = new (forever.Monitor)(DASHBOARD_DEAMON, {
   env: { 'NETBEAST_PORT': config.port },
@@ -45,5 +43,11 @@ deamon.title = 'netbeast'
 deamon.start()
 
 process.on('exit', function () {
-  deamon.kill()
+  deamon.kill('SIGTERM')
+})
+
+io.listen(server)
+io.on('connection', require('./src/broker'))
+io.use(function (socket, next) {
+  next() // socket middleware
 })

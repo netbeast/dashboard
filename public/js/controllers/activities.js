@@ -16,9 +16,10 @@ function ($scope, $routeParams, Activity, $sce) {
   Activity.open($routeParams.name)
   .success(function (data, status) {
     var aux = window.location.host
-    aux = aux.substring(0, aux.indexOf(':'))
+    // aux = aux.substring(0, aux.indexOf(':'))
     aux = aux || window.location.host // recover if empty string
-    $scope.url = 'http://' + aux + ':' + data.port
+    // $scope.url = 'http://' + aux + ':' + data.port
+    $scope.url = '/i/' + $routeParams.name
     $scope.href = $sce.trustAsResourceUrl($scope.url)
   })
 }])

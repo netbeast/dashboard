@@ -83,7 +83,6 @@ self.ready = function (child, done) {
 
   async.whilst(keepTrying, function (callback) {
     k++
-    console.log('checking ' + APP_URL)
     request(APP_URL, function (err, resp, body) {
       if (err && err.code !== 'ECONNREFUSED') {
         return done(err)

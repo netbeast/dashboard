@@ -11,22 +11,22 @@ helper.createTable = function (callback) {
   'id INTEGER NOT NULL, ' +
   'sceneid TEXT NOT NULL, ' +
   'location TEXT NOT NULL, ' +
-  'status BOOLEAN NOT NULL, ' +
-  'bri INTEGER, ' +
+  'power BOOLEAN NOT NULL, ' +
+  'brightness INTEGER, ' +
   'hue INTEGER, ' +
-  'sat INTEGER, ' +
+  'saturation INTEGER, ' +
   'PRIMARY KEY(id, sceneid))',
   callback)
 }
 
 helper.insertDevice = function (query, callback) {
   var statement = db.prepare('INSERT INTO scenes (' +
-  "'id', 'sceneid', 'location', 'status', 'bri', 'hue', 'sat') " +
+  "'id', 'sceneid', 'location', 'power', 'brightness', 'hue', 'saturation') " +
   'VALUES (?,?,?,?,?,?,?)')
 
   statement.run(
-    query.id, query.sceneid, query.location, query.status,
-    query.bri, query.hue, query.sat, callback
+    query.id, query.sceneid, query.location, query.power,
+    query.brightness, query.hue, query.saturation, callback
   )
   statement.finalize()
 }
@@ -54,7 +54,6 @@ helper.findDevice = function (query, callback) {
     Object.keys(query)[1] + " = '" +
     query[Object.keys(query)[1]] + "'", callback)
     break
-
     case 3:
       db.all('SELECT * FROM scenes WHERE ' +
     Object.keys(query)[0] + " = '" +

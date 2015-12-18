@@ -12,11 +12,6 @@ function ActivityFactory ($http, $sce, $location) {
 
   self.stop = function (app) {
     return $http.delete('/activities/' + app)
-    .success(function (data, status) {
-      toastr.success(app + ' succesfully stopped')
-      var icon = document.getElementById(app)
-      icon.parentElement.removeChild(icon)
-    })
   }
 
   self.open = function (app) {

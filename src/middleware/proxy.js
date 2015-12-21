@@ -39,7 +39,5 @@ router.use('/i/:name?', function (req, res) {
   // to the running app and pass it to the client
   proxyUrl = req.protocol + '://localhost:' + app.port
   req.url = reqUrl
-  res.cookie('referer_app', app.name, { maxAge: 900000 })
-  res.cookie('referer_port', app.port, { maxAge: 900000 })
   proxy.web(req, res, { target: proxyUrl })
 })

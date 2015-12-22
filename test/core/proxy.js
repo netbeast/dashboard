@@ -7,7 +7,6 @@ var expect = chai.expect
 var request = require('request')
 var async = require('async')
 
-var App = require('src/models/app')
 var io = require('socket.io-client')
 var config = require('config')
 
@@ -17,7 +16,7 @@ const TEST_MSG_BODY = 'testing websockets on proxy'
 
 var socket_tx, socket_rx
 
-describe('Proxy', function () {
+describe.skip('Proxy', function () {
   before('have sockets connected', function (done) {
     var n_connected = 0
     socket_tx = io.connect(URL, { 'force new connection': true })

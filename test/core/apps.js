@@ -16,8 +16,6 @@ var s = 1000 // seconds
 const URL = 'http://localhost:' + config.port
 const GITHUB_REPO = 'https://github.com/netbeast/get-started'
 
-console.log('### %s ###', process.env.ENV)
-
 // Test styling
 // http://chaijs.com/guide/styles/
 

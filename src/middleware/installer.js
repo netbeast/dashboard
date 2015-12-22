@@ -15,7 +15,7 @@ module.exports.multer = multer({
     var fname = file.name
     var ext = [fname.split('.')[1], fname.split('.')[2]].join('.')
     if (ext !== 'tar.gz' && ext !== 'tgz.') {
-      res.status(403).send('Invalid Package. Must be ')
+      res.status(403).send('Invalid Package. Must be a tar.gz')
       return false
     }
   },
@@ -25,24 +25,22 @@ module.exports.multer = multer({
 })
 
 module.exports.process = function (req, res, next) {
-  console.log(req.originalUrl)
   if (!req.uploadedFile) return next()
 
   var tarball = path.join(config.tmpDir, req.uploadedFile.name)
   App.install(tarball, function (err, appJson) {
+    if (err) return next(err)
     broker.success(appJson.name + ' installed')
-    if (err) return error.handle(err, res)
     res.status(204).end()
   })
 }
 
 module.exports.git = function (req, res, next) {
-  console.log(req.originalUrl)
   if (!req.body.url) return next()
 
   App.install(req.body.url, function (err, appJson) {
-    broker.success(appJson.name + ' installed')
     if (err) return next(err)
+    broker.success(appJson.name + ' installed')
     res.status(204).end()
   })
 }

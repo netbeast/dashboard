@@ -1,28 +1,22 @@
 'use strict'
 
 var gulp = require('gulp')
-var sourcemaps = require('gulp-sourcemaps')
+var plugins = require('gulp-load-plugins')()
 var source = require('vinyl-source-stream')
 var buffer = require('vinyl-buffer')
 var browserify = require('browserify')
-var nodemon = require('gulp-nodemon')
-var sass = require('gulp-sass')
-var minify = require('gulp-minify-css')
-var livereload = require('gulp-livereload')
+var watchify = require('watchify')
 
-gulp.task('default', ['serve'], function () {
-  livereload.listen()
+gulp.task('default', ['serve', 'watchify'], function () {
+  plugins.livereload.listen()
   gulp.watch('./public/css/**', ['sass'])
-  gulp.watch('./public/js/**', ['browserify'])
-  gulp.watch('./public/views/**/*.html', function (files) {
-    livereload.changed(files)
-  })
+  gulp.watch('./public/views/**/*.html', plugins.livereload.changed)
 })
 
 gulp.task('serve', function () {
-  nodemon({
+  plugins.nodemon({
     script: './index.js',
-    ignore: ['test/*', '.gulpfile', '.git', '.sandbox/*', '*.md', '*.txt', 'web/*'],
+    watch: ['./index.js', 'src'],
     env: { 'ENV': 'development' }
   })
 })
@@ -31,33 +25,40 @@ gulp.task('build', ['sass', 'browserify'])
 
 gulp.task('sass', function () {
   gulp.src('./public/css/style.scss')
-  .pipe(sass().on('error', sass.logError))
-  .pipe(sourcemaps.init())
-  .pipe(sass())
-  .pipe(minify())
-  .pipe(sourcemaps.write('./'))
+  .pipe(plugins.sass().on('error', plugins.sass.logError))
+  .pipe(plugins.sourcemaps.init())
+  .pipe(plugins.sass())
+  .pipe(plugins.minifyCss())
+  .pipe(plugins.sourcemaps.write('./'))
   .pipe(gulp.dest('./public/dist/css'))
-  .pipe(livereload())
+  .pipe(plugins.livereload())
 })
 
-gulp.task('browserify', function () {
+gulp.task('watchify', function () {
   // set up the browserify instance on a task basis
-  var bundler = browserify({
-    entries: './public/js/index.js',
-    debug: true
-  })
+  var bundler = watchify(
+    browserify({
+      entries: './public/js/index.js',
+      debug: true
+    })
+  ).transform('babelify', { presets: ['es2015', 'react'] })
 
+  bundler.on('update', () => { compile(bundler) })
+  return compile(bundler)
+})
+
+function compile (bundler) {
   return bundler.bundle()
-  .on('error', function (err) {
-    // print the error (can replace with gulp-util)
-    console.log(err.message)
-    // end this stream
-    this.emit('end')
-  })
+  .on('error', handle)
   .pipe(source('bundle.js'))
   .pipe(buffer())
-  .pipe(sourcemaps.init({loadMaps: true}))
-  .pipe(sourcemaps.write('./'))
+  .pipe(plugins.sourcemaps.init({ loadMaps: true }))
+  .pipe(plugins.sourcemaps.write('./'))
   .pipe(gulp.dest('./public/dist/js/'))
-  .pipe(livereload())
-})
+  .pipe(plugins.livereload())
+}
+
+function handle (err) {
+  console.log(err.message)
+  this.emit('end')
+}

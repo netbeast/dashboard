@@ -10771,395 +10771,353 @@ function toArray(list, index) {
 })(Function('return this')());
 
 },{}],65:[function(require,module,exports){
+'use strict';
+
 /* global angular, toastr*/
 
 // Broker.js is an instance for socket.io
 // that logs messages to refactor code
 
-var io = require('socket.io-client')
-var socket = io.connect()
+var io = require('socket.io-client');
+var socket = io.connect();
 
-angular.module('Dashboard')
-.run(function () {
+angular.module('Dashboard').run(function () {
   socket.on('connect', function () {
-    console.log('ws:// connection stablished')
-  })
+    console.log('ws:// connection stablished');
+  });
 
   socket.on('disconnect', function () {
-    console.log('ws:// connection lost')
-  })
+    console.log('ws:// connection lost');
+  });
 
-  socket.on('news', handle)
-})
+  socket.on('news', handle);
+});
 
-function handle (msg) {
-  console.log('ws://news')
-  console.log('msg')
+function handle(msg) {
+  console.log('ws://news');
+  console.log('msg');
   switch (msg.emphasis) {
     case 'error':
     case 'warning':
     case 'success':
-      toastr[msg.emphasis](msg.body.toString(), msg.title)
-      break
+      toastr[msg.emphasis](msg.body.toString(), msg.title);
+      break;
     default:
-      toastr.info(msg.body, msg.title)
+      toastr.info(msg.body, msg.title);
   }
 }
 
 },{"socket.io-client":16}],66:[function(require,module,exports){
-'use strict'
+'use strict';
 /* global angular */
 
-angular.module('Dashboard')
-
-.controller('Activities#list', ['$scope', 'Activity',
-function ($scope, Activity) {
+angular.module('Dashboard').controller('Activities#list', ['$scope', 'Activity', function ($scope, Activity) {
   Activity.all().success(function (data) {
-    console.log(data)
-    $scope.activities = data
-  })
-}])
-
-.controller('Activities#live', ['$scope', '$routeParams', 'Activity', '$sce',
-function ($scope, $routeParams, Activity, $sce) {
-  Activity.open($routeParams.name)
-  .success(function (data, status) {
-    var aux = window.location.host
+    console.log(data);
+    $scope.activities = data;
+  });
+}]).controller('Activities#live', ['$scope', '$routeParams', 'Activity', '$sce', function ($scope, $routeParams, Activity, $sce) {
+  Activity.open($routeParams.name).success(function (data, status) {
+    var aux = window.location.host;
     // aux = aux.substring(0, aux.indexOf(':'))
-    aux = aux || window.location.host // recover if empty string
+    aux = aux || window.location.host; // recover if empty string
     // $scope.url = 'http://' + aux + ':' + data.port
-    $scope.url = '/i/' + $routeParams.name
-    $scope.href = $sce.trustAsResourceUrl($scope.url)
-  })
-}])
+    $scope.url = '/i/' + $routeParams.name;
+    $scope.href = $sce.trustAsResourceUrl($scope.url);
+  });
+}]);
 
 },{}],67:[function(require,module,exports){
 /* global angular, toastr,  $ */
-'use strict'
+'use strict';
 
-var Dropzone = require('Dropzone')
-var marked = require('marked')
+var Dropzone = require('Dropzone');
+var marked = require('marked');
 
-angular.module('Dashboard')
-
-.controller('Apps#show', ['$scope', '$routeParams', 'App', 'Activity', '$sce',
-function ($scope, $routeParams, App, Activity, $sce) {
-  var appName = $routeParams.name
+angular.module('Dashboard').controller('Apps#show', ['$scope', '$routeParams', 'App', 'Activity', '$sce', function ($scope, $routeParams, App, Activity, $sce) {
+  var appName = $routeParams.name;
 
   App.getReadme(appName).success(function (data) {
-    $scope.readme = $sce.trustAsHtml(marked(data))
-  })
+    $scope.readme = $sce.trustAsHtml(marked(data));
+  });
 
   App.get(appName).success(function (data) {
-    $scope.app = data
-  })
+    $scope.app = data;
+  });
 
   Activity.launch(appName).success(function (data) {
-    $scope.href = 'http://' + window.location.host + ':' + data.port
-  })
+    $scope.href = 'http://' + window.location.host + ':' + data.port;
+  });
 
   // pin app to boot
   $scope.update = function (bool) {
-    $scope.app.bootOnLoad = bool
+    $scope.app.bootOnLoad = bool;
     App.update(appName, $scope.app).success(function () {
-      toastr.success('App will start on load next time', 'Dashboard')
-    })
-  }
-}])
-
-.controller('Apps#list', ['$scope', 'App', '$location', 'cfpLoadingBar',
-function ($scope, App, $location, cfpLoadingBar) {
+      toastr.success('App will start on load next time', 'Dashboard');
+    });
+  };
+}]).controller('Apps#list', ['$scope', 'App', '$location', 'cfpLoadingBar', function ($scope, App, $location, cfpLoadingBar) {
   App.all().success(function (data) {
-    $scope.apps = data
+    $scope.apps = data;
     $scope._apps = data.filter(function (app) {
-      return !app.netbeast || app.netbeast && app.netbeast.type !== 'service'
-    })
-  })
+      return !app.netbeast || app.netbeast && app.netbeast.type !== 'service';
+    });
+  });
 
   var dz = new Dropzone('#drawer', {
     url: '/apps',
     clickable: false,
     dictDefaultMessage: '',
     previewTemplate: $('.dz-template').html(),
-    accept: function (file, done) {
-      cfpLoadingBar.start()
-      var fname = file.name
-      var ext = [fname.split('.')[1], fname.split('.')[2]].join('.')
+    accept: function accept(file, done) {
+      cfpLoadingBar.start();
+      var fname = file.name;
+      var ext = [fname.split('.')[1], fname.split('.')[2]].join('.');
       if (ext === 'tar.gz' || ext === 'tgz.') {
-        console.log('Uploading file with extension ' + ext)
-        done()
+        console.log('Uploading file with extension ' + ext);
+        done();
       } else {
-        done('Invalid file type. Must be a tar.gz')
-        this.removeFile(file)
+        done('Invalid file type. Must be a tar.gz');
+        this.removeFile(file);
       }
     }
-  })
+  });
   dz.on('complete', function (file) {
-    dz.removeFile(file)
-    cfpLoadingBar.complete()
+    dz.removeFile(file);
+    cfpLoadingBar.complete();
     App.all().success(function (data) {
-      $scope.apps = data
-      $scope.$apply()
-    })
-  })
-  dz.on('uploadprogress', cfpLoadingBar.inc)
+      $scope.apps = data;
+      $scope.$apply();
+    });
+  });
+  dz.on('uploadprogress', cfpLoadingBar.inc);
   dz.on('error', function (file, error, xhr) {
-    cfpLoadingBar.complete()
-    toastr.error(error, 'Dashboard')
-  })
-}])
-
-.controller('Apps#edit', ['$scope', 'App', '$routeParams', '$sce',
-function ($scope, App, $routeParams, $sce) {
-  var appName = $routeParams.name
+    cfpLoadingBar.complete();
+    toastr.error(error, 'Dashboard');
+  });
+}]).controller('Apps#edit', ['$scope', 'App', '$routeParams', '$sce', function ($scope, App, $routeParams, $sce) {
+  var appName = $routeParams.name;
 
   App.get(appName).success(function (data) {
-    $scope.app = data
-  })
+    $scope.app = data;
+  });
 
   // could not get this to work with $http
-  $.ajax('/apps/' + appName + '/package')
-  .done(function (data) {
-    $scope.package = $sce.trustAsHtml(data)
-    $scope.$apply()
-  })
-  .fail(function (data) {
-    toastr.error(data, 'Dashboard')
-  })
+  $.ajax('/apps/' + appName + '/package').done(function (data) {
+    $scope.package = $sce.trustAsHtml(data);
+    $scope.$apply();
+  }).fail(function (data) {
+    toastr.error(data, 'Dashboard');
+  });
 
   $scope.update = function () {
-    var content = $('#content').text()
+    var content = $('#content').text();
     App.update(appName, content).success(function (data) {
-      toastr.success('Your app has been updated correctly', 'Dashboard')
-    })
-  }
-}])
-
-.controller('Apps#rm', ['$scope', 'App', '$routeParams', '$sce',
-function ($scope, App) {
-  $scope.uninstall = true
+      toastr.success('Your app has been updated correctly', 'Dashboard');
+    });
+  };
+}]).controller('Apps#rm', ['$scope', 'App', '$routeParams', '$sce', function ($scope, App) {
+  $scope.uninstall = true;
   App.all().success(function (data) {
-    $scope.apps = data
+    $scope.apps = data;
     $scope._apps = data.filter(function (app) {
-      return !app.netbeast || app.netbeast && app.netbeast.type !== 'service'
-    })
-  })
-}])
-
-.controller('Apps#install', ['$scope', 'App', '$location', 'cfpLoadingBar',
-function ($scope, App, $location, cfpLoadingBar) {
+      return !app.netbeast || app.netbeast && app.netbeast.type !== 'service';
+    });
+  });
+}]).controller('Apps#install', ['$scope', 'App', '$location', 'cfpLoadingBar', function ($scope, App, $location, cfpLoadingBar) {
   $scope.clone = function (url) {
     App.install(url).success(function (data) {
-      $location.path('/')
-    })
-  }
+      $location.path('/');
+    });
+  };
 
   var dz = new Dropzone('#dz-install', {
     url: '/apps',
     dictDefaultMessage: '',
     previewTemplate: $('.dz-template').html(),
-    accept: function (file, done) {
-      cfpLoadingBar.start()
-      var fname = file.name
-      var ext = [fname.split('.')[1], fname.split('.')[2]].join('.')
+    accept: function accept(file, done) {
+      cfpLoadingBar.start();
+      var fname = file.name;
+      var ext = [fname.split('.')[1], fname.split('.')[2]].join('.');
       if (ext === 'tar.gz' || ext === 'tgz.') {
-        console.log('Uploading file with extension ' + ext)
-        done()
+        console.log('Uploading file with extension ' + ext);
+        done();
       } else {
-        done('Invalid file type. Must be a tar.gz')
-        this.removeFile(file)
+        done('Invalid file type. Must be a tar.gz');
+        this.removeFile(file);
       }
     }
-  })
+  });
   dz.on('success', function (file) {
-    dz.removeFile(file)
+    dz.removeFile(file);
     App.all().success(function (data) {
-      $scope.apps = data
-      $scope.$apply()
-    })
-  })
+      $scope.apps = data;
+      $scope.$apply();
+    });
+  });
   dz.on('complete', function () {
-    $location.path('/')
-    cfpLoadingBar.complete()
-  })
-  dz.on('uploadprogress', cfpLoadingBar.inc)
+    $location.path('/');
+    cfpLoadingBar.complete();
+  });
+  dz.on('uploadprogress', cfpLoadingBar.inc);
   dz.on('error', function (file, error, xhr) {
-    cfpLoadingBar.complete()
-    toastr.error(error, 'Dashboard')
-  })
-}])
+    cfpLoadingBar.complete();
+    toastr.error(error, 'Dashboard');
+  });
+}]);
 
 },{"Dropzone":1,"marked":11}],68:[function(require,module,exports){
-require('./activities')
-require('./apps')
-require('./users')
-require('./misc')
+'use strict';
+
+require('./activities');
+require('./apps');
+require('./users');
+require('./misc');
 
 },{"./activities":66,"./apps":67,"./misc":69,"./users":70}],69:[function(require,module,exports){
+'use strict';
+
 /* global angular */
 
-angular.module('Dashboard')
-.controller('Routes#index', ['$scope', '$http', function ($scope, $http) {
-  $http.get('/routes')
-  .success(function (data, status, headers, config) {
-    $scope.routes = data
-    $scope.keys = Object.keys
-  })
-  .error(function (data, status, headers, config) {
-    console.log(status + ' when GET /routes -> ' + data)
-  })
-}])
+angular.module('Dashboard').controller('Routes#index', ['$scope', '$http', function ($scope, $http) {
+  $http.get('/routes').success(function (data, status, headers, config) {
+    $scope.routes = data;
+    $scope.keys = Object.keys;
+  }).error(function (data, status, headers, config) {
+    console.log(status + ' when GET /routes -> ' + data);
+  });
+}]);
 
-angular.module('Dashboard')
-.controller('Settings#index', ['$scope', '$http', function ($scope, $http) {
+angular.module('Dashboard').controller('Settings#index', ['$scope', '$http', function ($scope, $http) {
   $scope.update = function () {
-    $http.put('/update')
-  }
-}])
+    $http.put('/update');
+  };
+}]);
 
 },{}],70:[function(require,module,exports){
+'use strict';
+
 /* global angular */
 
-var md5 = require('md5')
-var _chunk = require('lodash/array/chunk')
+var md5 = require('md5');
+var _chunk = require('lodash/array/chunk');
 
-angular.module('Dashboard')
-
-.controller('Users#index', ['$scope', 'User',
-function ($scope, User) {
+angular.module('Dashboard').controller('Users#index', ['$scope', 'User', function ($scope, User) {
   User.all().success(function (data) {
     data.forEach(function (user) {
-      user.gravatar = md5(user.email)
-    })
-    $scope.users = data
-  })
-}])
-
-.controller('Users#login', ['$scope', 'User', 'Session',
-function ($scope, User, Session) {
-  $scope.user = {}
-  User.redirectIfLogged()
-  $scope.login = Session.login
-}])
-
-.controller('Users#signup', ['$scope', 'User',
-function ($scope, User) {
-  $scope.user = {}
-  User.redirectIfLogged()
-  $scope.signup = User.signup
-}])
-
-.controller('Users#settings', ['$scope', 'User', 'Session',
-function ($scope, User, Session) {
-  User.authenticate()
-  $scope.currentUser = Session.getCurrentUser()
-  $scope.currentUser.gravatar = md5($scope.currentUser.email)
-  $scope.update = User.update
-  $scope.delete = User.remove
-}])
-
-.controller('InvitationCtrl', ['User', function (User) {
-  User.redirectIfLogged()
-}])
-
-.controller('Users#show', ['$scope', '$routeParams', 'User', 'Apps',
-function ($scope, $routeParams, User, Apps) {
+      user.gravatar = md5(user.email);
+    });
+    $scope.users = data;
+  });
+}]).controller('Users#login', ['$scope', 'User', 'Session', function ($scope, User, Session) {
+  $scope.user = {};
+  User.redirectIfLogged();
+  $scope.login = Session.login;
+}]).controller('Users#signup', ['$scope', 'User', function ($scope, User) {
+  $scope.user = {};
+  User.redirectIfLogged();
+  $scope.signup = User.signup;
+}]).controller('Users#settings', ['$scope', 'User', 'Session', function ($scope, User, Session) {
+  User.authenticate();
+  $scope.currentUser = Session.getCurrentUser();
+  $scope.currentUser.gravatar = md5($scope.currentUser.email);
+  $scope.update = User.update;
+  $scope.delete = User.remove;
+}]).controller('InvitationCtrl', ['User', function (User) {
+  User.redirectIfLogged();
+}]).controller('Users#show', ['$scope', '$routeParams', 'User', 'Apps', function ($scope, $routeParams, User, Apps) {
   User.get($routeParams.name).success(function (data) {
-    $scope.u = data
-    $scope.u.gravatar = md5(data.email)
+    $scope.u = data;
+    $scope.u.gravatar = md5(data.email);
     Apps.from($routeParams.name).success(function (data) {
-      $scope.cols = _chunk(data, Math.ceil(data.length / 4))
-    })
-  })
-}])
+      $scope.cols = _chunk(data, Math.ceil(data.length / 4));
+    });
+  });
+}]);
 
 },{"lodash/array/chunk":2,"md5":12}],71:[function(require,module,exports){
+'use strict';
+
 /* global angular, toastr */
 
-angular.module('Dashboard')
-.directive('app', ['App', 'Activity', '$window', '$location',
-function (App, Activity, $window, $location) {
-  var self = {}
-  self.scope = { app: '=app'	}
-  self.restrict = 'E'
-  self.templateUrl = 'views/apps/_app.html'
+angular.module('Dashboard').directive('app', ['App', 'Activity', '$window', '$location', function (App, Activity, $window, $location) {
+  var self = {};
+  self.scope = { app: '=app' };
+  self.restrict = 'E';
+  self.templateUrl = 'views/apps/_app.html';
 
   self.controller = ['$scope', '$element', function ($scope, $element) {
-    var app = $scope.app
+    var app = $scope.app;
 
     $scope.open = function () {
       Activity.launch(app.name).success(function () {
-        $location.path('/i/' + app.name)
-      })
-    }
+        $location.path('/i/' + app.name);
+      });
+    };
 
     $scope.delete = function () {
-      var msg = 'Are you sure you want to uninstall ' + app.name + '?'
+      var msg = 'Are you sure you want to uninstall ' + app.name + '?';
 
       if (window.confirm(msg)) {
         App.delete(app.name).success(function (data) {
-          console.log('Success on removing -> %s', app.name)
-          toastr.success(app.name + ' succesfully removed')
-          $element.hide()
-        })
+          console.log('Success on removing -> %s', app.name);
+          toastr.success(app.name + ' succesfully removed');
+          $element.hide();
+        });
       }
-    }
+    };
 
     $scope.launch = function () {
       Activity.launch(app.name).success(function (data) {
-        console.log('Success on launching -> %s', app.name)
-        toastr.success(app.name + ' launched', 'Dashboard')
-      })
-    }
+        console.log('Success on launching -> %s', app.name);
+        toastr.success(app.name + ' launched', 'Dashboard');
+      });
+    };
 
     $scope.stop = function () {
       Activity.stop(app.name).success(function (data) {
-        console.log('Success on stopping -> %s', app.name)
-        $element.hide()
-      })
-    }
-  }]
+        console.log('Success on stopping -> %s', app.name);
+        $element.hide();
+      });
+    };
+  }];
 
-  self.link = function ($scope, $element) {
-  }
+  self.link = function ($scope, $element) {};
 
-  return self
-}]) // - directive
+  return self;
+}]); // - directive
 
 /* global angular, toastr */
 
-angular.module('Dashboard')
-.directive('pins', [function () {
-  var self = {}
-  self.scope = { app: '=app'	}
-  self.restrict = 'E'
-  self.templateUrl = 'views/apps/_pins.html'
+angular.module('Dashboard').directive('pins', [function () {
+  var self = {};
+  self.scope = { app: '=app' };
+  self.restrict = 'E';
+  self.templateUrl = 'views/apps/_pins.html';
 
-  self.controller = ['$scope', '$element', function ($scope, $element) {
-  }]
+  self.controller = ['$scope', '$element', function ($scope, $element) {}];
 
-  self.link = function ($scope, $element) {
-  }
+  self.link = function ($scope, $element) {};
 
-  return self
-}]) // - directive
+  return self;
+}]); // - directive
 
 },{}],72:[function(require,module,exports){
+'use strict';
+
 /* global angular $ */
 
-require('./app')
+require('./app');
 
-angular.module('Dashboard')
-
-.directive('nbNavbar', function () {
-  console.log('loaded')
+angular.module('Dashboard').directive('nbNavbar', function () {
+  console.log('loaded');
   return {
     restrict: 'E',
     templateUrl: 'views/navbar.html',
     controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
-      $scope.user = $rootScope.user
+      $scope.user = $rootScope.user;
     }]
-  }
+  };
 })
 
 // .directive('ngRightClick', ['$parse', function ($parse) {
@@ -11178,350 +11136,325 @@ angular.module('Dashboard')
   return {
     restrict: 'E',
     scope: { value: '=content' },
-    link: function (scope) {
-      $('meta[name=description]').attr('content', scope.value)
+    link: function link(scope) {
+      $('meta[name=description]').attr('content', scope.value);
     }
-  }
-})
-
-.directive('nbTitle', ['$rootScope', function ($rootScope) {
+  };
+}).directive('nbTitle', ['$rootScope', function ($rootScope) {
   return {
     restrict: 'E',
     scope: { value: '=' },
-    controller: function ($scope) {
-      $rootScope.title = ' Netbeast | ' + $scope.value
+    controller: function controller($scope) {
+      $rootScope.title = ' Netbeast | ' + $scope.value;
     }
-  }
-}])
+  };
+}]);
 
 },{"./app":71}],73:[function(require,module,exports){
+'use strict';
+
 // Some helper methods:
 // ====================
 
 /* global angular, toastr */
 
-var md5 = require('md5')
+var md5 = require('md5');
 
-var self = module.exports = {}
+var self = module.exports = {};
 
 self._validateUserForm = function (user) {
   if (!user.alias) {
-    toastr.warning('Please type an alias')
-    return false
+    toastr.warning('Please type an alias');
+    return false;
   } else if (!user.email) {
-    toastr.warning('Please type a valid email address')
-    return false
+    toastr.warning('Please type a valid email address');
+    return false;
   } else if (self._validatePasswords(user)) {
-    return true
+    return true;
   } else {
     // unless passwords and all fields are validated
-    return false
+    return false;
   }
-}
+};
 
 self._validatePasswords = function (user) {
   if (!user.password) {
-    toastr.warning('Please type your password')
-    return false
+    toastr.warning('Please type your password');
+    return false;
   } else if (user.password.length < 6) {
-    toastr.warning('It should have more characters', 'Password should be more secure')
-    return false
+    toastr.warning('It should have more characters', 'Password should be more secure');
+    return false;
   } else if (!user.password_confirmation) {
-    toastr.warning('Please confirm your password')
-    return false
+    toastr.warning('Please confirm your password');
+    return false;
   } else if (user.password !== user.password_confirmation) {
-    toastr.warning('Passwords do not match')
-    return false
+    toastr.warning('Passwords do not match');
+    return false;
   } else {
-    return true
+    return true;
   }
-}
+};
 
 self._hashPasswords = function (user) {
-  var aux = {}
-  angular.copy(user, aux)
-  aux.password = md5(user.password)
+  var aux = {};
+  angular.copy(user, aux);
+  aux.password = md5(user.password);
   if (user.password_confirmation) {
-    aux.password_confirmation = md5(user.password_confirmation)
+    aux.password_confirmation = md5(user.password_confirmation);
   }
-  return aux
-}
+  return aux;
+};
 
 },{"md5":12}],74:[function(require,module,exports){
+'use strict';
+
 /* global angular */
 // Angular core of dashboard app
 // by jesus@netbeast
 // =============================
 
-const V = '/views/'
+var V = '/views/';
 
-angular.module('Dashboard', ['ngRoute', 'angular-loading-bar', 'cfp.loadingBar'])
+angular.module('Dashboard', ['ngRoute', 'angular-loading-bar', 'cfp.loadingBar']).config(['$routeProvider', function ($routeProvider) {
+  $routeProvider.when('/', { templateUrl: V + 'apps/index.html', controller: 'Apps#list' }).when('/apps/:name', { templateUrl: V + 'apps/show.html', controller: 'Apps#show' }).when('/apps/:name/edit', { templateUrl: V + 'apps/edit.html', controller: 'Apps#edit' }).when('/i/:name', { templateUrl: V + 'apps/live.html', controller: 'Activities#live' }).when('/activities', { templateUrl: V + 'apps/index.html', controller: 'Activities#list' }).when('/uninstall', { templateUrl: V + 'apps/index.html', controller: 'Apps#rm' }).when('/install', { templateUrl: V + 'apps/install.html', controller: 'Apps#install' }).when('/login', { templateUrl: V + 'users/login.html', controller: 'Users#login' }).when('/signup', { templateUrl: V + 'users/signup.html', controller: 'Users#signup' }).when('/routes', { templateUrl: V + 'misc/routes.html', controller: 'Routes#index' }).when('/settings', { templateUrl: V + 'misc/settings.html', controller: 'Settings#index' }).otherwise({ redirectTo: '/' });
+}]).run(['Session', function (Session) {
+  Session.update();
+}]).config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
+  cfpLoadingBarProvider.includeSpinner = false;
+}]);
 
-.config(['$routeProvider', function ($routeProvider) {
-  $routeProvider
-  .when('/', { templateUrl: V + 'apps/index.html', controller: 'Apps#list' })
-  .when('/apps/:name', { templateUrl: V + 'apps/show.html', controller: 'Apps#show' })
-  .when('/apps/:name/edit', { templateUrl: V + 'apps/edit.html', controller: 'Apps#edit' })
-  .when('/i/:name', {templateUrl: V + 'apps/live.html', controller: 'Activities#live'})
-  .when('/activities', { templateUrl: V + 'apps/index.html', controller: 'Activities#list' })
-  .when('/uninstall', { templateUrl: V + 'apps/index.html', controller: 'Apps#rm' })
-  .when('/install', { templateUrl: V + 'apps/install.html', controller: 'Apps#install' })
-  .when('/login', { templateUrl: V + 'users/login.html', controller: 'Users#login' })
-  .when('/signup', { templateUrl: V + 'users/signup.html', controller: 'Users#signup' })
-  .when('/routes', { templateUrl: V + 'misc/routes.html', controller: 'Routes#index' })
-  .when('/settings', { templateUrl: V + 'misc/settings.html', controller: 'Settings#index' })
-  .otherwise({ redirectTo: '/' })
-}])
-
-.run(['Session', function (Session) {
-  Session.update()
-}])
-
-.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
-  cfpLoadingBarProvider.includeSpinner = false
-}])
-
-require('./broker')
-require('./services')
-require('./directives')
-require('./controllers')
+require('./broker');
+require('./services');
+require('./directives');
+require('./controllers');
 
 },{"./broker":65,"./controllers":68,"./directives":72,"./services":78}],75:[function(require,module,exports){
-'use strict'
+'use strict';
 
 /* global angular, toastr */
 
-angular.module('Dashboard')
-.factory('Activity', ['$http', '$sce', '$location',
-function ActivityFactory ($http, $sce, $location) {
-  var self = {}
+angular.module('Dashboard').factory('Activity', ['$http', '$sce', '$location', function ActivityFactory($http, $sce, $location) {
+  var self = {};
   self.all = function () {
-    return $http.get('/activities/')
-  }
+    return $http.get('/activities/');
+  };
 
   self.stop = function (app) {
-    return $http.delete('/activities/' + app)
-  }
+    return $http.delete('/activities/' + app);
+  };
 
   self.open = function (app) {
-    return $http.get('/activities/' + app)
-    .error(function (data, status, headers, config) {
-      $location.path('/')
-      $location.replace()
-    })
-  }
+    return $http.get('/activities/' + app).error(function (data, status, headers, config) {
+      $location.path('/');
+      $location.replace();
+    });
+  };
 
   self.launch = function (app) {
-    return $http.post('/activities/' + app)
-  }
+    return $http.post('/activities/' + app);
+  };
 
-  return self
-}])
+  return self;
+}]);
 
 },{}],76:[function(require,module,exports){
-'use strict'
+'use strict';
 /* global angular, toastr */
 
-angular.module('Dashboard')
-.factory('App', ['$http', '$sce', '$location',
-function AppFactory ($http, $sce, $location) {
-  var self = {}
+angular.module('Dashboard').factory('App', ['$http', '$sce', '$location', function AppFactory($http, $sce, $location) {
+  var self = {};
 
   self.get = function (app) {
-    return $http.get('/apps/' + app)
-  }
+    return $http.get('/apps/' + app);
+  };
 
   self.all = function () {
-    return self.get('')
-  }
+    return self.get('');
+  };
 
   self.getReadme = function (app) {
-    return $http.get('/apps/' + app + '/readme')
-  }
+    return $http.get('/apps/' + app + '/readme');
+  };
 
   self.update = function (app, pkg) {
-    return $http.put('/apps/' + app, pkg)
-  }
+    return $http.put('/apps/' + app, pkg);
+  };
 
   self.remove = self.delete = function (app) {
-    return $http.delete('/apps/' + app)
-  }
+    return $http.delete('/apps/' + app);
+  };
 
   self.install = function (url) {
     if (!url) {
-      return toastr.warning('Git Repo URL field is empty')
+      return toastr.warning('Git Repo URL field is empty');
     }
-    return $http.post('/apps', {url: url})
-  }
+    return $http.post('/apps', { url: url });
+  };
 
-  return self
-}])
+  return self;
+}]);
 
 },{}],77:[function(require,module,exports){
+'use strict';
+
 /* global angular */
 
-var store = require('store')
+var store = require('store');
 
-angular.module('Dashboard')
-.factory('httpRequestInterceptor', function () {
+angular.module('Dashboard').factory('httpRequestInterceptor', function () {
   return {
-    request: function (config) {
-      var user = store.get('user')
-      if (!user) return config
+    request: function request(config) {
+      var user = store.get('user');
+      if (!user) return config;
 
-      var token = user.token
-      config.headers['Authorization'] = token
-      return config
+      var token = user.token;
+      config.headers['Authorization'] = token;
+      return config;
     }
-  }
-})
-
-.config(['$httpProvider', function ($httpProvider) {
-  $httpProvider.interceptors.push('httpRequestInterceptor')
-}])
+  };
+}).config(['$httpProvider', function ($httpProvider) {
+  $httpProvider.interceptors.push('httpRequestInterceptor');
+}]);
 
 },{"store":64}],78:[function(require,module,exports){
-require('./activity')
-require('./session')
-require('./auth')
-require('./user')
-require('./app')
+'use strict';
+
+require('./activity');
+require('./session');
+require('./auth');
+require('./user');
+require('./app');
 
 },{"./activity":75,"./app":76,"./auth":77,"./session":79,"./user":80}],79:[function(require,module,exports){
+'use strict';
+
 /* global angular, toastr */
 
-var store = require('store')
-var _hashPasswords = require('../helpers')._hashPasswords
+var store = require('store');
+var _hashPasswords = require('../helpers')._hashPasswords;
 
-angular.module('Dashboard')
-.factory('Session', ['$http', '$rootScope', '$location',
-function SessionFactory ($http, $rootScope, $location) {
-  var self = {}
+angular.module('Dashboard').factory('Session', ['$http', '$rootScope', '$location', function SessionFactory($http, $rootScope, $location) {
+  var self = {};
   self.save = function (data) {
     // console.log('Saving session...')
-    $rootScope.user = data
-    store.set('user', data)
+    $rootScope.user = data;
+    store.set('user', data);
     // console.log(data)
-  }
+  };
 
   self.login = function (credentials) {
-    console.log('login %s', credentials.toString())
-    var creds = _hashPasswords(credentials)
+    console.log('login %s', credentials.toString());
+    var creds = _hashPasswords(credentials);
     $http.post('/login', creds).success(function (data) {
-      $location.path('/')
-      toastr.success('Welcome ' + data.alias)
-      self.save(data)
-    })
-  }
+      $location.path('/');
+      toastr.success('Welcome ' + data.alias);
+      self.save(data);
+    });
+  };
 
   self.update = function () {
-    console.log('Retrieving session...')
+    console.log('Retrieving session...');
     $http.get('/sessions').success(function (data) {
-      self.save(data)
-    })
-  }
+      self.save(data);
+    });
+  };
 
   self.load = self.getCurrentUser = function () {
-    var user = store.get('user')
-    console.log('Stored user is:')
-    console.log(user)
-    return user
-  }
+    var user = store.get('user');
+    console.log('Stored user is:');
+    console.log(user);
+    return user;
+  };
 
   self.logout = function () {
     $http.get('/logout').then(function () {
-      store.remove('user')
-      delete $rootScope.user
-      toastr.success('See you soon :)')
-      $location.path('/')
-    })
-  }
+      store.remove('user');
+      delete $rootScope.user;
+      toastr.success('See you soon :)');
+      $location.path('/');
+    });
+  };
 
-  self.update()
+  self.update();
 
-  return self
-}])
+  return self;
+}]);
 
 },{"../helpers":73,"store":64}],80:[function(require,module,exports){
 /* global angular, toastr */
 
-'use strict'
+'use strict';
 
-var _validateUserForm = require('../helpers')._validateUserForm
-var _hashPasswords = require('../helpers')._hashPasswords
+var _validateUserForm = require('../helpers')._validateUserForm;
+var _hashPasswords = require('../helpers')._hashPasswords;
 
-angular.module('Dashboard')
-.factory('User', ['$http', '$location', 'Session', '$rootScope',
-function ActivitiesFactory ($http, $location, Session, $rootScope) {
-  var self = {}
-  
+angular.module('Dashboard').factory('User', ['$http', '$location', 'Session', '$rootScope', function ActivitiesFactory($http, $location, Session, $rootScope) {
+  var self = {};
+
   self.get = function (alias) {
-    return $http.get('/users/' + alias)
-  }
+    return $http.get('/users/' + alias);
+  };
 
   self.all = function () {
-    return self.get('')
-  }
+    return self.get('');
+  };
 
   self.signup = function (userForm) {
     if (!_validateUserForm(userForm)) {
-      return false
+      return false;
     } else {
-      var user = _hashPasswords(userForm)
-      return $http.post('/signup', user)
-      .success(function (data, status, headers, config) {
-        toastr.success('An activation code has been sent to ' + data.email)
-      })
+      var user = _hashPasswords(userForm);
+      return $http.post('/signup', user).success(function (data, status, headers, config) {
+        toastr.success('An activation code has been sent to ' + data.email);
+      });
     }
-  }
+  };
 
   self.update = function (userForm) {
     if (!_validateUserForm(userForm)) {
-      return false
+      return false;
     } else {
-      var user = _hashPasswords(userForm)
-      user._id = Session.load()._id
-      return $http.put('/users', user)
-      .success(function (data, status, headers, config) {
-        console.log('PUT  /users/ -> ')
-        console.log(userForm)
-        toastr.success('Your data has been successfully updated')
-        Session.save(user)
-      })
+      var user = _hashPasswords(userForm);
+      user._id = Session.load()._id;
+      return $http.put('/users', user).success(function (data, status, headers, config) {
+        console.log('PUT  /users/ -> ');
+        console.log(userForm);
+        toastr.success('Your data has been successfully updated');
+        Session.save(user);
+      });
     }
-  }
+  };
 
   self.remove = function () {
     if (window.confirm('Are you sure you want to delete your account?')) {
-      $http.delete('/users')
-      .success(function (data, status, headers, config) {
-        toastr.success('Sorry to see you go :[')
-        Session.logout()
-        return $location.path('/')
-      })
+      $http.delete('/users').success(function (data, status, headers, config) {
+        toastr.success('Sorry to see you go :[');
+        Session.logout();
+        return $location.path('/');
+      });
     }
-  }
+  };
 
   self.getCurrentUser = function () {
-    return $rootScope.user
-  }
+    return $rootScope.user;
+  };
 
   self.authenticate = function () {
     if (!self.getCurrentUser()) {
-      console.log('User not logged in. Redirecting...')
-      $location.path('/login')
+      console.log('User not logged in. Redirecting...');
+      $location.path('/login');
     }
-  }
+  };
 
   self.redirectIfLogged = function () {
     if (self.getCurrentUser()) {
-      console.log('User is already logged. Redirecting...')
-      return $location.path('/apps')
+      console.log('User is already logged. Redirecting...');
+      return $location.path('/apps');
     }
-  }
+  };
 
-  return self
-}])
+  return self;
+}]);
 
 },{"../helpers":73}]},{},[74])
 

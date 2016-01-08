@@ -22,8 +22,8 @@ gulp.task('serve', function () {
 gulp.task('build', ['sass', 'browserify'])
 
 gulp.task('sass', function () {
-  gulp.src('./public/css/style.scss')
-  .on('error', handle)
+  gulp.src('./public/styles/style.scss')
+  .pipe(plugins.plumber())
   .pipe(plugins.sourcemaps.init())
   .pipe(plugins.sass())
   .pipe(plugins.minifyCss())
@@ -48,16 +48,11 @@ gulp.task('watchify', function () {
 
 function compile (bundler) {
   return bundler.bundle()
-  .on('error', handle)
+  // .on('error', handle)
+  .pipe(plugins.plumber())
   .pipe(source('bundle.js'))
   .pipe(buffer())
   .pipe(plugins.sourcemaps.init({ loadMaps: true }))
   .pipe(plugins.sourcemaps.write('./'))
   .pipe(gulp.dest('./public/dist/js/'))
-  .pipe(plugins.livereload())
-}
-
-function handle (err) {
-  console.log(err.message)
-  this.emit('end')
 }

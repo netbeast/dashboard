@@ -2,10 +2,10 @@
 // From here files get imported in dependency order
 // and get compiled into style.css
 
-@import '../../dist/fa/css/font-awesome.css';
+@import 'mixins';
 @import 'colors';
 @import 'navbar';
-@import 'apps';
+@import 'components/all';
 
 
 * {
@@ -19,6 +19,7 @@ body, html {
   width: 100%;
   background-color: $grey-lighter;
   color: $black;
+  font-family: sans-serif;
 }
 
 #wrapper {

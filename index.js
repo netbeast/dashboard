@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// Load environment variables
+require('dotenv').load()
+
 // Node native libraries
 var path = require('path')
 var http = require('http')
@@ -11,7 +14,6 @@ var cmd = require('commander')
 
 // Project libraries
 var app = require('./src')
-var config = require('./config')
 var bootOnload = require('./src/boot-on-load')
 
 const DASHBOARD_DEAMON = path.join(__dirname, './bin/deamon.js')
@@ -24,10 +26,10 @@ cmd
 // Launch server with web sockets
 var server = http.createServer(app)
 
-config.port = cmd.port || config.port
-config.LOCAL_URL = 'http://localhost:' + config.port
+process.env.PORT = cmd.port || process.env.PORT
+process.env.LOCAL_URL = 'http://localhost:' + process.env.PORT
 
-server.listen(config.port, function () {
+server.listen(process.env.PORT, function () {
   console.log('👾  Netbeast dashboard started on %s:%s',
   server.address().address,
   server.address().port)
@@ -35,7 +37,7 @@ server.listen(config.port, function () {
 })
 
 var deamon = new (forever.Monitor)(DASHBOARD_DEAMON, {
-  env: { 'NETBEAST_PORT': config.port },
+  env: { 'NETBEAST_PORT': process.env.PORT },
   max: 1
 })
 

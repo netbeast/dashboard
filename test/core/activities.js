@@ -1,5 +1,5 @@
-#!/usr/bin/env node
 /* global describe, before, after, it */
+require('dotenv').load()
 
 var chai = require('chai')
 var should = chai.should()
@@ -9,16 +9,9 @@ var fs = require('fs-extra')
 var path = require('path')
 
 var App = require('src/models/app')
-var config = require('config')
 
-const URL = 'http://localhost:' + config.port
+const URL = process.env.LOCAL_URL
 const APP_PATH = './test/app.tar.gz'
-
-// Test styling
-// http://chaijs.com/guide/styles/
-
-// tutorial
-// http://code.tutsplus.com/tutorials/testing-in-nodejs--net-35018
 
 describe('Activities', function () {
   before('it should install myapp for tests', function (done) {
@@ -32,7 +25,7 @@ describe('Activities', function () {
   })
 
   after('it should remove myapp', function (done) {
-    fs.remove(path.join(config.appsDir, 'myapp'), function (err) {
+    fs.remove(path.join(process.env.APPS_DIR, 'myapp'), function (err) {
       should.not.exist(err)
       fs.copy(APP_PATH + '.bck', APP_PATH, function (err) {
         should.not.exist(err)
@@ -41,10 +34,10 @@ describe('Activities', function () {
     })
   })
 
-  it('myapp should not be running', function (done) {
+  it('myapp should be running', function (done) {
     request(URL + '/activities/myapp', function (err, resp, body) {
       should.not.exist(err)
-      resp.statusCode.should.equal(500)
+      resp.statusCode.should.equal(200)
       done()
     })
   })

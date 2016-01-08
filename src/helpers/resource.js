@@ -1,10 +1,8 @@
 var sqlite3 = require('sqlite3').verbose()
 
-var config = require('../../config')
+var db = new sqlite3.Database(process.env.DATABASE_URI)
 
-var db = new sqlite3.Database(config.DATABASE_URI)
-
-var helper = {}
+var helper = module.exports = {}
 
 helper.createTable = function (done) {
   db.run('CREATE TABLE IF NOT EXISTS actions(' +
@@ -51,5 +49,3 @@ helper.updateAction = function (query, value, done) {
   db.run('UPDATE actions SET ' + newvalue + "= '" + value[newvalue] +
   "' WHERE " + key + "= '" + query[key] + "'", done)
 }
-
-module.exports = helper

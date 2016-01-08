@@ -1,4 +1,3 @@
-'use strict'
 
 var gulp = require('gulp')
 var plugins = require('gulp-load-plugins')()
@@ -17,7 +16,7 @@ gulp.task('serve', function () {
   plugins.nodemon({
     script: './index.js',
     watch: ['./index.js', 'src'],
-    env: { 'ENV': 'development' }
+    nodeArgs: ['--use-strict']
   })
 })
 
@@ -41,7 +40,7 @@ gulp.task('watchify', function () {
       entries: './public/js/index.js',
       debug: true
     })
-  ).transform('babelify', { presets: ['es2015', 'react'] })
+  ).transform('babelify', { presets: ['es2015'] })
 
   bundler.on('update', () => { compile(bundler) })
   return compile(bundler)

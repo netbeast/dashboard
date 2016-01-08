@@ -24,7 +24,7 @@ Thumbs.db
 
 # Project ignores #
 ###################
-
+.env
 .log
 .sass-cache/
 

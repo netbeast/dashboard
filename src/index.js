@@ -1,3 +1,7 @@
+
+// load environment variables
+require('dotenv').load()
+
 var path = require('path')
 
 var fs = require('fs-extra')
@@ -8,7 +12,6 @@ var cookieParser = require('cookie-parser')
 var express = require('express')
 
 var broker = require('./helpers/broker')
-var config = require('../config')
 
 var app = module.exports = express()
 
@@ -21,12 +24,12 @@ app.use(require('./middleware/proxy'))
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(favicon(path.join(config.publicDir, 'img/favicon.png')))
+app.use(favicon(path.join(process.env.PUBLIC_DIR, 'img/favicon.png')))
 
 app.use(require('./middleware/cors'))
 app.use(require('./routes'))
 
-app.use(express.static(config.publicDir))
+app.use(express.static(process.env.PUBLIC_DIR))
 
 // error with Error classes
 app.use(function (err, req, res, next) {

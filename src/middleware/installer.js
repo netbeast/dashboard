@@ -1,13 +1,11 @@
 var path = require('path')
 var multer = require('multer')
 
-var config = require('../../config')
-var error = require('../util/invalid-format')
 var App = require('../models/app')
 var broker = require('../helpers/broker')
 
 module.exports.multer = multer({
-  dest: config.tmpDir,
+  dest: process.env.TMP_DIR,
   rename: function (fieldname, filename, req, res) {
     return new Date().getTime() + '-' + filename
   },
@@ -27,7 +25,7 @@ module.exports.multer = multer({
 module.exports.process = function (req, res, next) {
   if (!req.uploadedFile) return next()
 
-  var tarball = path.join(config.tmpDir, req.uploadedFile.name)
+  const tarball = path.join(process.env.TMP_DIR, req.uploadedFile.name)
   App.install(tarball, function (err, appJson) {
     if (err) return next(err)
     broker.success(appJson.name + ' installed')

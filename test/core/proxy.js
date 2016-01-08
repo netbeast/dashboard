@@ -1,5 +1,6 @@
-#!/usr/bin/env node
 /* global describe, it, before, after */
+require('dotenv').load()
+
 var chai = require('chai')
 var should = chai.should()
 var expect = chai.expect
@@ -8,9 +9,8 @@ var request = require('request')
 var async = require('async')
 
 var io = require('socket.io-client')
-var config = require('config')
 
-const URL = config.LOCAL_URL + '/i/test-app'
+const URL = process.env.LOCAL_URL + '/i/test-app'
 const METHODS = ['GET', 'PUT', 'PATCH', 'POST', 'DELETE']
 const TEST_MSG_BODY = 'testing websockets on proxy'
 

@@ -1,4 +1,5 @@
 /* global describe, before, it*/
+require('dotenv').load()
 
 var should = require('chai').should()
 var expect = require('chai').expect

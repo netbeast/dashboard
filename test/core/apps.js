@@ -1,5 +1,5 @@
-#!/usr/bin/env node
 /* global describe, it */
+require('dotenv').load()
 
 var chai = require('chai')
 var should = chai.should()
@@ -9,11 +9,10 @@ var request = require('request')
 var path = require('path')
 var fs = require('fs')
 
-var config = require('config')
-
 var s = 1000 // seconds
 
-const URL = 'http://localhost:' + config.port
+const URL = process.env.LOCAL_URL
+const APPS_DIR = process.env.APPS_DIR
 const GITHUB_REPO = 'https://github.com/netbeast/get-started'
 
 // Test styling
@@ -28,7 +27,7 @@ describe('Apps', function () {
     var req = request.post(URL + '/apps', function (err, resp, body) {
       should.not.exist(err)
       expect(resp.statusCode).to.equal(204)
-      fs.stat(path.join(config.appsDir, 'myapp'), function (err, stats) {
+      fs.stat(path.join(APPS_DIR, 'myapp'), function (err, stats) {
         should.not.exist(err)
         expect(stats.isDirectory()).to.equal(true)
         done()
@@ -57,7 +56,7 @@ describe('Apps', function () {
     var req = request.post(URL + '/apps', function (err, resp, body) {
       should.not.exist(err)
       expect(resp.statusCode).to.equal(204)
-      fs.stat(path.join(config.appsDir, 'xy-get-started'), function (err, stats) {
+      fs.stat(path.join(APPS_DIR, 'xy-get-started'), function (err, stats) {
         should.not.exist(err)
         expect(stats.isDirectory()).to.equal(true)
         done()

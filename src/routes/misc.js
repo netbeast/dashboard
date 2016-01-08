@@ -1,17 +1,15 @@
-var express	 = require('express')
-var spawn		 = require('child_process').spawn
-var AsciiTable = require('ascii-table')
+var express = require('express')
+var spawn = require('child_process').spawn
 
-var apps 	 	 = require('./apps')
-var users 	 = require('./users')
+var apps = require('./apps')
+var users = require('./users')
 var activities = require('./activities')
-var config 	 = require('../../config')
-var broker		 = require('../helpers/broker')
+var broker = require('../helpers/broker')
 
 var router = express.Router()
 
 router.get('/config', function (req, res) {
-  res.json(config)
+  res.json(process.env)
 })
 
 router.put('/update', function (req, res) {
@@ -43,21 +41,8 @@ router.put('/update', function (req, res) {
 })
 
 router.get('/routes', function (req, res) {
-  var stack = [].concat(activities.stack, apps.stack, users.stack, router.stack)
-
-  if (req.query.format !== 'plain') {
-    res.json(stack)
-  } else {
-    var table = new AsciiTable('Netbeast dashboard API')
-    table.setHeading('Path', 'Method')
-    stack.forEach(function (s) {
-      if (s.route !== undefined) {
-        table.addRow(s.route.path, Object.keys(s.route.methods)[0])
-      }
-    })
-    res.header('Content-Type', 'text/plain')
-    res.end(table.toString() + '\n')
-  }
+  const stack = [].concat(activities.stack, apps.stack, users.stack, router.stack)
+  res.json(stack)
 })
 
 module.exports = router

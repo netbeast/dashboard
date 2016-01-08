@@ -9,14 +9,13 @@ var chalk = require('chalk')
 var async = require('async')
 
 var broker = require('../helpers/broker')
-var config = require('../../config')
 var App = require('./app')
 
 portfinder.basePort = 3000
+const APPS_DIR = process.env.APPS_DIR
 
 // Apps with their child object running
 var children = {}
-
 var self = new events.EventEmitter()
 
 self.start = function (req, res, next) {
@@ -130,10 +129,10 @@ self.on('start', function (app) {
     if (err) return broker.error(err.toString())
 
     // child management
-    var entryPoint = path.join(config.appsDir, app.name, pkgJson.main)
+    var entryPoint = path.resolve(APPS_DIR, app.name, pkgJson.main)
 
     var child = spawn(entryPoint, ['--port', app.port], {
-      cwd: path.join(config.appsDir, app.name)
+      cwd: path.join(APPS_DIR, app.name)
     })
 
     child.stdout.on('data', function (data) {
@@ -149,8 +148,9 @@ self.on('start', function (app) {
       children[app.name] = undefined
     })
 
-    child.on('error', function (code) {
-      broker.error(' exited with code ' + code || 0, app.name)
+    child.on('error', function (error) {
+      broker.error(' exited with code ' + error || 0, app.name)
+      console.trace(error)
       children[app.name] = undefined
     })
 

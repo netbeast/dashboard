@@ -1,4 +1,4 @@
-/* global describe, before, after, it*/
+/* global describe, after, it*/
 
 var should = require('chai').should()
 

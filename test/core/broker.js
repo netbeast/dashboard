@@ -1,4 +1,5 @@
 /* global describe, it, before, after */
+require('dotenv').load()
 
 // File to unit tests web sockets
 // jesus@netbeast.co
@@ -10,7 +11,6 @@ var chai = require('chai')
 var expect = chai.expect
 
 var broker = require('src/helpers/broker')
-var config = require('config')
 
 const TEST_ERR_MSG_BODY = crypto.createHash('sha1')
 .update(Math.random().toString())
@@ -20,13 +20,13 @@ const TEST_WARN_MSG_BODY = crypto.createHash('sha1')
 .update(Math.random().toString())
 .digest('hex')
 
-console.log('### %s ###', config.LOCAL_URL)
+console.log('### %s ###', process.env.LOCAL_URL)
 
 var socket
 
 describe('Broker', function () {
   before('should connect to Netbeast', function (done) {
-    socket = io.connect(config.LOCAL_URL, { 'force new connection': true })
+    socket = io.connect(process.env.LOCAL_URL, { 'force new connection': true })
     socket.on('connect', done)
   })
 

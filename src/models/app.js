@@ -2,16 +2,16 @@ var path = require('path')
 var fs = require('fs-extra')
 var async = require('async')
 
-var config = require('../../config')
 var broker = require('../helpers/broker')
 var NotFound = require('../util/not-found')
 var InvalidFormat = require('../util/invalid-format')
 var _install = require('./_install')
 
 var App = module.exports = {}
+const APPS_DIR = process.env.APPS_DIR
 
 App.all = function (done) {
-  fs.readdir(config.appsDir, function (err, files) {
+  fs.readdir(APPS_DIR, function (err, files) {
     if (err) return done(err)
     files = files.filter(function (file) {
       return file !== 'installed_apps_live_here'
@@ -21,18 +21,19 @@ App.all = function (done) {
 }
 
 App.delete = function (app, done) {
-  var _path = path.join(config.appsDir, app)
-  if (!fs.existsSync(_path)) return done(new NotFound(app + ' is not installed'))
+  if (!fs.existsSync(path.join(APPS_DIR, app))) {
+    return done(new NotFound(app + ' is not installed'))
+  }
 
   broker.info('Uninstalling ' + app + '...')
-  fs.remove(_path, done)
+  fs.remove(path.join(APPS_DIR, app), done)
 }
 
 App.getPackageJson = function (app, done) {
-  if (!fs.existsSync(path.join(config.appsDir, app))) {
+  if (!fs.existsSync(path.join(APPS_DIR, app))) {
     return done(new NotFound(app + ' is not installed'))
   }
-  fs.readJson(path.join(config.appsDir, app, 'package.json'), done)
+  fs.readJson(path.join(APPS_DIR, app, 'package.json'), done)
 }
 
 App.install = function (bundle, done) {

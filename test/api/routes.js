@@ -1,14 +1,12 @@
-#!/usr/bin/env node
 /* global describe, it*/
+require('dotenv').load()
 
 var request = require('request')
 var chai = require('chai')
 var should = chai.should()
 var expect = chai.expect
 
-var config = require('config')
-
-const URL = 'http://localhost:' + config.port
+const URL = process.env.LOCAL_URL
 
 console.log(URL + '/resources')
 

@@ -2,14 +2,14 @@ var path = require('path')
 var express = require('express')
 var fs = require('fs-extra')
 
-var config = require('../../config')
-var installer = require('../middleware/installer')
 var App = require('../models/app')
 var Activity = require('../models/activity')
+var installer = require('../middleware/installer')
+
 var NotFound = require('../util/not-found')
 var InvalidFormat = require('../util/invalid-format')
 
-var router = express.Router()
+var router = module.exports = express.Router()
 
 // GET
 router.route('/apps')
@@ -31,7 +31,7 @@ router.route('/apps/:name')
   })
 })
 .put(function (req, res, next) {
-  var file = path.join(config.appsDir, req.params.name, 'package.json')
+  const file = path.join(process.env.APPS_DIR, req.params.name, 'package.json')
   fs.writeJson(file, req.body, function (err) {
     if (err) {
       next(new InvalidFormat('Not a valid package.json'))
@@ -59,21 +59,20 @@ router.route('/apps/:name')
 })
 
 router.get('/apps/:name/logo', function (req, res) {
-  var pkgJson = path.join(config.appsDir, req.params.name, 'package.json')
+  const pkgJson = path.join(process.env.APPS_DIR, req.params.name, 'package.json')
   try {
-    var app = fs.readJsonSync(pkgJson)
-    var appRoot = path.join(config.appsDir, app.name)
-    var appLogo = path.join(appRoot, app.logo)
+    const app = fs.readJsonSync(pkgJson)
+    const appRoot = path.join(process.env.APPS_DIR, app.name)
+    const appLogo = path.join(appRoot, app.logo)
     res.sendFile(appLogo)
   } catch (e) {
-    res.sendFile(path.join(config.publicDir, 'img/dflt.png'))
+    res.sendFile(path.resolve(process.env.PUBLIC_DIR, 'img/dflt.png'))
   }
 })
 
 router.get('/apps/:name/port?', function (req, res) {
-  var app = Activity.get(req.params.name)
+  const app = Activity.get(req.params.name)
   if (app) {
-    console.dir(app.port)
     res.json(app.port)
   } else {
     res.status(403).send('App not running')
@@ -81,9 +80,9 @@ router.get('/apps/:name/port?', function (req, res) {
 })
 
 router.get('/apps/:name/readme', function (req, res, next) {
-  var readme = path.join(config.appsDir, req.params.name, 'README.md')
+  const readme = path.join(process.env.APPS_DIR, req.params.name, 'README.md')
   if (!fs.existsSync(readme)) {
-    return res.send('This app does not have a README.md')
+    return res.status(404).send('This app does not have a README.md')
   }
 
   res.sendFile(readme)
@@ -97,5 +96,3 @@ router.get('/apps/:name/package', function (req, res, next) {
     res.send('' + data)
   })
 })
-
-module.exports = router

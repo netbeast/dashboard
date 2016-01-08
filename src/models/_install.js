@@ -7,11 +7,8 @@ var fs = require('fs-extra')
 var request = require('request')
 var broker = require('../helpers/broker')
 
-var config = require('../../config')
-
 function _installFromDir (dir, done) {
-  var file, appJson, appRoot, main
-  file = path.join(dir, 'package.json')
+  const file = path.join(dir, 'package.json')
 
   broker.info('Setting everything up for you...')
 
@@ -19,18 +16,18 @@ function _installFromDir (dir, done) {
     return done(new Error('App does not have a package.json'))
   }
 
-  appJson = fs.readJsonSync(file, {throws: false})
+  const appJson = fs.readJsonSync(file, {throws: false})
   if (!appJson) {
     return done(new Error("App's package.json is malformed"))
   }
 
-  appRoot = path.join(config.appsDir, appJson.name)
+  const appRoot = path.join(process.env.APPS_DIR, appJson.name)
   if (fs.existsSync(appRoot)) {
     return done(new Error('App already exists'))
   }
 
   // Check if main is an executable file
-  main = path.resolve(dir, appJson.main)
+  const main = path.resolve(dir, appJson.main)
   if (!fs.existsSync(main)) {
     return done(new Error('App does not have a main executable'))
   } else {
@@ -44,7 +41,7 @@ function _installFromDir (dir, done) {
 }
 
 function _installFromTar (tarball, done) {
-  var tmpDir = path.join(config.tmpDir, '' + new Date().getTime())
+  const tmpDir = path.join(process.env.TMP_DIR, '' + new Date().getTime())
 
   broker.info('Unbundling the app...')
   new Decompress().src(tarball).dest(tmpDir)
@@ -67,7 +64,7 @@ function _installFromTar (tarball, done) {
 }
 
 function _installFromGit (url, done) {
-  var tmpDir = path.join(config.tmpDir, '' + new Date().getTime())
+  var tmpDir = path.join(process.env.TMP_DIR, '' + new Date().getTime())
   git.clone(url, tmpDir, function (err, repo) {
     if (err) return done(err)
 
@@ -88,7 +85,7 @@ function _installFromNetbeast (url, done) {
 }
 
 function _installFromUrl (url, done) {
-  var host = Url.parse(url).host
+  const host = Url.parse(url).host
   console.log('[install] host=%s', host)
   if (host === 'netbeast.co') {
     broker.info('Installing from Netbeast repos...')

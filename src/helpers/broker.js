@@ -3,8 +3,8 @@
 
 var chalk = require('chalk')
 
-var io = require('socket.io-client')
-var socket = socket || io.connect(process.env.LOCAL_URL)
+var mqtt = require('mqtt')
+var client = mqtt.connect()
 
 var broker = module.exports = {}
 
@@ -43,10 +43,8 @@ broker.emit = function (msg) {
     case 'success':
       str = str + chalk.bgGreen(msg.body)
       break
-    default:
-      break
   }
 
   console.log(str)
-  socket.emit('push', msg)
+  client.publish('netbeast/push', JSON.stringify(msg))
 }

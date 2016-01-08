@@ -34,10 +34,10 @@ describe('Activities', function () {
     })
   })
 
-  it('myapp should be running', function (done) {
+  it('myapp should not be running', function (done) {
     request(URL + '/activities/myapp', function (err, resp, body) {
       should.not.exist(err)
-      resp.statusCode.should.equal(200)
+      resp.statusCode.should.equal(500)
       done()
     })
   })

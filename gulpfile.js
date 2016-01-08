@@ -15,8 +15,7 @@ gulp.task('default', ['serve', 'watchify'], function () {
 gulp.task('serve', function () {
   plugins.nodemon({
     script: './index.js',
-    watch: ['./index.js', 'src'],
-    nodeArgs: ['--use-strict']
+    watch: ['./index.js', 'src']
   })
 })
 

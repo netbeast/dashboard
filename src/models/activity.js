@@ -16,7 +16,7 @@ const APPS_DIR = process.env.APPS_DIR
 
 // Apps with their child object running
 var children = {}
-var self = new events.EventEmitter()
+var self = module.exports = new events.EventEmitter()
 
 self.start = function (req, res, next) {
   self.boot(req.params.name, function (err, child) {
@@ -164,5 +164,3 @@ process.on('exit', function () {
     child.process.kill('SIGTERM')
   })
 })
-
-module.exports = self

@@ -9,8 +9,8 @@ var http = require('http')
 
 // NPM dependencies
 var forever = require('forever-monitor')
-var io = require('socket.io')()
 var cmd = require('commander')
+var mosca = require('mosca')
 
 // Project libraries
 var app = require('./src')
@@ -25,6 +25,8 @@ cmd
 
 // Launch server with web sockets
 var server = http.createServer(app)
+var broker = new mosca.Server({})
+broker.attachHttpServer(server)
 
 process.env.PORT = cmd.port || process.env.PORT
 process.env.LOCAL_URL = 'http://localhost:' + process.env.PORT
@@ -46,10 +48,4 @@ deamon.start()
 
 process.on('exit', function () {
   deamon.kill('SIGTERM')
-})
-
-io.listen(server)
-io.on('connection', require('./src/broker'))
-io.use(function (socket, next) {
-  next() // socket middleware
 })

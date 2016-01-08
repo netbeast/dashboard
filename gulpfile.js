@@ -5,11 +5,11 @@ var source = require('vinyl-source-stream')
 var buffer = require('vinyl-buffer')
 var browserify = require('browserify')
 var watchify = require('watchify')
+var lrload = require('livereactload')
 
 gulp.task('default', ['serve', 'watchify'], function () {
   plugins.livereload.listen()
-  gulp.watch('./public/css/**', ['sass'])
-  gulp.watch('./public/views/**/*.html', plugins.livereload.changed)
+  gulp.watch('./public/styles/**', ['sass'])
 })
 
 gulp.task('serve', function () {
@@ -23,7 +23,7 @@ gulp.task('build', ['sass', 'browserify'])
 
 gulp.task('sass', function () {
   gulp.src('./public/css/style.scss')
-  .pipe(plugins.sass().on('error', plugins.sass.logError))
+  .on('error', handle)
   .pipe(plugins.sourcemaps.init())
   .pipe(plugins.sass())
   .pipe(plugins.minifyCss())
@@ -36,10 +36,11 @@ gulp.task('watchify', function () {
   // set up the browserify instance on a task basis
   var bundler = watchify(
     browserify({
-      entries: './public/js/index.js',
+      entries: './public/components/index.jsx',
+      plugin: [ lrload ],
       debug: true
     })
-  ).transform('babelify', { presets: ['es2015'] })
+  ).transform('babelify', { presets: ['es2015', 'react'] })
 
   bundler.on('update', () => { compile(bundler) })
   return compile(bundler)

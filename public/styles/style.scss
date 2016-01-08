@@ -2,12 +2,7 @@
 // From here files get imported in dependency order
 // and get compiled into style.css
 
-@import 'theme.css';
 @import '../../dist/fa/css/font-awesome.css';
-@import 'vendor/dropzone.css';
-@import 'vendor/toastr.css';
-@import 'vendor/loading-bar';
-@import 'mixins';
 @import 'colors';
 @import 'navbar';
 @import 'apps';

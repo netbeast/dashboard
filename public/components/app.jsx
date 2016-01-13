@@ -6,11 +6,13 @@ export default class App extends React.Component {
     const logo = `/apps/${name}/logo`
     return (
       <div className='app'>
-        <img src={logo} alt={logo} />
-        <h4> <br/>
-          {name} <br/>
-          {author}
-          </h4>
+        <div className='logo'>
+          <img className='filter-to-white' src={logo} alt={logo} />
+        </div>
+        <h4>
+          <br/> <span className='name'>{name}</span>
+          <br/> <span className='author'>{author}</span>
+        </h4>
       </div>
     )
   }

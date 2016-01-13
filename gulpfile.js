@@ -9,7 +9,7 @@ var lrload = require('livereactload')
 
 gulp.task('default', ['serve', 'watchify'], function () {
   plugins.livereload.listen()
-  gulp.watch('./public/styles/**', ['sass'])
+  gulp.watch('./public/styles/*.scss', ['sass'])
 })
 
 gulp.task('serve', function () {
@@ -26,6 +26,7 @@ gulp.task('sass', function () {
   .pipe(plugins.plumber())
   .pipe(plugins.sourcemaps.init())
   .pipe(plugins.sass())
+  .pipe(plugins.autoprefixer())
   .pipe(plugins.minifyCss())
   .pipe(plugins.sourcemaps.write('./'))
   .pipe(gulp.dest('./public/dist/css'))
@@ -40,7 +41,7 @@ gulp.task('watchify', function () {
       plugin: [ lrload ],
       debug: true
     })
-  ).transform('babelify', { presets: ['es2015', 'react'] })
+    ).transform('babelify', { presets: ['es2015', 'react'] })
 
   bundler.on('update', () => { compile(bundler) })
   return compile(bundler)
@@ -48,8 +49,10 @@ gulp.task('watchify', function () {
 
 function compile (bundler) {
   return bundler.bundle()
-  // .on('error', handle)
-  .pipe(plugins.plumber())
+  .on('error', function (err) {
+    console.error(err.message)
+    this.emit('end')
+  })
   .pipe(source('bundle.js'))
   .pipe(buffer())
   .pipe(plugins.sourcemaps.init({ loadMaps: true }))

@@ -2,11 +2,11 @@
 // From here files get imported in dependency order
 // and get compiled into style.css
 
-@import 'mixins';
-@import 'colors';
-@import 'navbar';
-@import 'components/all';
 
+@import 'vendor/normalize.css';
+
+@import 'colors';
+@import 'components';
 
 * {
   margin: 0;
@@ -17,54 +17,13 @@
 body, html {
   height: 100%;
   width: 100%;
-  background-color: $grey-lighter;
-  color: $black;
-  font-family: sans-serif;
-}
-
-#wrapper {
-  display: block;
-  position: absolute;
-  width: 100%;
-  min-height: 100vh;
-  top: 0; left: 0;
-  padding-left: $navbar-width;
-}
-
-#brand {
-  position: fixed;
-  bottom: 15px;
-  right: 20px;
-  opacity: 0.4;
-  transition: all ease 0.5s;
-  img {
-    width: 120px;
-    height: auto;
-  }
-  &:hover {
-    opacity: 1;
-  }
-}
-
-.blurry {
-  @include blur(5px);
-}
-
-.desaturated {
-  @include desaturate();
+  background-color: $black;
+  color: white;
 }
 
 .filter-to-white {
   -webkit-filter: brightness(0) invert(1);
   filter: brightness(0) invert(1);
-}
-
-.slant {
-  @include slant();
-}
-
-.rotate-45 {
-  @include transform-rotate(45deg);
 }
 
 .clickable {

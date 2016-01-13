@@ -2,6 +2,7 @@ import jQuery from 'jquery'
 import React from 'react'
 
 import App from './app.jsx'
+import Launcher from './launcher.jsx'
 
 export default class Drawer extends React.Component {
   constructor (props) {
@@ -37,15 +38,20 @@ export default class Drawer extends React.Component {
     )
 
     return (
-      <div className='drawer'>
-        <h1>Apps</h1>
-        {(apps.length < 1) ? installApps : null}
-        {apps.slice(0, 6).map(function (data) {
-          return <App { ...data } />
-        })}
-        <br/>
-        {(apps.length > 6) ? allAvailableApps : null}
-      </div>
+      <span>
+        <div className='drawer'>
+          <h1>Apps installed</h1>
+          <div className='apps-list'>
+            {(apps.length < 1) ? installApps : null}
+            {apps.slice(0, 6).map(function (data) {
+              return <App { ...data } />
+            })}
+            <br/>
+            {(apps.length > 6) ? allAvailableApps : null}
+          </div>
+        </div>
+        <Launcher />
+      </span>
     )
   }
 }

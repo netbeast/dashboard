@@ -1,11 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Router, Route } from 'react-router'
+import { Router, Route, browserHistory } from 'react-router'
 
 import Drawer from './drawer.jsx'
 import Notifications from './notifications.jsx'
 import Settings from './settings.jsx'
 import NotFound from './not-found.jsx'
+import AppLiveView from './apps/live.jsx'
 
 class Dashboard extends React.Component {
   render () {
@@ -21,13 +22,12 @@ class Dashboard extends React.Component {
 }
 
 ReactDOM.render(
-  <Router>
+  <Router history={browserHistory}>
     <Route path='/' component={Dashboard}>
-      <Route path='about' component={Drawer}/>
-      <Route path='settings' component={Settings}>
-        <Route path='/user/:userId' component={Drawer}/>
-      </Route>
-      <Route path='*' component={NotFound}/>
+      <Route path='about' component={Drawer} />
+      <Route path='settings' component={Settings} />
+      <Route path='i/:appName' component={AppLiveView} />
+      <Route path='*' component={NotFound} />
     </Route>
   </Router>
 , document.getElementById('app'))

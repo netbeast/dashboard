@@ -51,6 +51,11 @@
   bottom: 50px;
   width: 100%;
 
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
   ul {
     padding: 5px 30px;
     display: inline-block;

@@ -1,7 +1,7 @@
 import jQuery from 'jquery'
 import React from 'react'
 
-import App from './app.jsx'
+import App from './apps/app.jsx'
 import Launcher from './launcher.jsx'
 
 export default class Drawer extends React.Component {
@@ -29,12 +29,15 @@ export default class Drawer extends React.Component {
     const { apps } = this.state
 
     let installApps = (
-      <a href='javascript:void(0)'><h3>Install a new app <i className='fa fa-share'></i></h3></a>
+      <a href='javascript:void(0)'>
+        <h3>Install a new app <i className='fa fa-share'></i></h3>
+      </a>
     )
 
     let allAvailableApps = (
-      <span><a href='javascript:void(0)'>See all apps...</a>
-      <br/></span>
+      <span>
+        <a href='javascript:void(0)'>See all apps...</a><br/>
+      </span>
     )
 
     return (

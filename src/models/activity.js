@@ -132,7 +132,8 @@ self.on('start', function (app) {
     var entryPoint = path.resolve(APPS_DIR, app.name, pkgJson.main)
 
     var child = spawn(entryPoint, ['--port', app.port], {
-      cwd: path.join(APPS_DIR, app.name)
+      cwd: path.join(APPS_DIR, app.name),
+      env: process.env
     })
 
     child.stdout.on('data', function (data) {

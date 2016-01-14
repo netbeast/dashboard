@@ -24,6 +24,9 @@ class Dashboard extends React.Component {
 ReactDOM.render(
   <Router history={browserHistory}>
     <Route path='/' component={Dashboard}>
+      <Route path='apps' component={Drawer} />
+      <Route path='activities' component={Drawer} />
+      <Route path='plugins' component={Drawer} />
       <Route path='about' component={Drawer} />
       <Route path='settings' component={Settings} />
       <Route path='i/:appName' component={AppLiveView} />

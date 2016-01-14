@@ -8,19 +8,36 @@ export default class Drawer extends React.Component {
   constructor (props) {
     super(props)
     this.state = { apps: [] }
+    this.loadApps = this.loadApps.bind(this)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const { route } = this.props || null
+    const query = route && route.path || 'apps'
+    this.loadApps(query, (err, apps) => {
+      if (err) return console.error(err.message)
+      this.setState({ apps: apps })
+    })
   }
 
   componentDidMount () {
+    this.loadApps('apps', (err, apps) => {
+      if (err) return console.error(err.message)
+      this.setState({ apps: apps })
+    })
+  }
+
+  loadApps (query, done) {
     jQuery.ajax({
-      url: '/apps/',
+      url: `/${query}/`,
       dataType: 'json',
       cache: false,
       success: (data) => {
         data.forEach((app) => { app.key = app.name })
-        this.setState({ apps: data })
+        done(null, data)
       },
       error: (xhr, status, err) => {
-        console.error('/apps/', status, err.toString())
+        done(err)
       }
     })
   }

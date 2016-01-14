@@ -2,7 +2,6 @@ import jQuery from 'jquery'
 import React from 'react'
 
 import App from './apps/app.jsx'
-import Launcher from './launcher.jsx'
 
 export default class Drawer extends React.Component {
   constructor (props) {
@@ -12,8 +11,8 @@ export default class Drawer extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const { route } = this.props || null
-    const query = route && route.path || 'apps'
+    const { route } = nextProps || null
+    const query = (route && route.path) || 'apps'
     this.loadApps(query, (err, apps) => {
       if (err) return console.error(err.message)
       this.setState({ apps: apps })
@@ -70,7 +69,6 @@ export default class Drawer extends React.Component {
             {(apps.length > 6) ? allAvailableApps : null}
           </div>
         </div>
-        <Launcher />
       </span>
     )
   }

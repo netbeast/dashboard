@@ -10,7 +10,7 @@ export default React.createClass({
     const { name } = this.props
 
     jQuery.ajax({
-      url: '/activities/' + name,
+      url: '/api/activities/' + name,
       dataType: 'json',
       cache: false,
 
@@ -23,7 +23,7 @@ export default React.createClass({
 
   render () {
     const { name, author } = this.props
-    const logo = `/apps/${name}/logo`
+    const logo = `/api/apps/${name}/logo`
     return (
       <div className='app'>
         <div className='logo' onClick={this.launchApp}>

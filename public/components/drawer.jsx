@@ -29,7 +29,7 @@ export default class Drawer extends React.Component {
 
   loadApps (query, done) {
     jQuery.ajax({
-      url: `/${query}/`,
+      url: `/api/${query}/`,
       dataType: 'json',
       cache: false,
       success: (data) => {

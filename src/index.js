@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(favicon(path.join(process.env.PUBLIC_DIR, 'img/favicon.png')))
 
 app.use(require('./middleware/cors'))
-app.use(require('./routes'))
+app.use('/api', require('./routes'))
 
 app.use(express.static(process.env.PUBLIC_DIR))
 

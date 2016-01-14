@@ -6,7 +6,7 @@ var chai = require('chai')
 var should = chai.should()
 var expect = chai.expect
 
-const URL = process.env.LOCAL_URL
+const URL = process.env.LOCAL_URL + '/api'
 
 console.log(URL + '/resources')
 

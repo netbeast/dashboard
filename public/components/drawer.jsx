@@ -1,4 +1,5 @@
-import jQuery from 'jquery'
+/* global toastr */
+import request from 'superagent'
 import React from 'react'
 
 import App from './apps/app.jsx'
@@ -14,30 +15,35 @@ export default class Drawer extends React.Component {
     const { route } = nextProps || null
     const query = (route && route.path) || 'apps'
     this.loadApps(query, (err, apps) => {
-      if (err) return console.error(err.message)
+      if (err) return toastr.error({title: 'Dashboard', body: err})
       this.setState({ apps: apps })
     })
   }
 
   componentDidMount () {
     this.loadApps('apps', (err, apps) => {
-      if (err) return console.error(err.message)
+      if (err) return toastr.error({title: 'Dashboard', body: err})
       this.setState({ apps: apps })
     })
   }
 
   loadApps (query, done) {
-    jQuery.ajax({
-      url: `/api/${query}/`,
-      dataType: 'json',
-      cache: false,
-      success: (data) => {
-        data.forEach((app) => { app.key = app.name })
-        done(null, data)
-      },
-      error: (xhr, status, err) => {
-        done(err)
-      }
+    const latestQ = this.query
+    if (latestQ === query) {
+      return // done is never called
+    } else {
+      // and save latest query...
+      this.query = query
+    }
+
+    request.get(`/api/${query}/`)
+    .end(function (err, res) {
+      if (err) return done(err)
+      res.body.forEach((app) => {
+        app.key = app.name
+        app.type = query
+      })
+      done(null, res.body)
     })
   }
 

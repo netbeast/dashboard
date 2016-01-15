@@ -30,6 +30,9 @@ app.use(require('./middleware/cors'))
 app.use('/api', require('./routes'))
 
 app.use(express.static(process.env.PUBLIC_DIR))
+app.get('*', function (req, res) {
+  res.sendFile(path.resolve(process.env.PUBLIC_DIR, 'index.html'))
+})
 
 // error with Error classes
 app.use(function (err, req, res, next) {

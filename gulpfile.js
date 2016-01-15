@@ -47,6 +47,16 @@ gulp.task('watchify', function () {
   return compile(bundler)
 })
 
+gulp.task('browserify', function () {
+  // set up the browserify instance on a task basis
+  var bundler = browserify({
+    entries: './public/components/index.jsx',
+    debug: true
+  }).transform('babelify', { presets: ['es2015', 'react'] })
+
+  return compile(bundler)
+})
+
 function compile (bundler) {
   return bundler.bundle()
   .on('error', function (err) {

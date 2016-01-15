@@ -24,7 +24,7 @@
 
 .drawer .apps-list { margin-top: -20px; }
 
-.drawer .app {
+.drawer .apps-list .app {
   display: inline-block;
   vertical-align: top;
   border-radius: 3px;
@@ -34,6 +34,7 @@
   .logo img {
     max-width: 100px;
     height: auto;
+    &:hover { cursor: pointer; }
   }
 
   .name {
@@ -47,6 +48,11 @@
     font-size: 0.8rem;
     opacity: 0.8;
   }
+}
+
+.drawer .apps-list .stop-btn {
+  text-transform: uppercase;
+  position: absolute;
 }
 
 //====================================

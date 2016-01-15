@@ -30,17 +30,6 @@ body, html {
   cursor: pointer;
 }
 
-z-bg {
-  position: relative;
-  z-index: 0;
-}
-
-z-front {
-  position: relative;
-  z-index: 10;
-}
-
-z-super {
-  position: relative;
-  z-index: 100;
-}
+z-bg { z-index: 0; }
+z-front { z-index: 10; }
+z-super { z-index: 100; }

@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Router, Route, browserHistory } from 'react-router'
+import { Router, Route, browserHistory, IndexRoute } from 'react-router'
 
 import Drawer from './drawer.jsx'
 import Launcher from './launcher.jsx'
@@ -19,11 +19,8 @@ class Dashboard extends React.Component {
   getPathClassName (nextProps) {
     const { location } = nextProps || this.props
     const regexp = new RegExp('/', 'g')
-    let pathname = location.pathname.replace(regexp, '-')
-    pathname = (pathname === '-') ? '-root' : pathname
-
-    console.log('pathname:', pathname)
-    return pathname
+    const pathname = location.pathname.replace(regexp, '-')
+    return (pathname === '-') ? '-root' : pathname
   }
 
   componentWillReceiveProps (nextProps) {
@@ -36,7 +33,7 @@ class Dashboard extends React.Component {
       <div id='dashboard' className={`path${path}`}>
         <Notifications />
         <main>
-          {this.props.children || <Drawer />}
+          {this.props.children}
         </main>
         <Launcher />
       </div>
@@ -47,7 +44,7 @@ class Dashboard extends React.Component {
 ReactDOM.render(
   <Router history={browserHistory}>
     <Route path='/' component={Dashboard}>
-      <Route path='' component={Drawer} />
+      <IndexRoute component={Drawer} />
       <Route path='apps' component={Drawer} />
       <Route path='activities' component={Drawer} />
       <Route path='plugins' component={Drawer} />

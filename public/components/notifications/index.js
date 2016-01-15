@@ -26,6 +26,17 @@ export default class App extends React.Component {
     this.client.on('message', this.handleNotification.bind(this))
 
     window.notify = this.notify.bind(this) // make it globally accesible
+    window.toastr = {
+      error: (msg) => {
+        window.notify({title: msg.title, body: msg.body, emphasis: 'error'})
+      },
+      success: (msg) => {
+        window.notify({title: msg.title, body: msg.body, emphasis: 'success'})
+      },
+      warning: (msg) => {
+        window.notify({title: msg.title, body: msg.body, emphasis: 'warning'})
+      }
+    }
   }
 
   componentWillUnmount () {

@@ -12,17 +12,19 @@ export default class Drawer extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const { route } = nextProps || null
-    const query = (route && route.path) || 'apps'
+    const { route } = nextProps || this.props
+    const query = route.path
     this.loadApps(query, (err, apps) => {
-      if (err) return toastr.error({title: 'Dashboard', body: err})
+      if (err) return toastr.error(err)
       this.setState({ apps: apps })
     })
   }
 
   componentDidMount () {
-    this.loadApps('apps', (err, apps) => {
-      if (err) return toastr.error({title: 'Dashboard', body: err})
+    const { route } = this.props
+    const query = route.path
+    this.loadApps(query, (err, apps) => {
+      if (err) return toastr.error(err)
       this.setState({ apps: apps })
     })
   }

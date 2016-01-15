@@ -5,7 +5,6 @@ var source = require('vinyl-source-stream')
 var buffer = require('vinyl-buffer')
 var browserify = require('browserify')
 var watchify = require('watchify')
-var lrload = require('livereactload')
 
 gulp.task('default', ['serve', 'watchify'], function () {
   plugins.livereload.listen()
@@ -38,7 +37,6 @@ gulp.task('watchify', function () {
   var bundler = watchify(
     browserify({
       entries: './public/components/index.jsx',
-      plugin: [ lrload ],
       debug: true
     })
     ).transform('babelify', { presets: ['es2015', 'react'] })
@@ -68,4 +66,5 @@ function compile (bundler) {
   .pipe(plugins.sourcemaps.init({ loadMaps: true }))
   .pipe(plugins.sourcemaps.write('./'))
   .pipe(gulp.dest('./public/dist/js/'))
+  .pipe(plugins.livereload())
 }

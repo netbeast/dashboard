@@ -45,9 +45,6 @@ router.use('/i/:name?', function (req, res) {
   proxyUrl = req.protocol + '://localhost:' + app.port
   req.url = reqUrl
 
-  console.log('proxyUrl', proxyUrl)
-  console.log('reqUrl', reqUrl)
-
   // This block prevents iframe caching
   proxy.web(req, res, { target: proxyUrl })
 })

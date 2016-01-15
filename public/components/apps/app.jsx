@@ -1,30 +1,34 @@
+/* global toastr */
 import React from 'react'
 import { History } from 'react-router'
-import jQuery from 'jquery'
+import request from 'superagent'
 
 export default React.createClass({
 
   mixins: [ History ],
 
-  launchApp () {
+  launch () {
     const { name } = this.props
+    request.post('/api/activities/' + name)
+    .end((err, data) => {
+      if (err) return toastr.error(err.message)
+      this.history.pushState(null, '/i/' + name)
+    })
+  },
 
-    jQuery.ajax({
-      url: '/api/activities/' + name,
-      dataType: 'json',
-      cache: false,
-
-      method: 'POST',
-      success: (data) => {
-        this.history.pushState(null, '/i/' + name)
-      }
+  stop () {
+    const { name } = this.props
+    request.del('/api/activities/' + name)
+    .end((err, data) => {
+      if (err) return toastr.error(err.message)
+      toastr.info(name + ' has been stopped.')
     })
   },
 
   renderStop () {
     const { type } = this.props
     return type === 'activities'
-    ? <a href='#' className='stop-btn'> Stop </a>
+    ? <a href='#' onClick={this.stop} className='stop-btn'> Stop </a>
     : null
   },
 
@@ -33,14 +37,14 @@ export default React.createClass({
     const logo = `/api/apps/${name}/logo`
     return (
       <div className='app'>
-        <div className='logo' onClick={this.launchApp}>
+        <div className='logo' onClick={this.launch}>
           <img className='filter-to-white' src={logo} alt={logo} />
+          {this.renderStop()}
         </div>
         <h4>
           <br/> <span className='name'>{name}</span>
-          <br/> <span className='author'>{author}</span>
         </h4>
-        {this.renderStop()}
+        <span className='author'>{author}</span>
       </div>
     )
   }

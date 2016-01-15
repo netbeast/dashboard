@@ -27,14 +27,15 @@ export default class App extends React.Component {
 
     window.notify = this.notify.bind(this) // make it globally accesible
     window.toastr = {
-      error: (msg) => {
-        window.notify({title: msg.title, body: msg.body, emphasis: 'error'})
+      error: (body, title) => {
+        title = title || 'dashboard'
+        window.notify({title: title, body: body, emphasis: 'error'})
       },
-      success: (msg) => {
-        window.notify({title: msg.title, body: msg.body, emphasis: 'success'})
+      success: (body, title) => {
+        window.notify({title: title, body: body, emphasis: 'success'})
       },
-      warning: (msg) => {
-        window.notify({title: msg.title, body: msg.body, emphasis: 'warning'})
+      warning: (body, title) => {
+        window.notify({title: title, body: body, emphasis: 'warning'})
       }
     }
   }

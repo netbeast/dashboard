@@ -56,3 +56,21 @@ function _isUrl (s) {
   var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
   return regexp.test(s)
 }
+
+App.plugins = function (done) {
+  fs.readdir(APPS_DIR, function (err, files) {
+    if (err) return done(err)
+
+    files = files.filter(function (file) {
+      return file !== 'installed_apps_live_here'
+    })
+
+    async.map(files, App.getPackageJson, function (err, plugins) {
+      if (err) return done(err)
+      plugins = plugins.filter(function (app) {
+        return app.netbeast && app.netbeast.type === 'plugin'
+      })
+      done(null, plugins)
+    })
+  })
+}

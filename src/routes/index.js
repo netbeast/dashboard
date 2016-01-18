@@ -16,5 +16,6 @@ router.use('/', require('./activities'))
 // API routes
 router.use('/', require('./resource'))
 router.use('/', require('./scene'))
+router.use('/', require('./plugins'))
 
 module.exports = router

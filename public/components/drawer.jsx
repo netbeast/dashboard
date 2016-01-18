@@ -5,46 +5,45 @@ import React from 'react'
 import App from './apps/app.jsx'
 
 export default class Drawer extends React.Component {
-  constructor (props) {
-    super(props)
+  constructor (props, context) {
+    super(props, context)
     this.state = { apps: [] }
     this.loadApps = this.loadApps.bind(this)
   }
 
   componentWillReceiveProps (nextProps) {
-    const { route } = nextProps || this.props
-    const query = route.path
-    this.loadApps(query, (err, apps) => {
+    console.log('component will receive props has run')
+    this.loadApps(nextProps, (err, apps) => {
       if (err) return toastr.error(err)
       this.setState({ apps: apps })
     })
   }
 
   componentDidMount () {
-    const { route } = this.props
-    const query = route.path
-    this.loadApps(query, (err, apps) => {
+    console.log('component did mount props has run')
+    this.loadApps(this.props, (err, apps) => {
       if (err) return toastr.error(err)
       this.setState({ apps: apps })
     })
   }
 
-  loadApps (query, done) {
-    const latestQ = this.query
-    if (latestQ === query) {
-      return // done is never called
-    } else {
-      // and save latest query...
-      this.query = query
-    }
+  loadApps (props, done) {
+    const { route } = props
+    const query = route.path ? route.path : 'apps'
+
+    console.log('query', query)
 
     request.get(`/api/${query}/`)
     .end(function (err, res) {
       if (err) return done(err)
+
+      if (res.body.length === 0) return done(null, [])
+
       res.body.forEach((app) => {
         app.key = app.name
         app.type = query
       })
+
       done(null, res.body)
     })
   }
@@ -80,4 +79,8 @@ export default class Drawer extends React.Component {
       </span>
     )
   }
+}
+
+Drawer.contextTypes = {
+  history: React.PropTypes.object.isRequired
 }

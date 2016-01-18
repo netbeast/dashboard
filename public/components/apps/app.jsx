@@ -1,20 +1,21 @@
 /* global toastr */
 import React from 'react'
-import { History } from 'react-router'
 import request from 'superagent'
 
-export default React.createClass({
-
-  mixins: [ History ],
+export default class App extends React.Component {
+  constructor (props, context) {
+    super(props)
+    this.router = context.router
+  }
 
   launch () {
     const { name } = this.props
     request.post('/api/activities/' + name)
     .end((err, data) => {
       if (err) return toastr.error(err.message)
-      this.history.pushState(null, '/i/' + name)
+      this.router.push('/i/' + name)
     })
-  },
+  }
 
   stop () {
     const { name } = this.props
@@ -23,24 +24,24 @@ export default React.createClass({
       if (err) return toastr.error(err.message)
       toastr.info(name + ' has been stopped.')
     })
-  },
+  }
 
   renderStop () {
     const { type } = this.props
     return type === 'activities'
-    ? <a href='#' onClick={this.stop} className='stop-btn'> Stop </a>
+    ? <a href='#' onClick={this.stop.bind(this)} className='stop-btn'> Stop </a>
     : null
-  },
+  }
 
   render () {
     const { name, author } = this.props
     const logo = `/api/apps/${name}/logo`
     return (
       <div className='app'>
-        <div className='logo' onClick={this.launch}>
+        <div className='logo' onClick={this.launch.bind(this)}>
           <img className='filter-to-white' src={logo} alt={logo} />
-          {this.renderStop()}
         </div>
+        {this.renderStop()}
         <h4>
           <br/> <span className='name'>{name}</span>
         </h4>
@@ -48,4 +49,8 @@ export default React.createClass({
       </div>
     )
   }
-})
+}
+
+App.contextTypes = {
+  router: React.PropTypes.object.isRequired
+}

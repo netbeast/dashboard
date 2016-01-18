@@ -10,6 +10,7 @@ var favicon = require('serve-favicon')
 var bodyParser = require('body-parser')
 var cookieParser = require('cookie-parser')
 var express = require('express')
+var chalk = require('chalk')
 
 var broker = require('./helpers/broker')
 
@@ -34,12 +35,12 @@ app.get('*', function (req, res) {
   res.sendFile(path.resolve(process.env.PUBLIC_DIR, 'index.html'))
 })
 
-// error with Error classes
+// Handle errors
 app.use(function (err, req, res, next) {
+  console.log('\n' + chalk.red('Exception in routes stack:'))
   console.error(err.stack)
   if (!err.statusCode || err.statusCode === 500) {
-    fs.appendFile('./.errorlog', err.stack)
+    if (process.env.ERR_REPORT) fs.appendFile('./.errorlog', err.stack)
   }
-  broker.error(err.message)
   res.status(err.statusCode || 500).send(err.message)
 })

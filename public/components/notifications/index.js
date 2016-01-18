@@ -8,6 +8,7 @@ export default class App extends React.Component {
     super(props)
     this.state = { toasts: [] }
     this.client = mqtt.connect()
+    this.dismiss = this.dismiss.bind(this)
   }
 
   notify (notification) {
@@ -21,35 +22,46 @@ export default class App extends React.Component {
     this.notify(notification)
   }
 
+  dismiss (index, timeout) {
+    const toasts = this.state.toasts.splice(index, 1)
+    if (typeof timeout === 'undefined') {
+      return this.setState({ toasts: toasts })
+    } else {
+      setTimeout(this.dismiss, timeout)
+    }
+  }
+
   componentDidMount () {
     this.client.subscribe('netbeast/push')
     this.client.on('message', this.handleNotification.bind(this))
 
     window.notify = this.notify.bind(this) // make it globally accesible
     window.toastr = {
-      error: (body, title) => {
-        title = title || 'dashboard'
+      info: (body, title = 'dashboard') => {
+        window.notify({title: title, body: body, emphasis: 'info'})
+      },
+      error: (body, title = 'dashboard') => {
         window.notify({title: title, body: body, emphasis: 'error'})
       },
-      success: (body, title) => {
+      success: (body, title = 'dashboard') => {
         window.notify({title: title, body: body, emphasis: 'success'})
       },
-      warning: (body, title) => {
+      warning: (body, title = 'dashboard') => {
         window.notify({title: title, body: body, emphasis: 'warning'})
       }
     }
   }
 
   componentWillUnmount () {
-    // this.client.end(() => console.log('Client disconnected'))
+    this.client.end(() => console.log('Client disconnected'))
   }
 
   render () {
     const { toasts } = this.state
     return (
       <div className='notifications'>
-        {toasts.map(function (props) {
-          return <Toast {...props} />
+        {toasts.map((props, index) => {
+          return <Toast {...props} dismiss={this.dismiss.bind(this, index)}/>
         })}
       </div>
     )

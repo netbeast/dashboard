@@ -14,7 +14,7 @@ App.all = function (done) {
   fs.readdir(APPS_DIR, function (err, files) {
     if (err) return done(err)
     files = files.filter(function (file) {
-      return file !== 'installed_apps_live_here'
+      return (file !== 'installed_apps_live_here') && (file !== '.DS_Store')
     })
     async.map(files, App.getPackageJson, done)
   })

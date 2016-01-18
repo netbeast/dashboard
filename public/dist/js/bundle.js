@@ -39485,6 +39485,8 @@ module.exports = function(arr, fn, initial){
 },{}],308:[function(require,module,exports){
 'use strict';
 
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -39493,82 +39495,110 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouter = require('react-router');
-
 var _superagent = require('superagent');
 
 var _superagent2 = _interopRequireDefault(_superagent);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _react2.default.createClass({
-  displayName: 'app',
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  mixins: [_reactRouter.History],
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-  launch: function launch() {
-    var _this = this;
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global toastr */
 
-    var name = this.props.name;
+var App = (function (_React$Component) {
+  _inherits(App, _React$Component);
 
-    _superagent2.default.post('/api/activities/' + name).end(function (err, data) {
-      if (err) return toastr.error(err.message);
-      _this.history.pushState(null, '/i/' + name);
-    });
-  },
-  stop: function stop() {
-    var name = this.props.name;
+  function App(props, context) {
+    _classCallCheck(this, App);
 
-    _superagent2.default.del('/api/activities/' + name).end(function (err, data) {
-      if (err) return toastr.error(err.message);
-      toastr.info(name + ' has been stopped.');
-    });
-  },
-  renderStop: function renderStop() {
-    var type = this.props.type;
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props));
 
-    return type === 'activities' ? _react2.default.createElement(
-      'a',
-      { href: '#', onClick: this.stop, className: 'stop-btn' },
-      ' Stop '
-    ) : null;
-  },
-  render: function render() {
-    var _props = this.props;
-    var name = _props.name;
-    var author = _props.author;
+    _this.router = context.router;
+    return _this;
+  }
 
-    var logo = '/api/apps/' + name + '/logo';
-    return _react2.default.createElement(
-      'div',
-      { className: 'app' },
-      _react2.default.createElement(
+  _createClass(App, [{
+    key: 'launch',
+    value: function launch() {
+      var _this2 = this;
+
+      var name = this.props.name;
+
+      _superagent2.default.post('/api/activities/' + name).end(function (err, data) {
+        if (err) return toastr.error(err.message);
+        _this2.router.push('/i/' + name);
+      });
+    }
+  }, {
+    key: 'stop',
+    value: function stop() {
+      var name = this.props.name;
+
+      _superagent2.default.del('/api/activities/' + name).end(function (err, data) {
+        if (err) return toastr.error(err.message);
+        toastr.info(name + ' has been stopped.');
+      });
+    }
+  }, {
+    key: 'renderStop',
+    value: function renderStop() {
+      var type = this.props.type;
+
+      return type === 'activities' ? _react2.default.createElement(
+        'a',
+        { href: '#', onClick: this.stop.bind(this), className: 'stop-btn' },
+        ' Stop '
+      ) : null;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props;
+      var name = _props.name;
+      var author = _props.author;
+
+      var logo = '/api/apps/' + name + '/logo';
+      return _react2.default.createElement(
         'div',
-        { className: 'logo', onClick: this.launch },
-        _react2.default.createElement('img', { className: 'filter-to-white', src: logo, alt: logo }),
-        this.renderStop()
-      ),
-      _react2.default.createElement(
-        'h4',
-        null,
-        _react2.default.createElement('br', null),
-        ' ',
+        { className: 'app' },
+        _react2.default.createElement(
+          'div',
+          { className: 'logo', onClick: this.launch.bind(this) },
+          _react2.default.createElement('img', { className: 'filter-to-white', src: logo, alt: logo })
+        ),
+        this.renderStop(),
+        _react2.default.createElement(
+          'h4',
+          null,
+          _react2.default.createElement('br', null),
+          ' ',
+          _react2.default.createElement(
+            'span',
+            { className: 'name' },
+            name
+          )
+        ),
         _react2.default.createElement(
           'span',
-          { className: 'name' },
-          name
+          { className: 'author' },
+          author
         )
-      ),
-      _react2.default.createElement(
-        'span',
-        { className: 'author' },
-        author
-      )
-    );
-  }
-}); /* global toastr */
+      );
+    }
+  }]);
 
-},{"react":304,"react-router":118,"superagent":305}],309:[function(require,module,exports){
+  return App;
+})(_react2.default.Component);
+
+exports.default = App;
+
+App.contextTypes = {
+  router: _react2.default.PropTypes.object.isRequired
+};
+
+},{"react":304,"superagent":305}],309:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -39645,10 +39675,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Drawer = (function (_React$Component) {
   _inherits(Drawer, _React$Component);
 
-  function Drawer(props) {
+  function Drawer(props, context) {
     _classCallCheck(this, Drawer);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Drawer).call(this, props));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Drawer).call(this, props, context));
 
     _this.state = { apps: [] };
     _this.loadApps = _this.loadApps.bind(_this);
@@ -39660,12 +39690,8 @@ var Drawer = (function (_React$Component) {
     value: function componentWillReceiveProps(nextProps) {
       var _this2 = this;
 
-      var _ref = nextProps || this.props;
-
-      var route = _ref.route;
-
-      var query = route.path;
-      this.loadApps(query, function (err, apps) {
+      console.log('component will receive props has run');
+      this.loadApps(nextProps, function (err, apps) {
         if (err) return toastr.error(err);
         _this2.setState({ apps: apps });
       });
@@ -39675,31 +39701,31 @@ var Drawer = (function (_React$Component) {
     value: function componentDidMount() {
       var _this3 = this;
 
-      var route = this.props.route;
-
-      var query = route.path;
-      this.loadApps(query, function (err, apps) {
+      console.log('component did mount props has run');
+      this.loadApps(this.props, function (err, apps) {
         if (err) return toastr.error(err);
         _this3.setState({ apps: apps });
       });
     }
   }, {
     key: 'loadApps',
-    value: function loadApps(query, done) {
-      var latestQ = this.query;
-      if (latestQ === query) {
-        return; // done is never called
-      } else {
-          // and save latest query...
-          this.query = query;
-        }
+    value: function loadApps(props, done) {
+      var route = props.route;
+
+      var query = route.path ? route.path : 'apps';
+
+      console.log('query', query);
 
       _superagent2.default.get('/api/' + query + '/').end(function (err, res) {
         if (err) return done(err);
+
+        if (res.body.length === 0) return done(null, []);
+
         res.body.forEach(function (app) {
           app.key = app.name;
           app.type = query;
         });
+
         done(null, res.body);
       });
     }
@@ -39760,6 +39786,10 @@ var Drawer = (function (_React$Component) {
 })(_react2.default.Component);
 
 exports.default = Drawer;
+
+Drawer.contextTypes = {
+  history: _react2.default.PropTypes.object.isRequired
+};
 
 },{"./apps/app.jsx":308,"react":304,"superagent":305}],311:[function(require,module,exports){
 'use strict';
@@ -39866,7 +39896,6 @@ _reactDom2.default.render(_react2.default.createElement(
     _reactRouter.Route,
     { path: '/', component: Dashboard },
     _react2.default.createElement(_reactRouter.IndexRoute, { component: _drawer2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'apps', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'activities', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'plugins', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _drawer2.default }),
@@ -39922,7 +39951,7 @@ var Launcher = (function (_React$Component) {
             null,
             _react2.default.createElement(
               _reactRouter.Link,
-              { to: 'apps' },
+              { to: '/' },
               'Apps'
             )
           ),
@@ -39931,7 +39960,7 @@ var Launcher = (function (_React$Component) {
             null,
             _react2.default.createElement(
               _reactRouter.Link,
-              { to: 'activities' },
+              { to: '/activities' },
               'Activities'
             )
           ),
@@ -39940,7 +39969,7 @@ var Launcher = (function (_React$Component) {
             null,
             _react2.default.createElement(
               _reactRouter.Link,
-              { to: 'plugins' },
+              { to: '/plugins' },
               'Plugins'
             )
           ),
@@ -39949,7 +39978,7 @@ var Launcher = (function (_React$Component) {
             null,
             _react2.default.createElement(
               _reactRouter.Link,
-              { to: 'uninstall' },
+              { to: '/uninstall' },
               'Uninstall'
             )
           ),
@@ -39958,7 +39987,7 @@ var Launcher = (function (_React$Component) {
             null,
             _react2.default.createElement(
               _reactRouter.Link,
-              { to: 'settings' },
+              { to: '/settings' },
               'Settings'
             )
           )
@@ -40076,6 +40105,8 @@ exports.default = NotFound;
 },{"react":304,"react-router":118}],314:[function(require,module,exports){
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 Object.defineProperty(exports, "__esModule", {
@@ -40114,6 +40145,7 @@ var App = (function (_React$Component) {
 
     _this.state = { toasts: [] };
     _this.client = _mqtt2.default.connect();
+    _this.dismiss = _this.dismiss.bind(_this);
     return _this;
   }
 
@@ -40131,6 +40163,16 @@ var App = (function (_React$Component) {
       this.notify(notification);
     }
   }, {
+    key: 'dismiss',
+    value: function dismiss(index, timeout) {
+      var toasts = this.state.toasts.splice(index, 1);
+      if (typeof timeout === 'undefined') {
+        return this.setState({ toasts: toasts });
+      } else {
+        setTimeout(this.dismiss, timeout);
+      }
+    }
+  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       this.client.subscribe('netbeast/push');
@@ -40138,14 +40180,24 @@ var App = (function (_React$Component) {
 
       window.notify = this.notify.bind(this); // make it globally accesible
       window.toastr = {
-        error: function error(body, title) {
-          title = title || 'dashboard';
+        info: function info(body) {
+          var title = arguments.length <= 1 || arguments[1] === undefined ? 'dashboard' : arguments[1];
+
+          window.notify({ title: title, body: body, emphasis: 'info' });
+        },
+        error: function error(body) {
+          var title = arguments.length <= 1 || arguments[1] === undefined ? 'dashboard' : arguments[1];
+
           window.notify({ title: title, body: body, emphasis: 'error' });
         },
-        success: function success(body, title) {
+        success: function success(body) {
+          var title = arguments.length <= 1 || arguments[1] === undefined ? 'dashboard' : arguments[1];
+
           window.notify({ title: title, body: body, emphasis: 'success' });
         },
-        warning: function warning(body, title) {
+        warning: function warning(body) {
+          var title = arguments.length <= 1 || arguments[1] === undefined ? 'dashboard' : arguments[1];
+
           window.notify({ title: title, body: body, emphasis: 'warning' });
         }
       };
@@ -40153,18 +40205,22 @@ var App = (function (_React$Component) {
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
-      // this.client.end(() => console.log('Client disconnected'))
+      this.client.end(function () {
+        return console.log('Client disconnected');
+      });
     }
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       var toasts = this.state.toasts;
 
       return _react2.default.createElement(
         'div',
         { className: 'notifications' },
-        toasts.map(function (props) {
-          return _react2.default.createElement(_toast2.default, props);
+        toasts.map(function (props, index) {
+          return _react2.default.createElement(_toast2.default, _extends({}, props, { dismiss: _this2.dismiss.bind(_this2, index) }));
         })
       );
     }
@@ -40205,20 +40261,10 @@ var Toast = (function (_React$Component) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Toast).call(this, props));
 
     _this.state = { visible: true };
-    _this.dismiss = _this.dismiss.bind(_this);
     return _this;
   }
 
   _createClass(Toast, [{
-    key: 'dismiss',
-    value: function dismiss(timeout) {
-      if (typeof timeout === 'undefined') {
-        return this.setState({ visible: false });
-      } else {
-        setTimeout(this.dismiss, timeout);
-      }
-    }
-  }, {
     key: 'render',
     value: function render() {
       var _props = this.props;
@@ -40226,8 +40272,10 @@ var Toast = (function (_React$Component) {
       var body = _props.body;
       var emphasis = _props.emphasis;
       var timeout = _props.timeout;
+      var dismiss = _props.dismiss;
 
-      if (timeout) this.dismiss(timeout);
+      if (timeout) dismiss(timeout);
+
       return this.state.visible ? _react2.default.createElement(
         'div',
         { className: 'toast ' + emphasis },
@@ -40240,7 +40288,7 @@ var Toast = (function (_React$Component) {
         ),
         _react2.default.createElement(
           'div',
-          { className: 'close', onClick: this.dismiss },
+          { className: 'close', onClick: dismiss },
           ' ✕ '
         ),
         _react2.default.createElement('br', null),

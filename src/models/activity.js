@@ -42,7 +42,7 @@ self.status = function (req, res, next) {
 self.close = function (req, res, next) {
   self.stop(req.params.name, function (err) {
     if (err) return next(err)
-    res.send('App closed')
+    res.status(204).end()
   })
 }
 

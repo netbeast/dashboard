@@ -8,6 +8,7 @@ var broker = require('../helpers/broker')
 var router = module.exports = express.Router()
 
 var proxy = httpProxy.createProxyServer({ ws: true })
+
 proxy.on('error', function (err) {
   broker.error(err.message, 'Proxy error')
 })

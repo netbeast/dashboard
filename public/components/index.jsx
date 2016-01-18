@@ -45,7 +45,6 @@ ReactDOM.render(
   <Router history={browserHistory}>
     <Route path='/' component={Dashboard}>
       <IndexRoute component={Drawer} />
-      <Route path='apps' component={Drawer} />
       <Route path='activities' component={Drawer} />
       <Route path='plugins' component={Drawer} />
       <Route path='about' component={Drawer} />

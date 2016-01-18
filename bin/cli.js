@@ -31,6 +31,7 @@ if (!fs.existsSync(nconf_path)) {
 cli.command('new <app>').alias('create')
 .description('Create the basic app structure')
 .option('--cloud', 'Allow thethings.io integration')
+.option('--plugin', 'Create the basic plugin struture (no App)')
 .action(App.create)
 
 cli.command('package [app]').alias('pkg')

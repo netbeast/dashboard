@@ -84,11 +84,9 @@ self.ready = function (child, done) {
     k++
     request(APP_URL, function (err, resp, body) {
       if (err && err.code !== 'ECONNREFUSED') {
-        return done(err)
-      } else if (resp && resp.statusCode < 400) {
-        return done(null, child)
-      } else {
         setTimeout(callback, 400)
+      } else {
+        done(null, child)
       }
     })
   }, function (err) {

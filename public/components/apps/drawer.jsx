@@ -12,7 +12,6 @@ export default class Drawer extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log('component will receive props has run')
     this.loadApps(nextProps, (err, apps) => {
       if (err) return toastr.error(err)
       this.setState({ apps: apps })
@@ -20,7 +19,6 @@ export default class Drawer extends React.Component {
   }
 
   componentDidMount () {
-    console.log('component did mount props has run')
     this.loadApps(this.props, (err, apps) => {
       if (err) return toastr.error(err)
       this.setState({ apps: apps })
@@ -29,9 +27,8 @@ export default class Drawer extends React.Component {
 
   loadApps (props, done) {
     const { route } = props
-    const query = route.path ? route.path : 'apps'
-
-    console.log('query', query)
+    const pathname = route.path ? route.path : 'apps'
+    const query = pathname === 'uninstall' ? 'apps' : pathname
 
     request.get(`/api/${query}/`)
     .end(function (err, res) {
@@ -39,7 +36,7 @@ export default class Drawer extends React.Component {
 
       if (res.body.length === 0) return done(null, [])
 
-      res.body.forEach((app) => app.type = query)
+      res.body.forEach((app) => app.type = pathname)
 
       done(null, res.body)
     })

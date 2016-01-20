@@ -18,18 +18,34 @@ export default class App extends React.Component {
   }
 
   stop () {
-    const { name } = this.props
+    const { name } = this.props
     request.del('/api/activities/' + name)
-    .end((err, data) => {
-      if (err) return toastr.error(err.message)
+    .end((err, res) => {
+      if (err) return toastr.error(res.text)
       toastr.info(name + ' has been stopped.')
     })
   }
 
-  renderStop () {
+  uninstall () {
+    const { name } = this.props
+    request.del('/api/apps/' + name)
+    .end((err, res) => {
+      if (err) return toastr.error(res.text)
+      toastr.info(name + ' has been removed.')
+    })
+  }
+
+  renderStopButton () {
     const { type } = this.props
     return type === 'activities'
-    ? <a href='#' onClick={this.stop.bind(this)} className='stop-btn'> Stop </a>
+    ? <a href='#' onClick={this.stop.bind(this)} className='stop btn btn-warning'> Stop </a>
+    : null
+  }
+
+  renderRemoveButton () {
+    const { type } = this.props
+    return type === 'uninstall'
+    ? <a href='#' onClick={this.uninstall.bind(this)} className='remove btn btn-danger'> Remove </a>
     : null
   }
 
@@ -41,7 +57,8 @@ export default class App extends React.Component {
         <div className='logo' onClick={this.launch.bind(this)}>
           <img className='filter-to-white' src={logo} alt={logo} />
         </div>
-        {this.renderStop()}
+        {this.renderStopButton()}
+        {this.renderRemoveButton()}
         <h4>
           <br/> <span className='name'>{name}</span>
         </h4>

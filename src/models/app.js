@@ -13,14 +13,15 @@ const APPS_DIR = process.env.APPS_DIR
 App.all = function (done) {
   fs.readdir(APPS_DIR, function (err, files) {
     if (err) return done(err)
-    files = async.filter(files, function (file, callback) {
-        fs.lstat(APPS_DIR + '/' + file, function (err, stats) {
-          if (err) return done(err) // done reports error to App.all
-          return callback(stats.isDirectory())
-        })
+
+    async.filter(files, function (file, callback) {
+      fs.lstat(APPS_DIR + '/' + file, function (err, stats) {
+        if (err) return done(err) // done reports error to App.all
+        return callback(stats.isDirectory())
+      })
     }, function (directories) {
       async.map(directories, App.getPackageJson, done)
-    }) 
+    })
   })
 }
 
@@ -34,10 +35,15 @@ App.delete = function (app, done) {
 }
 
 App.getPackageJson = function (app, done) {
-  if (!fs.existsSync(path.join(APPS_DIR, app))) {
+  const dir = path.join(APPS_DIR, app)
+  if (!fs.existsSync(dir)) {
     return done(new NotFound(app + ' is not installed'))
   }
-  fs.readJson(path.join(APPS_DIR, app, 'package.json'), done)
+
+  fs.readJson(path.join(dir, 'package.json'), function (err, package) {
+    if (err && err.code === 'ENOENT') return done()
+    done(err, package)
+  })
 }
 
 App.install = function (bundle, done) {
@@ -62,19 +68,13 @@ function _isUrl (s) {
 }
 
 App.plugins = function (done) {
-  fs.readdir(APPS_DIR, function (err, files) {
+  App.all(function (err, apps) {
     if (err) return done(err)
 
-    files = files.filter(function (file) {
-      return file !== 'installed_apps_live_here'
+    const plugins = apps.filter(function (app) {
+      return app.netbeast && app.netbeast.type === 'plugin'
     })
 
-    async.map(files, App.getPackageJson, function (err, plugins) {
-      if (err) return done(err)
-      plugins = plugins.filter(function (app) {
-        return app.netbeast && app.netbeast.type === 'plugin'
-      })
-      done(null, plugins)
-    })
+    done(null, plugins)
   })
 }

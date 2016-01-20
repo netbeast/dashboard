@@ -30,7 +30,6 @@
   border-radius: 3px;
   padding: 40px 20px;
   margin-top: 15px;
-  overflow: hidden;
   .logo img {
     max-width: 100px;
     height: auto;
@@ -50,7 +49,7 @@
   }
 }
 
-.drawer .apps-list .stop-btn {
+.drawer .apps-list .stop.btn {
   text-transform: uppercase;
   //position: absolute;
   margin-top: 90px;
@@ -60,6 +59,14 @@
   width: 75px; margin-left: -97.5px;
   font-weight: bold;
   text-decoration: none;
+}
+
+.drawer .apps-list .remove.btn {
+  //position: absolute;
+  margin-top: 90px;
+  color: $black;
+  padding: 10px;
+  width: 75px; margin-left: -97.5px;
 }
 
 //====================================

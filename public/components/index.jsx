@@ -50,6 +50,7 @@ ReactDOM.render(
       <Route path='plugins' component={Drawer} />
       <Route path='about' component={Drawer} />
       <Route path='install' component={InstallView} />
+      <Route path='uninstall' component={Drawer} />
       <Route path='settings' component={Settings} />
       <Route path='i/:appName' component={AppLiveView} />
       <Route path='*' component={NotFound} />

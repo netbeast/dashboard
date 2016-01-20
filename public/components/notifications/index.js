@@ -29,7 +29,7 @@ export default class App extends React.Component {
     let toasts = [ ...this.state.toasts ] // copy array, not reference
     const index = toasts.findIndex((toast) => { return toast.id === toastId })
     if (index < 0) return // do not change react component
-    toasts.splice(index, 1)
+    toasts.splice(index, 1) // splice changes the array
     this.setState({ toasts: toasts })
   }
 
@@ -61,7 +61,7 @@ export default class App extends React.Component {
   render () {
     const { toasts } = this.state
     return (
-      <div className='notifications'>
+      <div className='notifications z-super'>
         {toasts.map((props) => {
           return <Toast key={props.id} {...props} dismiss={this.dismiss.bind(this)}/>
         })}

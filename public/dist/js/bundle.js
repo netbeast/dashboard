@@ -39819,20 +39819,41 @@ var App = (function (_React$Component) {
     value: function stop() {
       var name = this.props.name;
 
-      _superagent2.default.del('/api/activities/' + name).end(function (err, data) {
-        if (err) return toastr.error(err.message);
+      _superagent2.default.del('/api/activities/' + name).end(function (err, res) {
+        if (err) return toastr.error(res.text);
         toastr.info(name + ' has been stopped.');
       });
     }
   }, {
-    key: 'renderStop',
-    value: function renderStop() {
+    key: 'uninstall',
+    value: function uninstall() {
+      var name = this.props.name;
+
+      _superagent2.default.del('/api/apps/' + name).end(function (err, res) {
+        if (err) return toastr.error(res.text);
+        toastr.info(name + ' has been removed.');
+      });
+    }
+  }, {
+    key: 'renderStopButton',
+    value: function renderStopButton() {
       var type = this.props.type;
 
       return type === 'activities' ? _react2.default.createElement(
         'a',
-        { href: '#', onClick: this.stop.bind(this), className: 'stop-btn' },
+        { href: '#', onClick: this.stop.bind(this), className: 'stop btn btn-warning' },
         ' Stop '
+      ) : null;
+    }
+  }, {
+    key: 'renderRemoveButton',
+    value: function renderRemoveButton() {
+      var type = this.props.type;
+
+      return type === 'uninstall' ? _react2.default.createElement(
+        'a',
+        { href: '#', onClick: this.uninstall.bind(this), className: 'remove btn btn-danger' },
+        ' Remove '
       ) : null;
     }
   }, {
@@ -39851,7 +39872,8 @@ var App = (function (_React$Component) {
           { className: 'logo', onClick: this.launch.bind(this) },
           _react2.default.createElement('img', { className: 'filter-to-white', src: logo, alt: logo })
         ),
-        this.renderStop(),
+        this.renderStopButton(),
+        this.renderRemoveButton(),
         _react2.default.createElement(
           'h4',
           null,
@@ -39930,7 +39952,6 @@ var Drawer = (function (_React$Component) {
     value: function componentWillReceiveProps(nextProps) {
       var _this2 = this;
 
-      console.log('component will receive props has run');
       this.loadApps(nextProps, function (err, apps) {
         if (err) return toastr.error(err);
         _this2.setState({ apps: apps });
@@ -39941,7 +39962,6 @@ var Drawer = (function (_React$Component) {
     value: function componentDidMount() {
       var _this3 = this;
 
-      console.log('component did mount props has run');
       this.loadApps(this.props, function (err, apps) {
         if (err) return toastr.error(err);
         _this3.setState({ apps: apps });
@@ -39952,9 +39972,8 @@ var Drawer = (function (_React$Component) {
     value: function loadApps(props, done) {
       var route = props.route;
 
-      var query = route.path ? route.path : 'apps';
-
-      console.log('query', query);
+      var pathname = route.path ? route.path : 'apps';
+      var query = pathname === 'uninstall' ? 'apps' : pathname;
 
       _superagent2.default.get('/api/' + query + '/').end(function (err, res) {
         if (err) return done(err);
@@ -39962,7 +39981,7 @@ var Drawer = (function (_React$Component) {
         if (res.body.length === 0) return done(null, []);
 
         res.body.forEach(function (app) {
-          return app.type = query;
+          return app.type = pathname;
         });
 
         done(null, res.body);
@@ -40089,7 +40108,7 @@ var InstallView = (function (_React$Component) {
           _react2.default.createElement(
             'h1',
             null,
-            'Drop your apps here to upload them'
+            'Drop your apps here to upload them.'
           ),
           _react2.default.createElement(
             'h3',
@@ -40264,6 +40283,7 @@ _reactDom2.default.render(_react2.default.createElement(
     _react2.default.createElement(_reactRouter.Route, { path: 'plugins', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'install', component: _install2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'uninstall', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: _settings2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'i/:appName', component: _live2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: '*', component: _notFound2.default })
@@ -40550,7 +40570,7 @@ var App = (function (_React$Component) {
         return toast.id === toastId;
       });
       if (index < 0) return; // do not change react component
-      toasts.splice(index, 1);
+      toasts.splice(index, 1); // splice changes the array
       this.setState({ toasts: toasts });
     }
   }, {
@@ -40591,7 +40611,7 @@ var App = (function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'notifications' },
+        { className: 'notifications z-super' },
         toasts.map(function (props) {
           return _react2.default.createElement(_toast2.default, _extends({ key: props.id }, props, { dismiss: _this2.dismiss.bind(_this2) }));
         })
@@ -40672,7 +40692,7 @@ var Toast = (function (_React$Component) {
         _react2.default.createElement(
           'div',
           { className: 'body' },
-          body
+          body.toString()
         )
       );
     }

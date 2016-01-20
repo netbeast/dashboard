@@ -6,7 +6,6 @@
 */
 
 var request = require('request')
-var config = require('../../config')
 
 module.exports = function (callback) {
 
@@ -15,7 +14,7 @@ module.exports = function (callback) {
   var objects = []
 
   // Request to the database
-  request.get(config.LOCAL_URL + '/resources?app=NAME_APP',
+  request.get(process.env.LOCAL_URL + '/resources?app=NAME_PLUGIN',
   function (err, resp, body) {
     if (err) return callback(err)
     if (!body) return callback()
@@ -30,20 +29,27 @@ module.exports = function (callback) {
     }
   })
 
+
+
   // Implement the device discovery method
+
   // When we find a device
-  //  1. look if its already exists on the database.
-  var indx = objects.indexOf('/HOOK/id') // hook == /Namebrand/id
+  //  1. Look if its already exists on the database.
+  var indx = objects.indexOf('/HOOK/id') // hook == /Namebrand/id. Example. /hueLights, /Sonos
+  // We will use the id to access to the device and modify it.
+  // Any value to refer this device (MacAddress, for example) can work as id
+
   //  2. If the hook is in 'objects' array, delete it from the array
   if (indx >= 0) {
     objects.splice(indx, 1)
+
   // 3. If this device is not registered on the database, you should register it
   } else {
     //  Use this block to register the found device on the netbeast database
     //  in order to using it later
-    request.post({url: config.LOCAL_URL + '/resources',
+    request.post({url: process.env.LOCAL_URL + '/resources',
     json: {
-      app: 'NAME_APP',          // Name of the device brand
+      app: 'NAME_PLUGIN',          // Name of the device brand
       location: 'none',
       topic: 'TOPIC',      // lights, bridge, switch, temperature, sounds, etc
       groupname: 'none',
@@ -63,7 +69,7 @@ module.exports = function (callback) {
   if (objects.length > 0) {
     objects.forEach(function (hooks) {
       //  Use this block to delete a device from the netbeast database
-      request.del(config.LOCAL_URL + '/resources?hook=' + hooks,
+      request.del(process.env.LOCAL_URL + '/resources?hook=' + hooks,
       function (err, resp, body) {
         if (err) callback(err)
       })

@@ -13,10 +13,14 @@ const APPS_DIR = process.env.APPS_DIR
 App.all = function (done) {
   fs.readdir(APPS_DIR, function (err, files) {
     if (err) return done(err)
-    files = files.filter(function (file) {
-      return (file !== 'installed_apps_live_here') && (file !== '.DS_Store')
-    })
-    async.map(files, App.getPackageJson, done)
+    files = async.filter(files, function (file, callback) {
+        fs.lstat(APPS_DIR + '/' + file, function (err, stats) {
+          if (err) return done(err) // done reports error to App.all
+          return callback(stats.isDirectory())
+        })
+    }, function (directories) {
+      async.map(directories, App.getPackageJson, done)
+    }) 
   })
 }
 

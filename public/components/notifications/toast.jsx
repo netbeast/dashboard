@@ -3,23 +3,25 @@ import React from 'react'
 export default class Toast extends React.Component {
   constructor (props) {
     super(props)
-    this.state = { visible: true }
+    this.close = this.close.bind(this)
   }
 
+  close () { this.props.dismiss(this.props.id) }
+
   render () {
-    const {title, body, emphasis, timeout, dismiss} = this.props
+    const {title, body, emphasis, timeout} = this.props
 
-    if (timeout) dismiss(timeout)
+    if (timeout) setTimeout(this.close, timeout)
 
-    return this.state.visible ? (
+    return (
       <div className={'toast ' + emphasis}>
-        <span className='title'> {title} </span>
-        <div className='close' onClick={dismiss}> &#x2715; </div>
+        <span className='title'> {title || 'dashboard'} </span>
+        <div className='close' onClick={this.close}> &#x2715; </div>
         <br/>
         <div className='body'>
-          {body || this.props.children}
+          {body}
         </div>
       </div>
-    ) : <span />
+    )
   }
 }

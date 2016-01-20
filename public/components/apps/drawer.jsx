@@ -2,7 +2,7 @@
 import request from 'superagent'
 import React from 'react'
 
-import App from './apps/app.jsx'
+import App from './app.jsx'
 
 export default class Drawer extends React.Component {
   constructor (props, context) {
@@ -39,10 +39,7 @@ export default class Drawer extends React.Component {
 
       if (res.body.length === 0) return done(null, [])
 
-      res.body.forEach((app) => {
-        app.key = app.name
-        app.type = query
-      })
+      res.body.forEach((app) => app.type = query)
 
       done(null, res.body)
     })
@@ -64,23 +61,21 @@ export default class Drawer extends React.Component {
     )
 
     return (
-      <span>
         <div className='drawer'>
           <h1>Apps installed</h1>
           <div className='apps-list'>
             {(apps.length < 1) ? installApps : null}
             {apps.slice(0, 6).map(function (data) {
-              return <App { ...data } />
+              return <App key={data.name} { ...data } />
             })}
             <br/>
             {(apps.length > 6) ? allAvailableApps : null}
           </div>
         </div>
-      </span>
     )
   }
 }
 
-Drawer.contextTypes = {
-  history: React.PropTypes.object.isRequired
-}
+// Drawer.contextTypes = {
+//   router: React.PropTypes.object.isRequired
+// }

@@ -12,7 +12,10 @@ export default class App extends React.Component {
   }
 
   notify (notification) {
-    const toast = Object.assign({ timeout: 2700 }, notification)
+    const { title, body, emphasis } = notification
+    const id = `${title}.${body}.${emphasis}.${(new Date()).getTime()}`
+    const timeout = notification.timeout || 2700
+    const toast = Object.assign({ id, timeout }, notification)
     this.setState({ toasts: [toast, ...this.state.toasts] })
   }
 
@@ -22,13 +25,12 @@ export default class App extends React.Component {
     this.notify(notification)
   }
 
-  dismiss (index, timeout) {
-    const toasts = this.state.toasts.splice(index, 1)
-    if (typeof timeout === 'undefined') {
-      return this.setState({ toasts: toasts })
-    } else {
-      setTimeout(this.dismiss, timeout)
-    }
+  dismiss (toastId) {
+    let toasts = [ ...this.state.toasts ] // copy array, not reference
+    const index = toasts.findIndex((toast) => { return toast.id === toastId })
+    if (index < 0) return // do not change react component
+    toasts.splice(index, 1)
+    this.setState({ toasts: toasts })
   }
 
   componentDidMount () {
@@ -37,16 +39,16 @@ export default class App extends React.Component {
 
     window.notify = this.notify.bind(this) // make it globally accesible
     window.toastr = {
-      info: (body, title = 'dashboard') => {
+      info: (body, title) => {
         window.notify({title: title, body: body, emphasis: 'info'})
       },
-      error: (body, title = 'dashboard') => {
+      error: (body, title) => {
         window.notify({title: title, body: body, emphasis: 'error'})
       },
-      success: (body, title = 'dashboard') => {
+      success: (body, title) => {
         window.notify({title: title, body: body, emphasis: 'success'})
       },
-      warning: (body, title = 'dashboard') => {
+      warning: (body, title) => {
         window.notify({title: title, body: body, emphasis: 'warning'})
       }
     }
@@ -60,8 +62,8 @@ export default class App extends React.Component {
     const { toasts } = this.state
     return (
       <div className='notifications'>
-        {toasts.map((props, index) => {
-          return <Toast {...props} dismiss={this.dismiss.bind(this, index)}/>
+        {toasts.map((props) => {
+          return <Toast key={props.id} {...props} dismiss={this.dismiss.bind(this)}/>
         })}
       </div>
     )

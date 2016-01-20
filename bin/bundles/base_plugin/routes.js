@@ -32,9 +32,18 @@ loadResources(function (err) {
     for example, brigthness, saturation, power, etc. This is an example for ligths, which
     general structure is in the documentation on https://netbeast.gitbooks.io/docs/content/chapters/api_reference/methods.html
 
-    req.query = [power: '', brigthness: '', color: '']
+    INPUT -> req.query = [power: '', brightness: '', color: '']
+
+    OUTPUT -> response = [power: 1, brightness: 100, color: {hex: 000000, rgb: {r:0, g:0, b:0}}]
+
+    INPUT -> req.query = [volume: '', status: '']
+
+    OUTPUT -> response = [volume: 80, status: play]
+
   */
   router.get('/HOOK/:id', function (req, res, next) {
+    //  You can find the id stored on req.params.id
+
     //  1. If the device with this id doesn't exist, you will send:
     // return res.status(404).send('Device not found')
 
@@ -52,19 +61,7 @@ loadResources(function (err) {
     // return res.status(400).send('Values not available on wemo-switch')
   })
 
-  /*
-    You should replace HOOk for the hook that you have configured on resources.js
 
-    On this route, you should answer with the general info of a given device.
-    Is the same case of the previous route when we are not asked for a specific value (2)
-  */
-  router.get('/HOOK/:id/info', function (req, res, next) {
-    //  1. If the device with this id doesn't exist, you will send:
-    // return res.status(404).send('Device not found')
-
-    // 2. Else, you should return the whole state (or the most significant info) of the device
-
-  })
 
   /*
     We are going to use this route to trigger the discovery method (loadResources),
@@ -80,19 +77,24 @@ loadResources(function (err) {
     // You can obtain the devices from the 'loadResources' function through the callback
   })
 
+
+
   /*
     You should replace HOOk for the hook that you have configured on resources.js
 
     On this route we should modify specified values of the device current status.
+    GET and POST accept (and return) the same paremeters.
   */
   router.post('/HOOK/:id', function (req, res, next) {
     //  You can find the id stored on req.params.id
+
     //  We will received an JSON object with the parameters that should be changed,
     // and its new values:
-    // req.query = {power: 1, volume: 100}
+    // req.body = {power: 1, volume: 100}
 
-    // You should answer with 'true' if you can change the parameters
-    // return res.send(true)
+    // You should answer with the changed values, if you can change the parameters
+    // var response = [power: 1, volume: 100]
+    // return res.send(response)
 
     // If you cannot change the parameters, please answer with:
     //  return res.status(404).send('A problem setting one value occurred')
@@ -100,7 +102,7 @@ loadResources(function (err) {
     // If the format of the object received is not correct, answer with:
     // return res.status(400).send('Incorrect color format')
 
-    // if you cannot reach the device, answer with:
+    // If you cannot reach the device, answer with:
     // return res.status(404).send('Device not found')
   })
 })

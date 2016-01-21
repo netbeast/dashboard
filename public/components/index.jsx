@@ -2,11 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, browserHistory, IndexRoute } from 'react-router'
 
-import Drawer from './apps/drawer.jsx'
 import Launcher from './launcher.jsx'
 import Notifications from './notifications'
 import Settings from './settings.jsx'
 import NotFound from './not-found.jsx'
+
+import Drawer from './apps/drawer.jsx'
 import AppLiveView from './apps/live.jsx'
 import InstallView from './apps/install.jsx'
 
@@ -49,8 +50,8 @@ ReactDOM.render(
       <Route path='activities' component={Drawer} />
       <Route path='plugins' component={Drawer} />
       <Route path='about' component={Drawer} />
-      <Route path='install' component={InstallView} />
       <Route path='uninstall' component={Drawer} />
+      <Route path='install' component={InstallView} />
       <Route path='settings' component={Settings} />
       <Route path='i/:appName' component={AppLiveView} />
       <Route path='*' component={NotFound} />

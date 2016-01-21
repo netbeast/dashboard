@@ -12,17 +12,11 @@ export default class Drawer extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    this.loadApps(nextProps, (err, apps) => {
-      if (err) return toastr.error(err)
-      this.setState({ apps: apps })
-    })
+    this.loadApps(nextProps)
   }
 
   componentDidMount () {
-    this.loadApps(this.props, (err, apps) => {
-      if (err) return toastr.error(err)
-      this.setState({ apps: apps })
-    })
+    this.loadApps(this.props)
   }
 
   loadApps (props, done) {
@@ -30,43 +24,52 @@ export default class Drawer extends React.Component {
     const pathname = route.path ? route.path : 'apps'
     const query = pathname === 'uninstall' ? 'apps' : pathname
 
-    request.get(`/api/${query}/`)
-    .end(function (err, res) {
-      if (err) return done(err)
+    request.get(`/api/${query}/`).end((err, res) => {
+      if (err) return toastr.error(err)
 
-      if (res.body.length === 0) return done(null, [])
+      let apps = [ ...res.body ] // smart copy
+      apps.forEach((app) => app.type = pathname)
 
-      res.body.forEach((app) => app.type = pathname)
-
-      done(null, res.body)
+      this.setState({ apps: apps, pathname: pathname })
     })
   }
 
-  render () {
-    const { apps } = this.state
+  renderTitle (pathname) {
+    let title = ''
 
-    let installApps = (
-      <a href='javascript:void(0)'>
-        <h3>Install a new app <i className='fa fa-share'></i></h3>
-      </a>
-    )
+    switch (pathname) {
+      case 'apps':
+        title = 'Apps installed.'
+        break
+      case 'plugins':
+        title = 'Plugins installed.'
+        break
+      case 'activities':
+        title = 'Applications running.'
+        break
+      case 'uninstall':
+        title = 'Choose those apps you want to remove'
+        break
+    }
 
-    let allAvailableApps = (
-      <span>
-        <a href='javascript:void(0)'>See all apps...</a><br/>
+    return (
+      <span className='title'>
+        <h1>{title}</h1>
       </span>
     )
+  }
+
+  render () {
+    const { apps, pathname } = this.state
 
     return (
         <div className='drawer'>
-          <h1>Apps installed</h1>
+          {this.renderTitle(pathname)}
           <div className='apps-list'>
-            {(apps.length < 1) ? installApps : null}
             {apps.slice(0, 6).map(function (data) {
               return <App key={data.name} { ...data } />
             })}
             <br/>
-            {(apps.length > 6) ? allAvailableApps : null}
           </div>
         </div>
     )

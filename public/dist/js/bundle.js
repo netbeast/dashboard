@@ -39928,6 +39928,8 @@ var _app2 = _interopRequireDefault(_app);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -39950,87 +39952,82 @@ var Drawer = (function (_React$Component) {
   _createClass(Drawer, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      var _this2 = this;
-
-      this.loadApps(nextProps, function (err, apps) {
-        if (err) return toastr.error(err);
-        _this2.setState({ apps: apps });
-      });
+      this.loadApps(nextProps);
     }
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _this3 = this;
-
-      this.loadApps(this.props, function (err, apps) {
-        if (err) return toastr.error(err);
-        _this3.setState({ apps: apps });
-      });
+      this.loadApps(this.props);
     }
   }, {
     key: 'loadApps',
     value: function loadApps(props, done) {
+      var _this2 = this;
+
       var route = props.route;
 
       var pathname = route.path ? route.path : 'apps';
       var query = pathname === 'uninstall' ? 'apps' : pathname;
 
       _superagent2.default.get('/api/' + query + '/').end(function (err, res) {
-        if (err) return done(err);
+        if (err) return toastr.error(err);
 
-        if (res.body.length === 0) return done(null, []);
-
-        res.body.forEach(function (app) {
+        var apps = [].concat(_toConsumableArray(res.body)); // smart copy
+        apps.forEach(function (app) {
           return app.type = pathname;
         });
 
-        done(null, res.body);
+        _this2.setState({ apps: apps, pathname: pathname });
       });
+    }
+  }, {
+    key: 'renderTitle',
+    value: function renderTitle(pathname) {
+      var title = '';
+
+      switch (pathname) {
+        case 'apps':
+          title = 'Apps installed.';
+          break;
+        case 'plugins':
+          title = 'Plugins installed.';
+          break;
+        case 'activities':
+          title = 'Applications running.';
+          break;
+        case 'uninstall':
+          title = 'Choose those apps you want to remove';
+          break;
+      }
+
+      return _react2.default.createElement(
+        'span',
+        { className: 'title' },
+        _react2.default.createElement(
+          'h1',
+          null,
+          title
+        )
+      );
     }
   }, {
     key: 'render',
     value: function render() {
-      var apps = this.state.apps;
-
-      var installApps = _react2.default.createElement(
-        'a',
-        { href: 'javascript:void(0)' },
-        _react2.default.createElement(
-          'h3',
-          null,
-          'Install a new app ',
-          _react2.default.createElement('i', { className: 'fa fa-share' })
-        )
-      );
-
-      var allAvailableApps = _react2.default.createElement(
-        'span',
-        null,
-        _react2.default.createElement(
-          'a',
-          { href: 'javascript:void(0)' },
-          'See all apps...'
-        ),
-        _react2.default.createElement('br', null)
-      );
+      var _state = this.state;
+      var apps = _state.apps;
+      var pathname = _state.pathname;
 
       return _react2.default.createElement(
         'div',
         { className: 'drawer' },
-        _react2.default.createElement(
-          'h1',
-          null,
-          'Apps installed'
-        ),
+        this.renderTitle(pathname),
         _react2.default.createElement(
           'div',
           { className: 'apps-list' },
-          apps.length < 1 ? installApps : null,
           apps.slice(0, 6).map(function (data) {
             return _react2.default.createElement(_app2.default, _extends({ key: data.name }, data));
           }),
-          _react2.default.createElement('br', null),
-          apps.length > 6 ? allAvailableApps : null
+          _react2.default.createElement('br', null)
         )
       );
     }
@@ -40108,7 +40105,7 @@ var InstallView = (function (_React$Component) {
           _react2.default.createElement(
             'h1',
             null,
-            'Drop your apps here to upload them.'
+            'Drop apps here to install them.'
           ),
           _react2.default.createElement(
             'h3',
@@ -40185,10 +40182,6 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 
 var _reactRouter = require('react-router');
 
-var _drawer = require('./apps/drawer.jsx');
-
-var _drawer2 = _interopRequireDefault(_drawer);
-
 var _launcher = require('./launcher.jsx');
 
 var _launcher2 = _interopRequireDefault(_launcher);
@@ -40204,6 +40197,10 @@ var _settings2 = _interopRequireDefault(_settings);
 var _notFound = require('./not-found.jsx');
 
 var _notFound2 = _interopRequireDefault(_notFound);
+
+var _drawer = require('./apps/drawer.jsx');
+
+var _drawer2 = _interopRequireDefault(_drawer);
 
 var _live = require('./apps/live.jsx');
 
@@ -40282,8 +40279,8 @@ _reactDom2.default.render(_react2.default.createElement(
     _react2.default.createElement(_reactRouter.Route, { path: 'activities', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'plugins', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _drawer2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'install', component: _install2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'uninstall', component: _drawer2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'install', component: _install2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: _settings2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'i/:appName', component: _live2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: '*', component: _notFound2.default })

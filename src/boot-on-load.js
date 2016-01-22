@@ -19,10 +19,10 @@ module.exports = function bootOnload () {
 
         console.info('[booting] %s launched on port %s ', app.name, port.port)
         done(null, port.port)
-      },
-      function (err) {
-        if (err) throw err
       })
+    },
+    function (err) {
+      if (err) throw err
     })
   })
 }

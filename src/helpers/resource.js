@@ -5,7 +5,7 @@ var db = new sqlite3.Database(process.env.DATABASE_URI)
 var helper = module.exports = {}
 
 helper.createTable = function (done) {
-  db.run('CREATE TABLE IF NOT EXISTS actions(' +
+  db.run('CREATE TABLE IF NOT EXISTS resources(' +
   'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
   'app TEXT NOT NULL, ' +
   'location TEXT NOT NULL, ' +
@@ -16,7 +16,7 @@ helper.createTable = function (done) {
 }
 
 helper.insertAction = function (query, done) {
-  var statement = db.prepare('INSERT INTO actions (' +
+  var statement = db.prepare('INSERT INTO resources (' +
   "'app', 'location', 'topic', 'groupname', 'hook') " +
   'VALUES (?,?,?,?,?)')
   statement
@@ -25,15 +25,15 @@ helper.insertAction = function (query, done) {
 }
 
 helper.deleteAction = function (id, done) {
-  db.run("DELETE FROM actions WHERE id = '" + id + "'", done)
+  db.run("DELETE FROM resources WHERE id = '" + id + "'", done)
 }
 
 helper.findAction = function (query, done) {
   if (Object.keys(query).length < 1) {
     // Devuelve los diferentes Hooks que identifican al objeto
-    db.all('SELECT DISTINCT hook FROM actions', done)
+    db.all('SELECT DISTINCT hook FROM resources', done)
   } else {
-    var sql_statement = 'SELECT * FROM actions WHERE '
+    var sql_statement = 'SELECT * FROM resources WHERE '
     for (var field in query) {
       sql_statement += field + "='" + query[field] + "' AND "
     }
@@ -46,6 +46,6 @@ helper.findAction = function (query, done) {
 helper.updateAction = function (query, value, done) {
   var key = Object.keys(query)[0]
   var newvalue = Object.keys(value)[0]
-  db.run('UPDATE actions SET ' + newvalue + "= '" + value[newvalue] +
+  db.run('UPDATE resources SET ' + newvalue + "= '" + value[newvalue] +
   "' WHERE " + key + "= '" + query[key] + "'", done)
 }

@@ -5,14 +5,8 @@ export default class NotFound extends React.Component {
   render () {
     return (
       <div className='not-found'>
-      <h1>Page not found</h1>
-        <ul>
-          <li><Link to='apps'>Apps</Link></li>
-          <li><Link to='activities'>Activities</Link></li>
-          <li><Link to='plugins'>Plugins</Link></li>
-          <li><Link to='uninstall'>Uninstall</Link></li>
-          <li><Link to='settings'>Settings</Link></li>
-        </ul>
+        <h1>Page not found</h1>
+        <p>Sorry, the resource you were looking for was not found :/</p>
       </div>
     )
   }

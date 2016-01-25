@@ -13,7 +13,7 @@ export default class App extends React.Component {
     request.post('/api/activities/' + name)
     .end((err, data) => {
       if (err) return toastr.error(err.message)
-      this.router.push('/i/' + name)
+      this.router.push('/live/' + name)
     })
   }
 
@@ -54,7 +54,7 @@ export default class App extends React.Component {
     const logo = `/api/apps/${name}/logo`
     return (
       <div className='app'>
-        <div className='logo' onClick={this.launch.bind(this)}>
+        <div className='logo' title='Launch app' onClick={this.launch.bind(this)}>
           <img className='filter-to-white' src={logo} alt={logo} />
         </div>
         {this.renderStopButton()}

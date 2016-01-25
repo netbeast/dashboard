@@ -48,7 +48,7 @@ export default class Drawer extends React.Component {
         title = 'Applications running.'
         break
       case 'uninstall':
-        title = 'Choose those apps you want to remove'
+        title = 'Choose those apps you want to remove.'
         break
     }
 

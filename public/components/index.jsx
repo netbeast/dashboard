@@ -53,7 +53,7 @@ ReactDOM.render(
       <Route path='uninstall' component={Drawer} />
       <Route path='install' component={InstallView} />
       <Route path='settings' component={Settings} />
-      <Route path='i/:appName' component={AppLiveView} />
+      <Route path='live/:appName' component={AppLiveView} />
       <Route path='*' component={NotFound} />
     </Route>
   </Router>

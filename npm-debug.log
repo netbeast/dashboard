@@ -1,0 +1,37 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'run', 'dev' ]
+2 info using npm@2.14.7
+3 info using node@v4.2.1
+4 verbose run-script [ 'predev', 'dev', 'postdev' ]
+5 info predev netbeast-cli@0.2.2
+6 info dev netbeast-cli@0.2.2
+7 verbose unsafe-perm in lifecycle true
+8 info netbeast-cli@0.2.2 Failed to exec dev script
+9 verbose stack Error: netbeast-cli@0.2.2 dev: `gulp.js`
+9 verbose stack spawn ENOENT
+9 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:17:16)
+9 verbose stack     at emitTwo (events.js:87:13)
+9 verbose stack     at ChildProcess.emit (events.js:172:7)
+9 verbose stack     at maybeClose (internal/child_process.js:818:16)
+9 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
+10 verbose pkgid netbeast-cli@0.2.2
+11 verbose cwd /Users/jdario/Development/Netbeast/dashboard
+12 error Darwin 15.0.0
+13 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "run" "dev"
+14 error node v4.2.1
+15 error npm  v2.14.7
+16 error file sh
+17 error code ELIFECYCLE
+18 error errno ENOENT
+19 error syscall spawn
+20 error netbeast-cli@0.2.2 dev: `gulp.js`
+20 error spawn ENOENT
+21 error Failed at the netbeast-cli@0.2.2 dev script 'gulp.js'.
+21 error This is most likely a problem with the netbeast-cli package,
+21 error not with npm itself.
+21 error Tell the author that this fails on your system:
+21 error     gulp.js
+21 error You can get their info via:
+21 error     npm owner ls netbeast-cli
+21 error There is likely additional logging output above.
+22 verbose exit [ 1, true ]

@@ -49,24 +49,14 @@
   }
 }
 
-.drawer .apps-list .stop.btn {
-  text-transform: uppercase;
-  //position: absolute;
-  margin-top: 90px;
-  color: $black;
-  background-color: $yellow;
-  padding: 10px;
-  width: 75px; margin-left: -97.5px;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.drawer .apps-list .remove.btn {
-  //position: absolute;
-  margin-top: 90px;
+.apps-list .remove.btn, .apps-list .stop.btn {
+  @extend .z-super;
+  position: absolute;
+  margin-top: -70px;
+  margin-left: -47px;
   color: $black;
   padding: 10px;
-  width: 75px; margin-left: -97.5px;
+  width: 75px;
 }
 
 //====================================
@@ -165,4 +155,14 @@
       border: 10px dashed white;
     }
   }
+}
+
+//====================================
+// NotFound
+//====================================
+
+.not-found {
+  width: 100%;
+  padding-top: 200px;
+  text-align: center;
 }

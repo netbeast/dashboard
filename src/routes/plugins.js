@@ -4,8 +4,8 @@ var App = require('../models/app')
 
 router.route('/plugins')
 .get(function (req, res, next) {
-  App.plugins(function (err, files) {
+  App.plugins(function (err, plugins) {
     if (err) return next(err)
-    res.json(files)
+    res.json(plugins)
   })
 })

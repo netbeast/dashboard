@@ -25,6 +25,9 @@ Thumbs.db
 # Project ignores #
 ###################
 .env
+# .env is force-added
+
+
 .log
 .sass-cache/
 

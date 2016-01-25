@@ -39811,7 +39811,7 @@ var App = (function (_React$Component) {
 
       _superagent2.default.post('/api/activities/' + name).end(function (err, data) {
         if (err) return toastr.error(err.message);
-        _this2.router.push('/i/' + name);
+        _this2.router.push('/live/' + name);
       });
     }
   }, {
@@ -39869,7 +39869,7 @@ var App = (function (_React$Component) {
         { className: 'app' },
         _react2.default.createElement(
           'div',
-          { className: 'logo', onClick: this.launch.bind(this) },
+          { className: 'logo', title: 'Launch app', onClick: this.launch.bind(this) },
           _react2.default.createElement('img', { className: 'filter-to-white', src: logo, alt: logo })
         ),
         this.renderStopButton(),
@@ -39996,7 +39996,7 @@ var Drawer = (function (_React$Component) {
           title = 'Applications running.';
           break;
         case 'uninstall':
-          title = 'Choose those apps you want to remove';
+          title = 'Choose those apps you want to remove.';
           break;
       }
 
@@ -40282,7 +40282,7 @@ _reactDom2.default.render(_react2.default.createElement(
     _react2.default.createElement(_reactRouter.Route, { path: 'uninstall', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'install', component: _install2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: _settings2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'i/:appName', component: _live2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'live/:appName', component: _live2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: '*', component: _notFound2.default })
   )
 ), document.getElementById('app'));
@@ -40372,15 +40372,6 @@ var Launcher = (function (_React$Component) {
               { to: '/uninstall' },
               'Remove'
             )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/settings' },
-              'Settings'
-            )
           )
         )
       );
@@ -40436,53 +40427,9 @@ var NotFound = (function (_React$Component) {
           'Page not found'
         ),
         _react2.default.createElement(
-          'ul',
+          'p',
           null,
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: 'apps' },
-              'Apps'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: 'activities' },
-              'Activities'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: 'plugins' },
-              'Plugins'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: 'uninstall' },
-              'Uninstall'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: 'settings' },
-              'Settings'
-            )
-          )
+          'Sorry, the resource you were looking for was not found :/'
         )
       );
     }

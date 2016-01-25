@@ -21,7 +21,7 @@ router.use('/i/:name?', function (req, res, next) {
   var aux = req.get('referer').split('/')
   aux = aux[aux.indexOf('i') + 1]
   // removes ?no_cache
-  req.referer = aux.substring(aux.indexOf('?'), 0)
+  req.referer = aux.substring(aux.indexOf('?'), 0) || aux
   return next()
 })
 

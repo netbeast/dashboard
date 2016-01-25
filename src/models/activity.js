@@ -34,7 +34,6 @@ self.status = function (req, res, next) {
   if (!child) return next(new Error('App not running'))
   self.ready(child, function (err, activity) {
     if (err) return next(err)
-    console.log(_.pick(activity, ['name', 'port']))
     res.json(_.pick(activity, ['name', 'port']))
   })
 }

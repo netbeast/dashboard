@@ -26,7 +26,7 @@ describe('Apps', function () {
     this.timeout(8 * s) // this takes time
     var req = request.post(URL + '/apps', function (err, resp, body) {
       should.not.exist(err)
-      expect(resp.statusCode).to.equal(204)
+      expect(resp.statusCode).to.equal(200)
       fs.stat(path.join(APPS_DIR, 'myapp'), function (err, stats) {
         should.not.exist(err)
         expect(stats.isDirectory()).to.equal(true)
@@ -47,15 +47,11 @@ describe('Apps', function () {
     })
   })
 
-  it.skip('should not accept bad-packaged app')
-
-  it.skip('should not accept bad-formed package.json')
-
-  it('should upload app @ github to repo', function (done) {
+  it('should upload app from github to repo', function (done) {
     this.timeout(20 * s) // this also takes time
     var req = request.post(URL + '/apps', function (err, resp, body) {
       should.not.exist(err)
-      expect(resp.statusCode).to.equal(204)
+      expect(resp.statusCode).to.equal(200)
       fs.stat(path.join(APPS_DIR, 'xy-get-started'), function (err, stats) {
         should.not.exist(err)
         expect(stats.isDirectory()).to.equal(true)

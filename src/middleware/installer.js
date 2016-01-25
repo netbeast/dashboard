@@ -8,13 +8,6 @@ module.exports.multer = multer({
   rename: function (fieldname) {
     return new Date().getTime() + '-' + fieldname
   },
-  onFileUploadStart: function (file, req, res) {
-    var ext = [file.name.split('.')[1], file.name.split('.')[2]].join('.')
-    if (ext !== 'tar.gz' && ext !== 'tgz.') {
-      res.status(403).send('Invalid Package. Must be a tar.gz')
-      return false
-    }
-  },
   onFileUploadComplete: function (file, req, res) {
     req.uploadedFile = file
   }

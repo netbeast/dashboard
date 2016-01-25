@@ -34,14 +34,6 @@ describe('Activities', function () {
     })
   })
 
-  it('myapp should not be running', function (done) {
-    request(URL + '/activities/myapp', function (err, resp, body) {
-      should.not.exist(err)
-      resp.statusCode.should.equal(500)
-      done()
-    })
-  })
-
   it('should show no apps running', function (done) {
     request(URL + '/activities/', function (err, resp, body) {
       should.not.exist(err)

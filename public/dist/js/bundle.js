@@ -40317,8 +40317,7 @@ var AppLiveView = (function (_React$Component) {
     value: function render() {
       var appName = this.props.params.appName;
 
-      var iframeSource = '/i/' + appName + '?no_cache=' + Date.now();
-      return _react2.default.createElement('iframe', { className: 'app-live', src: iframeSource, frameBorder: '0' });
+      return _react2.default.createElement('iframe', { className: 'app-live', src: '/i/' + appName, frameBorder: '0' });
     }
   }]);
 

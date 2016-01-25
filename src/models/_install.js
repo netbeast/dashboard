@@ -37,7 +37,7 @@ function _installFromDir (dir, done) {
   fs.move(dir, appRoot, function (err) {
     if (err) return done(err)
 
-    if (appJson.netbeast.type === 'service') {
+    if (appJson.netbeast && appJson.netbeast.type === 'service') {
       request.post(process.env.LOCAL_URL + '/activities/' + appJson.name, function (err, port) {
         if (err) return broker.error(err)
 

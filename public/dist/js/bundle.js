@@ -39996,7 +39996,11 @@ var Drawer = (function (_React$Component) {
           title = 'Applications running.';
           break;
         case 'uninstall':
+<<<<<<< HEAD
           title = 'Choose those apps you want to remove.';
+=======
+          title = 'Choose those apps you want to remove';
+>>>>>>> 2f1ae51dd4ae3dc55cbf7b45dd3a3205b11c61ab
           break;
       }
 

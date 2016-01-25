@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // Load environment variables
-require('dotenv').load()
+require('dotenv').config({path: __dirname + '/.env'})
 
 // Node native libraries
 var path = require('path')

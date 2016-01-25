@@ -5,6 +5,7 @@ var express = require('express')
 
 // librerias propias
 var	Resource = require('../models/resource.js')
+var ApiError = require('../util/api-error')
 
 var	router = express.Router()
 
@@ -12,7 +13,7 @@ router.route('/resources')
 
 .get(function (req, res, next) {
   Resource.find(req.query, function (err, resources) {
-    if (err) return res.status(500).send(err)
+    if (err) return next(err)
 
     res.json(resources)
   })
@@ -20,23 +21,23 @@ router.route('/resources')
 
 .post(function (req, res, next) {
   Resource.findOne(req.body, function (err, resource) {
-    if (err && err !== 'No Row Found!') return res.status(500).send(err)
+    if (err && err !== 'No Row Found!') return next(err)
 
     if (!resource || err === 'No Row Found!') {
       Resource.create(req.body, function (err, item) {
-        if (err) return res.status(500).send(err)
+        if (err) return next(err)
         return res.status(204).end()
       })
-    } else return res.status(500).send('This action exists!')
+    } else return new ApiError(500, 'This action exists!')
   })
 })
 
 .patch(function (req, res, next) {
   Resource.findOne(req.query, function (err, resource) {
-    if (err) return res.status(500).send(err)
+    if (err) return next(err)
 
     Resource.update(req.query, req.body, function (err) {
-      if (err) return res.status(500).send(err)
+      if (err) return next(err)
       return res.status(204).end()
     })
   })
@@ -44,11 +45,11 @@ router.route('/resources')
 
 .delete(function (req, res, next) {
   Resource.find(req.query, function (err, resources) {
-    if (err) return res.status(500).send(err)
+    if (err) return next(err)
 
     resources.forEach(function (item) {
       item.destroy(function (err) {
-        if (err) return res.status(500).send(err)
+        if (err) return next(err)
         return res.status(204).end()
       })
     })

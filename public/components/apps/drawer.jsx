@@ -1,8 +1,25 @@
 /* global toastr */
 import request from 'superagent'
 import React from 'react'
+import { Link } from 'react-router'
 
 import App from './app.jsx'
+
+class ExploreApp extends React.Component {
+  render () {
+    const logo = '/img/explore.png'
+    return (
+      <div className='app'>
+        <div className='logo' title='Launch app'>
+          <Link to='/explore'>
+            <img className='filter-to-white' src={logo} alt={logo} />
+          </Link>
+        </div>
+        <h4> <br/> <span className='name'>Explore</span> </h4>
+      </div>
+    )
+  }
+}
 
 export default class Drawer extends React.Component {
   constructor (props, context) {
@@ -66,6 +83,7 @@ export default class Drawer extends React.Component {
         <div className='drawer'>
           {this.renderTitle(pathname)}
           <div className='apps-list'>
+            <ExploreApp />
             {apps.slice(0, 6).map(function (data) {
               return <App key={data.name} { ...data } />
             })}

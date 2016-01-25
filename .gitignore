@@ -25,7 +25,7 @@ Thumbs.db
 # Project ignores #
 ###################
 .env
-# .env is force-added
+# .env is forcly-added
 
 
 .log

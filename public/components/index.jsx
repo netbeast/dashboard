@@ -10,6 +10,7 @@ import NotFound from './not-found.jsx'
 import Drawer from './apps/drawer.jsx'
 import AppLiveView from './apps/live.jsx'
 import InstallView from './apps/install.jsx'
+import Explore from './apps/explore.jsx'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -51,6 +52,7 @@ ReactDOM.render(
       <Route path='plugins' component={Drawer} />
       <Route path='about' component={Drawer} />
       <Route path='uninstall' component={Drawer} />
+      <Route path='explore' component={Explore} />
       <Route path='install' component={InstallView} />
       <Route path='settings' component={Settings} />
       <Route path='live/:appName' component={AppLiveView} />

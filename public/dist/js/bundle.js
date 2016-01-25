@@ -39922,6 +39922,8 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouter = require('react-router');
+
 var _app = require('./app.jsx');
 
 var _app2 = _interopRequireDefault(_app);
@@ -39936,17 +39938,62 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global toastr */
 
-var Drawer = (function (_React$Component) {
-  _inherits(Drawer, _React$Component);
+var ExploreApp = (function (_React$Component) {
+  _inherits(ExploreApp, _React$Component);
+
+  function ExploreApp() {
+    _classCallCheck(this, ExploreApp);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(ExploreApp).apply(this, arguments));
+  }
+
+  _createClass(ExploreApp, [{
+    key: 'render',
+    value: function render() {
+      var logo = '/img/explore.png';
+      return _react2.default.createElement(
+        'div',
+        { className: 'app' },
+        _react2.default.createElement(
+          'div',
+          { className: 'logo', title: 'Launch app' },
+          _react2.default.createElement(
+            _reactRouter.Link,
+            { to: '/explore' },
+            _react2.default.createElement('img', { className: 'filter-to-white', src: logo, alt: logo })
+          )
+        ),
+        _react2.default.createElement(
+          'h4',
+          null,
+          ' ',
+          _react2.default.createElement('br', null),
+          ' ',
+          _react2.default.createElement(
+            'span',
+            { className: 'name' },
+            'Explore'
+          ),
+          ' '
+        )
+      );
+    }
+  }]);
+
+  return ExploreApp;
+})(_react2.default.Component);
+
+var Drawer = (function (_React$Component2) {
+  _inherits(Drawer, _React$Component2);
 
   function Drawer(props, context) {
     _classCallCheck(this, Drawer);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Drawer).call(this, props, context));
+    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Drawer).call(this, props, context));
 
-    _this.state = { apps: [] };
-    _this.loadApps = _this.loadApps.bind(_this);
-    return _this;
+    _this2.state = { apps: [] };
+    _this2.loadApps = _this2.loadApps.bind(_this2);
+    return _this2;
   }
 
   _createClass(Drawer, [{
@@ -39962,7 +40009,7 @@ var Drawer = (function (_React$Component) {
   }, {
     key: 'loadApps',
     value: function loadApps(props, done) {
-      var _this2 = this;
+      var _this3 = this;
 
       var route = props.route;
 
@@ -39977,7 +40024,7 @@ var Drawer = (function (_React$Component) {
           return app.type = pathname;
         });
 
-        _this2.setState({ apps: apps, pathname: pathname });
+        _this3.setState({ apps: apps, pathname: pathname });
       });
     }
   }, {
@@ -39996,11 +40043,7 @@ var Drawer = (function (_React$Component) {
           title = 'Applications running.';
           break;
         case 'uninstall':
-<<<<<<< HEAD
           title = 'Choose those apps you want to remove.';
-=======
-          title = 'Choose those apps you want to remove';
->>>>>>> 2f1ae51dd4ae3dc55cbf7b45dd3a3205b11c61ab
           break;
       }
 
@@ -40028,6 +40071,7 @@ var Drawer = (function (_React$Component) {
         _react2.default.createElement(
           'div',
           { className: 'apps-list' },
+          _react2.default.createElement(ExploreApp, null),
           apps.slice(0, 6).map(function (data) {
             return _react2.default.createElement(_app2.default, _extends({ key: data.name }, data));
           }),
@@ -40046,7 +40090,119 @@ var Drawer = (function (_React$Component) {
 
 exports.default = Drawer;
 
-},{"./app.jsx":310,"react":306,"superagent":307}],312:[function(require,module,exports){
+},{"./app.jsx":310,"react":306,"react-router":120,"superagent":307}],312:[function(require,module,exports){
+'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _superagent = require('superagent');
+
+var _superagent2 = _interopRequireDefault(_superagent);
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _app = require('./app.jsx');
+
+var _app2 = _interopRequireDefault(_app);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global toastr */
+
+var Explore = (function (_React$Component) {
+  _inherits(Explore, _React$Component);
+
+  function Explore(props, context) {
+    _classCallCheck(this, Explore);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Explore).call(this, props, context));
+
+    _this.state = { apps: [] };
+    _this.loadApps = _this.loadApps.bind(_this);
+    return _this;
+  }
+
+  _createClass(Explore, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps() {
+      console.log('have queried!');
+      this.loadApps(this.props);
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      console.log('have queried!');
+      this.loadApps(this.props);
+    }
+  }, {
+    key: 'loadApps',
+    value: function loadApps(props, done) {
+      var _this2 = this;
+
+      var pathname = 'apps';
+      var query = pathname;
+
+      _superagent2.default.get('/api/' + query + '/').end(function (err, res) {
+        if (err) return toastr.error(err);
+
+        console.log('have queried!');
+        var apps = [].concat(_toConsumableArray(res.body)); // smart copy
+        apps.forEach(function (app) {
+          return app.type = pathname;
+        });
+
+        _this2.setState({ apps: apps, pathname: pathname });
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var apps = this.state.apps;
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'drawer' },
+        _react2.default.createElement(
+          'span',
+          { className: 'title' },
+          _react2.default.createElement(
+            'h1',
+            null,
+            'Explore all available apps'
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'apps-list' },
+          apps.slice(0, 6).map(function (data) {
+            return _react2.default.createElement(_app2.default, _extends({ key: data.name }, data));
+          }),
+          _react2.default.createElement('br', null)
+        )
+      );
+    }
+  }]);
+
+  return Explore;
+})(_react2.default.Component);
+
+exports.default = Explore;
+
+},{"./app.jsx":310,"react":306,"superagent":307}],313:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -40126,7 +40282,7 @@ var InstallView = (function (_React$Component) {
 
 exports.default = InstallView;
 
-},{"react":306,"react-dropzone":91,"superagent":307}],313:[function(require,module,exports){
+},{"react":306,"react-dropzone":91,"superagent":307}],314:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -40171,7 +40327,7 @@ var AppLiveView = (function (_React$Component) {
 
 exports.default = AppLiveView;
 
-},{"react":306}],314:[function(require,module,exports){
+},{"react":306}],315:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -40213,6 +40369,10 @@ var _live2 = _interopRequireDefault(_live);
 var _install = require('./apps/install.jsx');
 
 var _install2 = _interopRequireDefault(_install);
+
+var _explore = require('./apps/explore.jsx');
+
+var _explore2 = _interopRequireDefault(_explore);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -40284,6 +40444,7 @@ _reactDom2.default.render(_react2.default.createElement(
     _react2.default.createElement(_reactRouter.Route, { path: 'plugins', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'uninstall', component: _drawer2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'explore', component: _explore2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'install', component: _install2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: _settings2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'live/:appName', component: _live2.default }),
@@ -40291,7 +40452,7 @@ _reactDom2.default.render(_react2.default.createElement(
   )
 ), document.getElementById('app'));
 
-},{"./apps/drawer.jsx":311,"./apps/install.jsx":312,"./apps/live.jsx":313,"./launcher.jsx":315,"./not-found.jsx":316,"./notifications":317,"./settings.jsx":319,"react":306,"react-dom":90,"react-router":120}],315:[function(require,module,exports){
+},{"./apps/drawer.jsx":311,"./apps/explore.jsx":312,"./apps/install.jsx":313,"./apps/live.jsx":314,"./launcher.jsx":316,"./not-found.jsx":317,"./notifications":318,"./settings.jsx":320,"react":306,"react-dom":90,"react-router":120}],316:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -40387,7 +40548,7 @@ var Launcher = (function (_React$Component) {
 
 exports.default = Launcher;
 
-},{"react":306,"react-router":120}],316:[function(require,module,exports){
+},{"react":306,"react-router":120}],317:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -40444,7 +40605,7 @@ var NotFound = (function (_React$Component) {
 
 exports.default = NotFound;
 
-},{"react":306,"react-router":120}],317:[function(require,module,exports){
+},{"react":306,"react-router":120}],318:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -40572,7 +40733,7 @@ var App = (function (_React$Component) {
 
 exports.default = App;
 
-},{"./toast.jsx":318,"mqtt":35,"react":306}],318:[function(require,module,exports){
+},{"./toast.jsx":319,"mqtt":35,"react":306}],319:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -40651,7 +40812,7 @@ var Toast = (function (_React$Component) {
 
 exports.default = Toast;
 
-},{"react":306}],319:[function(require,module,exports){
+},{"react":306}],320:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -40752,7 +40913,7 @@ var Settings = (function (_React$Component) {
 
 exports.default = Settings;
 
-},{"react":306,"react-router":120}]},{},[314])
+},{"react":306,"react-router":120}]},{},[315])
 
 
 //# sourceMappingURL=bundle.js.map

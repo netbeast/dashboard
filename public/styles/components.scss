@@ -155,6 +155,22 @@
       border: 10px dashed white;
     }
   }
+  .install-from-git input[name=url] {
+    background-color: inherit;
+    border: none;
+    border-bottom: 1px solid white;
+    font-size: 24px;
+    width: 400px;
+    padding: 7px;
+  }
+
+  .install-from-git input[type=submit] {
+    @extend .btn;
+    border: 2px solid white;
+    background-color: $black;
+    margin: 20px;
+    padding: 10px;
+  }
 }
 
 //====================================

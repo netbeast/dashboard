@@ -95,7 +95,6 @@ function _installFromNetbeast (url, done) {
 
 function _installFromUrl (url, done) {
   const host = Url.parse(url).host
-  console.log('[install] host=%s', host)
   if (host === 'netbeast.co') {
     broker.info('Installing from Netbeast repos...')
     _installFromNetbeast(url, done)

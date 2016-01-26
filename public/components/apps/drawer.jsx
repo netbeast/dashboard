@@ -7,6 +7,11 @@ import App from './app.jsx'
 
 class ExploreApp extends React.Component {
   render () {
+    const { route } = this.props
+    const pathname = route.path ? route.path : 'apps'
+
+    if (pathname !== 'apps') return null
+
     const logo = '/img/explore.png'
     return (
       <div className='app'>
@@ -83,7 +88,7 @@ export default class Drawer extends React.Component {
         <div className='drawer'>
           {this.renderTitle(pathname)}
           <div className='apps-list'>
-            <ExploreApp />
+            <ExploreApp {...this.props} />
             {apps.slice(0, 6).map(function (data) {
               return <App key={data.name} { ...data } />
             })}

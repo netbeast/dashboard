@@ -39950,6 +39950,12 @@ var ExploreApp = (function (_React$Component) {
   _createClass(ExploreApp, [{
     key: 'render',
     value: function render() {
+      var route = this.props.route;
+
+      var pathname = route.path ? route.path : 'apps';
+
+      if (pathname !== 'apps') return null;
+
       var logo = '/img/explore.png';
       return _react2.default.createElement(
         'div',
@@ -40071,7 +40077,7 @@ var Drawer = (function (_React$Component2) {
         _react2.default.createElement(
           'div',
           { className: 'apps-list' },
-          _react2.default.createElement(ExploreApp, null),
+          _react2.default.createElement(ExploreApp, this.props),
           apps.slice(0, 6).map(function (data) {
             return _react2.default.createElement(_app2.default, _extends({ key: data.name }, data));
           }),
@@ -40254,6 +40260,21 @@ var InstallView = (function (_React$Component) {
       });
     }
   }, {
+    key: 'handleTextChange',
+    value: function handleTextChange(event) {
+      this.setState({ url: event.target.value });
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit(event) {
+      event.preventDefault();
+
+      _superagent2.default.post('/api/apps').send({ url: this.state.url }).end(function (err, res) {
+        if (err) return window.toastr.error(res.text);
+        window.toastr.success(res.body.name + ' has been installed!');
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -40272,6 +40293,12 @@ var InstallView = (function (_React$Component) {
             null,
             '(or click here to search for it!)'
           )
+        ),
+        _react2.default.createElement(
+          'form',
+          { className: 'install-from-git', onSubmit: this.handleSubmit.bind(this) },
+          _react2.default.createElement('input', { name: 'url', type: 'url', onChange: this.handleTextChange.bind(this), placeholder: 'Paste here an URL to install from git' }),
+          _react2.default.createElement('input', { type: 'submit', value: 'install' })
         )
       );
     }

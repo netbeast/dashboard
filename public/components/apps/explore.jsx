@@ -1,6 +1,6 @@
-/* global toastr */
 import request from 'superagent'
 import React from 'react'
+import async from 'async'
 
 import App from './app.jsx'
 
@@ -13,26 +13,30 @@ export default class Explore extends React.Component {
 
   componentWillReceiveProps () {
     console.log('have queried!')
-    this.loadApps(this.props)
+    this.loadApps()
   }
 
   componentDidMount () {
     console.log('have queried!')
-    this.loadApps(this.props)
+    this.loadApps()
   }
 
   loadApps (props, done) {
-    const pathname = 'apps'
-    const query = pathname
+    const GITHUB_REPO = 'https://api.github.com/repos/netbeast/apps/contents/'
+    const GITHUB_RAW = 'https://raw.githubusercontent.com/netbeast/apps/master/'
 
-    request.get(`/api/${query}/`).end((err, res) => {
-      if (err) return toastr.error(err)
+    console.log('have queried!')
+    request.get(GITHUB_REPO).end((err, response) => {
+      if (err) return window.toastr.error(err)
 
-      console.log('have queried!')
-      let apps = [ ...res.body ] // smart copy
-      apps.forEach((app) => app.type = pathname)
+      async.map(response.body, (app, done) => {
+        if (app.name === 'README.md') return done()
 
-      this.setState({ apps: apps, pathname: pathname })
+        request.get(GITHUB_RAW + app.name + '/package.json').end((err, resp) => {
+          if (err) return window.toastr.error(err)
+          this.setState({ apps: [ JSON.parse(resp.text), ...this.state.apps ] })
+        })
+      })
     })
   }
 

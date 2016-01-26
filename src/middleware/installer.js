@@ -6,9 +6,11 @@ var App = require('../models/app')
 module.exports.upload = multer({
   dest: process.env.TMP_DIR,
   rename: function (fieldname) {
+    console.log('peo')
     return new Date().getTime() + '-' + fieldname
   },
   onFileUploadComplete: function (file, req, res) {
+    console.log('peo2')
     req.uploadedFile = file
   }
 }).any()

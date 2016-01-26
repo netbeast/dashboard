@@ -10,7 +10,7 @@ var path = require('path')
 
 var App = require('src/models/app')
 
-const URL = process.env.LOCAL_URL
+const URL = process.env.LOCAL_URL + '/api'
 const APP_PATH = './test/app.tar.gz'
 
 describe('Activities', function () {
@@ -31,14 +31,6 @@ describe('Activities', function () {
         should.not.exist(err)
         done()
       })
-    })
-  })
-
-  it('myapp should not be running', function (done) {
-    request(URL + '/activities/myapp', function (err, resp, body) {
-      should.not.exist(err)
-      resp.statusCode.should.equal(500)
-      done()
     })
   })
 

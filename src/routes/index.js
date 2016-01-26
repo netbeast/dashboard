@@ -9,12 +9,13 @@ router.use(function (req, res, next) {
   next()
 })
 
-router.use('/', require('./apps'))
-router.use('/', require('./users'))
-router.use('/', require('./misc'))
-router.use('/', require('./activities'))
+router.use(require('./apps'))
+router.use(require('./users'))
+router.use(require('./misc'))
+router.use(require('./activities'))
 // API routes
-router.use('/', require('./resource'))
-router.use('/', require('./scene'))
+router.use(require('./resources'))
+router.use(require('./scene'))
+router.use(require('./plugins'))
 
 module.exports = router

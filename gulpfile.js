@@ -8,8 +8,7 @@ var watchify = require('watchify')
 
 gulp.task('default', ['serve', 'watchify'], function () {
   plugins.livereload.listen()
-  gulp.watch('./public/css/**', ['sass'])
-  gulp.watch('./public/views/**/*.html', plugins.livereload.changed)
+  gulp.watch('./public/styles/*.scss', ['sass'])
 })
 
 gulp.task('serve', function () {
@@ -22,10 +21,11 @@ gulp.task('serve', function () {
 gulp.task('build', ['sass', 'browserify'])
 
 gulp.task('sass', function () {
-  gulp.src('./public/css/style.scss')
-  .pipe(plugins.sass().on('error', plugins.sass.logError))
+  gulp.src('./public/styles/style.scss')
+  .pipe(plugins.plumber())
   .pipe(plugins.sourcemaps.init())
   .pipe(plugins.sass())
+  .pipe(plugins.autoprefixer())
   .pipe(plugins.minifyCss())
   .pipe(plugins.sourcemaps.write('./'))
   .pipe(gulp.dest('./public/dist/css'))
@@ -36,27 +36,35 @@ gulp.task('watchify', function () {
   // set up the browserify instance on a task basis
   var bundler = watchify(
     browserify({
-      entries: './public/js/index.js',
+      entries: './public/components/index.jsx',
       debug: true
     })
-  ).transform('babelify', { presets: ['es2015'] })
+    ).transform('babelify', { presets: ['es2015', 'react'] })
 
   bundler.on('update', () => { compile(bundler) })
   return compile(bundler)
 })
 
+gulp.task('browserify', function () {
+  // set up the browserify instance on a task basis
+  var bundler = browserify({
+    entries: './public/components/index.jsx',
+    debug: true
+  }).transform('babelify', { presets: ['es2015', 'react'] })
+
+  return compile(bundler)
+})
+
 function compile (bundler) {
   return bundler.bundle()
-  .on('error', handle)
+  .on('error', function (err) {
+    console.error(err.message)
+    this.emit('end')
+  })
   .pipe(source('bundle.js'))
   .pipe(buffer())
   .pipe(plugins.sourcemaps.init({ loadMaps: true }))
   .pipe(plugins.sourcemaps.write('./'))
   .pipe(gulp.dest('./public/dist/js/'))
   .pipe(plugins.livereload())
-}
-
-function handle (err) {
-  console.log(err.message)
-  this.emit('end')
 }

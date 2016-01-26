@@ -36,6 +36,15 @@ function _installFromDir (dir, done) {
 
   fs.move(dir, appRoot, function (err) {
     if (err) return done(err)
+
+    if (appJson.netbeast && appJson.netbeast.type === 'service') {
+      request.post(process.env.LOCAL_URL + '/activities/' + appJson.name, function (err, port) {
+        if (err) return broker.error(err)
+
+        console.info('[booting] %s launched on port %s ', appJson.name, port.port)
+        broker.info(appJson.name + ' plugin launched on port ' + port.port)
+      })
+    }
     done(null, appJson)
   })
 }

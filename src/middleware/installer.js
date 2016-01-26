@@ -3,7 +3,7 @@ var multer = require('multer')
 
 var App = require('../models/app')
 
-var upload = multer({
+module.exports.upload = multer({
   dest: process.env.TMP_DIR,
   rename: function (fieldname) {
     return new Date().getTime() + '-' + fieldname
@@ -13,7 +13,7 @@ var upload = multer({
   }
 }).any()
 
-module.exports = upload
+// module.exports = upload.any()
 
 module.exports.process = function (req, res, next) {
   if (!req.uploadedFile) return next()

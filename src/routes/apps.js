@@ -10,14 +10,10 @@ var NotFound = require('../util/not-found')
 var InvalidFormat = require('../util/invalid-format')
 
 var router = module.exports = express.Router()
-.use(function (req, res, next) {
-  installer.upload
-  next()
-})
 
 // GET
 router.route('/apps')
-.post(installer.process, installer.git)
+.post(installer.upload, installer.process, installer.git)
 .get(function (req, res, next) {
   App.all(function (err, files) {
     if (err) return next(err)

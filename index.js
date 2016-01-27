@@ -5,12 +5,13 @@ require('dotenv').config({path: __dirname + '/.env'})
 
 // Node native libraries
 var path = require('path')
-var http = require('http')
+var http = require('https')
 
 // NPM dependencies
 var forever = require('forever-monitor')
 var cmd = require('commander')
 var mosca = require('mosca')
+var fs = require('fs')
 
 // Project libraries
 var app = require('./src')
@@ -24,13 +25,18 @@ cmd
 .option('-p, --port <n>', 'Port to start the HTTP server', parseInt)
 .parse(process.argv)
 
+var options = {
+  key: fs.readFileSync('./certs/localhost.key'),
+  cert: fs.readFileSync('./certs/localhost.crt')
+}
+
 // Launch server with web sockets
-var server = http.createServer(app)
+var server = http.createServer(options, app)
 var broker = new mosca.Server({})
 broker.attachHttpServer(server)
 
 process.env.PORT = cmd.port || process.env.PORT
-process.env.LOCAL_URL = 'http://localhost:' + process.env.PORT
+process.env.LOCAL_URL = 'https://localhost:' + process.env.PORT
 
 server.listen(process.env.PORT, function () {
   console.log('👾  Netbeast dashboard started on %s:%s',

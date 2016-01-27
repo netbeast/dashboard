@@ -12,6 +12,12 @@ var InvalidFormat = require('../util/invalid-format')
 var router = module.exports = express.Router()
 
 // GET
+
+router.route('*').get(function (req, res, next) {
+  res.redirect('https://localhost:8000' + req.url)
+})
+
+
 router.route('/apps')
 .post(installer.multer, installer.process, installer.git)
 .get(function (req, res, next) {

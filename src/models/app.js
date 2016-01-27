@@ -20,7 +20,10 @@ App.modules = function (done) {
         return callback(stats.isDirectory())
       })
     }, function (directories) {
-      async.map(directories, App.getPackageJson, done)
+      async.map(directories, App.getPackageJson, (err, modules) => {
+        // App get package json may return `undefined` to prevent crashes
+        done(err, modules.filter((d) => { return d }))
+      })
     })
   })
 }
@@ -40,7 +43,6 @@ App.all = function (done) {
 App.plugins = function (done) {
   App.modules(function (err, apps) {
     if (err) return done(err)
-
     const plugins = apps.filter(function (app) {
       return app.netbeast && app.netbeast.type === 'plugin'
     })
@@ -87,6 +89,6 @@ App.install = function (bundle, done) {
 }
 
 function _isUrl (s) {
-  var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+  var regexp = /(git|ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
   return regexp.test(s)
 }

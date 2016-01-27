@@ -58,3 +58,7 @@ process.on('exit', function () {
   deamon.kill('SIGTERM')
   dns.kill('SIGTERM')
 })
+
+process.on('uncaughtException', function (err) {
+  console.error(err.stack)
+})

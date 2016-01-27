@@ -3,7 +3,7 @@ import request from 'superagent'
 import React from 'react'
 import { Link } from 'react-router'
 
-import App from './app.jsx'
+import App from '../apps/app.jsx'
 
 class ExploreApp extends React.Component {
   render () {

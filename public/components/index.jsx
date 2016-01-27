@@ -7,10 +7,10 @@ import Notifications from './notifications'
 import Settings from './settings.jsx'
 import NotFound from './not-found.jsx'
 
-import Drawer from './apps/drawer.jsx'
+import Drawer from './layouts/drawer.jsx'
 import AppLiveView from './apps/live.jsx'
 import InstallView from './apps/install.jsx'
-import Explore from './apps/explore.jsx'
+import Explore from './layouts/explore.jsx'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -35,10 +35,10 @@ class Dashboard extends React.Component {
     return (
       <div id='dashboard' className={`path${path}`}>
         <Notifications />
+        <Launcher />
         <main>
           {this.props.children}
         </main>
-        <Launcher />
       </div>
     )
   }

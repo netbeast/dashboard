@@ -49,19 +49,21 @@
   }
 }
 
-.apps-list .remove.btn, .apps-list .stop.btn {
+.apps-list .remove.btn, .apps-list .stop.btn, .apps-list .install.btn {
   @extend .z-super;
   position: absolute;
   margin-top: -70px;
   margin-left: -47px;
-  color: $black;
-  padding: 10px;
   width: 75px;
 }
 
 //====================================
 // LAUNCHER
 //====================================
+
+.apps-list {
+  padding-bottom: 50px;
+}
 
 .launcher {
   text-align: center;
@@ -146,31 +148,27 @@
   text-align: center;
   .preview {
     cursor: pointer;
-    margin-top: 100px;
+    margin-top: 100px; margin-bottom: 50px;
     display: inline-block;
-    padding: 100px;
+    vertical-align: middle;
+    padding: 50px;
+    transition: background 0.2s ease-in-out;
     &:hover, &.active {
-      position: relative;
-      top: -10px;
-      border: 10px dashed white;
+      border: 4px solid $green;
     }
   }
   .install-from-git input[name=url] {
     background-color: inherit;
     border: none;
-    border-bottom: 1px solid white;
+    border-bottom: 2px solid white;
     font-size: 24px;
     width: 400px;
-    padding: 7px;
+    padding: 20px 7px 7px 7px;
   }
 
-  .install-from-git input[type=submit] {
-    @extend .btn;
-    border: 2px solid white;
-    background-color: $black;
-    margin: 20px;
-    padding: 10px;
-  }
+  .install-from-git input[type=submit] { margin: 20px; }
+
+  .install-from-git { padding: 20px 0 120px 0; }
 }
 
 //====================================

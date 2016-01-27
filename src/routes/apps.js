@@ -43,7 +43,7 @@ router.route('/apps/:name')
 .delete(function (req, res, next) {
   Activity.stop(req.params.name, function (err) {
     if (err) {
-      return next(new Error('Activity could not stop the app'))
+      return next(new Error('Activity could not stop ' + req.params.name))
     } else {
       App.delete(req.params.name, function (err) {
         if (err && err.code === 404) {

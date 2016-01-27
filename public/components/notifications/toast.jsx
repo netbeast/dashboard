@@ -11,7 +11,7 @@ export default class Toast extends React.Component {
   render () {
     const {title, body, emphasis, timeout} = this.props
 
-    if (timeout) setTimeout(this.close, timeout)
+    // if (timeout) setTimeout(this.close, timeout)
 
     return (
       <div className={'toast ' + emphasis}>

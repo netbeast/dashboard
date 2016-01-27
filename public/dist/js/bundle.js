@@ -41428,21 +41428,16 @@ var Explore = (function (_React$Component) {
     value: function loadApps(props, done) {
       var _this2 = this;
 
-      var GITHUB_REPO = 'https://api.github.com/repos/netbeast/apps/contents/';
-      var GITHUB_RAW = 'https://raw.githubusercontent.com/netbeast/apps/master/';
+      var GITHUB_Q = 'https://api.github.com/search/repositories?q=netbeast+language:javascript';
 
-      console.log('have queried!');
-      _superagent2.default.get(GITHUB_REPO).end(function (err, response) {
+      _superagent2.default.get(GITHUB_Q).end(function (err, res) {
         if (err) return window.toastr.error(err);
 
-        _async2.default.map(response.body, function (app, done) {
-          if (app.name === 'README.md') return done();
+        var _JSON$parse = JSON.parse(res.text);
 
-          _superagent2.default.get(GITHUB_RAW + app.name + '/package.json').end(function (err, resp) {
-            if (err) return window.toastr.error(err);
-            _this2.setState({ apps: [JSON.parse(resp.text)].concat(_toConsumableArray(_this2.state.apps)) });
-          });
-        });
+        var items = _JSON$parse.items;
+
+        _this2.setState({ apps: [].concat(_toConsumableArray(items)) });
       });
     }
   }, {
@@ -41466,7 +41461,7 @@ var Explore = (function (_React$Component) {
           'div',
           { className: 'apps-list' },
           apps.slice(0, 6).map(function (data) {
-            return _react2.default.createElement(_app2.default, _extends({ key: data.name }, data));
+            return _react2.default.createElement(_app2.default, _extends({ key: data.id }, data));
           }),
           _react2.default.createElement('br', null)
         )

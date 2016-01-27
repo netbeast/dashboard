@@ -22,21 +22,12 @@ export default class Explore extends React.Component {
   }
 
   loadApps (props, done) {
-    const GITHUB_REPO = 'https://api.github.com/repos/netbeast/apps/contents/'
-    const GITHUB_RAW = 'https://raw.githubusercontent.com/netbeast/apps/master/'
+    const GITHUB_Q = 'https://api.github.com/search/repositories?q=netbeast+language:javascript'
 
-    console.log('have queried!')
-    request.get(GITHUB_REPO).end((err, response) => {
+    request.get(GITHUB_Q).end((err, res) => {
       if (err) return window.toastr.error(err)
-
-      async.map(response.body, (app, done) => {
-        if (app.name === 'README.md') return done()
-
-        request.get(GITHUB_RAW + app.name + '/package.json').end((err, resp) => {
-          if (err) return window.toastr.error(err)
-          this.setState({ apps: [ JSON.parse(resp.text), ...this.state.apps ] })
-        })
-      })
+      const { items } = JSON.parse(res.text)
+      this.setState({ apps: [ ...items] })
     })
   }
 
@@ -50,7 +41,7 @@ export default class Explore extends React.Component {
           </span>
           <div className='apps-list'>
             {apps.slice(0, 6).map(function (data) {
-              return <App key={data.name} { ...data } />
+              return <App key={data.id} { ...data } />
             })}
             <br/>
           </div>

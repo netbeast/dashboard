@@ -2,25 +2,30 @@ var path = require('path')
 var multer = require('multer')
 
 var App = require('../models/app')
-
-module.exports.upload = multer({
+/*
+module.exports.upload = function({
   dest: process.env.TMP_DIR,
   rename: function (fieldname) {
-    console.log('peo')
+    console.log('in multer')
     return new Date().getTime() + '-' + fieldname
   },
   onFileUploadComplete: function (file, req, res) {
-    console.log('peo2')
+    console.log('completed ')
     req.uploadedFile = file
+  }
+})
+*/
+module.exports.upload = multer({
+  dest: process.env.TMP_DIR,
+  rename: function (fieldname) {
+    console.log('multer def')
+    return new Date().getTime() + '-' + fieldname
   }
 }).any()
 
-// module.exports = upload.any()
-
 module.exports.process = function (req, res, next) {
-  if (!req.uploadedFile) return next()
-
-  const tarball = path.join(process.env.TMP_DIR, req.uploadedFile.name)
+  if (!req.file) return next()
+  const tarball = path.join(process.env.TMP_DIR, req.file.name)
   App.install(tarball, function (err, appJson) {
     if (err) return next(err)
     res.json(appJson)

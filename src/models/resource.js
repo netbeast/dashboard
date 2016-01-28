@@ -1,4 +1,5 @@
 var helper = require('../helpers/resource')
+var NotFound = require('../util/not-found')
 
 helper.createTable(function (err, data) {
   if (err) throw err
@@ -29,7 +30,7 @@ Resource.find = function (query, done) {
   var result = []
   helper.findAction(query, function (err, row) {
     if (err) return done(err)
-    if (!row) return done('No Row Found!')
+    if (!row) return done(new NotFound('Resource not found DB'))
 
     row.forEach(function (action) {
       result.push(new Resource(action))
@@ -41,7 +42,7 @@ Resource.find = function (query, done) {
 Resource.findOne = function (query, done) {
   helper.findAction(query, function (err, row) {
     if (err) return done(err)
-    if (row.length < 1) return done('No Row Found!')
+    if (row.length < 1) return done(new NotFound('Resource not found DB'))
 
     return done(null, new Resource(row[row.length - 1]))
   })

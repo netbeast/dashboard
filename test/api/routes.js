@@ -6,7 +6,7 @@ var chai = require('chai')
 var should = chai.should()
 var expect = chai.expect
 
-const URL = process.env.LOCAL_URL
+const URL = process.env.LOCAL_URL + '/api'
 
 console.log(URL + '/resources')
 
@@ -33,8 +33,8 @@ describe('RESTful Resources API', function () {
       should.not.exist(err)
       resp.statusCode.should.equal(200)
       body = JSON.parse(body)
-      body.data.should.be.an('Array')
-      body.data.forEach(function (item) {
+      body.should.be.an('Array')
+      body.forEach(function (item) {
         expect(item).to.have.all.keys('id', 'app', 'topic', 'location', 'groupname', 'hook')
       })
       done()

@@ -34,7 +34,6 @@ self.status = function (req, res, next) {
   if (!child) return next(new Error('App not running'))
   self.ready(child, function (err, activity) {
     if (err) return next(err)
-    console.log(_.pick(activity, ['name', 'port']))
     res.json(_.pick(activity, ['name', 'port']))
   })
 }
@@ -42,7 +41,7 @@ self.status = function (req, res, next) {
 self.close = function (req, res, next) {
   self.stop(req.params.name, function (err) {
     if (err) return next(err)
-    res.send('App closed')
+    res.status(204).end()
   })
 }
 
@@ -84,11 +83,11 @@ self.ready = function (child, done) {
     k++
     request(APP_URL, function (err, resp, body) {
       if (err && err.code !== 'ECONNREFUSED') {
-        return done(err)
-      } else if (resp && resp.statusCode < 400) {
-        return done(null, child)
-      } else {
+        done(err)
+      } else if (err) {
         setTimeout(callback, 400)
+      } else {
+        done(null, child)
       }
     })
   }, function (err) {
@@ -132,7 +131,8 @@ self.on('start', function (app) {
     var entryPoint = path.resolve(APPS_DIR, app.name, pkgJson.main)
 
     var child = spawn(entryPoint, ['--port', app.port], {
-      cwd: path.join(APPS_DIR, app.name)
+      cwd: path.join(APPS_DIR, app.name),
+      env: process.env
     })
 
     child.stdout.on('data', function (data) {

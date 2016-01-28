@@ -1,0 +1,72 @@
+//
+// This is the main application scss list
+// From here files get imported in dependency order
+// and get compiled into style.css
+// In this file global scope CSS shared across components
+// must be written
+//
+// jesus@netbeast.co
+
+
+@import 'vendor/normalize.css';
+
+@import 'colors';
+@import 'components';
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+
+body, html {
+  height: 100%;
+  width: 100%;
+  background-color: $black;
+  color: white;
+}
+
+.filter-to-white {
+  -webkit-filter: brightness(0) invert(1);
+  filter: brightness(0) invert(1);
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+z-bg { z-index: 0; }
+z-front { z-index: 10; }
+z-super { z-index: 100; }
+
+.btn {
+  text-transform: uppercase;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+  transition: background 0.2s ease-in-out;
+}
+
+.btn.btn-info { border: 2px solid $brand-info; &:hover { background-color: $brand-info; }}
+.btn.btn-success { border: 2px solid $brand-success; &:hover { background-color: $brand-success; }}
+.btn.btn-warning { border: 2px solid $brand-warning; &:hover { background-color: $brand-warning; }}
+.btn.btn-danger { border: 2px solid $brand-danger; &:hover { background-color: $brand-danger; }}
+.btn.btn-default {
+  background-color: black;
+  border: 2px solid white;
+  &:hover {
+    background-color: white;
+    color: $black;
+  }
+}
+
+
+.btn.btn-filled.btn-info { background-color: $brand-info; }
+.btn.btn-filled.btn-success { background-color: $brand-success; }
+.btn.btn-filled.btn-warning { background-color: $brand-warning; }
+.btn.btn-filled.btn-danger { background-color: $brand-danger; }
+.btn.btn-filled.btn-default {
+    background-color: white;
+    color: $black;
+}

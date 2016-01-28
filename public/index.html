@@ -1,33 +1,18 @@
 <!DOCTYPE html>
-<html ng-app="Dashboard">
+<html>
 <head>
   <title ng-bind="title"> Beta |&nbsp;Dashboard</title>
   <link rel="icon" href="img/favicon.png" type="image/png">
   <link rel="stylesheet" media="screen" href="/dist/css/style.css" charset="utf-8">
+  <link rel="stylesheet" media="screen" href="/dist/fa/css/font-awesome.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 </head>
 <body>
-  <nb-navbar></nb-navbar>
-  <div id="wrapper">
-    <div ng-view style="min-height: 100vh;"></div>
-  </div>
-  <span id="brand">
-    <a href="https://netbeast.co">
-      <img src="img/brand.png" alt="NB NETBEAST" />
-    </a>
-  </span>
 
-
-  <!-- Dependencies -->
-  <script src="dist/js/lib/jquery.min.js"></script>
-  <script src="dist/js/lib/toastr.min.js"></script>
-  <script src="dist/js/lib/bootstrap.min.js"></script>
-  <script src="dist/js/lib/angular.min.js"></script>
-  <script src="dist/js/lib/angular-route.min.js"></script>
-  <script src="dist/js/lib/loading-bar.min.js"></script>
+  <div id="app"></div>
 
   <!-- App code -->
-  <script src="dist/js/bundle.js"></script>
+  <script src="/dist/js/bundle.js"></script>
 
 </body>
 </html>

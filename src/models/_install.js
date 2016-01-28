@@ -1,11 +1,46 @@
 var path = require('path')
 var Url = require('url')
+var npm = require('npm')
 
 var Decompress = require('decompress')
 var git = require('gift')
 var fs = require('fs-extra')
-var request = require('request')
+var request = require('superagent')
+
 var broker = require('../helpers/broker')
+
+function _launchPlugin (app) {
+  var type = app.netbeast ? app.netbeast.type : 'app'
+  if (type === 'service' || type === 'plugin' || app.bootOnLoad) {
+    request.post(process.env.LOCAL_URL + '/activities/' + app.name)
+    .end((err, port) => {
+      if (err) return broker.error(err)
+
+      console.info('[booting] %s launched on port %s ', app.name, port.port)
+      broker.info(app.name + ' plugin launched on port ' + port.port)
+    })
+  }
+}
+
+function _installDeps (app, done) {
+  const root = path.join(process.env.APPS_DIR, app.name)
+  const modules = path.join(root, 'node_modules')
+  const dependencies = Object.keys(app)
+
+  if (fs.existsSync(modules)) {
+    _launchPlugin(app)
+    return done(null, app)
+  }
+
+  broker.info('Downloading ' + app.name + ' dependencies...')
+  npm.load({ prefix: root }, (err) => {
+    if (err) return done(err)
+    npm.commands.install(dependencies, (err, data) => {
+      _launchPlugin(app)
+      done(null, app)
+    })
+  })
+}
 
 function _installFromDir (dir, done) {
   const file = path.join(dir, 'package.json')
@@ -36,14 +71,15 @@ function _installFromDir (dir, done) {
 
   fs.move(dir, appRoot, function (err) {
     if (err) return done(err)
-    done(null, appJson)
+
+    _installDeps(appJson, done)
   })
 }
 
 function _installFromTar (tarball, done) {
   const tmpDir = path.join(process.env.TMP_DIR, '' + new Date().getTime())
 
-  broker.info('Unbundling the app...')
+  broker.info('Unbundling app ...')
   new Decompress().src(tarball).dest(tmpDir)
   .use(Decompress.targz({ strip: 1 })).run(function (err) {
     if (err) return done(err)
@@ -86,7 +122,7 @@ function _installFromNetbeast (url, done) {
 
 function _installFromUrl (url, done) {
   const host = Url.parse(url).host
-  console.log('[install] host=%s', host)
+
   if (host === 'netbeast.co') {
     broker.info('Installing from Netbeast repos...')
     _installFromNetbeast(url, done)

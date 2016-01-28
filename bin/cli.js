@@ -5,18 +5,21 @@
 // jesus@netbeast.co
 // ====================
 
-var path = require('path')
+require('dotenv').config({path: __dirname + '/../.env'})
 
+var path = require('path')
 var cli = require('commander')
 var fs = require('fs-extra')
+var didYouMean = require('didyoumean')
+
 var App = require('../lib/app')
 var scan = require('../lib/scan')
 var install = require('../lib/install')
 var publish = require('../lib/publish')
 var start = require('../lib/start')
-var didYouMean = require('didyoumean')
 
-const ACTIONS_LIST = ['new', 'create', 'package', 'pkg', 'unpackage', 'unpkg', 'publish', 'scan', 'install', 'forget', 'start']
+const ACTIONS_LIST = ['new', 'create', 'package', 'pkg', 'unpackage', 'unpkg',
+'publish', 'scan', 'install', 'forget', 'start']
 
 var pkg = require('../package.json')
 
@@ -30,7 +33,7 @@ if (!fs.existsSync(nconf_path)) {
 
 cli.command('new <app>').alias('create')
 .description('Create the basic app structure')
-.option('--cloud', 'Allow thethings.io integration')
+.option('--plugin', 'Create the basic plugin struture (no App)')
 .action(App.create)
 
 cli.command('package [app]').alias('pkg')
@@ -72,8 +75,7 @@ cli.parse(process.argv)
 // No command specified or unrecognaized command
 if (cli.args.length === 0) {
   cli.help()
-}
-if (ACTIONS_LIST.indexOf(process.argv[2]) === -1) {
+} else if (ACTIONS_LIST.indexOf(process.argv[2]) === -1) {
   didYouMean.threshold = null
   var matched = didYouMean(process.argv[2], ACTIONS_LIST)
   if (matched != null) {

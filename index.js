@@ -6,6 +6,8 @@ require('dotenv').config({path: __dirname + '/.env'})
 // Node native libraries
 var path = require('path')
 var http = require('https')
+var express = require('express')
+var redir = express()
 
 // NPM dependencies
 var forever = require('forever-monitor')
@@ -37,11 +39,21 @@ broker.attachHttpServer(server)
 
 process.env.PORT = cmd.port || process.env.PORT
 process.env.LOCAL_URL = 'https://localhost:' + process.env.PORT
+process.env.REDIR_PORT = (parseInt(process.env.PORT) + 1).toString()
+
+// Launch a http common server that redirects to https
+redir
+/*
+.createServer() */
+.get('*', function (req, res) {
+  res.redirect(process.env.LOCAL_URL)
+})
+.listen(process.env.REDIR_PORT, function () {
+  console.log('Redirection server listening on ' + process.env.REDIR_PORT)
+})
 
 server.listen(process.env.PORT, function () {
-  console.log('👾  Netbeast dashboard started on %s:%s',
-  server.address().address,
-  server.address().port)
+  console.log('👾  Netbeast dashboard started on ', process.env.LOCAL_URL)
   bootOnload()
 })
 

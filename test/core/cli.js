@@ -1,4 +1,5 @@
 /* global describe, after, it*/
+require('dotenv').load()
 
 var should = require('chai').should()
 
@@ -45,9 +46,10 @@ describe('Client', function () {
 
   it('should install test/app.tar.gz', function (done) {
     this.timeout(25000)
-    exec('beast install test/app.tar.gz', function (err, stdout, stderr) {
+    exec('beast install test/app.tar.gz ' + process.env.LOCAL_URL,
+    function (err, stdout, stderr) {
       should.not.exist(err)
-      fs.access('/etc/passwd', fs.F_OK, function (err) {
+      fs.access('./.sandbox/myapp', fs.F_OK, function (err) {
         should.not.exist(err)
         done()
       })

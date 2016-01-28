@@ -2,43 +2,31 @@ var path = require('path')
 var multer = require('multer')
 
 var App = require('../models/app')
-var broker = require('../helpers/broker')
+var ApiError = require('../util/api-error')
 
-module.exports.multer = multer({
+module.exports.upload = multer({
   dest: process.env.TMP_DIR,
-  rename: function (fieldname, filename, req, res) {
+  rename: function (fieldname, filename) {
+    console.log('filename', filename)
     return new Date().getTime() + '-' + filename
   },
-  onFileUploadStart: function (file, req, res) {
-    var fname = file.name
-    var ext = [fname.split('.')[1], fname.split('.')[2]].join('.')
-    if (ext !== 'tar.gz' && ext !== 'tgz.') {
-      res.status(403).send('Invalid Package. Must be a tar.gz')
-      return false
-    }
-  },
-  onFileUploadComplete: function (file, req, res) {
-    req.uploadedFile = file
+  fileFilter: function (req, file, done) {
+    console.log(file)
+    var ext = [file.originalname.split('.')[1], file.originalname.split('.')[2]].join('.')
+    console.log('EXT', ext)
+    if (ext !== 'tar.gz' && ext !== 'tgz.' || file.mimetype !== 'application/x-gzip' && file.mimetype !== 'application/octet-stream')
+      return done(null, false)
+    else
+      return done(null, true)
   }
-})
+}).any()
 
 module.exports.process = function (req, res, next) {
-  if (!req.uploadedFile) return next()
-
-  const tarball = path.join(process.env.TMP_DIR, req.uploadedFile.name)
-  App.install(tarball, function (err, appJson) {
+  const module = req.files.length > 0  ? req.files[0].path : req.body.url
+  if (!module) return next(new ApiError(422, 'App must be a .tar.gz file.'))
+  App.install(module, function (err, appJson) {
     if (err) return next(err)
-    broker.success(appJson.name + ' installed')
-    res.status(204).end()
-  })
-}
 
-module.exports.git = function (req, res, next) {
-  if (!req.body.url) return next()
-
-  App.install(req.body.url, function (err, appJson) {
-    if (err) return next(err)
-    broker.success(appJson.name + ' installed')
-    res.status(204).end()
+    res.json(appJson)
   })
 }

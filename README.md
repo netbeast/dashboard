@@ -13,17 +13,16 @@ This is a web panel from you can install, manage or publish IoT applications. Fo
 
 ## Try it locally
 Find it live at `http://localhost`
-<img src="https://github.com/netbeast/dashboard/blob/master/web/img/general_demo.gif?raw=true">
-</img>
+![Dashboard live GIF](public/img/general_demo.gif)
 
 ### Install
 ``` bash
-npm install -g nb-dashboard
+npm install -g netbeast-cli
 ```
 
 ### Run
 ```bash
-sudo nb-dashboard --port 80
+beast start --port 8000 # default port
 ```
 
 ## Turn your Raspberry Pi in a home automation gateway!
@@ -39,15 +38,9 @@ sudo ./index.js
 
 We also prepared a <u>very lightweight Raspberry Pi distro with the dashboard already installed</u> is published every two weeks here http://bit.ly/1HjkWo2. Available for Rpi 1 and 2 versions.
 
-## Use cases
-Find them in our marketplace private beta. Invitations are open <a target="_blank" href="http://bit.ly/1ENxgvq">here</a>
-* Push notification system using a Node.js REST API
-* SFTP server in Node.js + linux package
-* Live Streaming powerpoint web app
-* Web SSH built with node
-* Wifi Interface  controller with Node.js and bash scripts
-
+## Docs
 You can build IoT apps using only web technologies: javascript and HTML5! Also we hace tutorials at our docs to build apps with python.
+http://docs.netbeast.co
 
 ## Contact
 * Visit our site [https://netbeast.co](https://netbeast.co)

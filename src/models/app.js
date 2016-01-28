@@ -10,13 +10,44 @@ var _install = require('./_install')
 var App = module.exports = {}
 const APPS_DIR = process.env.APPS_DIR
 
-App.all = function (done) {
+App.modules = function (done) {
   fs.readdir(APPS_DIR, function (err, files) {
     if (err) return done(err)
-    files = files.filter(function (file) {
-      return file !== 'installed_apps_live_here'
+
+    async.filter(files, function (file, callback) {
+      fs.lstat(APPS_DIR + '/' + file, function (err, stats) {
+        if (err) return done(err) // done reports error to App.modules
+        return callback(stats.isDirectory())
+      })
+    }, function (directories) {
+      async.map(directories, App.getPackageJson, (err, modules) => {
+        // App get package json may return `undefined` to prevent crashes
+        done(err, modules.filter((d) => { return d }))
+      })
     })
-    async.map(files, App.getPackageJson, done)
+  })
+}
+
+App.all = function (done) {
+  App.modules(function (err, apps) {
+    if (err) return done(err)
+
+    const plugins = apps.filter(function (app) {
+      return !(app.netbeast && app.netbeast.type === 'plugin')
+    })
+
+    done(null, plugins)
+  })
+}
+
+App.plugins = function (done) {
+  App.modules(function (err, apps) {
+    if (err) return done(err)
+    const plugins = apps.filter(function (app) {
+      return app.netbeast && app.netbeast.type === 'plugin'
+    })
+
+    done(null, plugins)
   })
 }
 
@@ -30,10 +61,15 @@ App.delete = function (app, done) {
 }
 
 App.getPackageJson = function (app, done) {
-  if (!fs.existsSync(path.join(APPS_DIR, app))) {
+  const dir = path.join(APPS_DIR, app)
+  if (!fs.existsSync(dir)) {
     return done(new NotFound(app + ' is not installed'))
   }
-  fs.readJson(path.join(APPS_DIR, app, 'package.json'), done)
+
+  fs.readJson(path.join(dir, 'package.json'), function (err, pkg) {
+    if (err && err.code === 'ENOENT') return done()
+    done(err, pkg)
+  })
 }
 
 App.install = function (bundle, done) {
@@ -53,6 +89,6 @@ App.install = function (bundle, done) {
 }
 
 function _isUrl (s) {
-  var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+  var regexp = /(git|ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
   return regexp.test(s)
 }

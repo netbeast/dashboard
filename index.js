@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // Load environment variables
-require('dotenv').load()
+require('dotenv').config({path: __dirname + '/.env'})
 
 // Node native libraries
 var path = require('path')
@@ -17,6 +17,7 @@ var app = require('./src')
 var bootOnload = require('./src/boot-on-load')
 
 const DASHBOARD_DEAMON = path.join(__dirname, './bin/deamon.js')
+const DASHBOARD_DNS = path.join(__dirname, './bin/dns.js')
 
 cmd
 .version('0.1.42')
@@ -32,20 +33,30 @@ process.env.PORT = cmd.port || process.env.PORT
 process.env.LOCAL_URL = 'http://localhost:' + process.env.PORT
 
 server.listen(process.env.PORT, function () {
-  console.log('👾  Netbeast dashboard started on %s:%s',
-  server.address().address,
-  server.address().port)
+  console.log('👾  Netbeast dashboard started on %s:%s', server.address().address, server.address().port)
   bootOnload()
 })
+
+var dns = new (forever.Monitor)(DASHBOARD_DNS, {
+  env: { 'NETBEAST_PORT': process.env.PORT },
+  max: 1
+})
+dns.title = 'netbeast-dns'
+dns.start()
 
 var deamon = new (forever.Monitor)(DASHBOARD_DEAMON, {
   env: { 'NETBEAST_PORT': process.env.PORT },
   max: 1
 })
 
-deamon.title = 'netbeast'
+deamon.title = 'netbeast-deamon'
 deamon.start()
 
 process.on('exit', function () {
   deamon.kill('SIGTERM')
+  dns.kill('SIGTERM')
+})
+
+process.on('uncaughtException', function (err) {
+  console.error(err.stack)
 })

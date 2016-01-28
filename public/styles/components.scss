@@ -1,0 +1,182 @@
+
+//
+// Components styling file
+// Divide each component with big comment lines
+// Indeed, it simplifies writing CSS
+//
+
+//====================================
+// DASHBOARD COMPONENT
+//====================================
+
+#app, #dashboard, #dashboard main {
+  width: 100%; height: 100%;
+}
+
+//====================================
+// DRAWER COMPONENT
+//====================================
+
+.drawer {
+  padding: 20px 50px;
+  text-align: center;
+}
+
+.drawer .apps-list { margin-top: -20px; }
+
+.drawer .apps-list .app {
+  display: inline-block;
+  vertical-align: top;
+  border-radius: 3px;
+  padding: 40px 20px;
+  margin-top: 15px;
+  .logo img {
+    width: 100px;
+    height: auto;
+    &:hover { cursor: pointer; }
+  }
+
+  .name {
+    text-transform: uppercase;
+    font-size: 1.2rem;
+  }
+
+  .author {
+    padding-top: 10px;
+    font-weight: lighter;
+    font-size: 0.8rem;
+    opacity: 0.8;
+  }
+}
+
+.apps-list .remove.btn, .apps-list .stop.btn, .apps-list .install.btn {
+  @extend .z-super;
+  position: absolute;
+  margin-top: -70px;
+  margin-left: -47px;
+  width: 75px;
+}
+
+//====================================
+// LAUNCHER
+//====================================
+
+.apps-list {
+  padding-bottom: 50px;
+}
+
+.launcher {
+  text-align: center;
+  position: fixed;
+  bottom: 50px;
+  width: 100%;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ul {
+    padding: 5px 30px;
+    display: inline-block;
+    background-color: $black;
+
+    border: 1px solid $grey;
+    border-bottom: 2px solid $grey;
+
+    li {
+      display: inline-block;
+      padding: 10px;
+    }
+  }
+}
+
+//====================================
+// Notifications
+//====================================
+
+.notifications {
+  position: fixed;
+  width: 300px;
+  right: 50px;
+  top: 25px;
+
+  .toast {
+    display: block;
+    text-align: justify;
+    margin: 10px 0;
+    padding: 15px;
+    width: 100%;
+
+    background-color: $blue;
+    &.error { background-color: $red; }
+    &.warning { background-color: $orange; }
+    &.success { background-color: $green; }
+  }
+
+  .toast .title {
+    text-transform: uppercase;
+    font-weight: bolder;
+  }
+
+  .toast .close {
+    opacity: 0.8;
+    float: right;
+    cursor: pointer;
+  }
+
+  .toast .body {
+    padding-top: 5px;
+  }
+}
+
+//====================================
+// App LiveView
+//====================================
+
+.app-live {
+  width: 100%; height: 100%;
+  background-color: white;
+}
+
+//====================================
+// App InstallView
+//====================================
+
+.app-install {
+  width: 100%; height: 100%;
+  text-align: center;
+  .preview {
+    cursor: pointer;
+    margin-top: 100px; margin-bottom: 50px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 50px;
+    transition: background 0.2s ease-in-out;
+    &:hover, &.active {
+      border: 4px solid $green;
+    }
+  }
+  .install-from-git input[name=url] {
+    background-color: inherit;
+    border: none;
+    border-bottom: 2px solid white;
+    font-size: 24px;
+    width: 400px;
+    padding: 20px 7px 7px 7px;
+  }
+
+  .install-from-git input[type=submit] { margin: 20px; }
+
+  .install-from-git { padding: 20px 0 120px 0; }
+}
+
+//====================================
+// NotFound
+//====================================
+
+.not-found {
+  width: 100%;
+  padding-top: 200px;
+  text-align: center;
+}

@@ -79,7 +79,7 @@ function _installFromDir (dir, done) {
 function _installFromTar (tarball, done) {
   const tmpDir = path.join(process.env.TMP_DIR, '' + new Date().getTime())
 
-  broker.info('Unbundling the app...')
+  broker.info('Unbundling app ...')
   new Decompress().src(tarball).dest(tmpDir)
   .use(Decompress.targz({ strip: 1 })).run(function (err) {
     if (err) return done(err)

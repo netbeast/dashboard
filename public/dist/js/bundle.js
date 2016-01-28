@@ -40007,12 +40007,13 @@ var InstallView = (function (_React$Component) {
       var toggleGitFields = function toggleGitFields() {
         this.setState({ gitFieldsHidden: !this.state.gitFieldsHidden });
       };
+
       return _react2.default.createElement(
         'div',
         { className: 'app-install' },
         _react2.default.createElement(
           _reactDropzone2.default,
-          { onDrop: this.handleDrop.bind(this), className: 'preview', activeClassName: 'preview active' },
+          { onDrop: this.handleDrop.bind(this), className: 'preview', activeClassName: 'preview active', multiple: false },
           _react2.default.createElement(
             'h1',
             null,

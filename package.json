@@ -27,7 +27,7 @@
     "morgan": "^1.5.2",
     "mosca": "^0.32.1",
     "mqtt": "^1.6.3",
-    "multer": "0.1.8",
+    "multer": "^1.1.0",
     "nconf": "^0.8.2",
     "portfinder": "^0.4.0",
     "request": "^2.55.0",

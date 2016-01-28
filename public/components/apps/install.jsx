@@ -37,19 +37,20 @@ export default class InstallView extends React.Component {
     let toggleGitFields = function () {
       this.setState({ gitFieldsHidden: !this.state.gitFieldsHidden })
     }
+
     return (
       <div className='app-install'>
-      <Dropzone onDrop={this.handleDrop.bind(this)} className='preview' activeClassName='preview active'>
-      <h1>Drop apps here to install them.</h1>
-      <h3>(or click here to browse among your files).</h3>
-      </Dropzone>
-      <br/>
-      <a href='explore' className='btn btn-info'>Explore</a> &nbsp;
-      <a href='#' onClick={toggleGitFields.bind(this)} className='btn btn-default'>with git</a>
-      { this.state.gitFieldsHidden ? null : <form className='install-from-git' onSubmit={this.handleSubmit.bind(this)}>
-      <input name='url' type='url' onChange={this.handleTextChange.bind(this)} placeholder='Paste here an URL to install from git' />
-      <input type='submit' className='btn btn-default' value='install' />
-      </form>}
+        <Dropzone onDrop={this.handleDrop.bind(this)} className='preview' activeClassName='preview active' multiple={false} >
+          <h1>Drop apps here to install them.</h1>
+          <h3>(or click here to browse among your files).</h3>
+        </Dropzone>
+        <br/>
+        <a href='explore' className='btn btn-info'>Explore</a> &nbsp;
+        <a href='#' onClick={toggleGitFields.bind(this)} className='btn btn-default'>with git</a>
+        { this.state.gitFieldsHidden ? null : <form className='install-from-git' onSubmit={this.handleSubmit.bind(this)}>
+          <input name='url' type='url' onChange={this.handleTextChange.bind(this)} placeholder='Paste here an URL to install from git' />
+          <input type='submit' className='btn btn-default' value='install' />
+        </form>}
       </div>
     )
   }

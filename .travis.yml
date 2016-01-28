@@ -3,6 +3,7 @@ sudo: false
 env:
   - ENV="development" NODE=".:$NODE"
 node_js:
+  - "0.12"
   - "4.2.1"
 before_script:
-  - "npm link; ./index.js &"
+  - "npm link npm; npm install -g; ./index.js &"

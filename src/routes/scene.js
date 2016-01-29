@@ -6,7 +6,7 @@ var ApiError = require('../util/api-error')
 //  GET
 router.get('/scenes', function (req, res, next) {
   Scene.find(req.query, function (err, devices) {
-    if (err) return next(err)
+    if (err && err.statusCode !== 404) return next(err)
     res.json(devices)
 
     // MANDAR NOT FOUND Y SACARLO DEL MODELO.

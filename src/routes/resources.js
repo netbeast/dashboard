@@ -13,7 +13,8 @@ router.route('/resources')
 
 .get(function (req, res, next) {
   Resource.find(req.query, function (err, resources) {
-    if (err) return next(err)
+    if (err && err.statusCode !== 404) return next(err)
+
     res.json(resources)
   })
 })
@@ -22,7 +23,7 @@ router.route('/resources')
   Resource.findOne(req.body, function (err, resource) {
     if (err && err.statusCode !== 404) return next(err)
 
-    if (resource) return next(new ApiError(500, 'This resource exists!'))
+    if (resource) return next(new ApiError(405, 'This resource exists!'))
 
     Resource.create(req.body, function (err, item) {
       if (err) return next(err)

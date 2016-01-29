@@ -11,7 +11,7 @@ export default class App extends React.Component {
   handleClick () {
     const { type } = this.props
     console.log(this.props)
-    if (type === 'apps') this.launch()
+    if (type !== 'explore') this.launch()
   }
 
   launch () {

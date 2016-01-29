@@ -58,7 +58,7 @@ self.get = function (appName) {
 }
 
 self.all = function (done) {
-  App.all(function (err, apps) {
+  App.modules(function (err, apps) {
     if (err) return done(err)
 
     apps = apps.filter(function (app) {

@@ -7,11 +7,9 @@ var ApiError = require('../util/api-error')
 module.exports.upload = multer({
   dest: process.env.TMP_DIR,
   rename: function (fieldname, filename) {
-    console.log('filename', filename)
     return new Date().getTime() + '-' + filename
   },
   fileFilter: function (req, file, done) {
-    console.log(file)
     var ext = [file.originalname.split('.')[1], file.originalname.split('.')[2]].join('.')
     console.log('EXT', ext)
     if (ext !== 'tar.gz' && ext !== 'tgz.' || file.mimetype !== 'application/x-gzip' && file.mimetype !== 'application/octet-stream')

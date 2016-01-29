@@ -1,7 +1,6 @@
 language: node_js
 sudo: false
 node_js:
-  - "0.12"
   - "4.2.1"
 before_script:
-  - "npm link npm; npm install -g; beast start &"
+  - "./index.js &"

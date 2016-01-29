@@ -3,11 +3,13 @@ require('dotenv').load()
 
 var should = require('chai').should()
 
+var path = require('path')
 var exec = require('child_process').exec
 
 var fs = require('fs-extra')
 var async = require('async')
 
+const CLI = path.join(process.cwd(), 'bin', 'cli.js')
 const PATH_TO_APP = './test-app'
 const INSTALLED_APP = '.sandbox/myapp'
 
@@ -19,7 +21,7 @@ describe('Client', function () {
 
   it('should create an app called test-app', function (done) {
     async.series([
-      async.apply(exec, 'beast new test-app'),
+      async.apply(exec, CLI + ' new test-app'),
       async.apply(fs.readdir, PATH_TO_APP),
       async.apply(fs.readdir, PATH_TO_APP + '/public'),
       function (callback) {
@@ -46,7 +48,7 @@ describe('Client', function () {
 
   it('should install test/app.tar.gz', function (done) {
     this.timeout(25000)
-    exec('beast install test/app.tar.gz ' + process.env.LOCAL_URL,
+    exec(CLI + ' install test/app.tar.gz ' + process.env.LOCAL_URL,
     function (err, stdout, stderr) {
       should.not.exist(err)
       fs.access('./.sandbox/myapp', fs.F_OK, function (err) {
@@ -57,7 +59,7 @@ describe('Client', function () {
   })
 
   it('should package test-app into app.tar.gz', function (done) {
-    exec('beast package test-app', function (err, stdout, stderr) {
+    exec(CLI + ' package test-app', function (err, stdout, stderr) {
       should.not.exist(err)
       fs.access('app.tar.gz', fs.F_OK, function (err) {
         should.not.exist(err)
@@ -69,7 +71,7 @@ describe('Client', function () {
 
   // package app with option --to (alias -o)
   it('should create a packaged app from test-app called test-app.tar.gz (option --to)', function (done) {
-    exec('beast package test-app --to test-app__to.tar.gz', function (err, stdout, stderr) {
+    exec(CLI + ' package test-app --to test-app__to.tar.gz', function (err, stdout, stderr) {
       should.not.exist(err)
       fs.access('test-app__to.tar.gz', fs.F_OK, function (err) {
         should.not.exist(err)
@@ -80,7 +82,7 @@ describe('Client', function () {
 
   // unpkg option --to
   it('should test-app.tar.gz unpackage to ./test-app folder (option --to)', function (done) {
-    exec('beast unpkg test-app__to.tar.gz --to test-app__to', function (err, stdout, stderr) {
+    exec(CLI + ' unpkg test-app__to.tar.gz --to test-app__to', function (err, stdout, stderr) {
       should.not.exist(err)
       fs.access('test-app__to', fs.F_OK, function (err) {
         should.not.exist(err)

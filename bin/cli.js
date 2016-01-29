@@ -15,7 +15,6 @@ var didYouMean = require('didyoumean')
 var App = require('../lib/app')
 var scan = require('../lib/scan')
 var install = require('../lib/install')
-var publish = require('../lib/publish')
 var start = require('../lib/start')
 
 const ACTIONS_LIST = ['new', 'create', 'package', 'pkg', 'unpackage', 'unpkg',
@@ -46,9 +45,9 @@ cli.command('unpackage [app]').alias('unpkg')
 .description('Uncompress your app from tar.gz')
 .action(App.unpackage)
 
-cli.command('publish <file>')
-.description("Upload your app to the netbeast's repos")
-.action(publish)
+// cli.command('publish <file>')
+// .description("Upload your app to the netbeast's repos")
+// .action(publish)
 
 cli.command('scan').alias('discover')
 .description('Find available Netbeasts in range and shows their IP')

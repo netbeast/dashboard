@@ -26,7 +26,7 @@ gulp.task('sass', function () {
   .pipe(plugins.sourcemaps.init())
   .pipe(plugins.sass())
   .pipe(plugins.autoprefixer())
-  .pipe(plugins.minifyCss())
+  .pipe(plugins.cssnano())
   .pipe(plugins.sourcemaps.write('./'))
   .pipe(gulp.dest('./public/dist/css'))
   .pipe(plugins.livereload())

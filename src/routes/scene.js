@@ -8,19 +8,22 @@ router.get('/scenes', function (req, res, next) {
   Scene.find(req.query, function (err, devices) {
     if (err) return next(err)
     res.json(devices)
+
+    // MANDAR NOT FOUND Y SACARLO DEL MODELO.
   })
 })
 
 //  POST
 router.post('/scenes', function (req, res, next) {
   Scene.findOne(req.body, function (err, device) {
-    if (err) return next(err)
-    else if (device === undefined || err === 'No Row Found!') {
+    if (err && err.statusCode !== 404) return next(err)
+
+    if (device === undefined) {
       Scene.create(req.body, function (err, item) {
         if (err) return next(err)
         return res.status(204).end()
       })
-    } else return new ApiError(500, 'This device exists!')
+    } else return next(new ApiError(500, 'This device exists!'))
   })
 })
 
@@ -41,6 +44,7 @@ router.delete('/scenes', function (req, res, next) {
   Scene.find(req.query, function (err, devices) {
     if (err) return next(err)
 
+    if (!Object.keys(devices).length) return next(new ApiError(404, 'These resources doesn´t exists!'))
     devices.forEach(function (item) {
       item.destroy(function (err) {
         if (err) return next(err)

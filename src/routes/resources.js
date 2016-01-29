@@ -14,7 +14,6 @@ router.route('/resources')
 .get(function (req, res, next) {
   Resource.find(req.query, function (err, resources) {
     if (err) return next(err)
-
     res.json(resources)
   })
 })
@@ -23,9 +22,7 @@ router.route('/resources')
   Resource.findOne(req.body, function (err, resource) {
     if (err && err.statusCode !== 404) return next(err)
 
-    if (resource) {
-      return new ApiError(500, 'This action exists!')
-    }
+    if (resource) return next(new ApiError(500, 'This resource exists!'))
 
     Resource.create(req.body, function (err, item) {
       if (err) return next(err)
@@ -49,6 +46,7 @@ router.route('/resources')
   Resource.find(req.query, function (err, resources) {
     if (err) return next(err)
 
+    if (!Object.keys(resources).length) return next(new ApiError(404, 'These resources doesn´t exists!'))
     resources.forEach(function (item) {
       item.destroy(function (err) {
         if (err) return next(err)

@@ -1,5 +1,5 @@
 var helper = require('../helpers/scene')
-var NotFound = require('../util/not-found')
+var ApiError = require('../util/api-error')
 
 helper.createTable(function (err, data) {
   if (err) throw err
@@ -8,7 +8,7 @@ helper.createTable(function (err, data) {
 function Scene (item) {
   this.id = item.id
   this.sceneid = item.sceneid
-  this.location = item.location
+  this.location = item.location || 'none'
   this.power = item.power
   this.brightness = item.brightness
   this.hue = item.hue
@@ -30,7 +30,7 @@ Scene.find = function (query, done) {
   var result = []
   helper.findDevice(query, function (err, row) {
     if (err) return done(err)
-    if (!row) return done(new NotFound('Resource not found DB'))
+    if (!row.length) return done(new ApiError(404, 'Resource not found DB'))
 
     row.forEach(function (action) {
       result.push(new Scene(action))
@@ -42,7 +42,7 @@ Scene.find = function (query, done) {
 Scene.findOne = function (query, done) {
   helper.findDevice(query, function (err, row) {
     if (err) done(err)
-    else if (!row) done(new NotFound('Resource not found DB'))
+    else if (!row.length) done(new ApiError(404, 'Resource not found DB'))
     else done(null, new Scene(row[row.length - 1]))
   })
 }

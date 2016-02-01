@@ -20,9 +20,9 @@ App.modules = function (done) {
         return callback(stats.isDirectory())
       })
     }, function (directories) {
-      async.map(directories, App.getPackageJson, (err, modules) => {
+      async.map(directories, App.getPackageJson, function (err, modules) {
         // App get package json may return `undefined` to prevent crashes
-        done(err, modules.filter((d) => { return d }))
+        done(err, modules.filter(function (d) { return d }))
       })
     })
   })

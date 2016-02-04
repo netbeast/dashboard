@@ -63,8 +63,7 @@ router.get('/apps/:name/logo', function (req, res) {
   const pkgJson = path.join(process.env.APPS_DIR, req.params.name, 'package.json')
   try {
     const app = fs.readJsonSync(pkgJson)
-    const appRoot = path.join(process.env.APPS_DIR, app.name)
-    const appLogo = path.join(appRoot, app.logo)
+    const appLogo = path.resolve(process.env.APPS_DIR, app.name, app.logo)
     res.sendFile(appLogo)
   } catch (e) {
     res.sendFile(path.resolve(process.env.PUBLIC_DIR, 'img/dflt.png'))

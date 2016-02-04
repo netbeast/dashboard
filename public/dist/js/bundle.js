@@ -39883,34 +39883,24 @@ var App = function (_React$Component) {
       var _props = this.props;
       var name = _props.name;
       var author = _props.author;
+      var logo = _props.logo;
 
-      var logo = '/api/apps/' + name + '/logo';
+      var icon = logo ? '/api/apps/' + name + '/logo' : '/img/dflt.png';
       return _react2.default.createElement(
         'div',
         { className: 'app' },
         _react2.default.createElement(
           'div',
           { className: 'logo', title: 'Launch app', onClick: this.handleClick.bind(this) },
-          _react2.default.createElement('img', { className: 'filter-to-white', src: logo, alt: logo })
+          _react2.default.createElement('img', { className: '', src: icon, alt: icon })
         ),
         this.renderStopButton(),
         this.renderRemoveButton(),
         this.renderInstallButton(),
         _react2.default.createElement(
           'h4',
-          null,
-          _react2.default.createElement('br', null),
-          ' ',
-          _react2.default.createElement(
-            'span',
-            { className: 'name' },
-            name
-          )
-        ),
-        _react2.default.createElement(
-          'span',
-          { className: 'author' },
-          author
+          { className: 'name' },
+          name
         )
       );
     }
@@ -40366,28 +40356,20 @@ var ExploreApp = function (_React$Component) {
       var logo = '/img/explore.png';
       return _react2.default.createElement(
         'div',
-        { className: 'app' },
+        { className: 'app app-explore' },
         _react2.default.createElement(
           'div',
           { className: 'logo', title: 'Launch app' },
           _react2.default.createElement(
             _reactRouter.Link,
             { to: '/explore' },
-            _react2.default.createElement('img', { className: 'filter-to-white', src: logo, alt: logo })
+            _react2.default.createElement('img', { src: logo, alt: logo })
           )
         ),
         _react2.default.createElement(
           'h4',
-          null,
-          ' ',
-          _react2.default.createElement('br', null),
-          ' ',
-          _react2.default.createElement(
-            'span',
-            { className: 'name' },
-            'Explore'
-          ),
-          ' '
+          { className: 'name' },
+          ' Explore '
         )
       );
     }

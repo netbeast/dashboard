@@ -14,13 +14,13 @@ class ExploreApp extends React.Component {
 
     const logo = '/img/explore.png'
     return (
-      <div className='app'>
+      <div className='app app-explore'>
         <div className='logo' title='Launch app'>
           <Link to='/explore'>
-            <img className='filter-to-white' src={logo} alt={logo} />
+            <img src={logo} alt={logo} />
           </Link>
         </div>
-        <h4> <br/> <span className='name'>Explore</span> </h4>
+        <h4 className='name'> Explore </h4>
       </div>
     )
   }

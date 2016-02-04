@@ -40,21 +40,18 @@
     text-transform: uppercase;
     font-size: 1.2rem;
   }
-
-  .author {
-    padding-top: 10px;
-    font-weight: lighter;
-    font-size: 0.8rem;
-    opacity: 0.8;
-  }
 }
 
 .apps-list .remove.btn, .apps-list .stop.btn, .apps-list .install.btn {
   @extend .z-super;
   position: absolute;
   margin-top: -70px;
-  margin-left: -47px;
+  margin-left: -37px;
   width: 75px;
+}
+
+.app-explore {
+  .name { padding-top: 15px; }
 }
 
 //====================================
@@ -79,10 +76,9 @@
   ul {
     padding: 5px 30px;
     display: inline-block;
-    background-color: $black;
 
-    border: 1px solid $grey;
-    border-bottom: 2px solid $grey;
+    border: 1px solid $grey-base;
+    border-bottom: 2px solid $grey-base;
 
     li {
       display: inline-block;
@@ -110,7 +106,7 @@
 
     background-color: $blue;
     &.error { background-color: $red; }
-    &.warning { background-color: $orange; }
+    &.warning { background-color: $yellow; }
     &.success { background-color: $green; }
   }
 
@@ -154,7 +150,7 @@
     padding: 50px;
     transition: background 0.2s ease-in-out;
     &:hover, &.active {
-      border: 4px solid $green;
+      border: 4px solid $purple;
     }
   }
   .install-from-git input[name=url] {
@@ -162,7 +158,7 @@
     border: none;
     border-bottom: 2px solid white;
     font-size: 24px;
-    width: 400px;
+    width: 410px;
     padding: 20px 7px 7px 7px;
   }
 

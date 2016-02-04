@@ -68,20 +68,17 @@ export default class App extends React.Component {
   }
 
   render () {
-    const { name, author } = this.props
-    const logo = `/api/apps/${name}/logo`
+    const { name, author, logo } = this.props
+    const icon = logo ? `/api/apps/${name}/logo` : '/img/dflt.png'
     return (
       <div className='app'>
         <div className='logo' title='Launch app' onClick={this.handleClick.bind(this)}>
-          <img className='filter-to-white' src={logo} alt={logo} />
+          <img className='' src={icon} alt={icon} />
         </div>
         {this.renderStopButton()}
         {this.renderRemoveButton()}
         {this.renderInstallButton()}
-        <h4>
-          <br/> <span className='name'>{name}</span>
-        </h4>
-        <span className='author'>{author}</span>
+        <h4 className='name'>{name}</h4>
       </div>
     )
   }

@@ -6,7 +6,7 @@ var Activity = require('./models/activity')
 
 // start apps that must be initialized on boot
 module.exports = function bootOnload () {
-  App.all(function (err, apps) {
+  App.modules(function (err, apps) {
     if (err) throw err
 
     async.map(apps, function (app, done) {

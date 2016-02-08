@@ -39918,391 +39918,6 @@ App.contextTypes = {
 },{"react":306,"superagent":307}],311:[function(require,module,exports){
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDropzone = require('react-dropzone');
-
-var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
-
-var _superagent = require('superagent');
-
-var _superagent2 = _interopRequireDefault(_superagent);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var InstallView = function (_React$Component) {
-  _inherits(InstallView, _React$Component);
-
-  function InstallView(props) {
-    _classCallCheck(this, InstallView);
-
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(InstallView).call(this, props));
-
-    _this.state = { gitFieldsHidden: true };
-    return _this;
-  }
-
-  _createClass(InstallView, [{
-    key: 'handleDrop',
-    value: function handleDrop(files) {
-      var req = _superagent2.default.post('/api/apps');
-      files.forEach(function (file) {
-        window.toastr.info('Uploading ' + file.name + '...');
-        req.attach('file', file, file.name);
-      });
-      req.end(function (err, res) {
-        if (err) return window.toastr.error(res.text);
-        window.toastr.success(res.body.name + ' has been installed!');
-      });
-    }
-  }, {
-    key: 'handleTextChange',
-    value: function handleTextChange(event) {
-      this.setState({ url: event.target.value });
-    }
-  }, {
-    key: 'handleSubmit',
-    value: function handleSubmit(event) {
-      event.preventDefault();
-
-      _superagent2.default.post('/api/apps').send({ url: this.state.url }).end(function (err, res) {
-        if (err) return window.toastr.error(res.text);
-        window.toastr.success(res.body.name + ' has been installed!');
-      });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var toggleGitFields = function toggleGitFields() {
-        this.setState({ gitFieldsHidden: !this.state.gitFieldsHidden });
-      };
-
-      return _react2.default.createElement(
-        'div',
-        { className: 'app-install' },
-        _react2.default.createElement(
-          _reactDropzone2.default,
-          { onDrop: this.handleDrop.bind(this), className: 'preview', activeClassName: 'preview active', multiple: false },
-          _react2.default.createElement(
-            'h1',
-            null,
-            'Drop apps here to install them.'
-          ),
-          _react2.default.createElement(
-            'h3',
-            null,
-            '(or click here to browse among your files).'
-          )
-        ),
-        _react2.default.createElement('br', null),
-        _react2.default.createElement(
-          'a',
-          { href: 'explore', className: 'btn btn-info' },
-          'Explore'
-        ),
-        '  ',
-        _react2.default.createElement(
-          'a',
-          { href: '#', onClick: toggleGitFields.bind(this), className: 'btn btn-default' },
-          'with git'
-        ),
-        this.state.gitFieldsHidden ? null : _react2.default.createElement(
-          'form',
-          { className: 'install-from-git', onSubmit: this.handleSubmit.bind(this) },
-          _react2.default.createElement('input', { name: 'url', type: 'url', onChange: this.handleTextChange.bind(this), placeholder: 'Paste here an URL to install from git' }),
-          _react2.default.createElement('input', { type: 'submit', className: 'btn btn-default', value: 'install' })
-        )
-      );
-    }
-  }]);
-
-  return InstallView;
-}(_react2.default.Component);
-
-exports.default = InstallView;
-
-},{"react":306,"react-dropzone":91,"superagent":307}],312:[function(require,module,exports){
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var AppLiveView = function (_React$Component) {
-  _inherits(AppLiveView, _React$Component);
-
-  function AppLiveView() {
-    _classCallCheck(this, AppLiveView);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(AppLiveView).apply(this, arguments));
-  }
-
-  _createClass(AppLiveView, [{
-    key: 'render',
-    value: function render() {
-      var appName = this.props.params.appName;
-
-      return _react2.default.createElement('iframe', { className: 'app-live', src: '/i/' + appName, frameBorder: '0' });
-    }
-  }]);
-
-  return AppLiveView;
-}(_react2.default.Component);
-
-exports.default = AppLiveView;
-
-},{"react":306}],313:[function(require,module,exports){
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = require('react-dom');
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _reactRouter = require('react-router');
-
-var _launcher = require('./launcher.jsx');
-
-var _launcher2 = _interopRequireDefault(_launcher);
-
-var _notifications = require('./notifications');
-
-var _notifications2 = _interopRequireDefault(_notifications);
-
-var _settings = require('./settings.jsx');
-
-var _settings2 = _interopRequireDefault(_settings);
-
-var _notFound = require('./not-found.jsx');
-
-var _notFound2 = _interopRequireDefault(_notFound);
-
-var _drawer = require('./layouts/drawer.jsx');
-
-var _drawer2 = _interopRequireDefault(_drawer);
-
-var _live = require('./apps/live.jsx');
-
-var _live2 = _interopRequireDefault(_live);
-
-var _install = require('./apps/install.jsx');
-
-var _install2 = _interopRequireDefault(_install);
-
-var _explore = require('./layouts/explore.jsx');
-
-var _explore2 = _interopRequireDefault(_explore);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Dashboard = function (_React$Component) {
-  _inherits(Dashboard, _React$Component);
-
-  function Dashboard(props) {
-    _classCallCheck(this, Dashboard);
-
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Dashboard).call(this, props));
-
-    _this.getPathClassName = _this.getPathClassName.bind(_this);
-    _this.state = { path: _this.getPathClassName() };
-    return _this;
-  }
-
-  _createClass(Dashboard, [{
-    key: 'getPathClassName',
-    value: function getPathClassName(nextProps) {
-      var _ref = nextProps || this.props;
-
-      var location = _ref.location;
-
-      var regexp = new RegExp('/', 'g');
-      var pathname = location.pathname.replace(regexp, '-');
-      return pathname === '-' ? '-root' : pathname;
-    }
-  }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      this.setState({ path: this.getPathClassName(nextProps) });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var path = this.state.path;
-
-      return _react2.default.createElement(
-        'div',
-        { id: 'dashboard', className: 'path' + path },
-        _react2.default.createElement(_notifications2.default, null),
-        _react2.default.createElement(_launcher2.default, null),
-        _react2.default.createElement(
-          'main',
-          null,
-          this.props.children
-        )
-      );
-    }
-  }]);
-
-  return Dashboard;
-}(_react2.default.Component);
-
-_reactDom2.default.render(_react2.default.createElement(
-  _reactRouter.Router,
-  { history: _reactRouter.browserHistory },
-  _react2.default.createElement(
-    _reactRouter.Route,
-    { path: '/', component: Dashboard },
-    _react2.default.createElement(_reactRouter.IndexRoute, { component: _drawer2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'activities', component: _drawer2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'plugins', component: _drawer2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _drawer2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'uninstall', component: _drawer2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'explore', component: _explore2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'install', component: _install2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: _settings2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'live/:appName', component: _live2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: '*', component: _notFound2.default })
-  )
-), document.getElementById('app'));
-
-},{"./apps/install.jsx":311,"./apps/live.jsx":312,"./launcher.jsx":314,"./layouts/drawer.jsx":315,"./layouts/explore.jsx":316,"./not-found.jsx":317,"./notifications":318,"./settings.jsx":320,"react":306,"react-dom":90,"react-router":120}],314:[function(require,module,exports){
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRouter = require('react-router');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Launcher = function (_React$Component) {
-  _inherits(Launcher, _React$Component);
-
-  function Launcher() {
-    _classCallCheck(this, Launcher);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Launcher).apply(this, arguments));
-  }
-
-  _createClass(Launcher, [{
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'div',
-        { className: 'launcher' },
-        _react2.default.createElement(
-          'ul',
-          null,
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/' },
-              'Apps'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/activities' },
-              'Activities'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/plugins' },
-              'Plugins'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/install' },
-              'Install'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/uninstall' },
-              'Remove'
-            )
-          )
-        )
-      );
-    }
-  }]);
-
-  return Launcher;
-}(_react2.default.Component);
-
-exports.default = Launcher;
-
-},{"react":306,"react-router":120}],315:[function(require,module,exports){
-'use strict';
-
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -40321,7 +39936,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = require('react-router');
 
-var _app = require('../apps/app.jsx');
+var _app = require('./app.jsx');
 
 var _app2 = _interopRequireDefault(_app);
 
@@ -40485,7 +40100,7 @@ var Drawer = function (_React$Component2) {
 
 exports.default = Drawer;
 
-},{"../apps/app.jsx":310,"react":306,"react-router":120,"superagent":307}],316:[function(require,module,exports){
+},{"./app.jsx":310,"react":306,"react-router":120,"superagent":307}],312:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -40504,7 +40119,7 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _app = require('../apps/app.jsx');
+var _app = require('./app.jsx');
 
 var _app2 = _interopRequireDefault(_app);
 
@@ -40581,7 +40196,529 @@ var Explore = function (_React$Component) {
 
 exports.default = Explore;
 
-},{"../apps/app.jsx":310,"react":306,"superagent":307}],317:[function(require,module,exports){
+},{"./app.jsx":310,"react":306,"superagent":307}],313:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDropzone = require('react-dropzone');
+
+var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
+
+var _superagent = require('superagent');
+
+var _superagent2 = _interopRequireDefault(_superagent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var InstallView = function (_React$Component) {
+  _inherits(InstallView, _React$Component);
+
+  function InstallView(props) {
+    _classCallCheck(this, InstallView);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(InstallView).call(this, props));
+
+    _this.state = { gitFieldsHidden: true };
+    return _this;
+  }
+
+  _createClass(InstallView, [{
+    key: 'handleDrop',
+    value: function handleDrop(files) {
+      var req = _superagent2.default.post('/api/apps');
+      files.forEach(function (file) {
+        window.toastr.info('Uploading ' + file.name + '...');
+        req.attach('file', file, file.name);
+      });
+      req.end(function (err, res) {
+        if (err) return window.toastr.error(res.text);
+        window.toastr.success(res.body.name + ' has been installed!');
+      });
+    }
+  }, {
+    key: 'handleTextChange',
+    value: function handleTextChange(event) {
+      this.setState({ url: event.target.value });
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit(event) {
+      event.preventDefault();
+
+      _superagent2.default.post('/api/apps').send({ url: this.state.url }).end(function (err, res) {
+        if (err) return window.toastr.error(res.text);
+        window.toastr.success(res.body.name + ' has been installed!');
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var toggleGitFields = function toggleGitFields() {
+        this.setState({ gitFieldsHidden: !this.state.gitFieldsHidden });
+      };
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'app-install' },
+        _react2.default.createElement(
+          _reactDropzone2.default,
+          { onDrop: this.handleDrop.bind(this), className: 'preview', activeClassName: 'preview active', multiple: false },
+          _react2.default.createElement(
+            'h1',
+            null,
+            'Drop apps here to install them.'
+          ),
+          _react2.default.createElement(
+            'h3',
+            null,
+            '(or click here to browse among your files).'
+          )
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          'a',
+          { href: 'explore', className: 'btn btn-info' },
+          'Explore'
+        ),
+        '  ',
+        _react2.default.createElement(
+          'a',
+          { href: '#', onClick: toggleGitFields.bind(this), className: 'btn btn-default' },
+          'with git'
+        ),
+        this.state.gitFieldsHidden ? null : _react2.default.createElement(
+          'form',
+          { className: 'install-from-git', onSubmit: this.handleSubmit.bind(this) },
+          _react2.default.createElement('input', { name: 'url', type: 'url', onChange: this.handleTextChange.bind(this), placeholder: 'Paste here an URL to install from git' }),
+          _react2.default.createElement('input', { type: 'submit', className: 'btn btn-default', value: 'install' })
+        )
+      );
+    }
+  }]);
+
+  return InstallView;
+}(_react2.default.Component);
+
+exports.default = InstallView;
+
+},{"react":306,"react-dropzone":91,"superagent":307}],314:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AppLiveView = function (_React$Component) {
+  _inherits(AppLiveView, _React$Component);
+
+  function AppLiveView() {
+    _classCallCheck(this, AppLiveView);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(AppLiveView).apply(this, arguments));
+  }
+
+  _createClass(AppLiveView, [{
+    key: 'render',
+    value: function render() {
+      var appName = this.props.params.appName;
+
+      return _react2.default.createElement('iframe', { className: 'app-live', src: '/i/' + appName, frameBorder: '0' });
+    }
+  }]);
+
+  return AppLiveView;
+}(_react2.default.Component);
+
+exports.default = AppLiveView;
+
+},{"react":306}],315:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _notifications = require('./notifications');
+
+var _notifications2 = _interopRequireDefault(_notifications);
+
+var _launcher = require('./launcher.jsx');
+
+var _launcher2 = _interopRequireDefault(_launcher);
+
+var _versionPod = require('./misc/version-pod.jsx');
+
+var _versionPod2 = _interopRequireDefault(_versionPod);
+
+var _devicesPod = require('./misc/devices-pod.jsx');
+
+var _devicesPod2 = _interopRequireDefault(_devicesPod);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Dashboard = function (_React$Component) {
+  _inherits(Dashboard, _React$Component);
+
+  function Dashboard(props) {
+    _classCallCheck(this, Dashboard);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Dashboard).call(this, props));
+
+    _this.getPathClassName = _this.getPathClassName.bind(_this);
+    _this.state = { path: _this.getPathClassName() };
+    return _this;
+  }
+
+  _createClass(Dashboard, [{
+    key: 'getPathClassName',
+    value: function getPathClassName(nextProps) {
+      var _ref = nextProps || this.props;
+
+      var location = _ref.location;
+
+      var regexp = new RegExp('/', 'g');
+      var pathname = location.pathname.replace(regexp, '-');
+      return pathname === '-' ? '-root' : pathname;
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      this.setState({ path: this.getPathClassName(nextProps) });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var path = this.state.path;
+
+      return _react2.default.createElement(
+        'div',
+        { id: 'dashboard', className: 'path' + path },
+        _react2.default.createElement(_devicesPod2.default, null),
+        _react2.default.createElement(_notifications2.default, null),
+        _react2.default.createElement(
+          'main',
+          null,
+          this.props.children
+        ),
+        _react2.default.createElement(_launcher2.default, null),
+        _react2.default.createElement(_versionPod2.default, null)
+      );
+    }
+  }]);
+
+  return Dashboard;
+}(_react2.default.Component);
+
+exports.default = Dashboard;
+
+Dashboard.propTypes = {
+  children: _react2.default.PropTypes.element
+};
+
+},{"./launcher.jsx":317,"./misc/devices-pod.jsx":318,"./misc/version-pod.jsx":319,"./notifications":321,"react":306}],316:[function(require,module,exports){
+'use strict';
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _reactRouter = require('react-router');
+
+var _settings = require('./settings.jsx');
+
+var _settings2 = _interopRequireDefault(_settings);
+
+var _notFound = require('./not-found.jsx');
+
+var _notFound2 = _interopRequireDefault(_notFound);
+
+var _drawer = require('./apps/drawer.jsx');
+
+var _drawer2 = _interopRequireDefault(_drawer);
+
+var _live = require('./apps/live.jsx');
+
+var _live2 = _interopRequireDefault(_live);
+
+var _install = require('./apps/install.jsx');
+
+var _install2 = _interopRequireDefault(_install);
+
+var _explore = require('./apps/explore.jsx');
+
+var _explore2 = _interopRequireDefault(_explore);
+
+var _dashboard = require('./dashboard.jsx');
+
+var _dashboard2 = _interopRequireDefault(_dashboard);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_reactDom2.default.render(_react2.default.createElement(
+  _reactRouter.Router,
+  { history: _reactRouter.browserHistory },
+  _react2.default.createElement(
+    _reactRouter.Route,
+    { path: '/', component: _dashboard2.default },
+    _react2.default.createElement(_reactRouter.IndexRoute, { component: _drawer2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'activities', component: _drawer2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'plugins', component: _drawer2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _drawer2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'uninstall', component: _drawer2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'explore', component: _explore2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'install', component: _install2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: _settings2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'live/:appName', component: _live2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: '*', component: _notFound2.default })
+  )
+), document.getElementById('app'));
+
+},{"./apps/drawer.jsx":311,"./apps/explore.jsx":312,"./apps/install.jsx":313,"./apps/live.jsx":314,"./dashboard.jsx":315,"./not-found.jsx":320,"./settings.jsx":323,"react":306,"react-dom":90,"react-router":120}],317:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Launcher = function (_React$Component) {
+  _inherits(Launcher, _React$Component);
+
+  function Launcher() {
+    _classCallCheck(this, Launcher);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Launcher).apply(this, arguments));
+  }
+
+  _createClass(Launcher, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { className: 'launcher' },
+        _react2.default.createElement(
+          'ul',
+          null,
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/' },
+              'Apps'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/activities' },
+              'Activities'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/plugins' },
+              'Plugins'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/install' },
+              'Install'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/uninstall' },
+              'Remove'
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return Launcher;
+}(_react2.default.Component);
+
+exports.default = Launcher;
+
+},{"react":306,"react-router":120}],318:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DevicesPod = function (_React$Component) {
+  _inherits(DevicesPod, _React$Component);
+
+  function DevicesPod() {
+    _classCallCheck(this, DevicesPod);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DevicesPod).call(this));
+
+    _this.state = { devices: ['karaoke', 'trialdevice'] };
+    return _this;
+  }
+
+  _createClass(DevicesPod, [{
+    key: 'render',
+    value: function render() {
+      var devices = this.state.devices;
+
+      return _react2.default.createElement(
+        'span',
+        { className: 'devices-pod', title: 'Checking for updates...' },
+        devices.length,
+        ' devices connected'
+      );
+    }
+  }]);
+
+  return DevicesPod;
+}(_react2.default.Component);
+
+exports.default = DevicesPod;
+
+},{"react":306}],319:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var VersionPod = function (_React$Component) {
+  _inherits(VersionPod, _React$Component);
+
+  function VersionPod() {
+    _classCallCheck(this, VersionPod);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(VersionPod).call(this));
+
+    _this.state = { version: '0.2.4' };
+    return _this;
+  }
+
+  _createClass(VersionPod, [{
+    key: 'render',
+    value: function render() {
+      var version = this.state.version;
+
+      return _react2.default.createElement(
+        'span',
+        { className: 'version-pod', title: 'Checking for updates...' },
+        'v',
+        version
+      );
+    }
+  }]);
+
+  return VersionPod;
+}(_react2.default.Component);
+
+exports.default = VersionPod;
+
+},{"react":306}],320:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -40638,7 +40775,7 @@ var NotFound = function (_React$Component) {
 
 exports.default = NotFound;
 
-},{"react":306,"react-router":120}],318:[function(require,module,exports){
+},{"react":306,"react-router":120}],321:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -40766,7 +40903,7 @@ var App = function (_React$Component) {
 
 exports.default = App;
 
-},{"./toast.jsx":319,"mqtt":35,"react":306}],319:[function(require,module,exports){
+},{"./toast.jsx":322,"mqtt":35,"react":306}],322:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -40845,7 +40982,7 @@ var Toast = function (_React$Component) {
 
 exports.default = Toast;
 
-},{"react":306}],320:[function(require,module,exports){
+},{"react":306}],323:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -40946,7 +41083,7 @@ var Settings = function (_React$Component) {
 
 exports.default = Settings;
 
-},{"react":306,"react-router":120}]},{},[313])
+},{"react":306,"react-router":120}]},{},[316])
 
 
 //# sourceMappingURL=bundle.js.map

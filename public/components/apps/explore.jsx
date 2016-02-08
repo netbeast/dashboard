@@ -1,7 +1,7 @@
 import request from 'superagent'
 import React from 'react'
 
-import App from '../apps/app.jsx'
+import App from './app.jsx'
 
 export default class Explore extends React.Component {
   constructor (props, context) {

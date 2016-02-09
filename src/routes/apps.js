@@ -11,8 +11,6 @@ var InvalidFormat = require('../util/invalid-format')
 
 var router = module.exports = express.Router()
 
-var uploaded = installer.upload
-
 router.route('/apps')
 .post(installer.upload, installer.process)
 .get(function (req, res, next) {

@@ -2,8 +2,6 @@ import React from 'react'
 
 import Notifications from './notifications'
 import Launcher from './launcher.jsx'
-import VersionPod from './misc/version-pod.jsx'
-import DevicesPod from './misc/devices-pod.jsx'
 
 export default class Dashboard extends React.Component {
   constructor (props) {
@@ -24,16 +22,15 @@ export default class Dashboard extends React.Component {
   }
 
   render () {
-    const { path } = this.state
+    let { path } = this.state
+    path = path.indexOf('live') > -1 ? '-live' : path
     return (
       <div id='dashboard' className={`path${path}`}>
-        <DevicesPod />
         <Notifications />
         <main>
           {this.props.children}
         </main>
-        <Launcher />
-        <VersionPod />
+        <Launcher { ...this.props } />
       </div>
     )
   }

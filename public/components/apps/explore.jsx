@@ -1,4 +1,4 @@
-import request from 'superagent'
+import request from 'superagent-bluebird-promise'
 import React from 'react'
 
 import App from './app.jsx'

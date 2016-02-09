@@ -9,3 +9,11 @@ router.route('/plugins')
     res.json(plugins)
   })
 })
+
+router.route('/modules')
+.get(function (req, res, next) {
+  App.modules(function (err, plugins) {
+    if (err) return next(err)
+    res.json(plugins)
+  })
+})

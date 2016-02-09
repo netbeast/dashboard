@@ -1,6 +1,6 @@
 /* global toastr */
 import React from 'react'
-import request from 'superagent'
+import request from 'superagent-bluebird-promise'
 
 export default class App extends React.Component {
   constructor (props, context) {
@@ -15,10 +15,14 @@ export default class App extends React.Component {
   }
 
   launch () {
-    const { name } = this.props
-    request.post('/api/activities/' + name).end((err, data) => {
-      if (err) return toastr.error(err.message)
+    const { name } = this.props
+    request.post('/api/activities/' + name).then(() => {
+      return request.get('/i/' + name).promise()
+    }).then(() => {
       this.router.push('/live/' + name)
+    }).catch((err) => {
+      if (err.status === 404) return toastr.info('This plugin does not have an interface')
+      toastr.error(err.message)
     })
   }
 
@@ -68,12 +72,15 @@ export default class App extends React.Component {
   }
 
   render () {
-    const { name, author, logo } = this.props
-    const icon = logo ? `/api/apps/${name}/logo` : '/img/dflt.png'
+    const { name, author, logo, netbeast } = this.props
+    const isPlugin = netbeast && (netbeast.type === 'plugin')
+    const defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)'
+    const logoStyle = { backgroundImage: logo ? `url(/api/apps/${name}/logo)` : defaultLogo }
+
     return (
       <div className='app'>
-        <div className='logo' title='Launch app' onClick={this.handleClick.bind(this)}>
-          <img className='' src={icon} alt={icon} />
+        <div className='logo' title='Launch app' style={logoStyle}
+        onClick={this.handleClick.bind(this)}>
         </div>
         {this.renderStopButton()}
         {this.renderRemoveButton()}

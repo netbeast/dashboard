@@ -13,9 +13,10 @@ export default class App extends React.Component {
 
   notify (notification) {
     const { title, body, emphasis } = notification
-    const id = `${title}.${body}.${emphasis}.${(new Date()).getTime()}`
+    const id = `${title || ''}.${body.replace(/ /g, '')}.${emphasis}.${(new Date()).getTime()}`
     const timeout = notification.timeout || 2700
     const toast = Object.assign({ id, timeout }, notification)
+    console.log(id)
     this.setState({ toasts: [toast, ...this.state.toasts] })
   }
 

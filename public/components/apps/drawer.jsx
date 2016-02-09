@@ -1,25 +1,25 @@
 /* global toastr */
-import request from 'superagent'
+import request from 'superagent-bluebird-promise'
 import React from 'react'
 import { Link } from 'react-router'
 
+import VersionPod from '../misc/version-pod.jsx'
+import DevicesPod from '../misc/devices-pod.jsx'
 import App from './app.jsx'
 
 class ExploreApp extends React.Component {
   render () {
     const { route } = this.props
     const pathname = route.path ? route.path : 'apps'
+    const logoStyle = { backgroundImage: 'url(/img/explore.png)' }
 
     if (pathname !== 'apps') return null
 
-    const logo = '/img/explore.png'
     return (
       <div className='app app-explore'>
-        <div className='logo' title='Launch app'>
-          <Link to='/explore'>
-            <img src={logo} alt={logo} />
-          </Link>
-        </div>
+        <Link to='/explore'>
+          <div className='logo' title='Launch app' style={logoStyle} />
+        </Link>
         <h4 className='name'> Explore </h4>
       </div>
     )
@@ -44,7 +44,7 @@ export default class Drawer extends React.Component {
   loadApps (props, done) {
     const { route } = props
     const pathname = route.path ? route.path : 'apps'
-    const query = pathname === 'uninstall' ? 'apps' : pathname
+    const query = pathname === 'uninstall' ? 'modules' : pathname
 
     request.get(`/api/${query}/`).end((err, res) => {
       if (err) return toastr.error(err)
@@ -70,14 +70,14 @@ export default class Drawer extends React.Component {
         title = 'Applications running.'
         break
       case 'uninstall':
-        title = 'Choose those apps you want to remove.'
+        title = 'Remove any module.'
         break
     }
 
     return (
-      <span className='title'>
-        <h1>{title}</h1>
-      </span>
+      <div className='title'>
+        <h3>{title}</h3>
+      </div>
     )
   }
 
@@ -86,14 +86,16 @@ export default class Drawer extends React.Component {
 
     return (
         <div className='drawer'>
-          {this.renderTitle(pathname)}
           <div className='apps-list'>
+            {this.renderTitle(pathname)}
             <ExploreApp {...this.props} />
             {apps.slice(0, 6).map(function (data) {
               return <App key={data.name} { ...data } />
             })}
             <br/>
           </div>
+          <DevicesPod />
+          <VersionPod />
         </div>
     )
   }

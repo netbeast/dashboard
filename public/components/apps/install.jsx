@@ -1,6 +1,6 @@
 import React from 'react'
 import Dropzone from 'react-dropzone'
-import request from 'superagent'
+import request from 'superagent-bluebird-promise'
 
 export default class InstallView extends React.Component {
   constructor (props) {

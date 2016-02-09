@@ -7,7 +7,7 @@ export default class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = { toasts: [] }
-    this.client = mqtt.connect()
+    this.mqtt = mqtt.connect()
     this.dismiss = this.dismiss.bind(this)
   }
 
@@ -34,8 +34,8 @@ export default class App extends React.Component {
   }
 
   componentDidMount () {
-    this.client.subscribe('netbeast/push')
-    this.client.on('message', this.handleNotification.bind(this))
+    this.mqtt.subscribe('netbeast/push')
+    this.mqtt.on('message', this.handleNotification.bind(this))
 
     window.notify = this.notify.bind(this) // make it globally accesible
     window.toastr = {
@@ -55,7 +55,8 @@ export default class App extends React.Component {
   }
 
   componentWillUnmount () {
-    this.client.end(() => console.log('Client disconnected'))
+    this.mqtt.end(() => console.log('Client disconnected'))
+    console.log('Client disconnected')
   }
 
   render () {

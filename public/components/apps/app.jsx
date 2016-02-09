@@ -56,7 +56,7 @@ export default class App extends React.Component {
   renderRemoveButton () {
     const { type } = this.props
     return type === 'uninstall'
-    ? <a href='#' onClick={this.uninstall.bind(this)} className='remove btn btn-filled btn-danger'> Remove </a>
+    ? <a href='#' onClick={this.uninstall.bind(this)} className='remove btn btn-filled btn-primary'> Remove </a>
     : null
   }
 

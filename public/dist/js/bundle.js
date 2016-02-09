@@ -39862,7 +39862,7 @@ var App = function (_React$Component) {
 
       return type === 'uninstall' ? _react2.default.createElement(
         'a',
-        { href: '#', onClick: this.uninstall.bind(this), className: 'remove btn btn-filled btn-danger' },
+        { href: '#', onClick: this.uninstall.bind(this), className: 'remove btn btn-filled btn-primary' },
         ' Remove '
       ) : null;
     }
@@ -40279,12 +40279,12 @@ var InstallView = function (_React$Component) {
           _reactDropzone2.default,
           { onDrop: this.handleDrop.bind(this), className: 'preview', activeClassName: 'preview active', multiple: false },
           _react2.default.createElement(
-            'h1',
+            'h2',
             null,
             'Drop apps here to install them.'
           ),
           _react2.default.createElement(
-            'h3',
+            'h6',
             null,
             '(or click here to browse among your files).'
           )

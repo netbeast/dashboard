@@ -41,8 +41,8 @@ export default class InstallView extends React.Component {
     return (
       <div className='app-install'>
         <Dropzone onDrop={this.handleDrop.bind(this)} className='preview' activeClassName='preview active' multiple={false} >
-          <h1>Drop apps here to install them.</h1>
-          <h3>(or click here to browse among your files).</h3>
+          <h2>Drop apps here to install them.</h2>
+          <h6>(or click here to browse among your files).</h6>
         </Dropzone>
         <br/>
         <a href='explore' className='btn btn-info'>Explore</a> &nbsp;

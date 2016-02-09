@@ -40627,6 +40627,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _mqtt = require('mqtt');
+
+var _mqtt2 = _interopRequireDefault(_mqtt);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -40643,11 +40647,31 @@ var DevicesPod = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DevicesPod).call(this));
 
-    _this.state = { devices: ['karaoke', 'trialdevice'] };
+    _this.mqtt = _mqtt2.default.connect();
+    _this.state = { devices: [] };
     return _this;
   }
 
   _createClass(DevicesPod, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      var _this2 = this;
+
+      this.mqtt.subscribe('netbeast/network');
+      this.mqtt.on('message', function (topic, message) {
+        if (topic !== 'netbeast/network') return;
+
+        var devices = JSON.parse(message);
+        _this2.setState({ devices: devices });
+        console.log(devices);
+      });
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.mqtt.unsubscribe('netbeast/network');
+    }
+  }, {
     key: 'render',
     value: function render() {
       var devices = this.state.devices;
@@ -40666,7 +40690,7 @@ var DevicesPod = function (_React$Component) {
 
 exports.default = DevicesPod;
 
-},{"react":306}],319:[function(require,module,exports){
+},{"mqtt":35,"react":306}],319:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -40817,7 +40841,7 @@ var App = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props));
 
     _this.state = { toasts: [] };
-    _this.client = _mqtt2.default.connect();
+    _this.mqtt = _mqtt2.default.connect();
     _this.dismiss = _this.dismiss.bind(_this);
     return _this;
   }
@@ -40855,8 +40879,8 @@ var App = function (_React$Component) {
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.client.subscribe('netbeast/push');
-      this.client.on('message', this.handleNotification.bind(this));
+      this.mqtt.subscribe('netbeast/push');
+      this.mqtt.on('message', this.handleNotification.bind(this));
 
       window.notify = this.notify.bind(this); // make it globally accesible
       window.toastr = {
@@ -40877,9 +40901,10 @@ var App = function (_React$Component) {
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
-      this.client.end(function () {
+      this.mqtt.end(function () {
         return console.log('Client disconnected');
       });
+      console.log('Client disconnected');
     }
   }, {
     key: 'render',
@@ -40948,13 +40973,13 @@ var Toast = function (_React$Component) {
       var title = _props.title;
       var body = _props.body;
       var emphasis = _props.emphasis;
-      var timeout = _props.timeout;
+      var timeout = _props.timeout; // eslint-disable-line
 
-      // if (timeout) setTimeout(this.close, timeout)
+      if (timeout) setTimeout(this.close, timeout);
 
       return _react2.default.createElement(
         'div',
-        { className: 'toast ' + emphasis },
+        { className: 'alert alert-' + (emphasis || 'info') },
         _react2.default.createElement(
           'span',
           { className: 'title' },
@@ -40963,9 +40988,9 @@ var Toast = function (_React$Component) {
           ' '
         ),
         _react2.default.createElement(
-          'div',
-          { className: 'close', onClick: this.close },
-          ' ✕ '
+          'button',
+          { type: 'button', className: 'close', onClick: this.close, 'data-dismiss': 'alert' },
+          '×'
         ),
         _react2.default.createElement('br', null),
         _react2.default.createElement(
@@ -40981,6 +41006,11 @@ var Toast = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Toast;
+
+Toast.propTypes = {
+  id: _react2.default.PropTypes.String,
+  dismiss: _react2.default.PropTypes.function
+};
 
 },{"react":306}],323:[function(require,module,exports){
 'use strict';

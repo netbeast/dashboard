@@ -1,9 +1,26 @@
 import React from 'react'
+import mqtt from 'mqtt'
 
 export default class DevicesPod extends React.Component {
   constructor () {
     super()
-    this.state = { devices: ['karaoke', 'trialdevice'] }
+    this.mqtt = mqtt.connect()
+    this.state = { devices: [] }
+  }
+
+  componentWillMount () {
+    this.mqtt.subscribe('netbeast/network')
+    this.mqtt.on('message', (topic, message) => {
+      if (topic !== 'netbeast/network') return
+
+      const devices = JSON.parse(message)
+      this.setState({ devices })
+      console.log(devices)
+    })
+  }
+
+  componentWillUnmount () {
+    this.mqtt.unsubscribe('netbeast/network')
   }
 
   render () {

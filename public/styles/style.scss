@@ -39,14 +39,3 @@ body, html {
 .btn {
   transition: background 0.2s ease-in-out;
 }
-
-.btn.btn-filled.btn-info { background-color: $brand-info; }
-.btn.btn-filled.btn-success { background-color: $brand-success; }
-.btn.btn-filled.btn-warning { background-color: $brand-warning; }
-.btn.btn-filled.btn-danger { background-color: $brand-danger; }
-.btn.btn-filled.btn-inverted {
-    background-color: #fff;
-    color: $grey-base;
-}
-
-.btn.btn-filled { color: white; }

@@ -63,27 +63,21 @@
 }
 
 .launcher {
-  text-align: center;
   position: fixed;
-  bottom: 50px;
-  width: 100%;
+  bottom: 50px; right: 50px;
 
-  a {
-    color: inherit;
-    text-decoration: none;
+  ul li {
+    position: absolute;
+    margin: 10px; opacity: 0;
+    visibility: hidden;
+    display: inline-block;
+    transition: opacity 0.5s linear;
   }
 
-  ul {
-    padding: 5px 30px;
-    display: inline-block;
+  .anchor { opacity: 1; position: inherit; visibility: visible; }
 
-    border: 1px solid $grey-base;
-    border-bottom: 2px solid $grey-base;
-
-    li {
-      display: inline-block;
-      padding: 10px;
-    }
+  &:hover {
+    ul li { position: inherit; opacity: 1; visibility: visible; }
   }
 }
 

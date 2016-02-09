@@ -40547,15 +40547,19 @@ var Launcher = function (_React$Component) {
   function Launcher() {
     _classCallCheck(this, Launcher);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Launcher).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Launcher).call(this));
+
+    _this.state = { collapsed: true };
+    return _this;
   }
 
   _createClass(Launcher, [{
     key: 'render',
     value: function render() {
+      var state = this.state.collapsed ? 'collapsed' : '';
       return _react2.default.createElement(
         'div',
-        { className: 'launcher' },
+        { className: 'launcher ' + state },
         _react2.default.createElement(
           'ul',
           null,
@@ -40564,8 +40568,8 @@ var Launcher = function (_React$Component) {
             null,
             _react2.default.createElement(
               _reactRouter.Link,
-              { to: '/' },
-              'Apps'
+              { to: '/uninstall', className: 'btn btn-primary' },
+              'Remove'
             )
           ),
           _react2.default.createElement(
@@ -40573,25 +40577,7 @@ var Launcher = function (_React$Component) {
             null,
             _react2.default.createElement(
               _reactRouter.Link,
-              { to: '/activities' },
-              'Activities'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/plugins' },
-              'Plugins'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/install' },
+              { to: '/install', className: 'btn btn-danger' },
               'Install'
             )
           ),
@@ -40600,8 +40586,26 @@ var Launcher = function (_React$Component) {
             null,
             _react2.default.createElement(
               _reactRouter.Link,
-              { to: '/uninstall' },
-              'Remove'
+              { to: '/activities', className: 'btn btn-warning' },
+              'Activities'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/plugins', className: 'btn btn-success' },
+              'Plugins'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            { className: 'anchor' },
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/', className: 'btn btn-info' },
+              'Apps'
             )
           )
         )

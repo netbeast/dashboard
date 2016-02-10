@@ -33,9 +33,7 @@ process.env.PORT = cmd.port || process.env.PORT
 process.env.LOCAL_URL = 'http://localhost:' + process.env.PORT
 
 server.listen(process.env.PORT, function () {
-  console.log('👾  Netbeast dashboard started on %s:%s',
-  server.address().address,
-  server.address().port)
+  console.log('👾  Netbeast dashboard started on %s:%s', server.address().address, server.address().port)
   bootOnload()
 })
 
@@ -43,7 +41,7 @@ var dns = new (forever.Monitor)(DASHBOARD_DNS, {
   env: { 'NETBEAST_PORT': process.env.PORT },
   max: 1
 })
-
+dns.title = 'netbeast-dns'
 dns.start()
 
 var deamon = new (forever.Monitor)(DASHBOARD_DEAMON, {
@@ -51,7 +49,7 @@ var deamon = new (forever.Monitor)(DASHBOARD_DEAMON, {
   max: 1
 })
 
-deamon.title = 'netbeast'
+deamon.title = 'netbeast-deamon'
 deamon.start()
 
 process.on('exit', function () {

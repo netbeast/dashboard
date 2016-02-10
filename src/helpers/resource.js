@@ -31,7 +31,7 @@ helper.deleteAction = function (id, done) {
 helper.findAction = function (query, done) {
   if (Object.keys(query).length < 1) {
     // Devuelve los diferentes Hooks que identifican al objeto
-    db.all('SELECT DISTINCT hook FROM resources', done)
+    db.all('SELECT * FROM resources', done)
   } else {
     var sql_statement = 'SELECT * FROM resources WHERE '
     for (var field in query) {

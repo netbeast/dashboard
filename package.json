@@ -1,7 +1,7 @@
 {
   "name": "netbeast-cli",
   "description": "Netbeast OS dashboard, IoT apps manager",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "preferGlobal": "true",
   "dependencies": {
     "async": "^1.5.0",
@@ -22,17 +22,13 @@
     "http-proxy": "^1.12.0",
     "inquirer": "^0.11.0",
     "jquery": "^2.1.4",
-    "lodash": "^3.10.1",
-    "marked": "^0.3.5",
     "morgan": "^1.5.2",
     "mosca": "^0.32.1",
     "mqtt": "^1.6.3",
     "multer": "^1.1.0",
-    "nconf": "^0.8.2",
     "portfinder": "^0.4.0",
     "request": "^2.55.0",
     "serve-favicon": "^2.2.0",
-    "sha1": "^1.1.0",
     "sqlite3": "^3.1.0",
     "superagent": "^1.6.1",
     "tar.gz": "^1.0.2"
@@ -42,14 +38,15 @@
     "netbeast": "bin/cli.js"
   },
   "devDependencies": {
+    "babel-preset-react": "^6.3.13",
+    "babelify": "^7.2.0",
     "browserify": "^12.0.1",
     "chai": "^3.2.0",
-    "babel-preset-react": "^6.3.13",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
+    "gulp-cssnano": "^2.1.0",
     "gulp-livereload": "^3.8.1",
     "gulp-load-plugins": "^1.1.0",
-    "gulp-minify-css": "^1.1.1",
     "gulp-nodemon": "^2.0.3",
     "gulp-plumber": "^1.0.1",
     "gulp-sass": "^2.0.1",
@@ -78,11 +75,11 @@
     "router"
   ],
   "scripts": {
-    "test": "./test/coverage.sh",
+    "test": "./test/test.sh",
+    "coverage": "./test/coverage.sh",
     "build": "./node_modules/.bin/gulp build",
     "serve": "./node_modules/.bin/gulp serve",
     "dev": "./node_modules/.bin/gulp",
-    "preinstall": "NODE_ENV=production",
     "postinstall": "npm link npm"
   },
   "author": "staff@netbeast",

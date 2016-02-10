@@ -39979,7 +39979,7 @@ var InstallView = (function (_React$Component) {
       var req = _superagent2.default.post('/api/apps');
       files.forEach(function (file) {
         window.toastr.info('Uploading ' + file.name + '...');
-        req.attach(file.name, file);
+        req.attach('file', file, file.name);
       });
       req.end(function (err, res) {
         if (err) return window.toastr.error(res.text);

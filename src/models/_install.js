@@ -13,7 +13,7 @@ function _launchPlugin (app) {
   var type = app.netbeast ? app.netbeast.type : 'app'
   if (type === 'service' || type === 'plugin' || app.bootOnLoad) {
     request.post(process.env.LOCAL_URL + '/activities/' + app.name)
-    .end((err, port) => {
+    .end(function (err, port) {
       if (err) return broker.error(err)
 
       console.info('[booting] %s launched on port %s ', app.name, port.port)
@@ -33,9 +33,9 @@ function _installDeps (app, done) {
   }
 
   broker.info('Downloading ' + app.name + ' dependencies...')
-  npm.load({ prefix: root }, (err) => {
+  npm.load({ prefix: root }, function (err) {
     if (err) return done(err)
-    npm.commands.install(dependencies, (err, data) => {
+    npm.commands.install(dependencies, function (err, data) {
       _launchPlugin(app)
       done(null, app)
     })

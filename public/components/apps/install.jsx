@@ -12,7 +12,7 @@ export default class InstallView extends React.Component {
     var req = request.post('/api/apps')
     files.forEach((file) => {
       window.toastr.info(`Uploading ${file.name}...`)
-      req.attach(file.name, file)
+      req.attach('file', file, file.name)
     })
     req.end((err, res) => {
       if (err) return window.toastr.error(res.text)

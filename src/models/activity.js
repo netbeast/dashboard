@@ -2,7 +2,6 @@ var path = require('path')
 var events = require('events')
 var spawn = require('child_process').spawn
 
-var _ = require('lodash')
 var request = require('request')
 var portfinder = require('portfinder')
 var chalk = require('chalk')
@@ -21,10 +20,10 @@ var self = module.exports = new events.EventEmitter()
 self.start = function (req, res, next) {
   self.boot(req.params.name, function (err, child) {
     if (err) return next(err)
-    self.ready(child, function (err, activity) {
+    self.ready(child, function (err, act) {
       if (err) return next(err)
 
-      res.json(_.pick(activity, ['name', 'port']))
+      res.json({ name: act.name, port: act.port })
     })
   })
 }
@@ -32,9 +31,9 @@ self.start = function (req, res, next) {
 self.status = function (req, res, next) {
   var child = children[req.params.name]
   if (!child) return next(new Error('App not running'))
-  self.ready(child, function (err, activity) {
+  self.ready(child, function (err, act) {
     if (err) return next(err)
-    res.json(_.pick(activity, ['name', 'port']))
+    res.json({ name: act.name, port: act.port })
   })
 }
 

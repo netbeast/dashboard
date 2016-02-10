@@ -46336,7 +46336,7 @@ var App = function (_React$Component) {
       var emphasis = notification.emphasis;
 
       var id = (title || '') + '.' + body.replace(/ /g, '') + '.' + emphasis + '.' + new Date().getTime();
-      var timeout = notification.timeout || 2700;
+      var timeout = notification.timeout || 4700;
       var toast = Object.assign({ id: id, timeout: timeout }, notification);
       console.log(id);
       this.setState({ toasts: [toast].concat(_toConsumableArray(this.state.toasts)) });

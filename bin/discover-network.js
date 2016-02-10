@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var mqtt = require('mqtt') 
+var mqtt = require('mqtt')
 var spawn = require('child_process').spawn
 var request = require('superagent')
 var async = require('async')
@@ -11,10 +11,10 @@ function getArp () {
   .end(function(err, res) {
 
     //Get all devices on the database
-    var devices = res.body
+    var devices = res.body || []
 
     //Get all devices on the network
-    var arp = spawn('arp', ['-a']) 
+    var arp = spawn('arp', ['-a'])
     arp.stdout.setEncoding('utf8')
     arp.stdout.on('data', function(data) {
       arp_str = data;
@@ -24,7 +24,7 @@ function getArp () {
       var arp_table = parse_arp_table(arp_str)
       var client = mqtt.connect('ws://localhost' + ':' + process.env.NETBEAST_PORT)
       client.publish('netbeast/network', JSON.stringify(joinTables(arp_table, devices)))
-      client.end()  
+      client.end()
     })
   })
 }
@@ -35,7 +35,7 @@ function parse_arp_table(arpt) {
   var exist
 
 	//Split array
-	arpt = arpt.split('\n'); 
+	arpt = arpt.split('\n');
 
 	for (var aux in arpt) {
 		var arp_obj = {}
@@ -63,7 +63,7 @@ function parse_arp_table(arpt) {
     var mac_end = mac_start + 17
     var mac = entry.slice(mac_start, mac_end)
 
-    if (mac) { 
+    if (mac) {
       arp_obj['mac'] = mac
       arp_table.push(arp_obj)
     }
@@ -89,7 +89,3 @@ function joinTables(arp_table, devices_table) {
 setInterval(function(){
   getArp()
 }, 15000);
-
-
-
-

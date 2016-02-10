@@ -15,7 +15,6 @@ export default class DevicesPod extends React.Component {
 
       const devices = JSON.parse(message)
       this.setState({ devices })
-      console.log(devices)
     })
   }
 

@@ -13,7 +13,7 @@ proxy.on('error', function (err) {
   broker.error(err.message, 'Proxy error')
 })
 
-router.use('/i/:name?', function (req, res, next) {
+router.use('/i/:name', function (req, res, next) {
   // Capture the referer to proxy the request
   // in case the path is not clear enaugh
   if (req.get('referer') === undefined) return next()
@@ -25,7 +25,7 @@ router.use('/i/:name?', function (req, res, next) {
   return next()
 })
 
-router.use('/i/:name?', function (req, res) {
+router.use('/i/:name', function (req, res) {
   var app, reqUrl, proxyUrl
 
   // This block returns an app object

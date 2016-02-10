@@ -18,6 +18,7 @@ var bootOnload = require('./src/boot-on-load')
 
 const DASHBOARD_DEAMON = path.join(__dirname, './bin/deamon.js')
 const DASHBOARD_DNS = path.join(__dirname, './bin/dns.js')
+const DASHBOARD_NETWORK = path.join(__dirname, './bin/discover-network.js')
 
 cmd
 .version('0.1.42')
@@ -51,6 +52,14 @@ var deamon = new (forever.Monitor)(DASHBOARD_DEAMON, {
 
 deamon.title = 'netbeast-deamon'
 deamon.start()
+
+var network = new (forever.Monitor)(DASHBOARD_NETWORK, {
+	env: { 'NETBEAST_PORT': process.env.PORT},
+	max: 1
+})
+
+network.title = 'netbeast-network'
+network.start()
 
 process.on('exit', function () {
   deamon.kill('SIGTERM')

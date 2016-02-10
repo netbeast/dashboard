@@ -1,5 +1,5 @@
 var helper = require('../helpers/resource')
-var NotFound = require('../util/not-found')
+var ApiError = require('../util/api-error')
 
 helper.createTable(function (err, data) {
   if (err) throw err
@@ -30,7 +30,7 @@ Resource.find = function (query, done) {
   var result = []
   helper.findAction(query, function (err, row) {
     if (err) return done(err)
-    if (!row) return done(new NotFound('Resource not found DB'))
+    if (!row.length) return done(new ApiError(404, 'Resource not found DB'))
 
     row.forEach(function (action) {
       result.push(new Resource(action))
@@ -42,7 +42,7 @@ Resource.find = function (query, done) {
 Resource.findOne = function (query, done) {
   helper.findAction(query, function (err, row) {
     if (err) return done(err)
-    if (row.length < 1) return done(new NotFound('Resource not found DB'))
+    if (!row.length) return done(new ApiError(404, 'Resource not found DB'))
 
     return done(null, new Resource(row[row.length - 1]))
   })

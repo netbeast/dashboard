@@ -45620,17 +45620,17 @@ var Explore = function (_React$Component) {
         'div',
         { className: 'drawer' },
         _react2.default.createElement(
-          'span',
-          { className: 'title' },
-          _react2.default.createElement(
-            'h1',
-            null,
-            'Explore all available apps'
-          )
-        ),
-        _react2.default.createElement(
           'div',
           { className: 'apps-list' },
+          _react2.default.createElement(
+            'div',
+            { className: 'title' },
+            _react2.default.createElement(
+              'h1',
+              null,
+              'Explore all available apps.'
+            )
+          ),
           apps.slice(0, 6).map(function (data) {
             return _react2.default.createElement(_app2.default, _extends({ key: data.id }, data, { type: 'explore' }));
           }),

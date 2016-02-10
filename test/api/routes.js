@@ -12,13 +12,9 @@ console.log(URL + '/resources')
 
 describe('RESTful Resources API', function () {
   it('should insert a new action in db', function (done) {
-    request.post({url: URL + '/resources',
-    json: {
-      app: 'app',
-      location: 'location',
-      topic: 'topic',
-      groupname: 'group',
-      hook: 'hook'
+    request.post({
+      url: URL + '/resources',
+      json: { app: 'app', location: 'location', topic: 'topic', groupname: 'group', hook: 'hook'
     }},
     function (err, resp, body) {
       should.not.exist(err)
@@ -35,7 +31,7 @@ describe('RESTful Resources API', function () {
       body = JSON.parse(body)
       body.should.be.an('Array')
       body.forEach(function (item) {
-        expect(item).to.have.all.keys('id', 'app', 'topic', 'location', 'groupname', 'hook')
+        expect(item).to.have.all.keys('id', 'app', 'topic', 'location', 'groupname', 'hook', 'mac_or_ip')
       })
       done()
     })

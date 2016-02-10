@@ -24,10 +24,10 @@ export default class Explore extends React.Component {
 
     return (
         <div className='drawer'>
-          <span className='title'>
-            <h1>Explore all available apps</h1>
-          </span>
           <div className='apps-list'>
+            <div className='title'>
+              <h1>Explore all available apps.</h1>
+            </div>
             {apps.slice(0, 6).map(function (data) {
               return <App key={data.id} { ...data } type='explore' />
             })}

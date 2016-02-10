@@ -26,7 +26,7 @@ router.put('/update', function (req, res) {
 
   child.on('close', function (code) {
     if (code === 0) {
-      broker.success('Done! You will have to reset if there are any changes')
+      broker.success('Done! You will have to reset your Netbeast')
     } else {
       broker.error('Could not update the dashboard')
     }

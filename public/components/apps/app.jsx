@@ -1,6 +1,6 @@
 /* global toastr */
 import React from 'react'
-import request from 'superagent'
+import request from 'superagent-bluebird-promise'
 
 export default class App extends React.Component {
   constructor (props, context) {
@@ -11,14 +11,18 @@ export default class App extends React.Component {
   handleClick () {
     const { type } = this.props
     console.log(this.props)
-    if (type === 'apps') this.launch()
+    if (type !== 'explore') this.launch()
   }
 
   launch () {
-    const { name } = this.props
-    request.post('/api/activities/' + name).end((err, data) => {
-      if (err) return toastr.error(err.message)
+    const { name } = this.props
+    request.post('/api/activities/' + name).then(() => {
+      return request.get('/i/' + name).promise()
+    }).then(() => {
       this.router.push('/live/' + name)
+    }).catch((err) => {
+      if (err.status === 404) return toastr.info('This plugin does not have an interface')
+      toastr.error(err.message)
     })
   }
 
@@ -56,7 +60,7 @@ export default class App extends React.Component {
   renderRemoveButton () {
     const { type } = this.props
     return type === 'uninstall'
-    ? <a href='#' onClick={this.uninstall.bind(this)} className='remove btn btn-filled btn-danger'> Remove </a>
+    ? <a href='#' onClick={this.uninstall.bind(this)} className='remove btn btn-filled btn-primary'> Remove </a>
     : null
   }
 
@@ -68,20 +72,20 @@ export default class App extends React.Component {
   }
 
   render () {
-    const { name, author } = this.props
-    const logo = `/api/apps/${name}/logo`
+    const { name, author, logo, netbeast } = this.props
+    const isPlugin = netbeast && (netbeast.type === 'plugin')
+    const defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)'
+    const logoStyle = { backgroundImage: logo ? `url(/api/apps/${name}/logo)` : defaultLogo }
+
     return (
       <div className='app'>
-        <div className='logo' title='Launch app' onClick={this.handleClick.bind(this)}>
-          <img className='filter-to-white' src={logo} alt={logo} />
+        <div className='logo' title='Launch app' style={logoStyle}
+        onClick={this.handleClick.bind(this)}>
         </div>
         {this.renderStopButton()}
         {this.renderRemoveButton()}
         {this.renderInstallButton()}
-        <h4>
-          <br/> <span className='name'>{name}</span>
-        </h4>
-        <span className='author'>{author}</span>
+        <h4 className='name'>{name}</h4>
       </div>
     )
   }

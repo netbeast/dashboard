@@ -13,7 +13,6 @@ const APPS_DIR = process.env.APPS_DIR
 App.modules = function (done) {
   fs.readdir(APPS_DIR, function (err, files) {
     if (err) return done(err)
-
     async.filter(files, function (file, callback) {
       fs.lstat(APPS_DIR + '/' + file, function (err, stats) {
         if (err) return done(err) // done reports error to App.modules

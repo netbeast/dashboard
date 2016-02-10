@@ -8,9 +8,9 @@ helper.createTable = function (done) {
   db.run('CREATE TABLE IF NOT EXISTS resources(' +
   'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
   'app TEXT NOT NULL, ' +
-  'location TEXT NOT NULL, ' +
+  'location TEXT, ' +
   'topic TEXT NOT NULL, ' +
-  'groupname TEXT NOT NULL, ' +
+  'groupname TEXT, ' +
   'hook TEXT NOT NULL)',
   done)
 }

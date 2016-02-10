@@ -15,6 +15,12 @@ router.route('/resources')
   Resource.find(req.query, function (err, resources) {
     if (err && err.statusCode !== 404) return next(err)
 
+    if (resources) {
+      resources.forEach(function (item) {
+        item.mac_or_ip = item.hook.split('/')[item.hook.split('/').length - 1]
+      })
+    }
+
     res.json(resources)
   })
 })

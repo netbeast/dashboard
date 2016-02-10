@@ -9,14 +9,14 @@ export default class Toast extends React.Component {
   close () { this.props.dismiss(this.props.id) }
 
   render () {
-    const {title, body, emphasis, timeout} = this.props
+    const { title, body, emphasis, timeout } = this.props // eslint-disable-line
 
-    // if (timeout) setTimeout(this.close, timeout)
+    if (timeout) setTimeout(this.close, timeout)
 
     return (
-      <div className={'toast ' + emphasis}>
+      <div className={'alert alert-' + (emphasis || 'info') }>
         <span className='title'> {title || 'dashboard'} </span>
-        <div className='close' onClick={this.close}> &#x2715; </div>
+        <button type='button' className='close' onClick={this.close} data-dismiss='alert'>×</button>
         <br/>
         <div className='body'>
           {body.toString()}
@@ -24,4 +24,9 @@ export default class Toast extends React.Component {
       </div>
     )
   }
+}
+
+Toast.propTypes = {
+  id: React.PropTypes.String,
+  dismiss: React.PropTypes.function
 }

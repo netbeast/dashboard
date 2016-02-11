@@ -36,7 +36,6 @@ server.listen(3000); */
         })
         serverSocket.on('data', function (data) {
           try {
-            relaySocket.write('ID_UNICO')
             relaySocket.write(data)
           } catch (ex) {
             console.log(ex)

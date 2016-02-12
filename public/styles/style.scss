@@ -1,0 +1,41 @@
+//
+// This is the main application scss list
+// From here files get imported in dependency order
+// and get compiled into style.css
+// In this file global scope CSS shared across components
+// must be written
+//
+// jesus@netbeast.co
+
+
+@import 'vendor/normalize';
+
+@import 'colors';
+@import 'bootstrap';
+@import 'components';
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+
+body, html {
+  height: 100%;
+  width: 100%;
+  background-color: $grey-dark;
+  color: white;
+}
+
+.filter-to-white {
+  -webkit-filter: brightness(0) invert(1);
+  filter: brightness(0) invert(1);
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.btn {
+  transition: background 0.2s ease-in-out;
+}

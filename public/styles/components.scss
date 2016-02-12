@@ -1,0 +1,205 @@
+
+//
+// Components styling file
+// Divide each component with big comment lines
+// Indeed, it simplifies writing CSS
+//
+
+//====================================
+// DASHBOARD COMPONENT
+//====================================
+
+#app, #dashboard, #dashboard main {
+  width: 100%; height: 100%;
+}
+
+//====================================
+// DRAWER COMPONENT
+//====================================
+
+.drawer {
+  padding: 20px 50px;
+  text-align: center;
+}
+
+.drawer .apps-list { margin-top: -20px; }
+
+.drawer .apps-list .app {
+  display: inline-block;
+  vertical-align: top;
+  border-radius: 3px;
+  padding: 40px 20px;
+  margin-top: 15px;
+  text-align: center;
+
+  .logo {
+    width: 120px;
+    height: 120px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    &:hover { cursor: pointer; }
+  }
+
+  .name {
+    max-width: 120px;
+    padding-top: 15px;
+    text-transform: uppercase;
+    font-size: 1.4rem;
+  }
+}
+
+.apps-list .remove.btn, .apps-list .stop.btn, .apps-list .install.btn {
+  z-index: 10;
+  position: absolute;
+  margin-top: -70px;
+  margin-left: -37px;
+  width: 75px;
+}
+
+//====================================
+// ER
+//====================================
+
+.apps-list {
+  padding: 20px 160px;
+  text-align: left;
+  padding-bottom: 50px;
+  .title { margin-left: 20px; }
+}
+
+.launcher {
+  position: fixed;
+  z-index: 90;
+  height: 60px;
+  bottom: 50px; right: 50px;
+
+  .btn { text-transform: uppercase; }
+
+  ul li {
+    position: absolute;
+    border-radius: 3px;
+    padding: 2px 4px;
+    margin: 10px; opacity: 0;
+    visibility: hidden;
+    vertical-align: top;
+    display: inline-block;
+    transition: opacity 0.5s linear;
+  }
+
+  .anchor { opacity: 1; position: inherit; visibility: visible; }
+
+  &:hover {
+    ul { background-color: rgba(32, 32, 32, 0.9); }
+    ul li { position: inherit; opacity: 1; visibility: visible; }
+  }
+}
+
+.path-live .launcher:hover {
+  ul {
+    transition: all 0.5s ease-in-out;
+    background-color: $grey-lighter;
+    border-bottom: 4px solid $grey-darker;
+  }
+}
+
+//====================================
+// fications
+//====================================
+
+.notifications {
+  z-index: 100;
+  width: 300px;
+  position: fixed;
+  right: 50px; top: 25px;
+  transform: scaleY(-1);
+  overflow: hidden;
+
+  .alert { opacity: 0.9;
+    transform: scaleY(-1);
+    &:hover, &.current { opacity: 1 }
+  }
+  .alert-error { background-color: $brand-primary; }
+  .alert .title { text-transform: uppercase; font-weight: bolder; }
+  .alert .body { padding-top: 5px; }
+}
+
+//====================================
+// App LiveView
+//====================================
+
+.app-live {
+  width: 100%; height: 100%;
+  background-color: white;
+}
+
+//====================================
+// App InstallView
+//====================================
+
+.app-install {
+  width: 100%; height: 100%;
+  text-align: center;
+  .preview {
+    cursor: pointer;
+    margin-top: 100px; margin-bottom: 50px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 50px;
+    transition: background 0.2s ease-in-out;
+    &:hover, &.active {
+      border: 4px solid $purple;
+    }
+  }
+  .install-from-git input[name=url] {
+    background-color: inherit;
+    border: none;
+    border-bottom: 2px solid white;
+    font-size: 24px;
+    width: 410px;
+    padding: 20px 7px 7px 7px;
+  }
+
+  .install-from-git input[type=submit] { margin: 20px; }
+
+  .install-from-git { padding: 20px 0 120px 0; }
+}
+
+//====================================
+// NotFound
+//====================================
+
+.not-found {
+  width: 100%;
+  padding-top: 200px;
+  text-align: center;
+}
+
+//====================================
+// VERSION POD
+//====================================
+
+.version-pod {
+  position: fixed;
+  display: block;
+  bottom: 5px; left: 5px;
+  opacity: 0.25;
+  &:hover {
+    cursor: default;
+    opacity: 1;
+  }
+}
+
+//====================================
+// DEVICES POD
+//====================================
+
+.devices-pod {
+  position: fixed;
+  top: 5px; left: 5px;
+  opacity: 0.5;
+  &:hover {
+    cursor: default;
+    opacity: 1;
+  }
+}

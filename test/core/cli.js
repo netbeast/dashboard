@@ -48,7 +48,7 @@ describe('Client', function () {
 
   it('should install test/app.tar.gz', function (done) {
     this.timeout(25000)
-    exec(CLI + ' install test/app.tar.gz ' + process.env.LOCAL_URL,
+    exec(CLI + ' install test/app.tar.gz ' + 'http://localhost:' + process.env.PORT,
     function (err, stdout, stderr) {
       should.not.exist(err)
       fs.access('./.sandbox/myapp', fs.F_OK, function (err) {

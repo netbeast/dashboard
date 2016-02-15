@@ -7,7 +7,7 @@ var should = chai.should()
 var request = require('request')
 var async = require('async')
 
-const URL = process.env.LOCAL_URL + '/api/i/test-app'
+const URL = 'http://localhost:' + process.env.PORT + '/api/i/test-app'
 const METHODS = ['GET', 'PUT', 'PATCH', 'POST', 'DELETE']
 
 describe.skip('Proxy', function () {

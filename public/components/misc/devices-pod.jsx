@@ -1,11 +1,14 @@
 import React from 'react'
+import { Link } from 'react-router'
 import mqtt from 'mqtt'
+
+import { Session } from '../lib'
 
 export default class DevicesPod extends React.Component {
   constructor () {
     super()
     this.mqtt = mqtt.connect()
-    this.state = { devices: [] }
+    this.state = { devices: Session.load('devices') || [] }
   }
 
   componentWillMount () {
@@ -14,6 +17,7 @@ export default class DevicesPod extends React.Component {
       if (topic !== 'netbeast/network') return
 
       const devices = JSON.parse(message)
+      Session.save('devices', devices)
       this.setState({ devices })
     })
   }
@@ -25,9 +29,9 @@ export default class DevicesPod extends React.Component {
   render () {
     const { devices } = this.state
     return (
-      <span className='devices-pod' title='Checking for updates...'>
+      <Link to='devices' className='devices-pod' title='Checking for updates...'>
         {devices.length} devices connected
-      </span>
+      </Link>
     )
   }
 }

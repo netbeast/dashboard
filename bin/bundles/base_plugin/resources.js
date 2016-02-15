@@ -7,6 +7,8 @@
 
 var request = require('request')
 
+const API = process.env.NETBEAST + '/api/resources'
+
 module.exports = function (callback) {
 
   // First we ask the database for all the devices of the same brand that are stored
@@ -14,7 +16,7 @@ module.exports = function (callback) {
   var objects = []
 
   // Request to the database
-  request.get(process.env.LOCAL_URL + '/resources?app=NAME_PLUGIN',
+  request.get(API + '?app=NAME_PLUGIN',
   function (err, resp, body) {
     if (err) return callback(err)
     if (!body) return callback()
@@ -47,7 +49,7 @@ module.exports = function (callback) {
   } else {
     //  Use this block to register the found device on the netbeast database
     //  in order to using it later
-    request.post({url: process.env.LOCAL_URL + '/resources',
+    request.post({url: API,
     json: {
       app: 'NAME_PLUGIN',          // Name of the device brand
       location: 'none',
@@ -69,7 +71,7 @@ module.exports = function (callback) {
   if (objects.length > 0) {
     objects.forEach(function (hooks) {
       //  Use this block to delete a device from the netbeast database
-      request.del(process.env.LOCAL_URL + '/resources?hook=' + hooks,
+      request.del(API + '?hook=' + hooks,
       function (err, resp, body) {
         if (err) callback(err)
       })

@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-// Load environment variables
-require('dotenv').config({path: __dirname + '/.env'})
+require('./lib/init')
 
 // Node native libraries
 var path = require('path')
@@ -31,7 +30,6 @@ var broker = new mosca.Server({})
 broker.attachHttpServer(server)
 
 process.env.PORT = cmd.port || process.env.PORT
-process.env.LOCAL_URL = 'http://localhost:' + process.env.PORT
 
 server.listen(process.env.PORT, function () {
   console.log('👾  Netbeast dashboard started on %s:%s', server.address().address, server.address().port)
@@ -54,8 +52,8 @@ deamon.title = 'netbeast-deamon'
 deamon.start()
 
 var network = new (forever.Monitor)(DASHBOARD_NETWORK, {
-	env: { 'NETBEAST_PORT': process.env.PORT},
-	max: 1
+  env: { 'NETBEAST_PORT': process.env.PORT },
+  max: 1
 })
 
 network.title = 'netbeast-network'

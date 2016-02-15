@@ -11,7 +11,7 @@ var fs = require('fs')
 
 var s = 1000 // seconds
 
-const URL = process.env.LOCAL_URL + '/api'
+const URL = 'http://localhost:' + process.env.PORT + '/api'
 const APPS_DIR = process.env.APPS_DIR
 const GITHUB_REPO = 'https://github.com/netbeast/get-started'
 

@@ -5,7 +5,7 @@
 // jesus@netbeast.co
 // ====================
 
-require('dotenv').config({path: __dirname + '/../.env'})
+require('../lib/init')
 
 var path = require('path')
 var cli = require('commander')

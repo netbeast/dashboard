@@ -4,7 +4,7 @@ export default class AppLiveView extends React.Component {
   render () {
     const { appName } = this.props.params
     return (
-      <iframe className='app-live' src={'/i/' + appName} frameBorder='0' />
+      <iframe className='app-live' src={'/live/' + appName} frameBorder='0' />
     )
   }
 }

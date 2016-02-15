@@ -223,10 +223,12 @@
   text-align: left;
   margin: 15px;
   border-bottom-width: 4px;
-  width: 300px;
+  width: 500px;
 
-  .icon {
+  .icon, ul {
     padding: 5px;
+    float: left;
+    display: block;
   }
 
   .icon img {

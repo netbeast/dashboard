@@ -15,9 +15,9 @@ var mosca = require('mosca')
 var app = require('./src')
 var bootOnload = require('./src/boot-on-load')
 
+const DASHBOARD_NETWORK = path.join(__dirname, './bin/network.js')
 const DASHBOARD_DEAMON = path.join(__dirname, './bin/deamon.js')
 const DASHBOARD_DNS = path.join(__dirname, './bin/dns.js')
-const DASHBOARD_NETWORK = path.join(__dirname, './bin/discover-network.js')
 
 cmd
 .version('0.1.42')

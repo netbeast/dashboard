@@ -17,7 +17,7 @@ class Device extends React.Component {
         </div>
         <ul className='fields list-unstyled'>
           {Object.keys(this.props).map((key, idx) => {
-            return <li className='field'>{key}: {this.props[key]}</li>
+            return <li key={idx} className='field'>{key}: {this.props[key]}</li>
           })}
         </ul>
       </div>

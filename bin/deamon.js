@@ -8,11 +8,6 @@ deamon.bind(16180, function () {
   deamon.addMembership('239.0.16.18')
 })
 
-deamon.on('listening', function () {
-  var addr = deamon.address()
-  console.log('👾  Netbeast deamon ready at %s:%s', addr.address, addr.port)
-})
-
 deamon.on('message', function (msg, req) {
   console.log('%s from %s:%s', msg, req.address, req.port)
   // answer from the interface we got the request

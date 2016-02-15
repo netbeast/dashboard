@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router'
 import mqtt from 'mqtt'
 
 import { Session } from '../lib'
@@ -29,9 +28,9 @@ export default class DevicesPod extends React.Component {
   render () {
     const { devices } = this.state
     return (
-      <Link to='devices' className='devices-pod' title='Checking for updates...'>
+      <a href='devices' className='devices-pod' title='Checking for updates...'>
         {devices.length} devices connected
-      </Link>
+      </a>
     )
   }
 }

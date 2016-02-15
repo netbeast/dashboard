@@ -3,6 +3,8 @@ import request from 'superagent-bluebird-promise'
 import React from 'react'
 import { Link } from 'react-router'
 
+import { Session } from '../lib'
+
 import VersionPod from '../misc/version-pod.jsx'
 import DevicesPod from '../misc/devices-pod.jsx'
 import App from './app.jsx'
@@ -29,7 +31,7 @@ class ExploreApp extends React.Component {
 export default class Drawer extends React.Component {
   constructor (props, context) {
     super(props, context)
-    this.state = { apps: [] }
+    this.state = { apps: Session.load('apps') || [] }
     this.loadApps = this.loadApps.bind(this)
   }
 
@@ -52,6 +54,7 @@ export default class Drawer extends React.Component {
       let apps = [ ...res.body ] // smart copy
       apps.forEach((app) => app.type = pathname)
 
+      Session.save('apps', apps)
       this.setState({ apps: apps, pathname: pathname })
     })
   }

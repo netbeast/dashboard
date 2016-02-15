@@ -45398,6 +45398,8 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = require('react-router');
 
+var _lib = require('../lib');
+
 var _versionPod = require('../misc/version-pod.jsx');
 
 var _versionPod2 = _interopRequireDefault(_versionPod);
@@ -45467,7 +45469,7 @@ var Drawer = function (_React$Component2) {
 
     var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Drawer).call(this, props, context));
 
-    _this2.state = { apps: [] };
+    _this2.state = { apps: _lib.Session.load('apps') || [] };
     _this2.loadApps = _this2.loadApps.bind(_this2);
     return _this2;
   }
@@ -45500,6 +45502,7 @@ var Drawer = function (_React$Component2) {
           return app.type = pathname;
         });
 
+        _lib.Session.save('apps', apps);
         _this3.setState({ apps: apps, pathname: pathname });
       });
     }
@@ -45568,7 +45571,7 @@ var Drawer = function (_React$Component2) {
 
 exports.default = Drawer;
 
-},{"../misc/devices-pod.jsx":321,"../misc/version-pod.jsx":323,"./app.jsx":312,"react":307,"react-router":121,"superagent-bluebird-promise":308}],314:[function(require,module,exports){
+},{"../lib":320,"../misc/devices-pod.jsx":321,"../misc/version-pod.jsx":323,"./app.jsx":312,"react":307,"react-router":121,"superagent-bluebird-promise":308}],314:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -46204,8 +46207,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouter = require('react-router');
-
 var _mqtt = require('mqtt');
 
 var _mqtt2 = _interopRequireDefault(_mqtt);
@@ -46258,8 +46259,8 @@ var DevicesPod = function (_React$Component) {
       var devices = this.state.devices;
 
       return _react2.default.createElement(
-        _reactRouter.Link,
-        { to: 'devices', className: 'devices-pod', title: 'Checking for updates...' },
+        'a',
+        { href: 'devices', className: 'devices-pod', title: 'Checking for updates...' },
         devices.length,
         ' devices connected'
       );
@@ -46271,7 +46272,7 @@ var DevicesPod = function (_React$Component) {
 
 exports.default = DevicesPod;
 
-},{"../lib":320,"mqtt":36,"react":307,"react-router":121}],322:[function(require,module,exports){
+},{"../lib":320,"mqtt":36,"react":307}],322:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -46340,7 +46341,7 @@ var Device = function (_React$Component) {
           Object.keys(this.props).map(function (key, idx) {
             return _react2.default.createElement(
               'li',
-              { className: 'field' },
+              { key: idx, className: 'field' },
               key,
               ': ',
               _this2.props[key]

@@ -108,13 +108,11 @@ self.boot = function (appName, done) {
     return done(null, children[child.name])
   }
 
-  console.log('[booting] Looking for a free port for %s...', child.name)
   portfinder.getPort(function (err, port) {
     if (err) {
       done(new ApiError(405, 'Not enough ports'))
     } else {
       child.port = port
-      console.log('[booting] Found port for %s at %s.', child.name, child.port)
       self.emit('start', child)
       done(null, child)
     }
@@ -130,9 +128,14 @@ self.on('start', function (app) {
     // child management
     var entryPoint = path.resolve(APPS_DIR, app.name, pkgJson.main)
 
+    var env = Object.create(process.env)
+    env.APP_PORT = app.port
+    env.APP_NAME = app.name
+    env.NETBEAST = process.env.IPs.split(',') + ':' + process.env.PORT
+
     var child = spawn(entryPoint, ['--port', app.port], {
       cwd: path.join(APPS_DIR, app.name),
-      env: process.env
+      env: env
     })
 
     child.stdout.on('data', function (data) {

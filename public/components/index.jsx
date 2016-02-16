@@ -9,6 +9,7 @@ import Drawer from './apps/drawer.jsx'
 import AppLiveView from './apps/live.jsx'
 import InstallView from './apps/install.jsx'
 import Explore from './apps/explore.jsx'
+import Devices from './misc/devices.jsx'
 
 import Dashboard from './dashboard.jsx'
 
@@ -23,6 +24,7 @@ ReactDOM.render(
       <Route path='explore' component={Explore} />
       <Route path='install' component={InstallView} />
       <Route path='settings' component={Settings} />
+      <Route path='devices' component={Devices} />
       <Route path='live/:appName' component={AppLiveView} />
       <Route path='*' component={NotFound} />
     </Route>

@@ -195,11 +195,44 @@
 //====================================
 
 .devices-pod {
+  color: inherit;
   position: fixed;
   top: 5px; left: 5px;
+  text-decoration: none;
   opacity: 0.5;
-  &:hover {
-    cursor: default;
+  &:hover, &:active {
+    color: inherit;
+    text-decoration: none;
     opacity: 1;
+  }
+}
+
+//====================================
+// DEVICES POD
+//====================================
+
+.path-devices {
+  text-align: center;
+}
+
+.devices-list .device {
+  padding: 10px;
+  display: inline-block;
+  vertical-align: top;
+  border: 2px solid white;
+  text-align: left;
+  margin: 15px;
+  border-bottom-width: 4px;
+  width: 500px;
+
+  .icon, ul {
+    padding: 5px;
+    float: left;
+    display: block;
+  }
+
+  .icon img {
+    height: 64px; width: auto;
+    margin-right: 15px;
   }
 }

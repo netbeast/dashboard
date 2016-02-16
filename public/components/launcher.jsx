@@ -50,7 +50,7 @@ export default class Launcher extends React.Component {
             <Link to='/plugins' className='btn btn-success'>Plugins</Link>
           </li>
           <li className={this.isAnchor('root')}>
-            <Link to='/' className='btn btn-info'>Dashboard</Link>
+            <Link to='/' className='btn btn-info'>Apps</Link>
           </li>
           {this.renderMenuAnchor()}
         </ul>

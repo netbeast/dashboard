@@ -22,13 +22,19 @@
   text-align: center;
 }
 
-.drawer .apps-list { margin-top: -20px; }
+.drawer .title {
+  padding-top: 20px;
+}
+
+.drawer .apps-list {
+  margin-top: -20px;
+}
 
 .drawer .apps-list .app {
   display: inline-block;
   vertical-align: top;
   border-radius: 3px;
-  padding: 40px 20px;
+  padding: 40px 23px;
   margin-top: 15px;
   text-align: center;
 
@@ -58,13 +64,13 @@
 }
 
 //====================================
-// ER
+// LAUNCHER
 //====================================
 
 .apps-list {
-  padding: 20px 160px;
+  @media (max-width: 600px) { padding: 20px 0; }
+  padding: 20px 160px 50px 160px;
   text-align: left;
-  padding-bottom: 50px;
   .title { margin-left: 20px; }
 }
 
@@ -72,7 +78,7 @@
   position: fixed;
   z-index: 90;
   height: 60px;
-  bottom: 50px; right: 50px;
+  bottom: 5px; right: 5px;
 
   .btn { text-transform: uppercase; }
 

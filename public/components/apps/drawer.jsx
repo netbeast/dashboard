@@ -89,8 +89,8 @@ export default class Drawer extends React.Component {
 
     return (
         <div className='drawer'>
+          {this.renderTitle(pathname)}
           <div className='apps-list'>
-            {this.renderTitle(pathname)}
             <ExploreApp {...this.props} />
             {apps.map(function (data) {
               return <App key={data.name} { ...data } />

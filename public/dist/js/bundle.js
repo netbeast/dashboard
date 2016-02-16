@@ -45545,10 +45545,10 @@ var Drawer = function (_React$Component2) {
       return _react2.default.createElement(
         'div',
         { className: 'drawer' },
+        this.renderTitle(pathname),
         _react2.default.createElement(
           'div',
           { className: 'apps-list' },
-          this.renderTitle(pathname),
           _react2.default.createElement(ExploreApp, this.props),
           apps.map(function (data) {
             return _react2.default.createElement(_app2.default, _extends({ key: data.name }, data));
@@ -45650,16 +45650,16 @@ var Explore = function (_React$Component) {
         { className: 'drawer' },
         _react2.default.createElement(
           'div',
-          { className: 'apps-list' },
+          { className: 'title' },
           _react2.default.createElement(
-            'div',
-            { className: 'title' },
-            _react2.default.createElement(
-              'h1',
-              null,
-              'Explore all available apps.'
-            )
-          ),
+            'h1',
+            null,
+            'Explore all available apps.'
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'apps-list' },
           apps.map(function (data) {
             return _react2.default.createElement(_app2.default, _extends({ key: data.id }, data, { type: 'explore' }));
           }),
@@ -46128,7 +46128,7 @@ var Launcher = function (_React$Component) {
             _react2.default.createElement(
               _reactRouter.Link,
               { to: '/', className: 'btn btn-info' },
-              'Dashboard'
+              'Apps'
             )
           ),
           this.renderMenuAnchor()

@@ -45239,7 +45239,6 @@ var App = function (_React$Component) {
     value: function handleClick() {
       var type = this.props.type;
 
-      console.log(this.props);
       if (type !== 'explore') this.launch();
     }
   }, {
@@ -46055,8 +46054,8 @@ var Launcher = function (_React$Component) {
 
       var location = _ref.location;
 
-      var regexp = new RegExp('/', 'g');
-      var pathname = location.pathname.replace(regexp, '');
+      var aux = location.pathname.split('/');
+      var pathname = aux[aux.length - 1];
       return pathname === '' ? 'root' : pathname;
     }
   }, {

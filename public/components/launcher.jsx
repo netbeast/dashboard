@@ -16,8 +16,8 @@ export default class Launcher extends React.Component {
 
   getPath (nextProps) {
     const { location } = nextProps || this.props
-    const regexp = new RegExp('/', 'g')
-    const pathname = location.pathname.replace(regexp, '')
+    const aux = location.pathname.split('/')
+    const pathname = aux[aux.length - 1]
     return (pathname === '') ? 'root' : pathname
   }
 

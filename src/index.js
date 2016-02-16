@@ -15,7 +15,7 @@ var chalk = require('chalk')
 var app = module.exports = express()
 
 app.use(logger('dev', {
-  // skip: function (req, res) { return res.statusCode < 400 }
+  skip: function (req, res) { return res.statusCode < 300 }
 }))
 
 app.use(require('./middleware/proxy'))

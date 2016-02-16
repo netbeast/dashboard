@@ -11,26 +11,18 @@ var router = module.exports = express.Router()
 
 var proxy = httpProxy.createProxyServer({ ws: true })
 
-// proxy.on('error', function (err) {
-//   broker.error(err.message, 'Proxy error')
-// })
+// This route is higher priority
+router.use('/i/:name', function (req, res, next) {
+  // This block returns an app object
+  // with the port where it is running
+  const app = Activity.get(req.params.name)
 
-router.use(function (req, res, next) {
-  // Capture the referer to proxy the request
-  // in case the path is not clear enaugh
-
-  const referer = req.get('referer')
-  if (referer === undefined) return next()
-  if (req.url === url.parse(referer).pathname) return next()
-
-  const refererPathname = url.parse(referer).pathname || ''
-  var aux = refererPathname.split('/')
-  req.referer = aux[aux.indexOf('live') + 1]
-
-  const app = Activity.get(req.referer)
   if (!app) return next()
 
-  const pathname = req.url.replace('/live', '').replace('/' + app.name, '')
+  // Here app is running
+  // In case the path is /i/:name
+  // instead of /i/:name/ you need this block
+  const pathname = req.url.replace('/i/' + app.name, '/')
 
   // This block of code actually pipes the request
   // to the running app and pass it to the client
@@ -38,51 +30,39 @@ router.use(function (req, res, next) {
 
   req.url = pathname
 
-  console.log('================================')
-  console.log('* MIDDLEWARE')
-  console.log('proxyUrl =', proxyUrl)
-  console.log('pathname =', pathname)
-  console.log('req.url =', req.url)
-  console.log('req.referer =', req.referer)
-  console.log('================================')
-
   // Allow CORS on all plugins
   allowCORS(res)
 
-  console.log('REQUEST SENT')
   proxy.web(req, res, { target: proxyUrl })
 })
 
-router.use('/live/:name', function (req, res) {
-  // This block returns an app object
-  // with the port where it is running
-  const app = Activity.get(req.params.name)
+router.use(function (req, res, next) {
+  // Capture the referer to proxy the request
+  // in case the path is not clear enaugh
 
-  if (!app) return res.status(404).send('App not running')
+  const referer = req.get('referer')
+  if (referer === undefined) return next()
+  if (req.url.split('/')[1] === 'api') return next()
+  if (req.url === url.parse(referer).pathname) return next()
 
-  console.log('originalUrl =', req.url)
+  const refererPathname = url.parse(referer).pathname || ''
+  var aux = refererPathname.split('/')
+  req.referer = aux[aux.indexOf('i') + 1]
 
-  // Here app is running
-  // In case the path is /live/:name
-  // instead of /live/:name/ you need this block
-  const pathname = req.url.replace('/live', '').replace('/' + app.name, '')
+  const app = Activity.get(req.referer)
+  if (!app) return next()
+
+  const pathname = req.url.replace('/i/', '/').replace('/' + app.name, '')
 
   // This block of code actually pipes the request
   // to the running app and pass it to the client
-  var proxyUrl = req.protocol + '://localhost:' + app.port + pathname
+  var proxyUrl = req.protocol + '://localhost:' + app.port
 
-  console.log('================================')
-  console.log('LIVE MIDDLEWARE')
-  console.log('proxyUrl =', proxyUrl)
-  console.log('pathname =', pathname)
-  console.log('req.url =', req.url)
-  console.log('req.referer =', req.referer)
-  console.log('================================')
+  req.url = pathname
 
   // Allow CORS on all plugins
   allowCORS(res)
 
-  console.log('REQUEST SENT', req.url)
   proxy.web(req, res, { target: proxyUrl })
 })
 

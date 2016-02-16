@@ -18,7 +18,7 @@ export default class App extends React.Component {
   launch () {
     const { name } = this.props
     request.post('/api/activities/' + name).then(() => {
-      return request.get('/i/' + name).promise()
+      return request.get('/live/' + name).promise()
     }).then(() => {
       this.router.push('/live/' + name)
     }).catch((err) => {

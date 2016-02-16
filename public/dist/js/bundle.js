@@ -45250,7 +45250,7 @@ var App = function (_React$Component) {
       var name = this.props.name;
 
       _superagentBluebirdPromise2.default.post('/api/activities/' + name).then(function () {
-        return _superagentBluebirdPromise2.default.get('/i/' + name).promise();
+        return _superagentBluebirdPromise2.default.get('/live/' + name).promise();
       }).then(function () {
         _this2.router.push('/live/' + name);
       }).catch(function (err) {

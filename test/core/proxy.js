@@ -4,7 +4,7 @@ require('dotenv').load()
 var chai = require('chai')
 var should = chai.should()
 
-var request = require('request')
+var request = require('superagent')
 var async = require('async')
 
 const URL = 'http://localhost:' + process.env.PORT + '/api/i/test-app'

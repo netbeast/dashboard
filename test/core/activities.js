@@ -4,7 +4,7 @@ require('dotenv').load()
 var chai = require('chai')
 var should = chai.should()
 
-var request = require('request')
+var request = require('superagent')
 var fs = require('fs-extra')
 var path = require('path')
 
@@ -38,7 +38,7 @@ describe('Activities', function () {
     request(URL + '/activities/', function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200)
-      body = JSON.parse(body).filter(function (app) {
+      body = resp.body.filter(function (app) {
         return app.netbeast && app.netbeast.type !== 'service' && !app.netbeast.bootOnLoad
       })
       body.should.have.length.below(1)

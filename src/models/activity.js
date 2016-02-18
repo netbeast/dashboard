@@ -9,6 +9,7 @@ var async = require('async')
 
 var broker = require('../helpers/broker')
 var ApiError = require('../util/api-error')
+var Resource = require('./resource')
 var App = require('./app')
 
 portfinder.basePort = 3000
@@ -131,7 +132,7 @@ self.on('start', function (app) {
     var env = Object.create(process.env)
     env.APP_PORT = app.port
     env.APP_NAME = app.name
-    env.NETBEAST = process.env.IPs.split(',') + ':' + process.env.PORT
+    env.NETBEAST = process.env.IPs.split(',')[0] + ':' + process.env.PORT
 
     var child = spawn(entryPoint, ['--port', app.port], {
       cwd: path.join(APPS_DIR, app.name),
@@ -148,6 +149,10 @@ self.on('start', function (app) {
     })
 
     child.on('close', function (code) {
+      Resource.findOne({ app: app.name }, function (err, resource) {
+        if (err) return console.err(err)
+        resource.destroy()
+      })
       children[app.name] = undefined
     })
 

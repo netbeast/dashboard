@@ -25,7 +25,7 @@ ReactDOM.render(
       <Route path='install' component={InstallView} />
       <Route path='settings' component={Settings} />
       <Route path='devices' component={Devices} />
-      <Route path='live/:appName' component={AppLiveView} />
+      <Route path='i/:appName' component={AppLiveView} />
       <Route path='*' component={NotFound} />
     </Route>
   </Router>

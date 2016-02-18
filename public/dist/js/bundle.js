@@ -45249,9 +45249,9 @@ var App = function (_React$Component) {
       var name = this.props.name;
 
       _superagentBluebirdPromise2.default.post('/api/activities/' + name).then(function () {
-        return _superagentBluebirdPromise2.default.get('/live/' + name).promise();
+        return _superagentBluebirdPromise2.default.get('/i/' + name).promise();
       }).then(function () {
-        _this2.router.push('/live/' + name);
+        _this2.router.push('/i/' + name);
       }).catch(function (err) {
         if (err.status === 404) return toastr.info(name + ' is running');
         toastr.error(err.message);
@@ -45999,7 +45999,7 @@ _reactDom2.default.render(_react2.default.createElement(
     _react2.default.createElement(_reactRouter.Route, { path: 'install', component: _install2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: _settings2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'devices', component: _devices2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'live/:appName', component: _live2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'i/:appName', component: _live2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: '*', component: _notFound2.default })
   )
 ), document.getElementById('app'));

@@ -16,10 +16,11 @@ export default class App extends React.Component {
 
   launch () {
     const { name } = this.props
+
     request.post('/api/activities/' + name).then(() => {
-      return request.get('/live/' + name).promise()
+      return request.get('/i/' + name).promise()
     }).then(() => {
-      this.router.push('/live/' + name)
+      this.router.push('/i/' + name)
     }).catch((err) => {
       if (err.status === 404) return toastr.info(`${name} is running`)
       toastr.error(err.message)

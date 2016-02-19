@@ -83,8 +83,7 @@
     "coverage": "./test/coverage.sh",
     "build": "./node_modules/.bin/gulp build",
     "serve": "./node_modules/.bin/gulp serve",
-    "dev": "./node_modules/.bin/gulp",
-    "postinstall": "npm link npm"
+    "dev": "./node_modules/.bin/gulp"
   },
   "author": "staff@netbeast",
   "license": "AGPL-3.0"

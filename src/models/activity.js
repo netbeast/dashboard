@@ -150,7 +150,8 @@ self.on('start', function (app) {
 
     child.on('close', function (code) {
       Resource.findOne({ app: app.name }, function (err, resource) {
-        if (err) return console.err(err)
+        if (err) return console.error(err)
+
         resource.destroy()
       })
       children[app.name] = undefined

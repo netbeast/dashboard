@@ -23,7 +23,7 @@ describe('RESTful Resources API', function () {
 
   it('should return all specified actions from db', function (done) {
     var q = 'app=app&topic=topic'
-    request.get(URL + '/resources?' + q, function (err, resp, body) {
+    request.get(URL + '/resources?' + q).end(function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200)
       body = resp.body
@@ -49,7 +49,7 @@ describe('RESTful Resources API', function () {
 
   it('should delete the specified action from db', function (done) {
     var q = 'hook=hook'
-    request.del(URL + '/resources?' + q, function (err, resp, body) {
+    request.del(URL + '/resources?' + q).end(function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(204)
       expect(body).to.be.empty

@@ -13,7 +13,7 @@ const METHODS = ['GET', 'PUT', 'PATCH', 'POST', 'DELETE']
 describe.skip('Proxy', function () {
   it('it should perform all requests methods correctly', function (done) {
     async.map(METHODS, function (method, cb) {
-      request({ method: method, url: URL }, function (err, resp) {
+      request({ method: method, url: URL }).end(function (err, resp) {
         should.not.exist(err)
         resp.statusCode.should.equal(200)
         cb()

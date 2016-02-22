@@ -35,7 +35,7 @@ describe('Activities', function () {
   })
 
   it('should show no apps running', function (done) {
-    request(URL + '/activities/', function (err, resp, body) {
+    request(URL + '/activities/').end(function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200)
       body = resp.body.filter(function (app) {
@@ -47,7 +47,7 @@ describe('Activities', function () {
   })
 
   it('should start correctly myapp', function (done) {
-    request.post(URL + '/activities/myapp', function (err, resp, body) {
+    request.post(URL + '/activities/myapp').end(function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200)
       done()
@@ -55,7 +55,7 @@ describe('Activities', function () {
   })
 
   it('myapp should be running', function (done) {
-    request(URL + '/activities/myapp', function (err, resp, body) {
+    request(URL + '/activities/myapp').end(function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200) // app is running
       done()

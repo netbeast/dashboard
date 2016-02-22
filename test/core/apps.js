@@ -41,7 +41,7 @@ describe('Apps', function () {
   })
 
   it('should return application package.json', function (done) {
-    agent(URL + '/apps/myapp', function (err, resp, body) {
+    agent(URL + '/apps/myapp').end(function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200)
       expect(resp.body).to.be.an('Object')
@@ -66,7 +66,7 @@ describe('Apps', function () {
   })
 
   it("should return all apps' package.json", function (done) {
-    agent(URL + '/apps', function (err, resp, body) {
+    agent(URL + '/apps').end(function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200)
       expect(resp.body).to.be.an('Array')
@@ -75,7 +75,7 @@ describe('Apps', function () {
   })
 
   it("should remove 'myapp' from repository", function (done) {
-    agent.del(URL + '/apps/myapp', function (err, resp, body) {
+    agent.del(URL + '/apps/myapp').end(function (err, resp, body) {
       should.not.exist(err)
       expect(resp.statusCode).to.equal(204)
       done()
@@ -83,7 +83,7 @@ describe('Apps', function () {
   })
 
   it("should remove 'xy-get-started' from repository", function (done) {
-    agent.del(URL + '/apps/xy-get-started', function (err, resp, body) {
+    agent.del(URL + '/apps/xy-get-started').end(function (err, resp, body) {
       should.not.exist(err)
       expect(resp.statusCode).to.equal(204)
       done()
@@ -91,7 +91,7 @@ describe('Apps', function () {
   })
 
   it('should return 404 when an app does not exist', function (done) {
-    agent.del(URL + '/apps/tsaebten', function (err, resp, body) {
+    agent.del(URL + '/apps/tsaebten').end(function (err, resp, body) {
       expect(err.status).to.equal(404)
       expect(resp.statusCode).to.equal(404)
       done()

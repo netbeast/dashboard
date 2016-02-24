@@ -2,6 +2,8 @@ var should = require('chai').should()
 var expect = require('chai').expect
 var netbeast = require('netbeast')
 var mqtt = require('mqtt')
+var http = require('http')
+var request = require('request')
 
 describe('MQTT methods', function () {
 
@@ -61,5 +63,20 @@ describe('Find Method', function () {
       'adress', 'port'
     )
     done()
+  })
+})
+
+describe('Request methods', function () {
+  http.createServe(function (request, response) {
+    request.on('data', function (message) {
+      response.write(message)
+    })
+  }).listen(8080)
+  it('delete method', function (message, done) {
+    const queryString = queryCustom(normalizeArguments(message))
+    var res = request.del('http://localhost:8080').query(message).promise()
+    if (res.body === netbeast().delete(message)) {
+      done()
+    }
   })
 })

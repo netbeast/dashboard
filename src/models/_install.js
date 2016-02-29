@@ -1,6 +1,6 @@
 var path = require('path')
 var Url = require('url')
-var npm = require('npm')
+var exec = require('child_process').exec
 
 var Decompress = require('decompress')
 var request = require('superagent')
@@ -12,20 +12,15 @@ var broker = require('../helpers/broker')
 function _installDeps (app, done) {
   const root = path.join(process.env.APPS_DIR, app.name)
   const modules = path.join(root, 'node_modules')
-  // npm install expects array of deps
-  const dependencies = Object.keys(app.dependencies)
 
   if (fs.existsSync(modules)) {
     return done(null, app)
   }
 
   broker.info('Downloading ' + app.name + ' dependencies...')
-  npm.load({ prefix: root }, function (err) {
-    if (err) return done(err)
 
-    npm.commands.install(dependencies, function (err, data) {
-      return done(err, app) // data is not app
-    })
+  exec('npm i', {cwd: root}, function (err, data) {
+    return done(err, app) // data is not app
   })
 }
 

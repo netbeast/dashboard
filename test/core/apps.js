@@ -6,6 +6,7 @@ var should = chai.should()
 var expect = chai.expect
 
 var request = require('request')
+var agent = require('superagent')
 var path = require('path')
 var fs = require('fs')
 
@@ -22,6 +23,7 @@ const GITHUB_REPO = 'https://github.com/netbeast/get-started'
 // http://code.tutsplus.com/tutorials/testing-in-nodejs--net-35018
 
 describe('Apps', function () {
+  // Need to change this test. Still using request instead of superagent
   it('should upload myapp to repository', function (done) {
     this.timeout(8 * s) // this takes time
     var req = request.post(URL + '/apps', function (err, resp, body) {
@@ -39,14 +41,15 @@ describe('Apps', function () {
   })
 
   it('should return application package.json', function (done) {
-    request(URL + '/apps/myapp', function (err, resp, body) {
+    agent(URL + '/apps/myapp').end(function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200)
-      expect(JSON.parse(body)).to.be.an('Object')
+      expect(resp.body).to.be.an('Object')
       done()
     })
   })
 
+  // Need to change this test. Still using request instead of superagent
   it('should upload app from github to repo', function (done) {
     this.timeout(20 * s) // this also takes time
     var req = request.post(URL + '/apps', function (err, resp, body) {
@@ -63,16 +66,16 @@ describe('Apps', function () {
   })
 
   it("should return all apps' package.json", function (done) {
-    request(URL + '/apps', function (err, resp, body) {
+    agent(URL + '/apps').end(function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200)
-      expect(JSON.parse(body)).to.be.an('Array')
+      expect(resp.body).to.be.an('Array')
       done()
     })
   })
 
   it("should remove 'myapp' from repository", function (done) {
-    request.del(URL + '/apps/myapp', function (err, resp, body) {
+    agent.del(URL + '/apps/myapp').end(function (err, resp, body) {
       should.not.exist(err)
       expect(resp.statusCode).to.equal(204)
       done()
@@ -80,7 +83,7 @@ describe('Apps', function () {
   })
 
   it("should remove 'xy-get-started' from repository", function (done) {
-    request.del(URL + '/apps/xy-get-started', function (err, resp, body) {
+    agent.del(URL + '/apps/xy-get-started').end(function (err, resp, body) {
       should.not.exist(err)
       expect(resp.statusCode).to.equal(204)
       done()
@@ -88,8 +91,8 @@ describe('Apps', function () {
   })
 
   it('should return 404 when an app does not exist', function (done) {
-    request.del(URL + '/apps/tsaebten', function (err, resp, body) {
-      should.not.exist(err)
+    agent.del(URL + '/apps/tsaebten').end(function (err, resp, body) {
+      expect(err.status).to.equal(404)
       expect(resp.statusCode).to.equal(404)
       done()
     })

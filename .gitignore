@@ -29,6 +29,7 @@ Thumbs.db
 
 .log
 .sass-cache/
+.ftpconfig
 
 node_modules
 .sandbox/*

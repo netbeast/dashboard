@@ -11,8 +11,7 @@ module.exports.upload = multer({
   },
   fileFilter: function (req, file, done) {
     var ext = [file.originalname.split('.')[1], file.originalname.split('.')[2]].join('.')
-    console.log('EXT', ext)
-    if (ext !== 'tar.gz' && ext !== 'tgz.' || file.mimetype !== 'application/x-gzip' && file.mimetype !== 'application/octet-stream')
+    if (ext !== 'tar.gz' && ext !== 'tgz.' && file.mimetype !== 'application/x-gzip' && file.mimetype !== 'application/octet-stream')
       return done(null, false)
     else
       return done(null, true)
@@ -21,7 +20,8 @@ module.exports.upload = multer({
 
 module.exports.process = function (req, res, next) {
   const module = (req.files && req.files.length > 0) ? req.files[0].path : req.body.url
-  if (!module) return next(new ApiError(422, 'App must be a .tar.gz file.'))
+  console.log('MODULE', module)
+  if (!module) return next(new ApiError(422, 'App must be a tar.gz file.'))
   App.install(module, function (err, appJson) {
     if (err) return next(err)
 

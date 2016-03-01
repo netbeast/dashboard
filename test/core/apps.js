@@ -5,8 +5,7 @@ var chai = require('chai')
 var should = chai.should()
 var expect = chai.expect
 
-var request = require('request')
-var agent = require('superagent')
+var request = require('superagent')
 var path = require('path')
 var fs = require('fs')
 
@@ -23,25 +22,23 @@ const GITHUB_REPO = 'https://github.com/netbeast/get-started'
 // http://code.tutsplus.com/tutorials/testing-in-nodejs--net-35018
 
 describe('Apps', function () {
-  // Need to change this test. Still using request instead of superagent
-  it('should upload myapp to repository', function (done) {
+  it('should upload myapp to the dashboard', function (done) {
     this.timeout(8 * s) // this takes time
-    var req = request.post(URL + '/apps', function (err, resp, body) {
-      should.not.exist(err)
-      expect(resp.statusCode).to.equal(200)
-      fs.stat(path.join(APPS_DIR, 'myapp'), function (err, stats) {
-        should.not.exist(err)
-        expect(stats.isDirectory()).to.equal(true)
-        done()
-      })
-    })
-    var form = req.form()
     var app = path.join(__dirname, '../app.tar.gz')
-    form.append('file', fs.createReadStream(app))
+    request.post(URL + '/apps')
+      .attach('file', app, 'app.tar.gz')
+      .end(function (err, resp) {
+        expect(err).to.not.exist
+        fs.stat(path.join(APPS_DIR, 'myapp'), function (err, stats) {
+          should.not.exist(err)
+          expect(stats.isDirectory()).to.equal(true)
+          done()
+        })
+      })
   })
 
   it('should return application package.json', function (done) {
-    agent(URL + '/apps/myapp').end(function (err, resp, body) {
+    request(URL + '/apps/myapp').end(function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200)
       expect(resp.body).to.be.an('Object')
@@ -49,10 +46,11 @@ describe('Apps', function () {
     })
   })
 
-  // Need to change this test. Still using request instead of superagent
-  it('should upload app from github to repo', function (done) {
+  it('should upload app from github to the dashboard', function (done) {
     this.timeout(20 * s) // this also takes time
-    var req = request.post(URL + '/apps', function (err, resp, body) {
+    request.post(URL + '/apps')
+    .send({ url: GITHUB_REPO })
+    .end(function (err, resp, body) {
       should.not.exist(err)
       expect(resp.statusCode).to.equal(200)
       fs.stat(path.join(APPS_DIR, 'xy-get-started'), function (err, stats) {
@@ -61,12 +59,10 @@ describe('Apps', function () {
         done()
       })
     })
-    var form = req.form()
-    form.append('url', GITHUB_REPO)
   })
 
   it("should return all apps' package.json", function (done) {
-    agent(URL + '/apps').end(function (err, resp, body) {
+    request(URL + '/apps').end(function (err, resp, body) {
       should.not.exist(err)
       resp.statusCode.should.equal(200)
       expect(resp.body).to.be.an('Array')
@@ -75,7 +71,7 @@ describe('Apps', function () {
   })
 
   it("should remove 'myapp' from repository", function (done) {
-    agent.del(URL + '/apps/myapp').end(function (err, resp, body) {
+    request.del(URL + '/apps/myapp').end(function (err, resp, body) {
       should.not.exist(err)
       expect(resp.statusCode).to.equal(204)
       done()
@@ -83,7 +79,7 @@ describe('Apps', function () {
   })
 
   it("should remove 'xy-get-started' from repository", function (done) {
-    agent.del(URL + '/apps/xy-get-started').end(function (err, resp, body) {
+    request.del(URL + '/apps/xy-get-started').end(function (err, resp, body) {
       should.not.exist(err)
       expect(resp.statusCode).to.equal(204)
       done()
@@ -91,7 +87,7 @@ describe('Apps', function () {
   })
 
   it('should return 404 when an app does not exist', function (done) {
-    agent.del(URL + '/apps/tsaebten').end(function (err, resp, body) {
+    request.del(URL + '/apps/tsaebten').end(function (err, resp, body) {
       expect(err.status).to.equal(404)
       expect(resp.statusCode).to.equal(404)
       done()

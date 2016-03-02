@@ -62348,6 +62348,8 @@ var _devicesPod2 = _interopRequireDefault(_devicesPod);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -62366,15 +62368,13 @@ var FilterSVG = function (_React$Component) {
   _createClass(FilterSVG, [{
     key: 'render',
     value: function render() {
-      var _props = this.props;
-      var app = _props.app;
-      var idx = _props.idx;
+      var src = this.props.src;
 
-      var icon = app ? '/api/apps/' + app + '/logo' : '/img/dflt.png';
+      var icon = src === 'default' ? '/img/dflt.png' : '/api/apps/' + src + '/logo';
 
       return _react2.default.createElement(
         'filter',
-        { id: app || 'default', x: '0%', y: '0%', width: '100%', height: '100%' },
+        { id: src, x: '0%', y: '0%', width: '100%', height: '100%' },
         _react2.default.createElement('feImage', { xlinkHref: icon })
       );
     }
@@ -62395,11 +62395,14 @@ var DeviceDot = function (_React$Component2) {
   _createClass(DeviceDot, [{
     key: 'render',
     value: function render() {
-      var _props2 = this.props;
-      var app = _props2.app;
-      var idx = _props2.idx;
+      var _this3 = this;
 
-      var offset = { x: _rndSign() * (Math.random() * 50 + 50), y: _rndSign() * (Math.random() * 50 + 50) };
+      var _props = this.props;
+      var app = _props.app;
+      var idx = _props.idx;
+
+      var offset = _coords(idx);
+
       var style = {
         filter: 'url(#' + (app || 'default') + ')'
       };
@@ -62408,17 +62411,25 @@ var DeviceDot = function (_React$Component2) {
         _reactBootstrap.Popover,
         { id: idx },
         _react2.default.createElement(
-          'strong',
-          null,
-          'Holy guacamole!'
-        ),
-        ' Check this info.'
+          'ul',
+          { className: 'list-unstyled' },
+          Object.keys(this.props).map(function (key, idx) {
+            if (key === 'idx') return null;
+            return _react2.default.createElement(
+              'li',
+              { key: idx, className: 'field' },
+              key,
+              ': ',
+              _this3.props[key]
+            );
+          })
+        )
       );
 
       return _react2.default.createElement(
         _reactBootstrap.OverlayTrigger,
         { trigger: ['click'], placement: 'top', overlay: popover },
-        _react2.default.createElement('circle', { cx: offset.x, cy: offset.y, r: '25', style: style })
+        _react2.default.createElement('circle', { cx: offset.x - 12.5, cy: offset.y - 12.5, r: '25', style: style })
       );
     }
   }]);
@@ -62432,17 +62443,17 @@ var Devices = function (_React$Component3) {
   function Devices() {
     _classCallCheck(this, Devices);
 
-    var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(Devices).call(this));
+    var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(Devices).call(this));
 
-    _this3.mqtt = _mqtt2.default.connect();
-    _this3.state = { devices: _lib.Session.load('devices') || [] };
-    return _this3;
+    _this4.mqtt = _mqtt2.default.connect();
+    _this4.state = { devices: _lib.Session.load('devices') || [] };
+    return _this4;
   }
 
   _createClass(Devices, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.mqtt.subscribe('netbeast/network');
       this.mqtt.on('message', function (topic, message) {
@@ -62450,7 +62461,7 @@ var Devices = function (_React$Component3) {
 
         var devices = JSON.parse(message);
         _lib.Session.save('devices', devices);
-        _this4.setState({ devices: devices });
+        _this5.setState({ devices: devices });
       });
     }
   }, {
@@ -62462,6 +62473,10 @@ var Devices = function (_React$Component3) {
     key: 'render',
     value: function render() {
       var devices = this.state.devices;
+
+      var filters = [].concat(_toConsumableArray(new Set(devices.map(function (data) {
+        return data.app || 'default';
+      }))));
 
       return _react2.default.createElement(
         'span',
@@ -62481,6 +62496,9 @@ var Devices = function (_React$Component3) {
             _react2.default.createElement(
               'g',
               { transform: 'scale(1,-1)' },
+              filters.map(function (src, idx) {
+                return _react2.default.createElement(FilterSVG, { key: src, src: src });
+              }),
               _react2.default.createElement(
                 'filter',
                 { id: 'netbot', x: '0%', y: '0%', width: '100%', height: '100%' },
@@ -62488,7 +62506,7 @@ var Devices = function (_React$Component3) {
               ),
               _react2.default.createElement('circle', { cx: 0, cy: 0, r: '50', style: { filter: 'url(#netbot)' } }),
               devices.map(function (data, idx) {
-                return [_react2.default.createElement(FilterSVG, _extends({ key: 'filter-' + idx }, data, { idx: idx })), _react2.default.createElement(DeviceDot, _extends({ key: idx }, data, { idx: idx }))];
+                return _react2.default.createElement(DeviceDot, _extends({ key: idx }, data, { idx: idx }));
               })
             )
           )
@@ -62501,10 +62519,18 @@ var Devices = function (_React$Component3) {
   return Devices;
 }(_react2.default.Component);
 
-exports.default = Devices;
+// Accepts number of devices "n", return coords {x, y}
 
-function _rndSign() {
-  return Math.random() < 0.5 ? -1 : 1;
+exports.default = Devices;
+function _coords(n) {
+  var r = 160 + Math.floor(n / 6) * 80;
+  var N = 6;
+  var w = Math.floor(n / 6) * 1 / 12;
+
+  return {
+    x: r * Math.cos(2 * Math.PI * (n / N + w)),
+    y: r * Math.sin(2 * Math.PI * (n / N + w))
+  };
 }
 
 },{"../lib":564,"./devices-pod.jsx":565,"./version-pod.jsx":567,"mqtt":36,"react":551,"react-bootstrap":162}],567:[function(require,module,exports){

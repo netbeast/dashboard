@@ -26,6 +26,8 @@ Thumbs.db
 ###################
 # .env is added on purpose
 
+public/dist/js
+public/dist/css
 
 .log
 .sass-cache/

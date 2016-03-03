@@ -9,7 +9,7 @@ import Drawer from './apps/drawer.jsx'
 import AppLiveView from './apps/live.jsx'
 import InstallView from './apps/install.jsx'
 import Explore from './apps/explore.jsx'
-import Devices from './misc/devices.jsx'
+import Devices from './devices/index.jsx'
 
 import Dashboard from './dashboard.jsx'
 

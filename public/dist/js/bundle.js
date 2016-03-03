@@ -61625,7 +61625,7 @@ var Drawer = function (_React$Component2) {
 
 exports.default = Drawer;
 
-},{"../lib":565,"../misc/devices-pod.jsx":566,"../misc/version-pod.jsx":568,"./app.jsx":556,"react":551,"react-router":365,"superagent-bluebird-promise":552}],558:[function(require,module,exports){
+},{"../lib":569,"../misc/devices-pod.jsx":570,"../misc/version-pod.jsx":571,"./app.jsx":556,"react":551,"react-router":365,"superagent-bluebird-promise":552}],558:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -61886,7 +61886,7 @@ var Explore = function (_React$Component) {
 
 exports.default = Explore;
 
-},{"../misc/devices-pod.jsx":566,"../misc/version-pod.jsx":568,"./explorable-app.jsx":558,"react":551,"superagent-bluebird-promise":552}],560:[function(require,module,exports){
+},{"../misc/devices-pod.jsx":570,"../misc/version-pod.jsx":571,"./explorable-app.jsx":558,"react":551,"superagent-bluebird-promise":552}],560:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62016,7 +62016,7 @@ var InstallView = function (_React$Component) {
 
 exports.default = InstallView;
 
-},{"../misc/devices-pod.jsx":566,"../misc/version-pod.jsx":568,"react":551,"react-dropzone":336,"superagent-bluebird-promise":552}],561:[function(require,module,exports){
+},{"../misc/devices-pod.jsx":570,"../misc/version-pod.jsx":571,"react":551,"react-dropzone":336,"superagent-bluebird-promise":552}],561:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62147,7 +62147,410 @@ Dashboard.propTypes = {
   children: _react2.default.PropTypes.element
 };
 
-},{"./launcher.jsx":564,"./notifications":570,"react":551}],563:[function(require,module,exports){
+},{"./launcher.jsx":568,"./notifications":573,"react":551}],563:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _helper = require('./helper');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DeviceDot = function (_React$Component) {
+  _inherits(DeviceDot, _React$Component);
+
+  function DeviceDot() {
+    _classCallCheck(this, DeviceDot);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(DeviceDot).apply(this, arguments));
+  }
+
+  _createClass(DeviceDot, [{
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _props = this.props;
+      var app = _props.app;
+      var idx = _props.idx;
+
+      var _coords2 = (0, _helper._coords)(idx);
+
+      var x = _coords2.x;
+      var y = _coords2.y;
+
+      var style = {
+        filter: 'url(#' + (app || 'default') + ')'
+      };
+
+      var popover = _react2.default.createElement(
+        _reactBootstrap.Popover,
+        { id: idx },
+        _react2.default.createElement(
+          'ul',
+          { className: 'list-unstyled' },
+          Object.keys(this.props).map(function (key, idx) {
+            if (key === 'idx') return null;
+            return _react2.default.createElement(
+              'li',
+              { key: idx, className: 'field' },
+              key,
+              ': ',
+              _this2.props[key]
+            );
+          })
+        )
+      );
+
+      return _react2.default.createElement(
+        'g',
+        { className: 'device' },
+        _react2.default.createElement('rect', { x: x - 25, y: y - 25, rx: '25', ry: '25', fill: 'none', width: 50, height: 50 }),
+        _react2.default.createElement(
+          _reactBootstrap.OverlayTrigger,
+          { trigger: ['click'], placement: 'top', overlay: popover },
+          _react2.default.createElement('circle', { cx: x, cy: y, r: '25', style: style })
+        )
+      );
+    }
+  }]);
+
+  return DeviceDot;
+}(_react2.default.Component);
+
+exports.default = DeviceDot;
+
+},{"./helper":565,"react":551,"react-bootstrap":162}],564:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FilterSVG = function (_React$Component) {
+  _inherits(FilterSVG, _React$Component);
+
+  function FilterSVG() {
+    _classCallCheck(this, FilterSVG);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(FilterSVG).apply(this, arguments));
+  }
+
+  _createClass(FilterSVG, [{
+    key: 'render',
+    value: function render() {
+      var src = this.props.src;
+
+      var icon = src === 'default' ? '/img/dflt.png' : '/api/apps/' + src + '/logo';
+
+      return _react2.default.createElement(
+        'filter',
+        { id: src, x: '0%', y: '0%', width: '100%', height: '100%' },
+        _react2.default.createElement('feImage', { xlinkHref: icon })
+      );
+    }
+  }]);
+
+  return FilterSVG;
+}(_react2.default.Component);
+
+exports.default = FilterSVG;
+
+},{"react":551}],565:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports._coords = _coords;
+// Accepts number of devices 'n', return coords {x, y}. If array is a truthful value
+// returns [x, y]
+
+function _coords(n, array) {
+  var r = 140 + Math.floor(n / 6) * 80;
+  var N = 6;
+  var w = Math.floor(n / 6) * 1 / 12;
+
+  var result = {
+    x: r * Math.cos(2 * Math.PI * (n / N + w)),
+    y: r * Math.sin(2 * Math.PI * (n / N + w))
+  };
+
+  if (array) return [result.x, result.y];else return result;
+}
+
+},{}],566:[function(require,module,exports){
+'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _mqtt = require('mqtt');
+
+var _mqtt2 = _interopRequireDefault(_mqtt);
+
+var _lib = require('../lib');
+
+var _helper = require('./helper');
+
+var _filterSvg = require('./filter-svg.jsx');
+
+var _filterSvg2 = _interopRequireDefault(_filterSvg);
+
+var _device = require('./device.jsx');
+
+var _device2 = _interopRequireDefault(_device);
+
+var _versionPod = require('../misc/version-pod.jsx');
+
+var _versionPod2 = _interopRequireDefault(_versionPod);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Devices = function (_React$Component) {
+  _inherits(Devices, _React$Component);
+
+  function Devices() {
+    _classCallCheck(this, Devices);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Devices).call(this));
+
+    _this.mqtt = _mqtt2.default.connect();
+    _this.state = { devices: _lib.Session.load('devices') || [], dragging: false, ox: -250, oy: -250 };
+    return _this;
+  }
+
+  _createClass(Devices, [{
+    key: 'onMouseMove',
+    value: function onMouseMove(event) {
+      if (!this.state.dragging) return;
+      var _state = this.state;
+      var rx = _state.rx;
+      var ry = _state.ry;
+      var ox = _state.ox;
+      var oy = _state.oy;
+
+      var _devicesMap$getBoundi = this.devicesMap.getBoundingClientRect();
+
+      var left = _devicesMap$getBoundi.left;
+      var top = _devicesMap$getBoundi.top;
+      var _x$y = {
+        x: (event.pageX || document.body.scrollLeft + document.documentElement.scrollLeft) - left,
+        y: (event.pageY || document.body.scrollTop + document.documentElement.scrollTop) - top
+      };
+      var x = _x$y.x;
+      var y = _x$y.y;
+
+      this.devicesMap.setAttribute('viewBox', rx - x + ox + ' ' + (ry - y + oy) + ' 500 500');
+    }
+  }, {
+    key: 'onMouseDown',
+    value: function onMouseDown(event) {
+      this.setState({ dragging: true });
+
+      var _devicesMap$getBoundi2 = this.devicesMap.getBoundingClientRect();
+
+      var left = _devicesMap$getBoundi2.left;
+      var top = _devicesMap$getBoundi2.top;
+
+      this.setState({
+        rx: (event.pageX || document.body.scrollLeft + document.documentElement.scrollLeft) - left,
+        ry: (event.pageY || document.body.scrollTop + document.documentElement.scrollTop) - top
+      });
+    }
+  }, {
+    key: 'onMouseUp',
+    value: function onMouseUp(event) {
+      this.setState({ dragging: false });
+      var _state2 = this.state;
+      var rx = _state2.rx;
+      var ry = _state2.ry;
+      var ox = _state2.ox;
+      var oy = _state2.oy;
+
+      var _devicesMap$getBoundi3 = this.devicesMap.getBoundingClientRect();
+
+      var left = _devicesMap$getBoundi3.left;
+      var top = _devicesMap$getBoundi3.top;
+      var _x$y2 = {
+        x: (event.pageX || document.body.scrollLeft + document.documentElement.scrollLeft) - left,
+        y: (event.pageY || document.body.scrollTop + document.documentElement.scrollTop) - top
+      };
+      var x = _x$y2.x;
+      var y = _x$y2.y;
+
+      this.setState({ ox: rx - x + ox, oy: ry - y + oy });
+    }
+  }, {
+    key: 'zoom',
+    value: function zoom(amount) {}
+    // TODO
+
+    // Join to the nth element through a path
+
+  }, {
+    key: 'connect',
+    value: function connect(a, b) {
+      var _coords2 = (0, _helper._coords)(a, 'array');
+
+      var _coords3 = _slicedToArray(_coords2, 2);
+
+      var x1 = _coords3[0];
+      var y1 = _coords3[1];
+
+      var _coords4 = (0, _helper._coords)(b, 'array');
+
+      var _coords5 = _slicedToArray(_coords4, 2);
+
+      var x2 = _coords5[0];
+      var y2 = _coords5[1];
+
+      return _react2.default.createElement('line', { className: 'connection', key: a + '-' + b, x1: x1, y1: y1, x2: x2 || 0, y2: y2 || 0,
+        strokeDasharray: '4, 4', stroke: 'white', strokeWidth: 0.2 });
+    }
+  }, {
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      var _this2 = this;
+
+      this.mqtt.subscribe('netbeast/network');
+      this.mqtt.on('message', function (topic, message) {
+        if (topic !== 'netbeast/network') return;
+
+        var devices = JSON.parse(message);
+        _lib.Session.save('devices', devices);
+        _this2.setState({ devices: devices });
+      });
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.mqtt.unsubscribe('netbeast/network');
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this3 = this;
+
+      var _state3 = this.state;
+      var devices = _state3.devices;
+      var ox = _state3.ox;
+      var oy = _state3.oy;
+
+      var filters = [].concat(_toConsumableArray(new Set(devices.map(function (data) {
+        return data.app || 'default';
+      }))));
+
+      return _react2.default.createElement(
+        'span',
+        null,
+        _react2.default.createElement(
+          'div',
+          { className: 'devices-view' },
+          _react2.default.createElement(
+            'svg',
+            { className: 'devices-map grabbable', ref: function ref(_ref) {
+                return _this3.devicesMap = _ref;
+              },
+              viewBox: ox + ' ' + oy + ' 500 500', onMouseMove: this.onMouseMove.bind(this),
+              onMouseDown: this.onMouseDown.bind(this), onMouseUp: this.onMouseUp.bind(this) },
+            _react2.default.createElement(
+              'g',
+              { transform: 'scale(1,-1)' },
+              _react2.default.createElement(
+                'filter',
+                { id: 'dropshadow', height: '130%', 'with': '130%' },
+                _react2.default.createElement('feGaussianBlur', { 'in': 'SourceAlpha', stdDeviation: '1' }),
+                _react2.default.createElement('feOffset', { dx: '0', dy: '0', result: 'offsetblur' }),
+                _react2.default.createElement(
+                  'feMerge',
+                  null,
+                  _react2.default.createElement('feMergeNode', null),
+                  _react2.default.createElement('feMergeNode', { 'in': 'SourceGraphic' })
+                )
+              ),
+              filters.map(function (src, idx) {
+                return _react2.default.createElement(_filterSvg2.default, { key: src, src: src });
+              }),
+              devices.map(function (src, idx) {
+                return _this3.connect(idx);
+              }),
+              _react2.default.createElement(
+                'filter',
+                { id: 'netbot', x: '0%', y: '0%', width: '100%', height: '100%' },
+                _react2.default.createElement('feImage', { xlinkHref: '/img/netbot.png' })
+              ),
+              _react2.default.createElement('circle', { cx: 0, cy: 0, r: '50', style: { filter: 'url(#netbot)' } }),
+              devices.map(function (data, idx) {
+                return _react2.default.createElement(_device2.default, _extends({ key: idx }, data, { idx: idx }));
+              })
+            )
+          )
+        ),
+        _react2.default.createElement(_versionPod2.default, null)
+      );
+    }
+  }]);
+
+  return Devices;
+}(_react2.default.Component);
+
+// Refs
+//
+// http://stackoverflow.com/questions/6088409/svg-drop-shadow-using-css3
+
+exports.default = Devices;
+
+},{"../lib":569,"../misc/version-pod.jsx":571,"./device.jsx":563,"./filter-svg.jsx":564,"./helper":565,"mqtt":36,"react":551}],567:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -62184,9 +62587,9 @@ var _explore = require('./apps/explore.jsx');
 
 var _explore2 = _interopRequireDefault(_explore);
 
-var _devices = require('./misc/devices.jsx');
+var _index = require('./devices/index.jsx');
 
-var _devices2 = _interopRequireDefault(_devices);
+var _index2 = _interopRequireDefault(_index);
 
 var _dashboard = require('./dashboard.jsx');
 
@@ -62208,13 +62611,13 @@ _reactDom2.default.render(_react2.default.createElement(
     _react2.default.createElement(_reactRouter.Route, { path: 'explore', component: _explore2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'install', component: _install2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: _settings2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'devices', component: _devices2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'devices', component: _index2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'i/:appName', component: _live2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: '*', component: _notFound2.default })
   )
 ), document.getElementById('app'));
 
-},{"./apps/drawer.jsx":557,"./apps/explore.jsx":559,"./apps/install.jsx":560,"./apps/live.jsx":561,"./dashboard.jsx":562,"./misc/devices.jsx":567,"./not-found.jsx":569,"./settings.jsx":572,"react":551,"react-dom":335,"react-router":365}],564:[function(require,module,exports){
+},{"./apps/drawer.jsx":557,"./apps/explore.jsx":559,"./apps/install.jsx":560,"./apps/live.jsx":561,"./dashboard.jsx":562,"./devices/index.jsx":566,"./not-found.jsx":572,"./settings.jsx":575,"react":551,"react-dom":335,"react-router":365}],568:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62352,7 +62755,7 @@ var Launcher = function (_React$Component) {
 
 exports.default = Launcher;
 
-},{"react":551,"react-router":365}],565:[function(require,module,exports){
+},{"react":551,"react-router":365}],569:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62403,7 +62806,7 @@ var API = exports.API = function () {
 
 exports.default = { Session: Session, API: API };
 
-},{}],566:[function(require,module,exports){
+},{}],570:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62481,225 +62884,7 @@ var DevicesPod = function (_React$Component) {
 
 exports.default = DevicesPod;
 
-},{"../lib":565,"mqtt":36,"react":551}],567:[function(require,module,exports){
-'use strict';
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _mqtt = require('mqtt');
-
-var _mqtt2 = _interopRequireDefault(_mqtt);
-
-var _reactBootstrap = require('react-bootstrap');
-
-var _lib = require('../lib');
-
-var _versionPod = require('./version-pod.jsx');
-
-var _versionPod2 = _interopRequireDefault(_versionPod);
-
-var _devicesPod = require('./devices-pod.jsx');
-
-var _devicesPod2 = _interopRequireDefault(_devicesPod);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var FilterSVG = function (_React$Component) {
-  _inherits(FilterSVG, _React$Component);
-
-  function FilterSVG() {
-    _classCallCheck(this, FilterSVG);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(FilterSVG).apply(this, arguments));
-  }
-
-  _createClass(FilterSVG, [{
-    key: 'render',
-    value: function render() {
-      var src = this.props.src;
-
-      var icon = src === 'default' ? '/img/dflt.png' : '/api/apps/' + src + '/logo';
-
-      return _react2.default.createElement(
-        'filter',
-        { id: src, x: '0%', y: '0%', width: '100%', height: '100%' },
-        _react2.default.createElement('feImage', { xlinkHref: icon })
-      );
-    }
-  }]);
-
-  return FilterSVG;
-}(_react2.default.Component);
-
-var DeviceDot = function (_React$Component2) {
-  _inherits(DeviceDot, _React$Component2);
-
-  function DeviceDot() {
-    _classCallCheck(this, DeviceDot);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(DeviceDot).apply(this, arguments));
-  }
-
-  _createClass(DeviceDot, [{
-    key: 'render',
-    value: function render() {
-      var _this3 = this;
-
-      var _props = this.props;
-      var app = _props.app;
-      var idx = _props.idx;
-
-      var offset = _coords(idx);
-
-      var style = {
-        filter: 'url(#' + (app || 'default') + ')'
-      };
-
-      var popover = _react2.default.createElement(
-        _reactBootstrap.Popover,
-        { id: idx },
-        _react2.default.createElement(
-          'ul',
-          { className: 'list-unstyled' },
-          Object.keys(this.props).map(function (key, idx) {
-            if (key === 'idx') return null;
-            return _react2.default.createElement(
-              'li',
-              { key: idx, className: 'field' },
-              key,
-              ': ',
-              _this3.props[key]
-            );
-          })
-        )
-      );
-
-      return _react2.default.createElement(
-        _reactBootstrap.OverlayTrigger,
-        { trigger: ['click'], placement: 'top', overlay: popover },
-        _react2.default.createElement('circle', { cx: offset.x - 12.5, cy: offset.y - 12.5, r: '25', style: style })
-      );
-    }
-  }]);
-
-  return DeviceDot;
-}(_react2.default.Component);
-
-var Devices = function (_React$Component3) {
-  _inherits(Devices, _React$Component3);
-
-  function Devices() {
-    _classCallCheck(this, Devices);
-
-    var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(Devices).call(this));
-
-    _this4.mqtt = _mqtt2.default.connect();
-    _this4.state = { devices: _lib.Session.load('devices') || [] };
-    return _this4;
-  }
-
-  _createClass(Devices, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      var _this5 = this;
-
-      this.mqtt.subscribe('netbeast/network');
-      this.mqtt.on('message', function (topic, message) {
-        if (topic !== 'netbeast/network') return;
-
-        var devices = JSON.parse(message);
-        _lib.Session.save('devices', devices);
-        _this5.setState({ devices: devices });
-      });
-    }
-  }, {
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
-      this.mqtt.unsubscribe('netbeast/network');
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var devices = this.state.devices;
-
-      var filters = [].concat(_toConsumableArray(new Set(devices.map(function (data) {
-        return data.app || 'default';
-      }))));
-
-      return _react2.default.createElement(
-        'span',
-        null,
-        _react2.default.createElement(
-          'div',
-          { className: 'devices-list' },
-          _react2.default.createElement(
-            'h1',
-            null,
-            devices.length,
-            ' devices connected'
-          ),
-          _react2.default.createElement(
-            'svg',
-            { height: '500', width: '500', viewBox: '-250 -250 500 500' },
-            _react2.default.createElement(
-              'g',
-              { transform: 'scale(1,-1)' },
-              filters.map(function (src, idx) {
-                return _react2.default.createElement(FilterSVG, { key: src, src: src });
-              }),
-              _react2.default.createElement(
-                'filter',
-                { id: 'netbot', x: '0%', y: '0%', width: '100%', height: '100%' },
-                _react2.default.createElement('feImage', { xlinkHref: '/img/netbot.png' })
-              ),
-              _react2.default.createElement('circle', { cx: 0, cy: 0, r: '50', style: { filter: 'url(#netbot)' } }),
-              devices.map(function (data, idx) {
-                return _react2.default.createElement(DeviceDot, _extends({ key: idx }, data, { idx: idx }));
-              })
-            )
-          )
-        ),
-        _react2.default.createElement(_versionPod2.default, null)
-      );
-    }
-  }]);
-
-  return Devices;
-}(_react2.default.Component);
-
-// Accepts number of devices "n", return coords {x, y}
-
-exports.default = Devices;
-function _coords(n) {
-  var r = 160 + Math.floor(n / 6) * 80;
-  var N = 6;
-  var w = Math.floor(n / 6) * 1 / 12;
-
-  return {
-    x: r * Math.cos(2 * Math.PI * (n / N + w)),
-    y: r * Math.sin(2 * Math.PI * (n / N + w))
-  };
-}
-
-},{"../lib":565,"./devices-pod.jsx":566,"./version-pod.jsx":568,"mqtt":36,"react":551,"react-bootstrap":162}],568:[function(require,module,exports){
+},{"../lib":569,"mqtt":36,"react":551}],571:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62747,7 +62932,7 @@ var VersionPod = function (_React$Component) {
 
 exports.default = VersionPod;
 
-},{"react":551}],569:[function(require,module,exports){
+},{"react":551}],572:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62804,7 +62989,7 @@ var NotFound = function (_React$Component) {
 
 exports.default = NotFound;
 
-},{"react":551,"react-router":365}],570:[function(require,module,exports){
+},{"react":551,"react-router":365}],573:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -62932,7 +63117,7 @@ var Notifications = function (_React$Component) {
 
 exports.default = Notifications;
 
-},{"./toast.jsx":571,"mqtt":36,"react":551}],571:[function(require,module,exports){
+},{"./toast.jsx":574,"mqtt":36,"react":551}],574:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63012,7 +63197,7 @@ var Toast = function (_React$Component) {
 
 exports.default = Toast;
 
-},{"react":551}],572:[function(require,module,exports){
+},{"react":551}],575:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63113,7 +63298,7 @@ var Settings = function (_React$Component) {
 
 exports.default = Settings;
 
-},{"react":551,"react-router":365}]},{},[563])
+},{"react":551,"react-router":365}]},{},[567])
 
 
 //# sourceMappingURL=bundle.js.map

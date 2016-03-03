@@ -13,7 +13,7 @@ This is a web panel from you can install, manage or publish IoT applications. Fo
 
 ## Try it locally
 Find it live at `http://localhost`
-![Dashboard live GIF](public/img/general_demo.gif)
+![Dashboard live GIF](public/img/dashboard-demo.gif)
 
 ### Install
 ``` bash

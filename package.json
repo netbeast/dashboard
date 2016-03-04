@@ -16,7 +16,6 @@
     "didyoumean": "^1.2.1",
     "dotenv": "^1.2.0",
     "express": "^4.12.3",
-    "forever-monitor": "^1.7.0",
     "freeport": "^1.0.5",
     "fs-extra": "^0.26.0",
     "gift": "^0.6.1",

@@ -33,7 +33,7 @@ router.route('/resources')
 
     Resource.create(req.body, function (err, item) {
       if (err) return next(err)
-      return res.status(204).end()
+      return res.json(item)
     })
   })
 })

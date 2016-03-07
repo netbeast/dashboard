@@ -6,7 +6,7 @@ var helper = {}
 
 helper.createTable = function (callback) {
   db.run('CREATE TABLE IF NOT EXISTS scenes(' +
-  'id INTEGER NOT NULL, ' +
+  'id TEXT NOT NULL, ' +
   'sceneid TEXT NOT NULL, ' +
   'location TEXT, ' +
   'state TEXT NOT NULL, ' +

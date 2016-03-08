@@ -61922,13 +61922,18 @@ var ExplorableApp = function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      var GITHUB_Q = 'https://raw.githubusercontent.com/' + this.props.full_name + '/master/package.json';
+      var GITHUB_ROOT = 'https://raw.githubusercontent.com/' + this.props.full_name + '/master/';
+      var GITHUB_Q = GITHUB_ROOT + 'package.json';
 
       _superagentBluebirdPromise2.default.get(GITHUB_Q).end(function (err, res) {
         if (err) return _this2.setState({ hidden: true });
 
-        var packageJson = JSON.parse(res.text);
-        _this2.setState({ netbeast: packageJson.netbeast, logo: packageJson.logo });
+        var _JSON$parse = JSON.parse(res.text);
+
+        var netbeast = _JSON$parse.netbeast;
+        var logo = _JSON$parse.logo;
+
+        _this2.setState({ netbeast: netbeast, logo: logo ? GITHUB_ROOT + logo : null });
       });
     }
   }, {
@@ -61993,7 +61998,7 @@ var ExplorableApp = function (_React$Component) {
 
       var isPlugin = netbeast && netbeast.type === 'plugin';
       var defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)';
-      var logoStyle = { backgroundImage: logo ? 'url(/api/apps/' + name + '/logo)' : defaultLogo };
+      var logoStyle = { backgroundImage: logo ? 'url(' + logo + ')' : defaultLogo };
 
       return _react2.default.createElement(
         'div',
@@ -62614,7 +62619,7 @@ var Devices = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Devices).call(this));
 
     _this.mqtt = _mqtt2.default.connect();
-    _this.state = { devices: _lib.Session.load('devices') || [], dragging: false, ox: -250, oy: -250 };
+    _this.state = { devices: _lib.Session.load('devices') || [], dragging: false, ox: -400, oy: -200 };
     return _this;
   }
 
@@ -62639,7 +62644,7 @@ var Devices = function (_React$Component) {
       var x = _x$y.x;
       var y = _x$y.y;
 
-      this.devicesMap.setAttribute('viewBox', rx - x + ox + ' ' + (ry - y + oy) + ' 500 500');
+      this.devicesMap.setAttribute('viewBox', rx - x + ox + ' ' + (ry - y + oy) + ' 800 800');
     }
   }, {
     key: 'onMouseDown',
@@ -62750,27 +62755,23 @@ var Devices = function (_React$Component) {
             { className: 'devices-map grabbable', ref: function ref(_ref) {
                 return _this3.devicesMap = _ref;
               },
-              viewBox: ox + ' ' + oy + ' 500 500', onMouseMove: this.onMouseMove.bind(this),
+              viewBox: ox + ' ' + oy + ' 800 800', onMouseMove: this.onMouseMove.bind(this),
               onMouseDown: this.onMouseDown.bind(this), onMouseUp: this.onMouseUp.bind(this) },
+            filters.map(function (src, idx) {
+              return _react2.default.createElement(_filterSvg2.default, { key: src, src: src });
+            }),
+            devices.map(function (src, idx) {
+              return _this3.connect(idx);
+            }),
             _react2.default.createElement(
-              'g',
-              { transform: 'scale(1,-1)' },
-              filters.map(function (src, idx) {
-                return _react2.default.createElement(_filterSvg2.default, { key: src, src: src });
-              }),
-              devices.map(function (src, idx) {
-                return _this3.connect(idx);
-              }),
-              _react2.default.createElement(
-                'filter',
-                { id: 'netbot', x: '0%', y: '0%', width: '100%', height: '100%' },
-                _react2.default.createElement('feImage', { xlinkHref: '/img/netbot.png' })
-              ),
-              _react2.default.createElement('circle', { cx: 0, cy: 0, r: '50', style: { filter: 'url(#netbot)' } }),
-              devices.map(function (data, idx) {
-                return _react2.default.createElement(_device2.default, _extends({ key: idx }, data, { idx: idx }));
-              })
-            )
+              'filter',
+              { id: 'netbot', x: '0%', y: '0%', width: '100%', height: '100%' },
+              _react2.default.createElement('feImage', { xlinkHref: '/img/netbot.png' })
+            ),
+            _react2.default.createElement('circle', { cx: 0, cy: 0, r: '50', style: { filter: 'url(#netbot)' } }),
+            devices.map(function (data, idx) {
+              return _react2.default.createElement(_device2.default, _extends({ key: idx }, data, { idx: idx }));
+            })
           )
         ),
         _react2.default.createElement(_versionPod2.default, null)

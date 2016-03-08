@@ -10,13 +10,14 @@ export default class ExplorableApp extends React.Component {
   }
 
   componentDidMount () {
-    const GITHUB_Q = 'https://raw.githubusercontent.com/' + this.props.full_name + '/master/package.json'
+    const GITHUB_ROOT = 'https://raw.githubusercontent.com/' + this.props.full_name + '/master/'
+    const GITHUB_Q = GITHUB_ROOT + 'package.json'
 
     request.get(GITHUB_Q).end((err, res) => {
       if (err) return this.setState({ hidden: true })
 
-      const packageJson = JSON.parse(res.text)
-      this.setState({ netbeast: packageJson.netbeast, logo: packageJson.logo })
+      const { netbeast, logo } = JSON.parse(res.text)
+      this.setState({ netbeast, logo: logo ? GITHUB_ROOT + logo : null })
     })
   }
 
@@ -62,7 +63,7 @@ export default class ExplorableApp extends React.Component {
     const { netbeast, logo } = this.state
     const isPlugin = netbeast && (netbeast.type === 'plugin')
     const defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)'
-    const logoStyle = { backgroundImage: logo ? `url(/api/apps/${name}/logo)` : defaultLogo }
+    const logoStyle = { backgroundImage: logo ? `url(${logo})`  : defaultLogo }
 
     return (
       <div className='app'>

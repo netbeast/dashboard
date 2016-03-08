@@ -41,7 +41,7 @@ gulp.task('watchify', function () {
     })
     ).transform('babelify', { presets: ['es2015', 'react'] })
 
-  bundler.on('update', () => { compile(bundler) })
+  bundler.on('update', function () { compile(bundler) })
   return compile(bundler)
 })
 

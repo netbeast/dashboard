@@ -1,4 +1,5 @@
 var sqlite3 = require('sqlite3').verbose()
+var crypto = require('crypto')
 
 var db = new sqlite3.Database(process.env.DATABASE_URI)
 
@@ -6,7 +7,7 @@ var helper = module.exports = {}
 
 helper.createTable = function (done) {
   db.run('CREATE TABLE IF NOT EXISTS resources(' +
-  'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+  'id TEXT PRIMARY KEY NOT NULL, ' +
   'app TEXT NOT NULL, ' +
   'location TEXT, ' +
   'topic TEXT NOT NULL, ' +
@@ -16,11 +17,12 @@ helper.createTable = function (done) {
 }
 
 helper.insertAction = function (query, done) {
+  var id = crypto.createHash('sha1').update(query.app + query.hook).digest('hex')
   var statement = db.prepare('INSERT INTO resources (' +
-  "'app', 'location', 'topic', 'groupname', 'hook') " +
-  'VALUES (?,?,?,?,?)')
+  "'id', 'app', 'location', 'topic', 'groupname', 'hook') " +
+  'VALUES (?,?,?,?,?,?)')
   statement
-  .run(query.app, query.location, query.topic, query.groupname, query.hook, done)
+  .run(id, query.app, query.location, query.topic, query.groupname, query.hook, done)
   statement.finalize()
 }
 

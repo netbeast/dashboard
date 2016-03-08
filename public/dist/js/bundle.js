@@ -62426,16 +62426,16 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var DeviceDot = function (_React$Component) {
-  _inherits(DeviceDot, _React$Component);
+var Device = function (_React$Component) {
+  _inherits(Device, _React$Component);
 
-  function DeviceDot() {
-    _classCallCheck(this, DeviceDot);
+  function Device() {
+    _classCallCheck(this, Device);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(DeviceDot).apply(this, arguments));
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Device).apply(this, arguments));
   }
 
-  _createClass(DeviceDot, [{
+  _createClass(Device, [{
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -62485,10 +62485,10 @@ var DeviceDot = function (_React$Component) {
     }
   }]);
 
-  return DeviceDot;
+  return Device;
 }(_react2.default.Component);
 
-exports.default = DeviceDot;
+exports.default = Device;
 
 },{"./helper":566,"react":551,"react-bootstrap":162}],565:[function(require,module,exports){
 'use strict';
@@ -62525,7 +62525,7 @@ var FilterSVG = function (_React$Component) {
     value: function render() {
       var src = this.props.src;
 
-      var icon = src === 'default' ? '/img/dflt.png' : '/api/apps/' + src + '/logo';
+      var icon = src === 'default' ? '/img/device.png' : '/api/apps/' + src + '/logo';
 
       return _react2.default.createElement(
         'filter',

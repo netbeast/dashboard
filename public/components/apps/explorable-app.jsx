@@ -63,7 +63,7 @@ export default class ExplorableApp extends React.Component {
     const { netbeast, logo } = this.state
     const isPlugin = netbeast && (netbeast.type === 'plugin')
     const defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)'
-    const logoStyle = { backgroundImage: logo ? `url(${logo})`  : defaultLogo }
+    const logoStyle = { backgroundImage: logo ? `url(${logo})` : defaultLogo }
 
     return (
       <div className='app'>

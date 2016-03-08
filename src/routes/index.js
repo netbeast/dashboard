@@ -12,10 +12,11 @@ router.use(function (req, res, next) {
 router.use(require('./apps'))
 router.use(require('./users'))
 router.use(require('./misc'))
+router.use(require('./plugins'))
+router.use(require('./topics'))
 router.use(require('./activities'))
 // API routes
 router.use(require('./resources'))
 router.use(require('./scene'))
-router.use(require('./plugins'))
 
 module.exports = router

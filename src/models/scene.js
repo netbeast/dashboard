@@ -8,11 +8,8 @@ helper.createTable(function (err, data) {
 function Scene (item) {
   this.id = item.id
   this.sceneid = item.sceneid
-  this.location = item.location || 'none'
-  this.power = item.power
-  this.brightness = item.brightness
-  this.hue = item.hue
-  this.saturation = item.saturation
+  this.location = item.location
+  this.state = item.state
 }
 
 Scene.create = function (item, done) {
@@ -40,7 +37,7 @@ Scene.find = function (query, done) {
 }
 
 Scene.findOne = function (query, done) {
-  helper.findDevice(query, function (err, row) {
+  helper.findDevice({id: query.id, sceneid: query.sceneid}, function (err, row) {
     if (err) done(err)
     else if (!row.length) done(new ApiError(404, 'Resource not found DB'))
     else done(null, new Scene(row[row.length - 1]))
@@ -53,15 +50,12 @@ Scene.prototype.save = function (done) {
     id: this.id,
     sceneid: this.sceneid,
     location: this.location,
-    power: this.power,
-    brightness: this.brightness,
-    hue: this.hue,
-    saturation: this.saturation
+    state: this.state
   }
   helper.insertDevice(schema,	function (err) {
     if (err) return done(err)
 
-    return Scene.findOne({id: self.id}, done)
+    return Scene.findOne({id: self.id, sceneid: self.sceneid}, done)
   })
 }
 

@@ -8,8 +8,6 @@ router.get('/scenes', function (req, res, next) {
   Scene.find(req.query, function (err, devices) {
     if (err && err.statusCode !== 404) return next(err)
     res.json(devices)
-
-    // MANDAR NOT FOUND Y SACARLO DEL MODELO.
   })
 })
 

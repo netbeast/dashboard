@@ -57,6 +57,7 @@ router.use(function (req, res, next) {
   // This block of code actually pipes the request
   // to the running app and pass it to the client
   var proxyUrl = req.protocol + '://localhost:' + app.port
+  console.log('[proxy -> %s%s]', proxyUrl, pathname)
 
   req.url = pathname
 

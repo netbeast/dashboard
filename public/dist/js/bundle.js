@@ -61793,14 +61793,15 @@ var Drawer = function (_React$Component3) {
         ),
         _react2.default.createElement(
           'ul',
-          { className: 'list-unstyled list-inline pull-left' },
+          { className: 'list-unstyled list-inline' },
           _react2.default.createElement(
             'li',
             null,
             _react2.default.createElement(
               _reactRouter.Link,
               { to: '/' },
-              'Apps'
+              _react2.default.createElement('i', { className: 'glyphicon glyphicon-th' }),
+              ' Apps'
             )
           ),
           _react2.default.createElement(
@@ -61809,13 +61810,14 @@ var Drawer = function (_React$Component3) {
             _react2.default.createElement(
               _reactRouter.Link,
               { to: '/plugins' },
-              'Plugins'
+              _react2.default.createElement(
+                'i',
+                { className: 'glyphicon glyphicon-package' },
+                _react2.default.createElement('img', { src: '/img/plugin.png' })
+              ),
+              ' Plugins'
             )
-          )
-        ),
-        _react2.default.createElement(
-          'ul',
-          { className: 'list-unstyled list-inline pull-right' },
+          ),
           _react2.default.createElement(
             'li',
             null,
@@ -61922,13 +61924,18 @@ var ExplorableApp = function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      var GITHUB_Q = 'https://raw.githubusercontent.com/' + this.props.full_name + '/master/package.json';
+      var GITHUB_ROOT = 'https://raw.githubusercontent.com/' + this.props.full_name + '/master/';
+      var GITHUB_Q = GITHUB_ROOT + 'package.json';
 
       _superagentBluebirdPromise2.default.get(GITHUB_Q).end(function (err, res) {
         if (err) return _this2.setState({ hidden: true });
 
-        var packageJson = JSON.parse(res.text);
-        _this2.setState({ netbeast: packageJson.netbeast, logo: packageJson.logo });
+        var _JSON$parse = JSON.parse(res.text);
+
+        var netbeast = _JSON$parse.netbeast;
+        var logo = _JSON$parse.logo;
+
+        _this2.setState({ netbeast: netbeast, logo: logo ? GITHUB_ROOT + logo : null });
       });
     }
   }, {
@@ -61973,7 +61980,11 @@ var ExplorableApp = function (_React$Component) {
       var installed = _props.installed;
       var name = _props.name;
 
-      return installed ? null : _react2.default.createElement(
+      return installed ? _react2.default.createElement(
+        'a',
+        { href: 'javascript:void(0)', onClick: this.launch.bind(this), className: 'install btn btn-filled btn-primary' },
+        ' Launch '
+      ) : _react2.default.createElement(
         'a',
         { href: 'javascript:void(0)', onClick: this.install.bind(this), className: 'install btn btn-filled btn-info' },
         ' Install '
@@ -61993,7 +62004,7 @@ var ExplorableApp = function (_React$Component) {
 
       var isPlugin = netbeast && netbeast.type === 'plugin';
       var defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)';
-      var logoStyle = { backgroundImage: logo ? 'url(/api/apps/' + name + '/logo)' : defaultLogo };
+      var logoStyle = { backgroundImage: logo ? 'url(' + logo + ')' : defaultLogo };
 
       return _react2.default.createElement(
         'div',
@@ -62036,6 +62047,8 @@ var _superagentBluebirdPromise2 = _interopRequireDefault(_superagentBluebirdProm
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
 
 var _versionPod = require('../misc/version-pod.jsx');
 
@@ -62103,6 +62116,87 @@ var Explore = function (_React$Component) {
       return index >= 0;
     }
   }, {
+    key: 'renderNav',
+    value: function renderNav() {
+      return _react2.default.createElement(
+        'div',
+        { className: 'nav' },
+        _react2.default.createElement(
+          'span',
+          { className: 'title' },
+          _react2.default.createElement(
+            'h4',
+            null,
+            'All available apps.'
+          )
+        ),
+        _react2.default.createElement(
+          'ul',
+          { className: 'list-unstyled list-inline' },
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/' },
+              _react2.default.createElement('i', { className: 'glyphicon glyphicon-th' }),
+              ' Apps'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/plugins' },
+              _react2.default.createElement(
+                'i',
+                { className: 'glyphicon glyphicon-package' },
+                _react2.default.createElement('img', { src: '/img/plugin.png' })
+              ),
+              ' Plugins'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/activities' },
+              _react2.default.createElement('i', { className: 'glyphicon glyphicon-dashboard' }),
+              ' Activities'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/install' },
+              ' ',
+              _react2.default.createElement(
+                'i',
+                { className: 'glyphicon glyphicon-package' },
+                _react2.default.createElement('img', { src: '/img/package-unfilled.png' })
+              ),
+              ' Install'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/remove' },
+              ' ',
+              _react2.default.createElement('i', { className: 'glyphicon glyphicon-trash' }),
+              ' Remove'
+            )
+          )
+        )
+      );
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this3 = this;
@@ -62112,15 +62206,7 @@ var Explore = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         { className: 'drawer' },
-        _react2.default.createElement(
-          'div',
-          { className: 'title' },
-          _react2.default.createElement(
-            'h1',
-            null,
-            'Explore all available apps.'
-          )
-        ),
+        this.renderNav(),
         _react2.default.createElement(
           'div',
           { className: 'apps-list' },
@@ -62140,7 +62226,7 @@ var Explore = function (_React$Component) {
 
 exports.default = Explore;
 
-},{"../misc/devices-pod.jsx":571,"../misc/version-pod.jsx":572,"./explorable-app.jsx":559,"react":551,"superagent-bluebird-promise":552}],561:[function(require,module,exports){
+},{"../misc/devices-pod.jsx":571,"../misc/version-pod.jsx":572,"./explorable-app.jsx":559,"react":551,"react-router":365,"superagent-bluebird-promise":552}],561:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62160,6 +62246,8 @@ var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
 var _superagentBluebirdPromise = require('superagent-bluebird-promise');
 
 var _superagentBluebirdPromise2 = _interopRequireDefault(_superagentBluebirdPromise);
+
+var _reactRouter = require('react-router');
 
 var _versionPod = require('../misc/version-pod.jsx');
 
@@ -62228,6 +62316,87 @@ var InstallView = function (_React$Component) {
         'div',
         { className: 'app-install' },
         _react2.default.createElement(
+          'span',
+          { className: 'drawer' },
+          _react2.default.createElement(
+            'div',
+            { className: 'nav' },
+            _react2.default.createElement(
+              'span',
+              { className: 'title' },
+              _react2.default.createElement(
+                'h4',
+                null,
+                'Install an app.'
+              )
+            ),
+            _react2.default.createElement(
+              'ul',
+              { className: 'list-unstyled list-inline' },
+              _react2.default.createElement(
+                'li',
+                null,
+                _react2.default.createElement(
+                  _reactRouter.Link,
+                  { to: '/' },
+                  _react2.default.createElement('i', { className: 'glyphicon glyphicon-th' }),
+                  ' Apps'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                null,
+                _react2.default.createElement(
+                  _reactRouter.Link,
+                  { to: '/plugins' },
+                  _react2.default.createElement(
+                    'i',
+                    { className: 'glyphicon glyphicon-package' },
+                    _react2.default.createElement('img', { src: '/img/plugin.png' })
+                  ),
+                  ' Plugins'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                null,
+                _react2.default.createElement(
+                  _reactRouter.Link,
+                  { to: '/activities' },
+                  _react2.default.createElement('i', { className: 'glyphicon glyphicon-dashboard' }),
+                  ' Activities'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                null,
+                _react2.default.createElement(
+                  _reactRouter.Link,
+                  { to: '/install' },
+                  ' ',
+                  _react2.default.createElement(
+                    'i',
+                    { className: 'glyphicon glyphicon-package' },
+                    _react2.default.createElement('img', { src: '/img/package-unfilled.png' })
+                  ),
+                  ' Install'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                null,
+                _react2.default.createElement(
+                  _reactRouter.Link,
+                  { to: '/remove' },
+                  ' ',
+                  _react2.default.createElement('i', { className: 'glyphicon glyphicon-trash' }),
+                  ' Remove'
+                )
+              )
+            )
+          )
+        ),
+        _react2.default.createElement(
           _reactDropzone2.default,
           { onDrop: this.handleDrop.bind(this), className: 'preview', activeClassName: 'preview active', multiple: false },
           _react2.default.createElement(
@@ -62270,7 +62439,7 @@ var InstallView = function (_React$Component) {
 
 exports.default = InstallView;
 
-},{"../misc/devices-pod.jsx":571,"../misc/version-pod.jsx":572,"react":551,"react-dropzone":336,"superagent-bluebird-promise":552}],562:[function(require,module,exports){
+},{"../misc/devices-pod.jsx":571,"../misc/version-pod.jsx":572,"react":551,"react-dropzone":336,"react-router":365,"superagent-bluebird-promise":552}],562:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62282,6 +62451,8 @@ Object.defineProperty(exports, "__esModule", {
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -62305,7 +62476,20 @@ var AppLiveView = function (_React$Component) {
     value: function render() {
       var appName = this.props.params.appName;
 
-      return _react2.default.createElement('iframe', { className: 'app-live', src: '/i/' + appName, frameBorder: '0' });
+      return _react2.default.createElement(
+        'span',
+        null,
+        _react2.default.createElement('iframe', { className: 'app-live', src: '/i/' + appName, frameBorder: '0' }),
+        _react2.default.createElement(
+          'div',
+          { className: 'live-return-menu' },
+          _react2.default.createElement(
+            _reactRouter.Link,
+            { to: '/' },
+            ' Go back to Netbeast dashboard.'
+          )
+        )
+      );
     }
   }]);
 
@@ -62314,7 +62498,7 @@ var AppLiveView = function (_React$Component) {
 
 exports.default = AppLiveView;
 
-},{"react":551}],563:[function(require,module,exports){
+},{"react":551,"react-router":365}],563:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62421,16 +62605,16 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var DeviceDot = function (_React$Component) {
-  _inherits(DeviceDot, _React$Component);
+var Device = function (_React$Component) {
+  _inherits(Device, _React$Component);
 
-  function DeviceDot() {
-    _classCallCheck(this, DeviceDot);
+  function Device() {
+    _classCallCheck(this, Device);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(DeviceDot).apply(this, arguments));
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Device).apply(this, arguments));
   }
 
-  _createClass(DeviceDot, [{
+  _createClass(Device, [{
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -62480,10 +62664,10 @@ var DeviceDot = function (_React$Component) {
     }
   }]);
 
-  return DeviceDot;
+  return Device;
 }(_react2.default.Component);
 
-exports.default = DeviceDot;
+exports.default = Device;
 
 },{"./helper":566,"react":551,"react-bootstrap":162}],565:[function(require,module,exports){
 'use strict';
@@ -62520,7 +62704,7 @@ var FilterSVG = function (_React$Component) {
     value: function render() {
       var src = this.props.src;
 
-      var icon = src === 'default' ? '/img/dflt.png' : '/api/apps/' + src + '/logo';
+      var icon = src === 'default' ? '/img/device.png' : '/api/apps/' + src + '/logo';
 
       return _react2.default.createElement(
         'filter',
@@ -62575,6 +62759,8 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouter = require('react-router');
+
 var _mqtt = require('mqtt');
 
 var _mqtt2 = _interopRequireDefault(_mqtt);
@@ -62614,7 +62800,7 @@ var Devices = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Devices).call(this));
 
     _this.mqtt = _mqtt2.default.connect();
-    _this.state = { devices: _lib.Session.load('devices') || [], dragging: false, ox: -250, oy: -250 };
+    _this.state = { devices: _lib.Session.load('devices') || [], dragging: false, ox: -400, oy: -200 };
     return _this;
   }
 
@@ -62639,7 +62825,7 @@ var Devices = function (_React$Component) {
       var x = _x$y.x;
       var y = _x$y.y;
 
-      this.devicesMap.setAttribute('viewBox', rx - x + ox + ' ' + (ry - y + oy) + ' 500 500');
+      this.devicesMap.setAttribute('viewBox', rx - x + ox + ' ' + (ry - y + oy) + ' 800 800');
     }
   }, {
     key: 'onMouseDown',
@@ -62750,30 +62936,35 @@ var Devices = function (_React$Component) {
             { className: 'devices-map grabbable', ref: function ref(_ref) {
                 return _this3.devicesMap = _ref;
               },
-              viewBox: ox + ' ' + oy + ' 500 500', onMouseMove: this.onMouseMove.bind(this),
+              viewBox: ox + ' ' + oy + ' 800 800', onMouseMove: this.onMouseMove.bind(this),
               onMouseDown: this.onMouseDown.bind(this), onMouseUp: this.onMouseUp.bind(this) },
+            filters.map(function (src, idx) {
+              return _react2.default.createElement(_filterSvg2.default, { key: src, src: src });
+            }),
+            devices.map(function (src, idx) {
+              return _this3.connect(idx);
+            }),
             _react2.default.createElement(
-              'g',
-              { transform: 'scale(1,-1)' },
-              filters.map(function (src, idx) {
-                return _react2.default.createElement(_filterSvg2.default, { key: src, src: src });
-              }),
-              devices.map(function (src, idx) {
-                return _this3.connect(idx);
-              }),
-              _react2.default.createElement(
-                'filter',
-                { id: 'netbot', x: '0%', y: '0%', width: '100%', height: '100%' },
-                _react2.default.createElement('feImage', { xlinkHref: '/img/netbot.png' })
-              ),
-              _react2.default.createElement('circle', { cx: 0, cy: 0, r: '50', style: { filter: 'url(#netbot)' } }),
-              devices.map(function (data, idx) {
-                return _react2.default.createElement(_device2.default, _extends({ key: idx }, data, { idx: idx }));
-              })
-            )
+              'filter',
+              { id: 'netbot', x: '0%', y: '0%', width: '100%', height: '100%' },
+              _react2.default.createElement('feImage', { xlinkHref: '/img/netbot.png' })
+            ),
+            _react2.default.createElement('circle', { cx: 0, cy: 0, r: '50', style: { filter: 'url(#netbot)' } }),
+            devices.map(function (data, idx) {
+              return _react2.default.createElement(_device2.default, _extends({ key: idx }, data, { idx: idx }));
+            })
           )
         ),
-        _react2.default.createElement(_versionPod2.default, null)
+        _react2.default.createElement(_versionPod2.default, null),
+        _react2.default.createElement(
+          'div',
+          { className: 'live-return-menu' },
+          _react2.default.createElement(
+            _reactRouter.Link,
+            { to: '/' },
+            ' Go back to Netbeast dashboard.'
+          )
+        )
       );
     }
   }]);
@@ -62787,7 +62978,7 @@ var Devices = function (_React$Component) {
 
 exports.default = Devices;
 
-},{"../lib":569,"../misc/version-pod.jsx":572,"./device.jsx":564,"./filter-svg.jsx":565,"./helper":566,"mqtt":36,"react":551}],568:[function(require,module,exports){
+},{"../lib":569,"../misc/version-pod.jsx":572,"./device.jsx":564,"./filter-svg.jsx":565,"./helper":566,"mqtt":36,"react":551,"react-router":365}],568:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');

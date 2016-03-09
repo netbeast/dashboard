@@ -81,11 +81,9 @@ export default class Drawer extends React.Component {
     return (
       <div className='nav'>
         <span className='title'><h4>{title}</h4></span>
-        <ul className='list-unstyled list-inline pull-left'>
-          <li><Link to='/'>Apps</Link></li>
-          <li><Link to='/plugins'>Plugins</Link></li>
-        </ul>
-        <ul className='list-unstyled list-inline pull-right'>
+        <ul className='list-unstyled list-inline'>
+          <li><Link to='/'><i className='glyphicon glyphicon-th' /> Apps</Link></li>
+          <li><Link to='/plugins'><i className='glyphicon glyphicon-package'><img src='/img/plugin.png'/></i> Plugins</Link></li>
           <li><Link to='/activities'><i className='glyphicon glyphicon-dashboard' /> Activities</Link></li>
           <li><Link to='/install'> <i className='glyphicon glyphicon-package'><img src='/img/package-unfilled.png'/></i> Install</Link></li>
           <li><Link to='/remove'> <i className='glyphicon glyphicon-trash' /> Remove</Link></li>

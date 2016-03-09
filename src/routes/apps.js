@@ -59,13 +59,16 @@ router.route('/apps/:name')
 
 router.get('/apps/:name/logo', function (req, res) {
   const pkgJson = path.join(process.env.APPS_DIR, req.params.name, 'package.json')
-  const app = fs.readJsonSync(pkgJson) // kamikaze line
-  const isPlugin = app.netbeast && app.netbeast.type === 'plugin'
+  var app = {}
+  var isPlugin = false
 
   try {
+    app = fs.readJsonSync(pkgJson) // kamikaze line
+    isPlugin = app.netbeast && app.netbeast.type === 'plugin'
     const appLogo = path.resolve(process.env.APPS_DIR, app.name, app.logo)
     res.sendFile(appLogo)
   } catch (e) {
+    console.error(e)
     if (isPlugin) res.sendFile(path.resolve(process.env.PUBLIC_DIR, 'img/plugin.png'))
     else res.sendFile(path.resolve(process.env.PUBLIC_DIR, 'img/dflt.png'))
   }

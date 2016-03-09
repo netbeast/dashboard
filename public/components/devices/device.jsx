@@ -3,7 +3,7 @@ import { OverlayTrigger, Popover } from 'react-bootstrap'
 
 import { _coords } from './helper'
 
-export default class DeviceDot extends React.Component {
+export default class Device extends React.Component {
 
   render () {
     const { app, idx } = this.props

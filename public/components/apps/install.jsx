@@ -1,6 +1,7 @@
 import React from 'react'
 import Dropzone from 'react-dropzone'
 import request from 'superagent-bluebird-promise'
+import { Link } from 'react-router'
 
 import VersionPod from '../misc/version-pod.jsx'
 import DevicesPod from '../misc/devices-pod.jsx'
@@ -43,6 +44,18 @@ export default class InstallView extends React.Component {
 
     return (
       <div className='app-install'>
+        <span className='drawer'>
+          <div className='nav'>
+            <span className='title'><h4>Install an app.</h4></span>
+            <ul className='list-unstyled list-inline'>
+              <li><Link to='/'><i className='glyphicon glyphicon-th' /> Apps</Link></li>
+              <li><Link to='/plugins'><i className='glyphicon glyphicon-package'><img src='/img/plugin.png'/></i> Plugins</Link></li>
+              <li><Link to='/activities'><i className='glyphicon glyphicon-dashboard' /> Activities</Link></li>
+              <li><Link to='/install'> <i className='glyphicon glyphicon-package'><img src='/img/package-unfilled.png'/></i> Install</Link></li>
+              <li><Link to='/remove'> <i className='glyphicon glyphicon-trash' /> Remove</Link></li>
+            </ul>
+          </div>
+        </span>
         <Dropzone onDrop={this.handleDrop.bind(this)} className='preview' activeClassName='preview active' multiple={false} >
           <h2>Drop apps here to install them.</h2>
           <h6>(or click here to browse among your files).</h6>

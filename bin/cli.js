@@ -16,9 +16,14 @@ var App = require('../lib/app')
 var scan = require('../lib/scan')
 var install = require('../lib/install')
 var start = require('../lib/start')
+var uninstall = require('../lib/uninstall')
+var stop = require('../lib/stop')
+var restart = require('../lib/restart')
+var launch = require('../lib/launch')
 
 const ACTIONS_LIST = ['new', 'create', 'package', 'pkg', 'unpackage', 'unpkg',
-'publish', 'scan', 'install', 'forget', 'start']
+'publish', 'scan', 'install', 'forget', 'start', 'uninstall', 'stop', 'restart',
+ 'launch']
 
 var pkg = require('../package.json')
 
@@ -68,6 +73,22 @@ cli.command('start')
 .option('--silent', 'Capture dashboard output on console')
 .option('-p, --port <n>', 'Port to start the HTTP server', parseInt)
 .action(start)
+
+cli.command('uninstall <appname>')
+.description('Uninstall an app')
+.action(uninstall)
+
+cli.command('stop <appname>')
+.description('Stops a running app')
+.action(stop)
+
+cli.command('restart <appname>')
+.description('Restarts a running app')
+.action(restart)
+
+cli.command('launch <appname>')
+.description('Launches an installed app')
+.action(launch)
 
 cli.parse(process.argv)
 

@@ -20,7 +20,7 @@ ReactDOM.render(
       <Route path='activities' component={Drawer} />
       <Route path='plugins' component={Drawer} />
       <Route path='about' component={Drawer} />
-      <Route path='uninstall' component={Drawer} />
+      <Route path='remove' component={Drawer} />
       <Route path='explore' component={Explore} />
       <Route path='install' component={InstallView} />
       <Route path='settings' component={Settings} />

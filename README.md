@@ -42,6 +42,10 @@ We also prepared a <u>very lightweight Raspberry Pi distro with the dashboard al
 You can build IoT apps using only web technologies: javascript and HTML5! Also we hace tutorials at our docs to build apps with python.
 http://docs.netbeast.co
 
+##Desktop version compilation
+
+If you want to know how you can compile the Netbeast dashboard to get a desktop application go [here](https://github.com/netbeast/dashboard/tree/dashboard-electron)
+
 ## Contact
 * Visit our site [https://netbeast.co](https://netbeast.co)
 * Mail us: staff [at] netbeast.co

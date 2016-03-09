@@ -1,7 +1,6 @@
 import React from 'react'
 
 import Notifications from './notifications'
-import Launcher from './launcher.jsx'
 
 export default class Dashboard extends React.Component {
   constructor (props) {
@@ -30,7 +29,6 @@ export default class Dashboard extends React.Component {
         <main>
           {this.props.children}
         </main>
-        <Launcher { ...this.props } />
       </div>
     )
   }

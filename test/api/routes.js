@@ -16,7 +16,7 @@ describe('RESTful Resources API', function () {
     req.send({ app: 'app', location: 'location', topic: 'topic', groupname: 'group', hook: 'hook' })
       .end(function (err, resp, body) {
         should.not.exist(err)
-        resp.statusCode.should.equal(204)
+        resp.statusCode.should.equal(200)
         done()
       })
   })

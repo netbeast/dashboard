@@ -44,26 +44,7 @@ http://docs.netbeast.co
 
 ##Desktop version compilation
 
-At the moment, node_sqlite3 doesn't want to play nicely with Electron apps. So here, we are going to explain how you can recompile sqlite3 in order to work with Electron.
-
-Firtsly, you will need to know what is the version of your Electron and what is the module required version
-
-Get Electron version
-```
-electron -v # In my case it was 0.36.9
-```
-Get module required version
-```
-That information is printed on the error. In my case V47
-```
-
-After that you only need to run these commands:
-```
-cd node_modules/sqlite3
-npm run prepublish
-node-gyp configure --module_name=node_sqlite3 --module_path=../lib/binding/node-v47-darwin-x64
-node-gyp rebuild --target=0.36.9 --arch=x64 --target_platform=darwin --dist-url=https://atom.io/download/atom-shell --module_name=node_sqlite3 --module_path=../lib/binding/node-v47-darwin-x64
-```
+If you want to know how you can compile the Netbeast dashboard to get a desktop application go [here](https://github.com/netbeast/dashboard/tree/dashboard-electron)
 
 ## Contact
 * Visit our site [https://netbeast.co](https://netbeast.co)

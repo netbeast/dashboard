@@ -59,6 +59,15 @@ export default class Drawer extends React.Component {
     })
   }
 
+  dismiss (appName) {
+    console.log('dismissing', appName)
+    let apps = [ ...this.state.apps ] // smart copy
+    const index = apps.findIndex((app) => { return app.name === appName })
+    if (index < 0) return // do not change react component
+    apps.splice(index, 1) // splice changes the array
+    this.setState({ apps })
+  }
+
   renderTitle (pathname) {
     let title = ''
 
@@ -92,8 +101,8 @@ export default class Drawer extends React.Component {
           {this.renderTitle(pathname)}
           <div className='apps-list'>
             <ExploreApp {...this.props} />
-            {apps.map(function (data) {
-              return <App key={data.name} { ...data } />
+            {apps.map((data) => {
+              return <App key={data.name} { ...data } dismiss={this.dismiss.bind(this)} />
             })}
             <br/>
           </div>

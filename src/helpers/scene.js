@@ -6,25 +6,21 @@ var helper = {}
 
 helper.createTable = function (callback) {
   db.run('CREATE TABLE IF NOT EXISTS scenes(' +
-  'id INTEGER NOT NULL, ' +
+  'id TEXT NOT NULL, ' +
   'sceneid TEXT NOT NULL, ' +
-  'location TEXT NOT NULL, ' +
-  'power BOOLEAN NOT NULL, ' +
-  'brightness INTEGER, ' +
-  'hue INTEGER, ' +
-  'saturation INTEGER, ' +
+  'location TEXT, ' +
+  'state TEXT NOT NULL, ' +
   'PRIMARY KEY(id, sceneid))',
   callback)
 }
 
 helper.insertDevice = function (query, callback) {
   var statement = db.prepare('INSERT INTO scenes (' +
-  "'id', 'sceneid', 'location', 'power', 'brightness', 'hue', 'saturation') " +
-  'VALUES (?,?,?,?,?,?,?)')
+  "'id', 'sceneid', 'location', 'state') " +
+  'VALUES (?,?,?,?)')
 
   statement.run(
-    query.id, query.sceneid, query.location, query.power,
-    query.brightness, query.hue, query.saturation, callback
+    query.id, query.sceneid, query.location, query.state, callback
   )
   statement.finalize()
 }
@@ -72,54 +68,6 @@ helper.findDevice = function (query, callback) {
      query[Object.keys(query)[2]] + "' AND " +
      Object.keys(query)[3] + " = '" +
      query[Object.keys(query)[3]] + "'", callback)
-    break
-
-    case 5:
-    db.all("SELECT * FROM scenes WHERE "
-    + Object.keys(query)[0] + " = '"
-    + query[Object.keys(query)[0]] + "' AND "
-    + Object.keys(query)[1] + " = '"
-    + query[Object.keys(query)[1]] + "' AND "
-    + Object.keys(query)[2] + " = '"
-    + query[Object.keys(query)[2]] + "' AND "
-    + Object.keys(query)[3] + " = '"
-    + query[Object.keys(query)[3]] + "' AND "
-    + Object.keys(query)[4] + " = '"
-    + query[Object.keys(query)[4]] + "'", callback)
-    break
-
-    case 6:
-    db.all("SELECT * FROM scenes WHERE "
-    + Object.keys(query)[0] + " = '"
-    + query[Object.keys(query)[0]] + "' AND "
-    + Object.keys(query)[1] + " = '"
-    + query[Object.keys(query)[1]] + "' AND "
-    + Object.keys(query)[2] + " = '"
-    + query[Object.keys(query)[2]] + "' AND "
-    + Object.keys(query)[3] + " = '"
-    + query[Object.keys(query)[3]] + "' AND "
-    + Object.keys(query)[4] + " = '"
-    + query[Object.keys(query)[4]] + "' AND "
-    + Object.keys(query)[5] + " = '"
-    + query[Object.keys(query)[5]] + "'", callback)
-    break
-
-    case 7:
-    db.all("SELECT * FROM scenes WHERE "
-    + Object.keys(query)[0] + " = '"
-    + query[Object.keys(query)[0]] + "' AND "
-    + Object.keys(query)[1] + " = '"
-    + query[Object.keys(query)[1]] + "' AND "
-    + Object.keys(query)[2] + " = '"
-    + query[Object.keys(query)[2]] + "' AND "
-    + Object.keys(query)[3] + " = '"
-    + query[Object.keys(query)[3]] + "' AND "
-    + Object.keys(query)[4] + " = '"
-    + query[Object.keys(query)[4]] + "' AND "
-    + Object.keys(query)[5] + " = '"
-    + query[Object.keys(query)[5]] + "' AND "
-    + Object.keys(query)[6] + " = '"
-    + query[Object.keys(query)[6]] + "'", callback)
     break
 
     default:

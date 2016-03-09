@@ -61253,9 +61253,19 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _mqtt = require('mqtt');
+
+var _mqtt2 = _interopRequireDefault(_mqtt);
+
 var _superagentBluebirdPromise = require('superagent-bluebird-promise');
 
 var _superagentBluebirdPromise2 = _interopRequireDefault(_superagentBluebirdPromise);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _activityPulse = require('../misc/activity-pulse.jsx');
+
+var _activityPulse2 = _interopRequireDefault(_activityPulse);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61273,6 +61283,7 @@ var App = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props));
 
+    _this.state = { isRunning: false, menuHidden: true };
     _this.router = context.router;
     return _this;
   }
@@ -61283,6 +61294,16 @@ var App = function (_React$Component) {
       var type = this.props.type;
 
       if (type !== 'explore') this.launch();
+    }
+  }, {
+    key: 'toggleMenu',
+    value: function toggleMenu(event) {
+      if (event) event.preventDefault() && event.stopPropagation();
+
+      var menuHidden = this.state.menuHidden;
+
+      if (menuHidden) this.refs.contextMenu.show();else this.refs.contextMenu.hide();
+      this.setState({ menuHidden: !menuHidden });
     }
   }, {
     key: 'launch',
@@ -61296,7 +61317,10 @@ var App = function (_React$Component) {
       }).then(function () {
         _this2.router.push('/i/' + name);
       }).catch(function (err) {
-        if (err.status === 404) return toastr.info(name + ' is running');
+        if (err.status === 404) {
+          _this2.setState({ isRunning: true });
+          return toastr.info(name + ' is running');
+        }
         toastr.error(err.message);
       });
     }
@@ -61322,14 +61346,19 @@ var App = function (_React$Component) {
   }, {
     key: 'stop',
     value: function stop() {
+      var _this3 = this;
+
       var _props = this.props;
       var name = _props.name;
+      var kind = _props.kind;
       var dismiss = _props.dismiss;
 
       _superagentBluebirdPromise2.default.del('/api/activities/' + name).end(function (err, res) {
-        if (err) return toastr.error(res.text);
-        dismiss(name);
+        if (err) return;
+
+        _this3.setState({ isRunning: false });
         toastr.info(name + ' has been stopped.');
+        if (kind !== 'apps' && kind !== 'plugins') dismiss(name);
       });
     }
   }, {
@@ -61337,20 +61366,41 @@ var App = function (_React$Component) {
     value: function uninstall() {
       var _props2 = this.props;
       var name = _props2.name;
+      var kind = _props2.kind;
       var dismiss = _props2.dismiss;
 
       _superagentBluebirdPromise2.default.del('/api/apps/' + name).end(function (err, res) {
-        if (err) return toastr.error(res.text);
+        if (err) return;
         dismiss(name);
         toastr.info(name + ' has been removed.');
       });
     }
   }, {
+    key: 'contextMenu',
+    value: function contextMenu() {
+      var name = this.props.name;
+
+      return _react2.default.createElement(
+        _reactBootstrap.Popover,
+        { id: name, className: 'context-menu' },
+        _react2.default.createElement(
+          'a',
+          { href: 'javascript:void(0)', onClick: this.stop.bind(this), className: 'stop btn btn-filled btn-warning' },
+          ' Stop '
+        ),
+        _react2.default.createElement(
+          'a',
+          { href: 'javascript:void(0)', onClick: this.uninstall.bind(this), className: 'remove btn btn-filled btn-primary' },
+          ' Remove '
+        )
+      );
+    }
+  }, {
     key: 'renderStopButton',
     value: function renderStopButton() {
-      var type = this.props.type;
+      var kind = this.props.kind;
 
-      return type === 'activities' ? _react2.default.createElement(
+      return kind === 'activities' ? _react2.default.createElement(
         'a',
         { href: 'javascript:void(0)', onClick: this.stop.bind(this), className: 'stop btn btn-filled btn-warning' },
         ' Stop '
@@ -61359,9 +61409,10 @@ var App = function (_React$Component) {
   }, {
     key: 'renderRemoveButton',
     value: function renderRemoveButton() {
-      var type = this.props.type;
+      var kind = this.props.kind;
 
-      return type === 'uninstall' ? _react2.default.createElement(
+      console.log(kind);
+      return kind === 'remove' ? _react2.default.createElement(
         'a',
         { href: 'javascript:void(0)', onClick: this.uninstall.bind(this), className: 'remove btn btn-filled btn-primary' },
         ' Remove '
@@ -61370,13 +61421,35 @@ var App = function (_React$Component) {
   }, {
     key: 'renderInstallButton',
     value: function renderInstallButton() {
-      var type = this.props.type;
+      var kind = this.props.kind;
 
-      return type === 'explore' ? _react2.default.createElement(
+      return kind === 'explore' ? _react2.default.createElement(
         'a',
         { href: 'javascript:void(0)', onClick: this.install.bind(this), className: 'install btn btn-filled btn-info' },
         ' Install '
       ) : null;
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this4 = this;
+
+      var name = this.props.name;
+
+      this.mqtt = _mqtt2.default.connect();
+      this.mqtt.subscribe('netbeast/activities/close');
+      this.mqtt.on('message', function (topic, message) {
+        if (message.toString() === name) this.setState({ isRunning: false });
+      });
+
+      _superagentBluebirdPromise2.default.get('/api/activities/' + name).end(function (err, res) {
+        if (!err) _this4.setState({ isRunning: true });
+      });
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.mqtt.end();
     }
   }, {
     key: 'render',
@@ -61394,8 +61467,12 @@ var App = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         { className: 'app' },
-        _react2.default.createElement('div', { className: 'logo', title: 'Launch app', style: logoStyle,
-          onClick: this.handleClick.bind(this) }),
+        this.state.isRunning ? _react2.default.createElement(_activityPulse2.default, this.props) : null,
+        _react2.default.createElement(
+          _reactBootstrap.OverlayTrigger,
+          { ref: 'contextMenu', trigger: [], rootClose: true, placement: 'bottom', overlay: this.contextMenu() },
+          _react2.default.createElement('div', { className: 'logo', title: 'Launch app', style: logoStyle, onClick: this.handleClick.bind(this), onContextMenu: this.toggleMenu.bind(this) })
+        ),
         this.renderStopButton(),
         this.renderRemoveButton(),
         this.renderInstallButton(),
@@ -61417,7 +61494,7 @@ App.contextTypes = {
   router: _react2.default.PropTypes.object.isRequired
 };
 
-},{"react":551,"superagent-bluebird-promise":552}],557:[function(require,module,exports){
+},{"../misc/activity-pulse.jsx":570,"mqtt":36,"react":551,"react-bootstrap":162,"superagent-bluebird-promise":552}],557:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -61428,29 +61505,21 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _superagentBluebirdPromise = require('superagent-bluebird-promise');
-
-var _superagentBluebirdPromise2 = _interopRequireDefault(_superagentBluebirdPromise);
-
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _superagentBluebirdPromise = require('superagent-bluebird-promise');
+
+var _superagentBluebirdPromise2 = _interopRequireDefault(_superagentBluebirdPromise);
+
 var _reactRouter = require('react-router');
-
-var _lib = require('../lib');
-
-var _versionPod = require('../misc/version-pod.jsx');
-
-var _versionPod2 = _interopRequireDefault(_versionPod);
-
-var _devicesPod = require('../misc/devices-pod.jsx');
-
-var _devicesPod2 = _interopRequireDefault(_devicesPod);
 
 var _app = require('./app.jsx');
 
 var _app2 = _interopRequireDefault(_app);
+
+var _lib = require('../lib');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61461,6 +61530,128 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global toastr */
+
+var AppsList = function (_React$Component) {
+  _inherits(AppsList, _React$Component);
+
+  function AppsList(props, context) {
+    _classCallCheck(this, AppsList);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AppsList).call(this, props, context));
+
+    _this.state = { apps: _lib.Session.load('apps') || [] };
+    _this.loadApps = _this.loadApps.bind(_this);
+    return _this;
+  }
+
+  _createClass(AppsList, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      this.loadApps(nextProps);
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.loadApps();
+    }
+  }, {
+    key: 'loadApps',
+    value: function loadApps(props) {
+      var _this2 = this;
+
+      var _ref = props || this.props;
+
+      var src = _ref.src;
+
+      var kind = src.split('/')[src.split('/').length - 1];
+
+      src = kind !== 'remove' ? src : '/api/modules';
+
+      _superagentBluebirdPromise2.default.get(src).end(function (err, res) {
+        if (err) return toastr.error(err);
+
+        var apps = [].concat(_toConsumableArray(res.body)); // smart copy
+        apps.forEach(function (app) {
+          return app.kind = kind;
+        });
+        console.log('apps', apps);
+
+        _lib.Session.save('apps', apps);
+        _this2.setState({ apps: apps });
+      });
+    }
+  }, {
+    key: 'dismiss',
+    value: function dismiss(appName) {
+      var apps = [].concat(_toConsumableArray(this.state.apps)); // smart copy
+      var index = apps.findIndex(function (app) {
+        return app.name === appName;
+      });
+      if (index < 0) return; // do not change react component
+      apps.splice(index, 1); // splice changes the array
+      this.setState({ apps: apps });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this3 = this;
+
+      var apps = this.state.apps;
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'apps-list' },
+        this.props.prepend,
+        apps.map(function (data) {
+          return _react2.default.createElement(_app2.default, _extends({ key: data.name }, data, { dismiss: _this3.dismiss.bind(_this3) }));
+        }),
+        this.props.append,
+        _react2.default.createElement('br', null)
+      );
+    }
+  }]);
+
+  return AppsList;
+}(_react2.default.Component);
+
+exports.default = AppsList;
+
+},{"../lib":569,"./app.jsx":556,"react":551,"react-router":365,"superagent-bluebird-promise":552}],558:[function(require,module,exports){
+'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
+
+var _versionPod = require('../misc/version-pod.jsx');
+
+var _versionPod2 = _interopRequireDefault(_versionPod);
+
+var _devicesPod = require('../misc/devices-pod.jsx');
+
+var _devicesPod2 = _interopRequireDefault(_devicesPod);
+
+var _appsList = require('./apps-list.jsx');
+
+var _appsList2 = _interopRequireDefault(_appsList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var ExploreApp = function (_React$Component) {
   _inherits(ExploreApp, _React$Component);
@@ -61479,7 +61670,7 @@ var ExploreApp = function (_React$Component) {
       var pathname = route.path ? route.path : 'apps';
       var logoStyle = { backgroundImage: 'url(/img/explore.png)' };
 
-      if (pathname !== 'apps') return null;
+      if (pathname !== 'apps' && pathname !== 'plugins') return null;
 
       return _react2.default.createElement(
         'div',
@@ -61501,69 +61692,79 @@ var ExploreApp = function (_React$Component) {
   return ExploreApp;
 }(_react2.default.Component);
 
-var Drawer = function (_React$Component2) {
-  _inherits(Drawer, _React$Component2);
+var InstallApp = function (_React$Component2) {
+  _inherits(InstallApp, _React$Component2);
+
+  function InstallApp() {
+    _classCallCheck(this, InstallApp);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(InstallApp).apply(this, arguments));
+  }
+
+  _createClass(InstallApp, [{
+    key: 'render',
+    value: function render() {
+      var route = this.props.route;
+
+      var pathname = route.path ? route.path : 'apps';
+      var logoStyle = { backgroundImage: 'url(/img/package.png)' };
+
+      if (pathname !== 'apps' && pathname !== 'plugins') return null;
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'app' },
+        _react2.default.createElement(
+          _reactRouter.Link,
+          { to: '/install' },
+          _react2.default.createElement('div', { className: 'logo', title: 'Install an app manually', style: logoStyle })
+        ),
+        _react2.default.createElement(
+          'h4',
+          { className: 'name' },
+          ' Install '
+        )
+      );
+    }
+  }]);
+
+  return InstallApp;
+}(_react2.default.Component);
+
+var Drawer = function (_React$Component3) {
+  _inherits(Drawer, _React$Component3);
 
   function Drawer(props, context) {
     _classCallCheck(this, Drawer);
 
-    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Drawer).call(this, props, context));
+    var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(Drawer).call(this, props));
 
-    _this2.state = { apps: _lib.Session.load('apps') || [] };
-    _this2.loadApps = _this2.loadApps.bind(_this2);
-    return _this2;
+    _this3.state = { pathname: _this3.getPath() };
+    return _this3;
   }
 
   _createClass(Drawer, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      this.loadApps(nextProps);
+      this.setState({ pathname: this.getPath(nextProps) });
     }
   }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      this.loadApps(this.props);
+    key: 'getPath',
+    value: function getPath(nextProps) {
+      var _ref = nextProps || this.props;
+
+      var location = _ref.location;
+
+      var aux = location.pathname.split('/');
+      var pathname = aux[aux.length - 1];
+      return pathname === '' ? 'apps' : pathname;
     }
   }, {
-    key: 'loadApps',
-    value: function loadApps(props, done) {
-      var _this3 = this;
-
-      var route = props.route;
-
-      var pathname = route.path ? route.path : 'apps';
-      var query = pathname === 'uninstall' ? 'modules' : pathname;
-
-      _superagentBluebirdPromise2.default.get('/api/' + query + '/').end(function (err, res) {
-        if (err) return toastr.error(err);
-
-        var apps = [].concat(_toConsumableArray(res.body)); // smart copy
-        apps.forEach(function (app) {
-          return app.type = pathname;
-        });
-
-        _lib.Session.save('apps', apps);
-        _this3.setState({ apps: apps, pathname: pathname });
-      });
-    }
-  }, {
-    key: 'dismiss',
-    value: function dismiss(appName) {
-      console.log('dismissing', appName);
-      var apps = [].concat(_toConsumableArray(this.state.apps)); // smart copy
-      var index = apps.findIndex(function (app) {
-        return app.name === appName;
-      });
-      if (index < 0) return; // do not change react component
-      apps.splice(index, 1); // splice changes the array
-      this.setState({ apps: apps });
-    }
-  }, {
-    key: 'renderTitle',
-    value: function renderTitle(pathname) {
+    key: 'renderNav',
+    value: function renderNav() {
       var title = '';
 
-      switch (pathname) {
+      switch (this.state.pathname) {
         case 'apps':
           title = 'Apps installed.';
           break;
@@ -61573,43 +61774,96 @@ var Drawer = function (_React$Component2) {
         case 'activities':
           title = 'Applications running.';
           break;
-        case 'uninstall':
+        case 'remove':
           title = 'Remove any module.';
           break;
       }
 
       return _react2.default.createElement(
         'div',
-        { className: 'title' },
+        { className: 'nav' },
         _react2.default.createElement(
-          'h3',
-          null,
-          title
+          'span',
+          { className: 'title' },
+          _react2.default.createElement(
+            'h4',
+            null,
+            title
+          )
+        ),
+        _react2.default.createElement(
+          'ul',
+          { className: 'list-unstyled list-inline pull-left' },
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/' },
+              'Apps'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/plugins' },
+              'Plugins'
+            )
+          )
+        ),
+        _react2.default.createElement(
+          'ul',
+          { className: 'list-unstyled list-inline pull-right' },
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/activities' },
+              _react2.default.createElement('i', { className: 'glyphicon glyphicon-dashboard' }),
+              ' Activities'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/install' },
+              ' ',
+              _react2.default.createElement(
+                'i',
+                { className: 'glyphicon glyphicon-package' },
+                _react2.default.createElement('img', { src: '/img/package-unfilled.png' })
+              ),
+              ' Install'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/remove' },
+              ' ',
+              _react2.default.createElement('i', { className: 'glyphicon glyphicon-trash' }),
+              ' Remove'
+            )
+          )
         )
       );
     }
   }, {
     key: 'render',
     value: function render() {
-      var _this4 = this;
-
-      var _state = this.state;
-      var apps = _state.apps;
-      var pathname = _state.pathname;
-
+      var pathname = 'apps';
       return _react2.default.createElement(
         'div',
         { className: 'drawer' },
-        this.renderTitle(pathname),
-        _react2.default.createElement(
-          'div',
-          { className: 'apps-list' },
-          _react2.default.createElement(ExploreApp, this.props),
-          apps.map(function (data) {
-            return _react2.default.createElement(_app2.default, _extends({ key: data.name }, data, { dismiss: _this4.dismiss.bind(_this4) }));
-          }),
-          _react2.default.createElement('br', null)
-        ),
+        this.renderNav(),
+        _react2.default.createElement(_appsList2.default, _extends({ src: '/api/' + this.state.pathname }, this.props, { prepend: _react2.default.createElement(ExploreApp, this.props), append: _react2.default.createElement(InstallApp, this.props) })),
         _react2.default.createElement(_devicesPod2.default, null),
         _react2.default.createElement(_versionPod2.default, null)
       );
@@ -61625,7 +61879,7 @@ var Drawer = function (_React$Component2) {
 
 exports.default = Drawer;
 
-},{"../lib":569,"../misc/devices-pod.jsx":570,"../misc/version-pod.jsx":571,"./app.jsx":556,"react":551,"react-router":365,"superagent-bluebird-promise":552}],558:[function(require,module,exports){
+},{"../misc/devices-pod.jsx":571,"../misc/version-pod.jsx":572,"./apps-list.jsx":557,"react":551,"react-router":365}],559:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -61764,7 +62018,7 @@ ExplorableApp.contextTypes = {
   router: _react2.default.PropTypes.object.isRequired
 };
 
-},{"react":551,"superagent-bluebird-promise":552}],559:[function(require,module,exports){
+},{"react":551,"superagent-bluebird-promise":552}],560:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -61886,7 +62140,7 @@ var Explore = function (_React$Component) {
 
 exports.default = Explore;
 
-},{"../misc/devices-pod.jsx":570,"../misc/version-pod.jsx":571,"./explorable-app.jsx":558,"react":551,"superagent-bluebird-promise":552}],560:[function(require,module,exports){
+},{"../misc/devices-pod.jsx":571,"../misc/version-pod.jsx":572,"./explorable-app.jsx":559,"react":551,"superagent-bluebird-promise":552}],561:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62016,7 +62270,7 @@ var InstallView = function (_React$Component) {
 
 exports.default = InstallView;
 
-},{"../misc/devices-pod.jsx":570,"../misc/version-pod.jsx":571,"react":551,"react-dropzone":336,"superagent-bluebird-promise":552}],561:[function(require,module,exports){
+},{"../misc/devices-pod.jsx":571,"../misc/version-pod.jsx":572,"react":551,"react-dropzone":336,"superagent-bluebird-promise":552}],562:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62060,7 +62314,7 @@ var AppLiveView = function (_React$Component) {
 
 exports.default = AppLiveView;
 
-},{"react":551}],562:[function(require,module,exports){
+},{"react":551}],563:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62076,10 +62330,6 @@ var _react2 = _interopRequireDefault(_react);
 var _notifications = require('./notifications');
 
 var _notifications2 = _interopRequireDefault(_notifications);
-
-var _launcher = require('./launcher.jsx');
-
-var _launcher2 = _interopRequireDefault(_launcher);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -62132,8 +62382,7 @@ var Dashboard = function (_React$Component) {
           'main',
           null,
           this.props.children
-        ),
-        _react2.default.createElement(_launcher2.default, this.props)
+        )
       );
     }
   }]);
@@ -62147,7 +62396,7 @@ Dashboard.propTypes = {
   children: _react2.default.PropTypes.element
 };
 
-},{"./launcher.jsx":568,"./notifications":573,"react":551}],563:[function(require,module,exports){
+},{"./notifications":574,"react":551}],564:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62224,7 +62473,7 @@ var DeviceDot = function (_React$Component) {
         _react2.default.createElement('rect', { x: x - 25, y: y - 25, rx: '25', ry: '25', fill: 'none', width: 50, height: 50 }),
         _react2.default.createElement(
           _reactBootstrap.OverlayTrigger,
-          { trigger: ['click'], placement: 'top', overlay: popover },
+          { trigger: ['click'], rootClose: true, placement: 'top', overlay: popover },
           _react2.default.createElement('circle', { cx: x, cy: y, r: '25', style: style })
         )
       );
@@ -62236,7 +62485,7 @@ var DeviceDot = function (_React$Component) {
 
 exports.default = DeviceDot;
 
-},{"./helper":565,"react":551,"react-bootstrap":162}],564:[function(require,module,exports){
+},{"./helper":566,"react":551,"react-bootstrap":162}],565:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62286,7 +62535,7 @@ var FilterSVG = function (_React$Component) {
 
 exports.default = FilterSVG;
 
-},{"react":551}],565:[function(require,module,exports){
+},{"react":551}],566:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -62309,7 +62558,7 @@ function _coords(n, array) {
   if (array) return [result.x, result.y];else return result;
 }
 
-},{}],566:[function(require,module,exports){
+},{}],567:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -62506,18 +62755,6 @@ var Devices = function (_React$Component) {
             _react2.default.createElement(
               'g',
               { transform: 'scale(1,-1)' },
-              _react2.default.createElement(
-                'filter',
-                { id: 'dropshadow', height: '130%', 'with': '130%' },
-                _react2.default.createElement('feGaussianBlur', { 'in': 'SourceAlpha', stdDeviation: '1' }),
-                _react2.default.createElement('feOffset', { dx: '0', dy: '0', result: 'offsetblur' }),
-                _react2.default.createElement(
-                  'feMerge',
-                  null,
-                  _react2.default.createElement('feMergeNode', null),
-                  _react2.default.createElement('feMergeNode', { 'in': 'SourceGraphic' })
-                )
-              ),
               filters.map(function (src, idx) {
                 return _react2.default.createElement(_filterSvg2.default, { key: src, src: src });
               }),
@@ -62550,7 +62787,7 @@ var Devices = function (_React$Component) {
 
 exports.default = Devices;
 
-},{"../lib":569,"../misc/version-pod.jsx":571,"./device.jsx":563,"./filter-svg.jsx":564,"./helper":565,"mqtt":36,"react":551}],567:[function(require,module,exports){
+},{"../lib":569,"../misc/version-pod.jsx":572,"./device.jsx":564,"./filter-svg.jsx":565,"./helper":566,"mqtt":36,"react":551}],568:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -62607,7 +62844,7 @@ _reactDom2.default.render(_react2.default.createElement(
     _react2.default.createElement(_reactRouter.Route, { path: 'activities', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'plugins', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _drawer2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'uninstall', component: _drawer2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'remove', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'explore', component: _explore2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'install', component: _install2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: _settings2.default }),
@@ -62617,145 +62854,7 @@ _reactDom2.default.render(_react2.default.createElement(
   )
 ), document.getElementById('app'));
 
-},{"./apps/drawer.jsx":557,"./apps/explore.jsx":559,"./apps/install.jsx":560,"./apps/live.jsx":561,"./dashboard.jsx":562,"./devices/index.jsx":566,"./not-found.jsx":572,"./settings.jsx":575,"react":551,"react-dom":335,"react-router":365}],568:[function(require,module,exports){
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRouter = require('react-router');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var PLACES = ['uninstall', 'install', 'remove', 'activities', 'plugins', 'root'];
-
-var Launcher = function (_React$Component) {
-  _inherits(Launcher, _React$Component);
-
-  function Launcher(props) {
-    _classCallCheck(this, Launcher);
-
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Launcher).call(this, props));
-
-    _this.state = { path: _this.getPath() };
-    _this.isAnchor = _this.isAnchor.bind(_this);
-    return _this;
-  }
-
-  _createClass(Launcher, [{
-    key: 'isAnchor',
-    value: function isAnchor(path) {
-      return path === this.state.path ? 'anchor' : '';
-    }
-  }, {
-    key: 'getPath',
-    value: function getPath(nextProps) {
-      var _ref = nextProps || this.props;
-
-      var location = _ref.location;
-
-      var aux = location.pathname.split('/');
-      var pathname = aux[aux.length - 1];
-      return pathname === '' ? 'root' : pathname;
-    }
-  }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      this.setState({ path: this.getPath(nextProps) });
-    }
-  }, {
-    key: 'renderMenuAnchor',
-    value: function renderMenuAnchor() {
-      return PLACES.includes(this.state.path) ? null : _react2.default.createElement(
-        'li',
-        { className: 'anchor' },
-        _react2.default.createElement(
-          'a',
-          { href: '', className: 'btn btn-info' },
-          this.state.path
-        )
-      );
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var state = this.state.collapsed ? 'collapsed' : '';
-      return _react2.default.createElement(
-        'div',
-        { className: 'launcher ' + state },
-        _react2.default.createElement(
-          'ul',
-          null,
-          _react2.default.createElement(
-            'li',
-            { className: this.isAnchor('uninstall') },
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/uninstall', className: 'btn btn-primary' },
-              'Remove'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            { className: this.isAnchor('install') },
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/install', className: 'btn btn-danger' },
-              'Install'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            { className: this.isAnchor('activities') },
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/activities', className: 'btn btn-warning' },
-              'Activities'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            { className: this.isAnchor('plugins') },
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/plugins', className: 'btn btn-success' },
-              'Plugins'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            { className: this.isAnchor('root') },
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/', className: 'btn btn-info' },
-              'Apps'
-            )
-          ),
-          this.renderMenuAnchor()
-        )
-      );
-    }
-  }]);
-
-  return Launcher;
-}(_react2.default.Component);
-
-exports.default = Launcher;
-
-},{"react":551,"react-router":365}],569:[function(require,module,exports){
+},{"./apps/drawer.jsx":558,"./apps/explore.jsx":560,"./apps/install.jsx":561,"./apps/live.jsx":562,"./dashboard.jsx":563,"./devices/index.jsx":567,"./not-found.jsx":573,"./settings.jsx":576,"react":551,"react-dom":335,"react-router":365}],569:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62807,6 +62906,61 @@ var API = exports.API = function () {
 exports.default = { Session: Session, API: API };
 
 },{}],570:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Pulse = function (_React$Component) {
+  _inherits(Pulse, _React$Component);
+
+  function Pulse() {
+    _classCallCheck(this, Pulse);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Pulse).apply(this, arguments));
+  }
+
+  _createClass(Pulse, [{
+    key: 'render',
+    value: function render() {
+      var name = this.props.name;
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'pulse-container', title: name + ' is running' },
+        _react2.default.createElement(
+          'svg',
+          { className: 'p-svg-pulse', x: '0px', y: '0px',
+            viewBox: '0 0 80 80', enableBackground: 'new 0 0 80 80' },
+          _react2.default.createElement('circle', { className: 'pulse', fill: 'none', stroke: '#FF0000', strokeMiterlimit: '10', cx: '40', cy: '40', r: '11' }),
+          _react2.default.createElement('circle', { className: 'halo', fill: 'none', stroke: '#FF9C00', strokeWidth: '2', strokeMiterlimit: '10', cx: '40', cy: '40', r: '16' }),
+          _react2.default.createElement('circle', { className: 'center', fill: '#FF9C00', cx: '40', cy: '40', r: '10' })
+        )
+      );
+    }
+  }]);
+
+  return Pulse;
+}(_react2.default.Component);
+
+exports.default = Pulse;
+
+},{"react":551}],571:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62884,7 +63038,7 @@ var DevicesPod = function (_React$Component) {
 
 exports.default = DevicesPod;
 
-},{"../lib":569,"mqtt":36,"react":551}],571:[function(require,module,exports){
+},{"../lib":569,"mqtt":36,"react":551}],572:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62932,7 +63086,7 @@ var VersionPod = function (_React$Component) {
 
 exports.default = VersionPod;
 
-},{"react":551}],572:[function(require,module,exports){
+},{"react":551}],573:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62989,7 +63143,7 @@ var NotFound = function (_React$Component) {
 
 exports.default = NotFound;
 
-},{"react":551,"react-router":365}],573:[function(require,module,exports){
+},{"react":551,"react-router":365}],574:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -63033,7 +63187,6 @@ var Notifications = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Notifications).call(this, props));
 
     _this.state = { toasts: [] };
-    _this.mqtt = _mqtt2.default.connect();
     _this.dismiss = _this.dismiss.bind(_this);
     return _this;
   }
@@ -63067,6 +63220,7 @@ var Notifications = function (_React$Component) {
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
+      this.mqtt = _mqtt2.default.connect();
       this.mqtt.subscribe('netbeast/push');
       this.mqtt.on('message', this.handleNotification.bind(this));
 
@@ -63117,7 +63271,7 @@ var Notifications = function (_React$Component) {
 
 exports.default = Notifications;
 
-},{"./toast.jsx":574,"mqtt":36,"react":551}],574:[function(require,module,exports){
+},{"./toast.jsx":575,"mqtt":36,"react":551}],575:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63197,7 +63351,7 @@ var Toast = function (_React$Component) {
 
 exports.default = Toast;
 
-},{"react":551}],575:[function(require,module,exports){
+},{"react":551}],576:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63275,8 +63429,8 @@ var Settings = function (_React$Component) {
             null,
             _react2.default.createElement(
               _reactRouter.Link,
-              { to: 'uninstall' },
-              'Uninstall'
+              { to: 'remove' },
+              'Remove'
             )
           ),
           _react2.default.createElement(
@@ -63298,7 +63452,7 @@ var Settings = function (_React$Component) {
 
 exports.default = Settings;
 
-},{"react":551,"react-router":365}]},{},[567])
+},{"react":551,"react-router":365}]},{},[568])
 
 
 //# sourceMappingURL=bundle.js.map

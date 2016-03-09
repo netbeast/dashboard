@@ -25,7 +25,7 @@ After that, an Electron window of the Netbeast dashboard will appear.
 
 If you want to create the Netbeast dashboard application for mac, follow these steps:
 
-#### 1. Install last Nodejs version (In this example I have v5.7.1) & npm packages
+##### 1. Install last Nodejs version (In this example I have v5.7.1) & npm packages
 
 ```
 ##Install electron-packager
@@ -40,7 +40,7 @@ git clone -b electron --single-branch https://github.com/netbeast/dashboard
 
 - You can find more information about how these packages work: [electron-packager](https://github.com/electron-userland/electron-packager) [appdmg](https://github.com/LinusU/node-appdmg)
 
-#### 2. Create the Mac App
+##### 2. Create the Mac App
 
 ```
 electron-packager dashboard Netbeast --platform=darwin --arch=all --version=0.36.10 --icon=dashboard/desktop_app/icon.icns --version-string.CompanyName=Netbeast --version-string.ProductName=NetbeastDashboard
@@ -48,7 +48,7 @@ electron-packager dashboard Netbeast --platform=darwin --arch=all --version=0.36
 
 -  Check the electron version ```./node_modules/.bin/electron -v```in my case: 36.10
 
-### 3. Create the Mac dmg
+##### 3. Create the Mac dmg
 
 Once you have created the Netbeast dashboard app you can run the following command:
 

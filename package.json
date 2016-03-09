@@ -44,7 +44,6 @@
     "babelify": "^7.2.0",
     "browserify": "^12.0.1",
     "chai": "^3.2.0",
-    "electron-prebuilt": "^0.36.9",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-cssnano": "^2.1.0",
@@ -85,7 +84,7 @@
     "build": "./node_modules/.bin/gulp build",
     "serve": "./node_modules/.bin/gulp serve",
     "dev": "./node_modules/.bin/gulp",
-    "start": "electron index.js"
+    "start": "node index.js"
   },
   "author": "staff@netbeast",
   "license": "AGPL-3.0"

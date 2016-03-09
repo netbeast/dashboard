@@ -27,7 +27,7 @@ export default class DeviceDot extends React.Component {
     return (
       <g className='device'>
         <rect x={x - 25} y={y - 25} rx='25' ry='25' fill='none' width={50} height={50}/>
-        <OverlayTrigger trigger={['click']} placement='top' overlay={popover}>
+        <OverlayTrigger trigger={['click']} rootClose placement='top' overlay={popover}>
           <circle cx={x} cy={y} r='25' style={style} />
         </OverlayTrigger>
       </g>

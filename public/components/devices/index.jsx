@@ -86,15 +86,6 @@ export default class Devices extends React.Component {
           onMouseDown={this.onMouseDown.bind(this)} onMouseUp={this.onMouseUp.bind(this)}>
           <g transform='scale(1,-1)'>
 
-          <filter id='dropshadow' height='130%' with='130%'>
-            <feGaussianBlur in='SourceAlpha' stdDeviation='1'/>
-            <feOffset dx='0' dy='0' result='offsetblur'/>
-            <feMerge>
-              <feMergeNode/>
-              <feMergeNode in='SourceGraphic'/>
-            </feMerge>
-          </filter>
-
           {filters.map((src, idx) => <FilterSVG key={src} src={src}/>)}
           {devices.map((src, idx) => this.connect(idx))}
 

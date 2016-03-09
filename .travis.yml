@@ -3,4 +3,4 @@ sudo: false
 node_js:
   - "4.2.1"
 before_script:
-  - "./index.js &"
+  - "./index.js & sleep 3;"

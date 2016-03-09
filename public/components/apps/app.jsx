@@ -6,7 +6,6 @@ export default class App extends React.Component {
   constructor (props, context) {
     super(props)
     this.router = context.router
-    this.state = { hidden: false }
   }
 
   handleClick () {
@@ -44,19 +43,19 @@ export default class App extends React.Component {
   }
 
   stop () {
-    const { name } = this.props
+    const { name, dismiss } = this.props
     request.del('/api/activities/' + name).end((err, res) => {
       if (err) return toastr.error(res.text)
-      this.setState({ hidden: true })
+      dismiss(name)
       toastr.info(name + ' has been stopped.')
     })
   }
 
   uninstall () {
-    const { name } = this.props
+    const { name, dismiss } = this.props
     request.del('/api/apps/' + name).end((err, res) => {
       if (err) return toastr.error(res.text)
-      this.setState({ hidden: true })
+      dismiss(name)
       toastr.info(name + ' has been removed.')
     })
   }
@@ -83,8 +82,6 @@ export default class App extends React.Component {
   }
 
   render () {
-    if (this.state.hidden) return null
-
     const { name, author, logo, netbeast } = this.props
     const isPlugin = netbeast && (netbeast.type === 'plugin')
     const defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)'

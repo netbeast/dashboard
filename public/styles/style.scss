@@ -39,3 +39,10 @@ body, html {
 .btn {
   transition: background 0.2s ease-in-out;
 }
+
+.grabbable {
+  cursor: grab;
+  &:focus, &:active {
+    cursor: grabbing;
+  }
+}

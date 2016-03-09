@@ -4,9 +4,8 @@
 
   This file contains 4 routes:
     1. get  /HOOK/:id
-    2. get  /HOOK/:id/info
-    3. get  /discover
-    4. post /HOOK/:id
+    2. get  /discover
+    3. post /HOOK/:id
 */
 
 var express = require('express')
@@ -58,7 +57,7 @@ loadResources(function (err) {
 
     // 4. If you are asked for values, which are not available or not supported
     // on your device, answer with:
-    // return res.status(400).send('Values not available on wemo-switch')
+    // return res.status(202).send('Values not available on YOUR DEVICE')
   })
 
 
@@ -97,7 +96,7 @@ loadResources(function (err) {
     // return res.send(response)
 
     // If you cannot change the parameters, please answer with:
-    //  return res.status(404).send('A problem setting one value occurred')
+    //  return res.status(400).send('A problem setting one value occurred')
 
     // If the format of the object received is not correct, answer with:
     // return res.status(400).send('Incorrect color format')

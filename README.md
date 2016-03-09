@@ -60,6 +60,14 @@ appdmg ../dashboard/desktop_app/appdmg.json ~/Desktop/Netbeast.dmg
 
 - Then you will have the Netbeast.dmg file on your desktop :smile:
 
+##Compile the desktop version for Windows
+
+Coming Soon
+
+##Compile the desktop version for Linux
+
+Coming Soon
+
 ## Contact
 * Visit our site [https://netbeast.co](https://netbeast.co)
 * Mail us: staff [at] netbeast.co

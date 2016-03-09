@@ -52,7 +52,7 @@ export default class ExplorableApp extends React.Component {
 
   renderButton () {
     const { installed, name } = this.props
-    return installed ? null
+    return installed ? <a href='javascript:void(0)' onClick={this.launch.bind(this)} className='install btn btn-filled btn-primary'> Launch </a>
     : <a href='javascript:void(0)' onClick={this.install.bind(this)} className='install btn btn-filled btn-info'> Install </a>
   }
 

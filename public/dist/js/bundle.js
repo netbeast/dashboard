@@ -61793,14 +61793,15 @@ var Drawer = function (_React$Component3) {
         ),
         _react2.default.createElement(
           'ul',
-          { className: 'list-unstyled list-inline pull-left' },
+          { className: 'list-unstyled list-inline' },
           _react2.default.createElement(
             'li',
             null,
             _react2.default.createElement(
               _reactRouter.Link,
               { to: '/' },
-              'Apps'
+              _react2.default.createElement('i', { className: 'glyphicon glyphicon-th' }),
+              ' Apps'
             )
           ),
           _react2.default.createElement(
@@ -61809,13 +61810,14 @@ var Drawer = function (_React$Component3) {
             _react2.default.createElement(
               _reactRouter.Link,
               { to: '/plugins' },
-              'Plugins'
+              _react2.default.createElement(
+                'i',
+                { className: 'glyphicon glyphicon-package' },
+                _react2.default.createElement('img', { src: '/img/plugin.png' })
+              ),
+              ' Plugins'
             )
-          )
-        ),
-        _react2.default.createElement(
-          'ul',
-          { className: 'list-unstyled list-inline pull-right' },
+          ),
           _react2.default.createElement(
             'li',
             null,
@@ -61978,7 +61980,11 @@ var ExplorableApp = function (_React$Component) {
       var installed = _props.installed;
       var name = _props.name;
 
-      return installed ? null : _react2.default.createElement(
+      return installed ? _react2.default.createElement(
+        'a',
+        { href: 'javascript:void(0)', onClick: this.launch.bind(this), className: 'install btn btn-filled btn-primary' },
+        ' Launch '
+      ) : _react2.default.createElement(
         'a',
         { href: 'javascript:void(0)', onClick: this.install.bind(this), className: 'install btn btn-filled btn-info' },
         ' Install '
@@ -62041,6 +62047,8 @@ var _superagentBluebirdPromise2 = _interopRequireDefault(_superagentBluebirdProm
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
 
 var _versionPod = require('../misc/version-pod.jsx');
 
@@ -62108,6 +62116,87 @@ var Explore = function (_React$Component) {
       return index >= 0;
     }
   }, {
+    key: 'renderNav',
+    value: function renderNav() {
+      return _react2.default.createElement(
+        'div',
+        { className: 'nav' },
+        _react2.default.createElement(
+          'span',
+          { className: 'title' },
+          _react2.default.createElement(
+            'h4',
+            null,
+            'All available apps.'
+          )
+        ),
+        _react2.default.createElement(
+          'ul',
+          { className: 'list-unstyled list-inline' },
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/' },
+              _react2.default.createElement('i', { className: 'glyphicon glyphicon-th' }),
+              ' Apps'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/plugins' },
+              _react2.default.createElement(
+                'i',
+                { className: 'glyphicon glyphicon-package' },
+                _react2.default.createElement('img', { src: '/img/plugin.png' })
+              ),
+              ' Plugins'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/activities' },
+              _react2.default.createElement('i', { className: 'glyphicon glyphicon-dashboard' }),
+              ' Activities'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/install' },
+              ' ',
+              _react2.default.createElement(
+                'i',
+                { className: 'glyphicon glyphicon-package' },
+                _react2.default.createElement('img', { src: '/img/package-unfilled.png' })
+              ),
+              ' Install'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/remove' },
+              ' ',
+              _react2.default.createElement('i', { className: 'glyphicon glyphicon-trash' }),
+              ' Remove'
+            )
+          )
+        )
+      );
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this3 = this;
@@ -62117,15 +62206,7 @@ var Explore = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         { className: 'drawer' },
-        _react2.default.createElement(
-          'div',
-          { className: 'title' },
-          _react2.default.createElement(
-            'h1',
-            null,
-            'Explore all available apps.'
-          )
-        ),
+        this.renderNav(),
         _react2.default.createElement(
           'div',
           { className: 'apps-list' },
@@ -62145,7 +62226,7 @@ var Explore = function (_React$Component) {
 
 exports.default = Explore;
 
-},{"../misc/devices-pod.jsx":571,"../misc/version-pod.jsx":572,"./explorable-app.jsx":559,"react":551,"superagent-bluebird-promise":552}],561:[function(require,module,exports){
+},{"../misc/devices-pod.jsx":571,"../misc/version-pod.jsx":572,"./explorable-app.jsx":559,"react":551,"react-router":365,"superagent-bluebird-promise":552}],561:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62165,6 +62246,8 @@ var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
 var _superagentBluebirdPromise = require('superagent-bluebird-promise');
 
 var _superagentBluebirdPromise2 = _interopRequireDefault(_superagentBluebirdPromise);
+
+var _reactRouter = require('react-router');
 
 var _versionPod = require('../misc/version-pod.jsx');
 
@@ -62233,6 +62316,87 @@ var InstallView = function (_React$Component) {
         'div',
         { className: 'app-install' },
         _react2.default.createElement(
+          'span',
+          { className: 'drawer' },
+          _react2.default.createElement(
+            'div',
+            { className: 'nav' },
+            _react2.default.createElement(
+              'span',
+              { className: 'title' },
+              _react2.default.createElement(
+                'h4',
+                null,
+                'Install an app.'
+              )
+            ),
+            _react2.default.createElement(
+              'ul',
+              { className: 'list-unstyled list-inline' },
+              _react2.default.createElement(
+                'li',
+                null,
+                _react2.default.createElement(
+                  _reactRouter.Link,
+                  { to: '/' },
+                  _react2.default.createElement('i', { className: 'glyphicon glyphicon-th' }),
+                  ' Apps'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                null,
+                _react2.default.createElement(
+                  _reactRouter.Link,
+                  { to: '/plugins' },
+                  _react2.default.createElement(
+                    'i',
+                    { className: 'glyphicon glyphicon-package' },
+                    _react2.default.createElement('img', { src: '/img/plugin.png' })
+                  ),
+                  ' Plugins'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                null,
+                _react2.default.createElement(
+                  _reactRouter.Link,
+                  { to: '/activities' },
+                  _react2.default.createElement('i', { className: 'glyphicon glyphicon-dashboard' }),
+                  ' Activities'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                null,
+                _react2.default.createElement(
+                  _reactRouter.Link,
+                  { to: '/install' },
+                  ' ',
+                  _react2.default.createElement(
+                    'i',
+                    { className: 'glyphicon glyphicon-package' },
+                    _react2.default.createElement('img', { src: '/img/package-unfilled.png' })
+                  ),
+                  ' Install'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                null,
+                _react2.default.createElement(
+                  _reactRouter.Link,
+                  { to: '/remove' },
+                  ' ',
+                  _react2.default.createElement('i', { className: 'glyphicon glyphicon-trash' }),
+                  ' Remove'
+                )
+              )
+            )
+          )
+        ),
+        _react2.default.createElement(
           _reactDropzone2.default,
           { onDrop: this.handleDrop.bind(this), className: 'preview', activeClassName: 'preview active', multiple: false },
           _react2.default.createElement(
@@ -62275,7 +62439,7 @@ var InstallView = function (_React$Component) {
 
 exports.default = InstallView;
 
-},{"../misc/devices-pod.jsx":571,"../misc/version-pod.jsx":572,"react":551,"react-dropzone":336,"superagent-bluebird-promise":552}],562:[function(require,module,exports){
+},{"../misc/devices-pod.jsx":571,"../misc/version-pod.jsx":572,"react":551,"react-dropzone":336,"react-router":365,"superagent-bluebird-promise":552}],562:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62287,6 +62451,8 @@ Object.defineProperty(exports, "__esModule", {
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -62310,7 +62476,20 @@ var AppLiveView = function (_React$Component) {
     value: function render() {
       var appName = this.props.params.appName;
 
-      return _react2.default.createElement('iframe', { className: 'app-live', src: '/i/' + appName, frameBorder: '0' });
+      return _react2.default.createElement(
+        'span',
+        null,
+        _react2.default.createElement('iframe', { className: 'app-live', src: '/i/' + appName, frameBorder: '0' }),
+        _react2.default.createElement(
+          'div',
+          { className: 'live-return-menu' },
+          _react2.default.createElement(
+            _reactRouter.Link,
+            { to: '/' },
+            ' Go back to Netbeast dashboard.'
+          )
+        )
+      );
     }
   }]);
 
@@ -62319,7 +62498,7 @@ var AppLiveView = function (_React$Component) {
 
 exports.default = AppLiveView;
 
-},{"react":551}],563:[function(require,module,exports){
+},{"react":551,"react-router":365}],563:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62580,6 +62759,8 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouter = require('react-router');
+
 var _mqtt = require('mqtt');
 
 var _mqtt2 = _interopRequireDefault(_mqtt);
@@ -62774,7 +62955,16 @@ var Devices = function (_React$Component) {
             })
           )
         ),
-        _react2.default.createElement(_versionPod2.default, null)
+        _react2.default.createElement(_versionPod2.default, null),
+        _react2.default.createElement(
+          'div',
+          { className: 'live-return-menu' },
+          _react2.default.createElement(
+            _reactRouter.Link,
+            { to: '/' },
+            ' Go back to Netbeast dashboard.'
+          )
+        )
       );
     }
   }]);
@@ -62788,7 +62978,7 @@ var Devices = function (_React$Component) {
 
 exports.default = Devices;
 
-},{"../lib":569,"../misc/version-pod.jsx":572,"./device.jsx":564,"./filter-svg.jsx":565,"./helper":566,"mqtt":36,"react":551}],568:[function(require,module,exports){
+},{"../lib":569,"../misc/version-pod.jsx":572,"./device.jsx":564,"./filter-svg.jsx":565,"./helper":566,"mqtt":36,"react":551,"react-router":365}],568:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');

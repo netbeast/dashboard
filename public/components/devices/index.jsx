@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 import mqtt from 'mqtt'
 
 import { Session } from '../lib'
@@ -12,7 +13,7 @@ export default class Devices extends React.Component {
   constructor () {
     super()
     this.mqtt = mqtt.connect()
-    this.state = { devices: Session.load('devices') || [], dragging: false, ox: -250, oy: -250 }
+    this.state = { devices: Session.load('devices') || [], dragging: false, ox: -400, oy: -200 }
   }
 
   onMouseMove (event) {
@@ -23,7 +24,7 @@ export default class Devices extends React.Component {
       x: (event.pageX || document.body.scrollLeft + document.documentElement.scrollLeft) - left,
       y: (event.pageY || document.body.scrollTop + document.documentElement.scrollTop) - top
     }
-    this.devicesMap.setAttribute('viewBox', `${rx - x + ox} ${ry - y + oy} 500 500`)
+    this.devicesMap.setAttribute('viewBox', `${rx - x + ox} ${ry - y + oy} 800 800`)
   }
 
   onMouseDown (event) {
@@ -82,18 +83,8 @@ export default class Devices extends React.Component {
         <div className='devices-view'>
 
           <svg className='devices-map grabbable' ref={(ref) => this.devicesMap = ref}
-          viewBox={`${ox} ${oy} 500 500`} onMouseMove={this.onMouseMove.bind(this)}
+          viewBox={`${ox} ${oy} 800 800`} onMouseMove={this.onMouseMove.bind(this)}
           onMouseDown={this.onMouseDown.bind(this)} onMouseUp={this.onMouseUp.bind(this)}>
-          <g transform='scale(1,-1)'>
-
-          <filter id='dropshadow' height='130%' with='130%'>
-            <feGaussianBlur in='SourceAlpha' stdDeviation='1'/>
-            <feOffset dx='0' dy='0' result='offsetblur'/>
-            <feMerge>
-              <feMergeNode/>
-              <feMergeNode in='SourceGraphic'/>
-            </feMerge>
-          </filter>
 
           {filters.map((src, idx) => <FilterSVG key={src} src={src}/>)}
           {devices.map((src, idx) => this.connect(idx))}
@@ -105,10 +96,12 @@ export default class Devices extends React.Component {
 
           {devices.map((data, idx) => <Device key={idx} {...data} idx={idx} />)}
 
-          </g>
           </svg>
         </div>
         <VersionPod />
+        <div className='live-return-menu'>
+          <Link to='/'> Go back to Netbeast dashboard.</Link>
+        </div>
       </span>
     )
   }

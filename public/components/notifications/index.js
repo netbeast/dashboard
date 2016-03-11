@@ -9,7 +9,6 @@ export default class Notifications extends React.Component {
   constructor (props) {
     super(props)
     this.state = { toasts: [] }
-    this.mqtt = mqtt.connect()
     this.dismiss = this.dismiss.bind(this)
   }
 
@@ -35,6 +34,7 @@ export default class Notifications extends React.Component {
   }
 
   componentDidMount () {
+    this.mqtt = mqtt.connect()
     this.mqtt.subscribe('netbeast/push')
     this.mqtt.on('message', this.handleNotification.bind(this))
 

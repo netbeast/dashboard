@@ -87,6 +87,19 @@ App.install = function (bundle, done) {
   })
 }
 
+App.find = function (query, done) {
+  // only querying topics by the moment
+  App.all(function (err, apps) {
+    if (err) return done(err)
+
+    var result = apps.filter(function (app) {
+      return app.netbeast && app.netbeast.topic === query.topic
+    })
+
+    done(null, result)
+  })
+}
+
 function _isUrl (s) {
   var regexp = /(git|ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
   return regexp.test(s)

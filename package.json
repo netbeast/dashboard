@@ -93,7 +93,7 @@
     "serve": "./node_modules/.bin/gulp serve",
     "dev": "./node_modules/.bin/gulp",
     "clean": "rm -r ./test/coverage; rm .database.sqlite",
-    "start": "electron index.js"
+    "start": "./node_modules/.bin/electron index.js"
   },
   "engines" : { "node" : ">=0.12" },
   "author": "staff@netbeast",

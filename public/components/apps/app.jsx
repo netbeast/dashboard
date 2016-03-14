@@ -54,7 +54,7 @@ export default class App extends React.Component {
       toastr.success(`${name} has been installed!`)
 
       if (type === 'plugin' || type === 'service' || props.bootOnLoad)
-        return request.post('/api/activities/' + name).promise()
+      return request.post('/api/activities/' + name).promise()
     }).then((res) => { toastr.success(`${res.body.name} is running`) })
     .catch((fail, res) => toastr.error(res.text))
   }
@@ -83,8 +83,8 @@ export default class App extends React.Component {
     const { name } = this.props
     return (
       <Popover id={name} className='context-menu'>
-        <a href='javascript:void(0)' onClick={this.stop.bind(this)} className='stop btn btn-filled btn-warning'> Stop </a>
-        <a href='javascript:void(0)' onClick={this.uninstall.bind(this)} className='remove btn btn-filled btn-primary'> Remove </a>
+      <a href='javascript:void(0)' onClick={this.stop.bind(this)} className='stop btn btn-filled btn-warning'> Stop </a>
+      <a href='javascript:void(0)' onClick={this.uninstall.bind(this)} className='remove btn btn-filled btn-primary'> Remove </a>
       </Popover>
     )
   }
@@ -115,7 +115,7 @@ export default class App extends React.Component {
     const { name } = this.props
     this.mqtt = mqtt.connect()
     this.mqtt.subscribe('netbeast/activities/close')
-    this.mqtt.on('message', function (topic, message) {
+    this.mqtt.on('message', (topic, message) => {
       if (message.toString() === name) this.setState({ isRunning: false })
     })
 
@@ -136,14 +136,14 @@ export default class App extends React.Component {
 
     return (
       <div className='app'>
-        {this.state.isRunning ? <Pulse {...this.props} /> : null}
-        <OverlayTrigger ref='contextMenu' trigger={[]} rootClose placement='bottom' overlay={this.contextMenu()}>
-          <div className='logo' title='Launch app' style={logoStyle} onClick={this.handleClick.bind(this)} onContextMenu={this.toggleMenu.bind(this)} />
-        </OverlayTrigger>
-        {this.renderStopButton()}
-        {this.renderRemoveButton()}
-        {this.renderInstallButton()}
-        <h4 className='name'>{name}</h4>
+      {this.state.isRunning ? <Pulse {...this.props} /> : null}
+      <OverlayTrigger ref='contextMenu' trigger={[]} rootClose placement='bottom' overlay={this.contextMenu()}>
+      <div className='logo' title='Launch app' style={logoStyle} onClick={this.handleClick.bind(this)} onContextMenu={this.toggleMenu.bind(this)} />
+      </OverlayTrigger>
+      {this.renderStopButton()}
+      {this.renderRemoveButton()}
+      {this.renderInstallButton()}
+      <h4 className='name'>{name}</h4>
       </div>
     )
   }

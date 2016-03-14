@@ -61439,7 +61439,7 @@ var App = function (_React$Component) {
       this.mqtt = _mqtt2.default.connect();
       this.mqtt.subscribe('netbeast/activities/close');
       this.mqtt.on('message', function (topic, message) {
-        if (message.toString() === name) this.setState({ isRunning: false });
+        if (message.toString() === name) _this4.setState({ isRunning: false });
       });
 
       _superagentBluebirdPromise2.default.get('/api/activities/' + name).end(function (err, res) {

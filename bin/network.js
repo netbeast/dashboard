@@ -22,7 +22,6 @@ function getArp () {
 
     arp.on('close', function () {
       var arp_table = parse_arp_table(arp_str)
-      console.log(arp_str)
       var client = mqtt.connect('ws://localhost' + ':' + process.env.NETBEAST_PORT)
       client.publish('netbeast/network', JSON.stringify(joinTables(arp_table, devices)))
       client.end()

@@ -75,6 +75,21 @@ Coming Soon
 
 Coming Soon
 
+##Problems
+
+#####Sqlite3 Problem
+
+When you try to run the electron app as ```npm start```you may have a problem with the sqlite3 npm package. You have to rebuild it.
+
+```
+cd node_modules/sqlite3
+npm run prepublish
+node-gyp configure --module_name=node_sqlite3 --module_path=../lib/binding/node-v47-darwin-x64
+node-gyp rebuild --target=0.36.1 --arch=x64 --target_platform=darwin --dist-url=https://atom.io/download/atom-shell --module_name=node_sqlite3 --module_path=../lib/binding/node-v47-darwin-x64
+```
+
+- This is already done when you install all the npm dependencies. You can see it in the package.json file.
+
 ## Contact
 * Visit our site [https://netbeast.co](https://netbeast.co)
 * Mail us: staff [at] netbeast.co

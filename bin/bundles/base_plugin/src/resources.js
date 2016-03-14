@@ -6,6 +6,7 @@
 */
 
 var request = require('request')
+var netbeast = require('netbeast')
 
 const API = process.env.NETBEAST + '/api/resources'
 
@@ -49,20 +50,16 @@ module.exports = function (callback) {
   } else {
     //  Use this block to register the found device on the netbeast database
     //  in order to using it later
-    request.post({url: API,
-    json: {
-      app: 'NAME_PLUGIN',          // Name of the device brand
-      location: 'none',
-      topic: 'TOPIC',      // lights, bridge, switch, temperature, sounds, etc
-      groupname: 'none',
-      hook: '/HOOK/id'  // HOOK == /Namebrand  Example. /hueLights, /Sonos
+    netbeast('TOPIC').create({app: 'NAME_PLUGIN', hook: '/HOOK/id'})
+    .cathch(function (err) {
+      return callback(err)
+    })
+            // NAME_PLUGIN = Name of the device brand
+            // TOPIC = lights, bridge, switch, temperature, music, etc
+            // HOOK == /Namebrand  Example. /hueLights, /Sonos
       // We will use the id to access to the device and modify it.
       // Any value to refer this device (MacAddress, for example) can work as id
-    }},
-    function (err, resp, body) {
-      if (err) return callback(err)
-      callback
-    })
+      // netbeast('lights').create({app: 'philips-hue', hook: /hueLights/172.64.27.114})
   }
 
   // If there exists 'hooks' stored on the 'objects' array, it means that

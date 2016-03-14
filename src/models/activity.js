@@ -6,6 +6,7 @@ var request = require('request')
 var portfinder = require('portfinder')
 var chalk = require('chalk')
 var async = require('async')
+var mqtt = require('mqtt')
 
 var broker = require('../helpers/broker')
 var ApiError = require('../util/api-error')
@@ -18,6 +19,7 @@ const APPS_DIR = process.env.APPS_DIR
 // Apps with their child object running
 var children = {}
 var self = module.exports = new events.EventEmitter()
+var client = mqtt.connect() // for notifications
 
 self.start = function (req, res, next) {
   self.boot(req.params.name, function (err, child) {
@@ -149,6 +151,7 @@ self.on('start', function (app) {
     })
 
     child.on('close', function (code) {
+      client.publish('netbeast/activities/close', app.name)
       Resource.findOne({ app: app.name }, function (err, resource) {
         if (err) return console.error(err)
 
@@ -169,7 +172,7 @@ self.on('start', function (app) {
 })
 
 process.on('exit', function () {
-  children.forEach(function (child) {
-    child.process.kill('SIGTERM')
-  })
+  for (var key in children) {
+    children[key].process.kill('SIGTERM')
+  }
 })

@@ -75,19 +75,19 @@ cli.command('start')
 .option('-p, --port <n>', 'Port to start the HTTP server', parseInt)
 .action(start)
 
-cli.command('uninstall <appname>')
+cli.command('uninstall <app name>')
 .description('Uninstall an app')
 .action(uninstall)
 
-cli.command('stop <appname>')
+cli.command('stop <app name>')
 .description('Stops a running app')
 .action(stop)
 
-cli.command('restart <appname>')
+cli.command('restart <app name>')
 .description('Restarts a running app')
 .action(restart)
 
-cli.command('launch <appname>')
+cli.command('launch <app name>')
 .description('Launches an installed app')
 .action(launch)
 

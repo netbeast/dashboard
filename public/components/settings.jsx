@@ -10,7 +10,7 @@ export default class Settings extends React.Component {
           <li><Link to='apps'>Apps</Link></li>
           <li><Link to='activities'>Activities</Link></li>
           <li><Link to='plugins'>Plugins</Link></li>
-          <li><Link to='uninstall'>Uninstall</Link></li>
+          <li><Link to='remove'>Remove</Link></li>
           <li><Link to='settings'>Settings</Link></li>
         </ul>
       </div>

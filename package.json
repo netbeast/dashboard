@@ -16,7 +16,6 @@
     "didyoumean": "^1.2.1",
     "dotenv": "^1.2.0",
     "express": "^4.12.3",
-    "forever-monitor": "^1.7.0",
     "freeport": "^1.0.5",
     "fs-extra": "^0.26.0",
     "fstream": "^1.0.8",
@@ -61,6 +60,7 @@
     "istanbul": "^0.4.0",
     "livereload": "^0.4.1",
     "mocha": "^2.3.3",
+    "react-bootstrap": "^0.28.3",
     "react-dom": "^0.14.7",
     "react-dropzone": "^3.3.2",
     "react-router": "^2.0.0-rc5",
@@ -86,7 +86,8 @@
     "coverage": "./test/coverage.sh",
     "build": "./node_modules/.bin/gulp build",
     "serve": "./node_modules/.bin/gulp serve",
-    "dev": "./node_modules/.bin/gulp"
+    "dev": "./node_modules/.bin/gulp",
+    "start": "node index.js"
   },
   "author": "staff@netbeast",
   "license": "AGPL-3.0"

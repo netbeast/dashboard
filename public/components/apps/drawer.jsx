@@ -1,13 +1,9 @@
-/* global toastr */
-import request from 'superagent-bluebird-promise'
 import React from 'react'
 import { Link } from 'react-router'
 
-import { Session } from '../lib'
-
 import VersionPod from '../misc/version-pod.jsx'
 import DevicesPod from '../misc/devices-pod.jsx'
-import App from './app.jsx'
+import AppsList from './apps-list.jsx'
 
 class ExploreApp extends React.Component {
   render () {
@@ -15,7 +11,7 @@ class ExploreApp extends React.Component {
     const pathname = route.path ? route.path : 'apps'
     const logoStyle = { backgroundImage: 'url(/img/explore.png)' }
 
-    if (pathname !== 'apps') return null
+    if (pathname !== 'apps' && pathname !== 'plugins') return null
 
     return (
       <div className='app app-explore'>
@@ -28,41 +24,46 @@ class ExploreApp extends React.Component {
   }
 }
 
+class InstallApp extends React.Component {
+  render () {
+    const { route } = this.props
+    const pathname = route.path ? route.path : 'apps'
+    const logoStyle = { backgroundImage: 'url(/img/package.png)' }
+
+    if (pathname !== 'apps' && pathname !== 'plugins') return null
+
+    return (
+      <div className='app'>
+        <Link to='/install'>
+          <div className='logo' title='Install an app manually' style={logoStyle} />
+        </Link>
+        <h4 className='name'> Install </h4>
+      </div>
+    )
+  }
+}
+
 export default class Drawer extends React.Component {
   constructor (props, context) {
-    super(props, context)
-    this.state = { apps: Session.load('apps') || [] }
-    this.loadApps = this.loadApps.bind(this)
+    super(props)
+    this.state = { pathname: this.getPath() }
   }
 
   componentWillReceiveProps (nextProps) {
-    this.loadApps(nextProps)
+    this.setState({ pathname: this.getPath(nextProps) })
   }
 
-  componentDidMount () {
-    this.loadApps(this.props)
+  getPath (nextProps) {
+    const { location } = nextProps || this.props
+    const aux = location.pathname.split('/')
+    const pathname = aux[aux.length - 1]
+    return (pathname === '') ? 'apps' : pathname
   }
 
-  loadApps (props, done) {
-    const { route } = props
-    const pathname = route.path ? route.path : 'apps'
-    const query = pathname === 'uninstall' ? 'modules' : pathname
-
-    request.get(`/api/${query}/`).end((err, res) => {
-      if (err) return toastr.error(err)
-
-      let apps = [ ...res.body ] // smart copy
-      apps.forEach((app) => app.type = pathname)
-
-      Session.save('apps', apps)
-      this.setState({ apps: apps, pathname: pathname })
-    })
-  }
-
-  renderTitle (pathname) {
+  renderNav () {
     let title = ''
 
-    switch (pathname) {
+    switch (this.state.pathname) {
       case 'apps':
         title = 'Apps installed.'
         break
@@ -72,31 +73,31 @@ export default class Drawer extends React.Component {
       case 'activities':
         title = 'Applications running.'
         break
-      case 'uninstall':
+      case 'remove':
         title = 'Remove any module.'
         break
     }
 
     return (
-      <div className='title'>
-        <h3>{title}</h3>
+      <div className='nav'>
+        <span className='title'><h4>{title}</h4></span>
+        <ul className='list-unstyled list-inline'>
+          <li><Link to='/'><i className='glyphicon glyphicon-th' /> Apps</Link></li>
+          <li><Link to='/plugins'><i className='glyphicon glyphicon-package'><img src='/img/plugin.png'/></i> Plugins</Link></li>
+          <li><Link to='/activities'><i className='glyphicon glyphicon-dashboard' /> Activities</Link></li>
+          <li><Link to='/install'> <i className='glyphicon glyphicon-package'><img src='/img/package-unfilled.png'/></i> Install</Link></li>
+          <li><Link to='/remove'> <i className='glyphicon glyphicon-trash' /> Remove</Link></li>
+        </ul>
       </div>
     )
   }
 
   render () {
-    const { apps, pathname } = this.state
-
+    const pathname = 'apps'
     return (
         <div className='drawer'>
-          {this.renderTitle(pathname)}
-          <div className='apps-list'>
-            <ExploreApp {...this.props} />
-            {apps.map(function (data) {
-              return <App key={data.name} { ...data } />
-            })}
-            <br/>
-          </div>
+          {this.renderNav()}
+          <AppsList src={'/api/' + this.state.pathname} {...this.props} prepend={<ExploreApp {...this.props} />} append={<InstallApp {...this.props}/>}/>
           <DevicesPod />
           <VersionPod />
         </div>

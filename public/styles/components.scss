@@ -19,15 +19,27 @@
 
 .drawer {
   padding: 20px 50px;
-  text-align: center;
 }
 
-.drawer .title {
-  padding-top: 20px;
+.drawer .nav {
+  text-align: left;
+  @media (max-width: 920px) { padding: 20px 0 0 20px; }
+  padding: 20px 160px 0 160px;
+  max-width: 100%;
+  ul li a {
+    font-family: 'Proxima Nova';
+    text-transform: uppercase;
+    color: inherit;
+  }
 }
+
+.drawer .glyphicon.glyphicon-package img { max-height: 20px; }
 
 .drawer .apps-list {
   margin-top: -20px;
+  @media (max-width: 920px) { padding: 20px 0 0 20px; }
+  padding: 20px 160px 0 160px;
+  text-align: left;
 }
 
 .drawer .apps-list .app {
@@ -63,54 +75,45 @@
   width: 75px;
 }
 
-//====================================
-// LAUNCHER
-//====================================
-
-.apps-list {
-  @media (max-width: 920px) { padding: 20px 0; }
-  padding: 20px 160px 50px 160px;
-  text-align: left;
-  .title { margin-left: 20px; }
+.pulse-container {
+  margin-left: 100px;
+  margin-top: -15px;
+  width: 38px; height: 38px;
+  position: absolute;
 }
 
-.launcher {
-  position: fixed;
-  z-index: 90;
-  height: 60px;
-  bottom: 5px; right: 5px;
-
-  .btn { text-transform: uppercase; }
-
-  ul li {
-    position: absolute;
-    border-radius: 3px;
-    padding: 2px 4px;
-    margin: 10px; opacity: 0;
-    visibility: hidden;
-    vertical-align: top;
-    display: inline-block;
-    transition: opacity 0.5s linear;
+@-webkit-keyframes svg_pulse {
+  0% {
+    transform: matrix(1,0,1,0,0);
+    stroke-width: 1;
+    opacity: 1;
   }
-
-  .anchor { opacity: 1; position: inherit; visibility: visible; }
-
-  &:hover {
-    ul { background-color: rgba(32, 32, 32, 0.9); }
-    ul li { position: inherit; opacity: 1; visibility: visible; }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    transform: matrix(4,0,0,4,-120,-120);
+    stroke-width: 0.25;
+    opacity: 0;
   }
 }
 
-.path-live .launcher:hover {
-  ul {
-    transition: all 0.5s ease-in-out;
-    background-color: $grey-lighter;
-    border-bottom: 4px solid $grey-darker;
+.p-svg-pulse {
+  .pulse {
+    stroke: $brand-info;
+    -webkit-animation: svg_pulse 3s ease;
+    -webkit-animation-iteration-count: infinite;
+  }
+  .halo {
+    stroke: $brand-info;
+  }
+  .center {
+    fill: $brand-info;
   }
 }
 
 //====================================
-// fications
+// Nofications
 //====================================
 
 .notifications {
@@ -137,6 +140,15 @@
 .app-live {
   width: 100%; height: 100%;
   background-color: white;
+}
+
+.live-return-menu {
+  background-color: black;
+  text-align: center;
+  font-size: 75%;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
 //====================================
@@ -221,24 +233,36 @@
   text-align: center;
 }
 
-.devices-list .device {
-  padding: 10px;
-  display: inline-block;
-  vertical-align: top;
-  border: 2px solid white;
-  text-align: left;
-  margin: 15px;
-  border-bottom-width: 4px;
-  width: 500px;
+//====================================
+// DEVICES MAP
+//====================================
 
-  .icon, ul {
-    padding: 5px;
-    float: left;
-    display: block;
+.popover-content {
+  color: $grey;
+}
+
+.devices-view {
+  width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  position: relative;
+
+  svg.devices-map {
+    width: 800px;
+    height: 800px;
   }
 
-  .icon img {
-    height: 64px; width: auto;
-    margin-right: 15px;
+  line.connection { opacity: 0.6; }
+
+  .device {
+    cursor: pointer;
+    pointer-events: all;
+    rect { fill: $grey-dark; }
+    &:hover rect {
+      opacity: 0.05;
+      fill: white;
+      stroke: white;
+      stroke-width: 0.2;
+    }
   }
 }

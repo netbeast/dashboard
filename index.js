@@ -7,10 +7,11 @@ var path = require('path')
 var http = require('http')
 
 // NPM dependencies
-var forever = require('forever-monitor')
 var cmd = require('commander')
 var mosca = require('mosca')
+var spawn = require('child_process').spawn
 
+process.chdir(__dirname)
 // Project libraries
 var app = require('./src')
 var bootOnload = require('./src/boot-on-load')
@@ -36,30 +37,26 @@ server.listen(process.env.PORT, function () {
   bootOnload()
 })
 
-var dns = new (forever.Monitor)(DASHBOARD_DNS, {
-  env: { 'NETBEAST_PORT': process.env.PORT },
-  max: 1
+var env = Object.create(process.env)
+env.NETBEAST_PORT = process.env.PORT
+var options = { env: env }
+
+var network = spawn(DASHBOARD_NETWORK, options)
+var deamon = spawn(DASHBOARD_DEAMON, options)
+var dns = spawn(DASHBOARD_DNS, options)
+
+network.stdout.on('data', (data) => {
+  console.log(data.toString())
 })
-dns.title = 'netbeast-dns'
-dns.start()
-
-var deamon = new (forever.Monitor)(DASHBOARD_DEAMON, {
-  env: { 'NETBEAST_PORT': process.env.PORT },
-  max: 1
+deamon.stdout.on('data', (data) => {
+  console.log(data.toString())
 })
-
-deamon.title = 'netbeast-deamon'
-deamon.start()
-
-var network = new (forever.Monitor)(DASHBOARD_NETWORK, {
-  env: { 'NETBEAST_PORT': process.env.PORT },
-  max: 1
+dns.stdout.on('data', (data) => {
+  console.log(data.toString())
 })
-
-network.title = 'netbeast-network'
-network.start()
 
 process.on('exit', function () {
+  network.kill('SIGTERM')
   deamon.kill('SIGTERM')
   dns.kill('SIGTERM')
 })

@@ -44,7 +44,7 @@ http://docs.netbeast.co
 
 ##Desktop version compilation
 
-If you want to know how you can compile the Netbeast dashboard to get a desktop application go [here](https://github.com/netbeast/dashboard/tree/dashboard-electron)
+If you want to know how you can compile the Netbeast dashboard to get a desktop application go [here](https://github.com/netbeast/dashboard/tree/electron)
 
 ## Contact
 * Visit our site [https://netbeast.co](https://netbeast.co)

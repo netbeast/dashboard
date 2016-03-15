@@ -47,7 +47,7 @@
     "babelify": "^7.2.0",
     "browserify": "^12.0.1",
     "chai": "^3.2.0",
-    "electron-prebuilt": "^0.36.9",
+    "electron-prebuilt": "^0.37.2",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-cssnano": "^2.1.0",
@@ -92,8 +92,7 @@
     "build": "./node_modules/.bin/gulp build",
     "serve": "./node_modules/.bin/gulp serve",
     "dev": "./node_modules/.bin/gulp",
-    "clean": "rm -r ./test/coverage; rm .database.sqlite",
-    "start": "./node_modules/.bin/electron index.js"
+    "start": "./node_modules/.bin/electron main.js"
   },
   "engines" : { "node" : ">=0.12" },
   "author": "staff@netbeast",

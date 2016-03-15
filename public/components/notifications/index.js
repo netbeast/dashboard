@@ -17,10 +17,11 @@ export default class Notifications extends React.Component {
     const timeout = notification.timeout || 4700
     const toast = Object.assign({ id, timeout }, notification)
     this.setState({ toasts: [...this.state.toasts, toast] })
+    return id
   }
 
   handleNotification (topic, message) {
-    console.log('mqtt://push ->', message.toString())
+    // console.log('mqtt://push ->', message.toString())
     const notification = JSON.parse(message.toString())
     this.notify(notification)
   }
@@ -41,23 +42,23 @@ export default class Notifications extends React.Component {
     window.notify = this.notify.bind(this) // make it globally accesible
     window.toastr = {
       info: (body, title) => {
-        window.notify({title: title, body: body, emphasis: 'info'})
+        return window.notify({title: title, body: body, emphasis: 'info'})
       },
       error: (body, title) => {
-        window.notify({title: title, body: body, emphasis: 'error'})
+        return window.notify({title: title, body: body, emphasis: 'error'})
       },
       success: (body, title) => {
-        window.notify({title: title, body: body, emphasis: 'success'})
+        return window.notify({title: title, body: body, emphasis: 'success'})
       },
       warning: (body, title) => {
-        window.notify({title: title, body: body, emphasis: 'warning'})
-      }
+        return window.notify({title: title, body: body, emphasis: 'warning'})
+      },
+      dismiss: this.dismiss.bind(this)
     }
   }
 
   componentWillUnmount () {
     this.mqtt.end(() => console.log('Client disconnected'))
-    console.log('Client disconnected')
   }
 
   render () {

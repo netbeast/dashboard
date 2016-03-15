@@ -124,11 +124,13 @@
   transform: scaleY(-1);
   overflow: hidden;
 
-  .alert { opacity: 0.9;
+  .alert {
+    opacity: 0.9;
     transform: scaleY(-1);
+    border-width: 0;
     &:hover, &.current { opacity: 1 }
   }
-  .alert-error { background-color: $brand-primary; }
+
   .alert .title { text-transform: uppercase; font-weight: bolder; }
   .alert .body { padding-top: 5px; }
 }

@@ -33,7 +33,6 @@ export default class AppsList extends React.Component {
 
       let apps = [ ...res.body ] // smart copy
       apps.forEach((app) => app.kind = kind)
-      console.log('apps', apps)
 
       Session.save('apps', apps)
       this.setState({ apps })

@@ -20,10 +20,11 @@ var uninstall = require('../lib/uninstall')
 var stop = require('../lib/stop')
 var restart = require('../lib/restart')
 var launch = require('../lib/launch')
+var ipkg = require('../lib/ipkg')
 
 const ACTIONS_LIST = ['new', 'create', 'package', 'pkg', 'unpackage', 'unpkg',
 'publish', 'scan', 'install', 'forget', 'start', 'uninstall', 'stop', 'restart',
- 'launch']
+ 'launch', 'ipkg']
 
 var pkg = require('../package.json')
 
@@ -89,6 +90,10 @@ cli.command('restart <app name>')
 cli.command('launch <app name>')
 .description('Launches an installed app')
 .action(launch)
+
+cli.command('ipkg <appname>')
+.description('Compress an app as a tar avoiding .git and packages inside app folder')
+.action(ipkg)
 
 cli.parse(process.argv)
 

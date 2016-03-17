@@ -3,6 +3,7 @@
   "description": "Netbeast OS dashboard, IoT apps manager",
   "version": "0.2.4",
   "preferGlobal": "true",
+  "main": "main.js",
   "dependencies": {
     "async": "^1.5.0",
     "bluebird": "^3.2.2",

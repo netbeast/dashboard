@@ -64199,7 +64199,7 @@ var Toast = function (_React$Component) {
       var timeout = _props.timeout;
       var isCurrent = _props.isCurrent; // eslint-disable-line
 
-      // if (timeout) setTimeout(this.close, timeout)
+      if (timeout) setTimeout(this.close, timeout);
 
       return _react2.default.createElement(
         'div',

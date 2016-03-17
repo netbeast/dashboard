@@ -10,7 +10,6 @@ router.use(function (req, res, next) {
 })
 
 router.use(require('./apps'))
-router.use(require('./users'))
 router.use(require('./misc'))
 router.use(require('./plugins'))
 router.use(require('./topics'))

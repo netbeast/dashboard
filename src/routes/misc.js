@@ -2,7 +2,6 @@ var express = require('express')
 var spawn = require('child_process').spawn
 
 var apps = require('./apps')
-var users = require('./users')
 var activities = require('./activities')
 var broker = require('../helpers/broker')
 

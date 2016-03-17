@@ -33,7 +33,7 @@
   }
 }
 
-.drawer .glyphicon.glyphicon-package img { max-height: 20px; }
+.drawer .fa.fa-package img { max-height: 20px; }
 
 .drawer .apps-list {
   margin-top: -20px;
@@ -131,6 +131,8 @@
     &:hover, &.current { opacity: 1 }
   }
 
+  .alert.alert-info { background-color: white; color: $grey; }
+  .alert.alert-error { background-color: $brand-primary; }
   .alert .title { text-transform: uppercase; font-weight: bolder; }
   .alert .body { padding-top: 5px; }
 }
@@ -267,4 +269,22 @@
       stroke-width: 0.2;
     }
   }
+}
+
+//==============================
+// User pod
+//==============================
+
+.user-pod {
+  position: fixed;
+  display: block;
+  right: 25px;
+  top: 15px;
+}
+
+.user-pod-name {
+  padding: 10px;
+  display: inline-block;
+  vertical-align: top;
+  float: right;
 }

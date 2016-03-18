@@ -5,21 +5,10 @@ var source = require('vinyl-source-stream')
 var buffer = require('vinyl-buffer')
 var browserify = require('browserify')
 var watchify = require('watchify')
-var mocha = require('gulp-mocha');
 
 gulp.task('default', ['serve', 'watchify'], function () {
   plugins.livereload.listen()
   gulp.watch('./public/styles/*.scss', ['sass'])
-})
-
-gulp.task('test', function(){
-    // make test
-    process.env.ENV="development"
-    return gulp.src(
-        ['./test/**/*.js'],
-        {read: false})
-		  .pipe(mocha({reporter: 'spec', bail: true}))
-      .pipe(gulp.dest(""));
 })
 
 gulp.task('serve', function () {

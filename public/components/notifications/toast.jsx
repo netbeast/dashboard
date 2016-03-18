@@ -14,9 +14,9 @@ export default class Toast extends React.Component {
     // if (timeout) setTimeout(this.close, timeout)
 
     return (
-      <div className={'alert alert-' + (emphasis || 'info') + (isCurrent ? ' current' : '')}>
+      <div className={'alert alert-' + (emphasis) + (isCurrent ? ' current' : '')}>
         <span className='title'> {title || 'dashboard'} </span>
-        <button type='button' className='close' onClick={this.close} data-dismiss='alert'>×</button>
+        <button type='button' className='close' onClick={this.close}>×</button>
         <br/>
         <div className='body'>
           {body.toString()}

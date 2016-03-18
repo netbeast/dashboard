@@ -61396,38 +61396,32 @@ var App = function (_React$Component) {
       );
     }
   }, {
-    key: 'renderStopButton',
-    value: function renderStopButton() {
-      var kind = this.props.kind;
+    key: 'renderButton',
+    value: function renderButton() {
+      var _props3 = this.props;
+      var kind = _props3.kind;
+      var git_url = _props3.git_url;
 
-      return kind === 'activities' ? _react2.default.createElement(
-        'a',
-        { href: 'javascript:void(0)', onClick: this.stop.bind(this), className: 'stop btn btn-filled btn-warning' },
-        ' Stop '
-      ) : null;
-    }
-  }, {
-    key: 'renderRemoveButton',
-    value: function renderRemoveButton() {
-      var kind = this.props.kind;
-
-      console.log(kind);
-      return kind === 'remove' ? _react2.default.createElement(
-        'a',
-        { href: 'javascript:void(0)', onClick: this.uninstall.bind(this), className: 'remove btn btn-filled btn-primary' },
-        ' Remove '
-      ) : null;
-    }
-  }, {
-    key: 'renderInstallButton',
-    value: function renderInstallButton() {
-      var kind = this.props.kind;
-
-      return kind === 'explore' ? _react2.default.createElement(
-        'a',
-        { href: 'javascript:void(0)', onClick: this.install.bind(this), className: 'install btn btn-filled btn-info' },
-        ' Install '
-      ) : null;
+      switch (kind) {
+        case 'activities':
+          return _react2.default.createElement(
+            'a',
+            { href: 'javascript:void(0)', onClick: this.stop.bind(this), className: 'stop btn btn-filled btn-warning' },
+            ' Stop '
+          );
+        case 'remove':
+          return _react2.default.createElement(
+            'a',
+            { href: 'javascript:void(0)', onClick: this.uninstall.bind(this), className: 'remove btn btn-filled btn-primary' },
+            ' Remove '
+          );
+        case 'explore':
+          return _react2.default.createElement(
+            'a',
+            { href: 'javascript:void(0)', onClick: API.install.bind(API, git_url), className: 'install btn btn-filled btn-info' },
+            ' Install '
+          );
+      }
     }
   }, {
     key: 'componentDidMount',
@@ -61439,9 +61433,8 @@ var App = function (_React$Component) {
       this.mqtt = _mqtt2.default.connect();
       this.mqtt.subscribe('netbeast/activities/close');
       this.mqtt.on('message', function (topic, message) {
-        if (message.toString() === name) this.setState({ isRunning: false });
+        if (message.toString() === name) _this4.setState({ isRunning: false });
       });
-
       _superagentBluebirdPromise2.default.get('/api/activities/' + name).end(function (err, res) {
         if (!err) _this4.setState({ isRunning: true });
       });
@@ -61454,16 +61447,15 @@ var App = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _props3 = this.props;
-      var name = _props3.name;
-      var author = _props3.author;
-      var logo = _props3.logo;
-      var netbeast = _props3.netbeast;
+      var _props4 = this.props;
+      var name = _props4.name;
+      var author = _props4.author;
+      var logo = _props4.logo;
+      var netbeast = _props4.netbeast;
 
       var isPlugin = netbeast && netbeast.type === 'plugin';
       var defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)';
       var logoStyle = { backgroundImage: logo ? 'url(/api/apps/' + name + '/logo)' : defaultLogo };
-
       return _react2.default.createElement(
         'div',
         { className: 'app' },
@@ -61473,9 +61465,7 @@ var App = function (_React$Component) {
           { ref: 'contextMenu', trigger: [], rootClose: true, placement: 'bottom', overlay: this.contextMenu() },
           _react2.default.createElement('div', { className: 'logo', title: 'Launch app', style: logoStyle, onClick: this.handleClick.bind(this), onContextMenu: this.toggleMenu.bind(this) })
         ),
-        this.renderStopButton(),
-        this.renderRemoveButton(),
-        this.renderInstallButton(),
+        this.renderButton(),
         _react2.default.createElement(
           'h4',
           { className: 'name' },
@@ -61574,7 +61564,6 @@ var AppsList = function (_React$Component) {
         apps.forEach(function (app) {
           return app.kind = kind;
         });
-        console.log('apps', apps);
 
         _lib.Session.save('apps', apps);
         _this2.setState({ apps: apps });
@@ -63389,11 +63378,12 @@ var Notifications = function (_React$Component) {
       var timeout = notification.timeout || 4700;
       var toast = Object.assign({ id: id, timeout: timeout }, notification);
       this.setState({ toasts: [].concat(_toConsumableArray(this.state.toasts), [toast]) });
+      return id;
     }
   }, {
     key: 'handleNotification',
     value: function handleNotification(topic, message) {
-      console.log('mqtt://push ->', message.toString());
+      // console.log('mqtt://push ->', message.toString())
       var notification = JSON.parse(message.toString());
       this.notify(notification);
     }
@@ -63418,17 +63408,18 @@ var Notifications = function (_React$Component) {
       window.notify = this.notify.bind(this); // make it globally accesible
       window.toastr = {
         info: function info(body, title) {
-          window.notify({ title: title, body: body, emphasis: 'info' });
+          return window.notify({ title: title, body: body, emphasis: 'info' });
         },
         error: function error(body, title) {
-          window.notify({ title: title, body: body, emphasis: 'error' });
+          return window.notify({ title: title, body: body, emphasis: 'error' });
         },
         success: function success(body, title) {
-          window.notify({ title: title, body: body, emphasis: 'success' });
+          return window.notify({ title: title, body: body, emphasis: 'success' });
         },
         warning: function warning(body, title) {
-          window.notify({ title: title, body: body, emphasis: 'warning' });
-        }
+          return window.notify({ title: title, body: body, emphasis: 'warning' });
+        },
+        dismiss: this.dismiss.bind(this)
       };
     }
   }, {
@@ -63437,7 +63428,6 @@ var Notifications = function (_React$Component) {
       this.mqtt.end(function () {
         return console.log('Client disconnected');
       });
-      console.log('Client disconnected');
     }
   }, {
     key: 'render',
@@ -63514,7 +63504,7 @@ var Toast = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'alert alert-' + (emphasis || 'info') + (isCurrent ? ' current' : '') },
+        { className: 'alert alert-' + emphasis + (isCurrent ? ' current' : '') },
         _react2.default.createElement(
           'span',
           { className: 'title' },
@@ -63524,7 +63514,7 @@ var Toast = function (_React$Component) {
         ),
         _react2.default.createElement(
           'button',
-          { type: 'button', className: 'close', onClick: this.close, 'data-dismiss': 'alert' },
+          { type: 'button', className: 'close', onClick: this.close },
           '×'
         ),
         _react2.default.createElement('br', null),

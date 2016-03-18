@@ -59,7 +59,7 @@ function parse_arp_table (arpt) {
     var mac_end = mac_start + 17
     var mac = entry.slice(mac_start, mac_end)
 
-    if (mac) {
+    if (mac && mac!=='ff:ff:ff:ff:ff:ff') {
       arp_obj['mac'] = mac
       arp_table.push(arp_obj)
     }
@@ -69,19 +69,17 @@ function parse_arp_table (arpt) {
 
 function joinTables (arp_table, devices_table) {
   var result = arp_table
-
   devices_table.forEach(function (device) {
-    var exist = false
     result.forEach(function (entry, index) {
-      if (device.mac_or_ip !== entry.ip && device.mac_or_ip !== entry.mac && device.id !== entry.id) exist = false
-      else exist = true
+      if (device.mac_or_ip === entry.ip || device.mac_or_ip === entry.mac || device.id === entry.id) {
+        result.splice(index)
+        result.push(device)
+      }
     })
-    if (exist === false) result.push(device)
   })
-
   return result
 }
 
 setInterval(function () {
   getArp()
-}, 60000)
+}, 1000)

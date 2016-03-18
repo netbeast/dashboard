@@ -37,15 +37,26 @@ server.listen(process.env.PORT, function () {
   bootOnload()
 })
 
-var options = {
-  env: { 'NETBEAST_PORT': process.env.PORT }
-}
+var env = Object.create(process.env)
+env.NETBEAST_PORT = process.env.PORT
+var options = { env: env }
 
-spawn(DASHBOARD_NETWORK, options)
-spawn(DASHBOARD_DEAMON, options)
-spawn(DASHBOARD_DNS, options)
+var network = spawn(DASHBOARD_NETWORK, options)
+var deamon = spawn(DASHBOARD_DEAMON, options)
+var dns = spawn(DASHBOARD_DNS, options)
+
+network.stdout.on('data', (data) => {
+  console.log(data.toString())
+})
+deamon.stdout.on('data', (data) => {
+  console.log(data.toString())
+})
+dns.stdout.on('data', (data) => {
+  console.log(data.toString())
+})
 
 process.on('exit', function () {
+  network.kill('SIGTERM')
   deamon.kill('SIGTERM')
   dns.kill('SIGTERM')
 })

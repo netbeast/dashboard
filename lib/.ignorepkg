@@ -1,0 +1,12 @@
+# Packages #
+*.7z
+*.dmg
+*.iso
+*.jar
+*.rar
+*.gz
+*.tar
+*.zip
+
+# Git #
+.git

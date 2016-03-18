@@ -20,10 +20,11 @@ var uninstall = require('../lib/uninstall')
 var stop = require('../lib/stop')
 var restart = require('../lib/restart')
 var launch = require('../lib/launch')
+var ipkg = require('../lib/ipkg')
 
 const ACTIONS_LIST = ['new', 'create', 'package', 'pkg', 'unpackage', 'unpkg',
 'publish', 'scan', 'install', 'forget', 'start', 'uninstall', 'stop', 'restart',
- 'launch']
+ 'launch', 'ipkg']
 
 var pkg = require('../package.json')
 
@@ -74,21 +75,25 @@ cli.command('start')
 .option('-p, --port <n>', 'Port to start the HTTP server', parseInt)
 .action(start)
 
-cli.command('uninstall <appname>')
+cli.command('uninstall <app name>')
 .description('Uninstall an app')
 .action(uninstall)
 
-cli.command('stop <appname>')
+cli.command('stop <app name>')
 .description('Stops a running app')
 .action(stop)
 
-cli.command('restart <appname>')
+cli.command('restart <app name>')
 .description('Restarts a running app')
 .action(restart)
 
-cli.command('launch <appname>')
+cli.command('launch <app name>')
 .description('Launches an installed app')
 .action(launch)
+
+cli.command('ipkg <appname>')
+.description('Compress an app as a tar avoiding .git and packages inside app folder')
+.action(ipkg)
 
 cli.parse(process.argv)
 

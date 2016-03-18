@@ -151,7 +151,7 @@ self.on('start', function (app) {
     })
 
     child.on('close', function (code) {
-      client.public('netbeast/activities/close', app.name)
+      client.publish('netbeast/activities/close', app.name)
       Resource.findOne({ app: app.name }, function (err, resource) {
         if (err) return console.error(err)
 
@@ -172,7 +172,7 @@ self.on('start', function (app) {
 })
 
 process.on('exit', function () {
-  children.forEach(function (child) {
-    child.process.kill('SIGTERM')
-  })
+  for (var key in children) {
+    children[key].process.kill('SIGTERM')
+  }
 })

@@ -82,4 +82,4 @@ function joinTables (arp_table, devices_table) {
 
 setInterval(function () {
   getArp()
-}, 1000)
+}, 15000)

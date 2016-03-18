@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Notifications from './notifications'
+import FeedbackPod from './misc/feedback-pod.jsx'
 
 export default class Dashboard extends React.Component {
   constructor (props) {
@@ -26,6 +27,7 @@ export default class Dashboard extends React.Component {
     return (
       <div id='dashboard' className={`path${path}`}>
         <Notifications />
+        <FeedbackPod />
         <main>
           {this.props.children}
         </main>

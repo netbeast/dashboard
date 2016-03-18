@@ -210,6 +210,26 @@
   }
 }
 
+
+//====================================
+// FEEDBACK POD
+//====================================
+
+.feedback-pod {
+  color: inherit;
+  position: fixed;
+  display: block;
+  top: 5px; right: 5px;
+  text-decoration: none;
+  opacity: 0.5;
+  &:hover, &:active {
+    color: inherit;
+    text-decoration: none;
+    opacity: 1;
+  }
+}
+
+
 //====================================
 // DEVICES POD
 //====================================

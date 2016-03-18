@@ -21,10 +21,10 @@ gulp.task('serve', function () {
   })
 })
 
-gulp.task("start", bgtask = bg("node", "./index.js"));
+gulp.task("start-bg", bgtask = bg("node", "./index.js"));
 
-gulp.task('mocha',["start"], function(){
-    // make test
+gulp.task('test',["start"], function(){
+    // run test
     return gulp.src(
         ['./test/**/*.js'],
         {read: false})

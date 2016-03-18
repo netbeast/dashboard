@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Notifications from './notifications'
+import ConnectionPod from './misc/connection-pod.jsx'
 
 export default class Dashboard extends React.Component {
   constructor (props) {
@@ -15,7 +16,7 @@ export default class Dashboard extends React.Component {
     const pathname = location.pathname.replace(regexp, '-')
     return (pathname === '-') ? '-root' : pathname
   }
-
+ 
   componentWillReceiveProps (nextProps) {
     this.setState({ path: this.getPathClassName(nextProps) })
   }
@@ -26,6 +27,7 @@ export default class Dashboard extends React.Component {
     return (
       <div id='dashboard' className={`path${path}`}>
         <Notifications />
+        <ConnectionPod />
         <main>
           {this.props.children}
         </main>

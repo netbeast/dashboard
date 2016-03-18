@@ -236,6 +236,21 @@
 }
 
 //====================================
+// connection POD
+//====================================
+
+.connection-pod {
+  position: fixed;
+  right: 10px; bottom: 10px;
+  display: block;
+  width: 15px; height: 15px;
+  background-color: $brand-warning;
+  border-radius: 50%;
+  &.green { background-color: $brand-success; }
+  &.red { background-color: $brand-primary; }
+}
+
+//====================================
 // DEVICES MAP
 //====================================
 

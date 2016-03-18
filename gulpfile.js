@@ -6,6 +6,8 @@ var buffer = require('vinyl-buffer')
 var browserify = require('browserify')
 var watchify = require('watchify')
 var mocha = require('gulp-mocha')
+var wait = require('gulp-wait')
+var bg = require("gulp-bg");
 
 gulp.task('default', ['serve', 'watchify'], function () {
   plugins.livereload.listen()
@@ -19,13 +21,24 @@ gulp.task('serve', function () {
   })
 })
 
-gulp.task('test', function(){
+gulp.task("start", bgtask = bg("node", "./index.js"));
+
+gulp.task('mocha',["start"], function(){
     // make test
     return gulp.src(
         ['./test/**/*.js'],
         {read: false})
+      .pipe(wait(3000))
 		  .pipe(mocha({reporter: 'spec', bail: true}))
       .pipe(gulp.dest(""))
+      .once('end', function () {
+        bgtask.setCallback(function(){process.exit(0);});
+        bgtask.stop(0);
+      })
+      .once('error', function () {
+        bgtask.setCallback(function(){process.exit(0);});
+        bgtask.stop(0);
+      })
 })
 
 gulp.task('build', ['sass', 'browserify'])

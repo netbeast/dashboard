@@ -57,7 +57,9 @@
     "gulp-sass": "^2.0.1",
     "gulp-sourcemaps": "^1.5.2",
     "gulp-util": "^3.0.4",
+    "gulp-bg": "^0.0.8",
     "gulp-mocha": "^2.2.0",
+    "gulp-wait": "^0.0.2",
     "istanbul": "^0.4.0",
     "livereload": "^0.4.1",
     "mocha": "^2.3.3",
@@ -83,7 +85,7 @@
     "router"
   ],
   "scripts": {
-    "test": "export ENV=development && export NODE_PATH=.:$NODE_PATH && ./node_modules/.bin/gulp test",
+    "test": "./test/test.sh",
     "coverage": "./test/coverage.sh",
     "build": "./node_modules/.bin/gulp build",
     "serve": "./node_modules/.bin/gulp serve",

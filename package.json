@@ -55,6 +55,7 @@
     "gulp-nodemon": "^2.0.3",
     "gulp-plumber": "^1.0.1",
     "gulp-sass": "^2.0.1",
+    "gulp-mocha": "^2.2.0",
     "gulp-sourcemaps": "^1.5.2",
     "gulp-util": "^3.0.4",
     "istanbul": "^0.4.0",
@@ -82,7 +83,7 @@
     "router"
   ],
   "scripts": {
-    "test": "./test/test.sh",
+    "test": "./node_modules/.bin/gulp test",
     "coverage": "./test/coverage.sh",
     "build": "./node_modules/.bin/gulp build",
     "serve": "./node_modules/.bin/gulp serve",

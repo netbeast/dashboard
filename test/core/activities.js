@@ -8,7 +8,7 @@ var request = require('superagent')
 var fs = require('fs-extra')
 var path = require('path')
 
-var App = require('src/models/app')
+var App = require('../../src/models/app')
 
 const URL = 'http://localhost:' + process.env.PORT + '/api'
 const APP_PATH = './test/app.tar.gz'

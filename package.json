@@ -82,7 +82,7 @@
     "router"
   ],
   "scripts": {
-    "test": "./test/test.sh",
+    "test": "export NODE_PATH=.:$NODE_PATH; ./node_modules/.bin/_mocha --bail --recursive",
     "coverage": "./test/coverage.sh",
     "build": "./node_modules/.bin/gulp build",
     "serve": "./node_modules/.bin/gulp serve",

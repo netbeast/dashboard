@@ -1,11 +1,8 @@
 import React from 'react'
 
 import Notifications from './notifications'
-<<<<<<< HEAD
 import FeedbackPod from './misc/feedback-pod.jsx'
-=======
 import ConnectionPod from './misc/connection-pod.jsx'
->>>>>>> master
 
 export default class Dashboard extends React.Component {
   constructor (props) {
@@ -31,11 +28,8 @@ export default class Dashboard extends React.Component {
     return (
       <div id='dashboard' className={`path${path}`}>
         <Notifications />
-<<<<<<< HEAD
         <FeedbackPod />
-=======
         <ConnectionPod />
->>>>>>> master
         <main>
           {this.props.children}
         </main>

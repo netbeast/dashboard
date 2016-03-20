@@ -256,16 +256,18 @@
 }
 
 //====================================
-// connection POD
+// Connection POD to show online status or internet availability
 //====================================
 
 .connection-pod {
   position: fixed;
   right: 10px; bottom: 10px;
   display: block;
-  width: 15px; height: 15px;
+  width: 12px; height: 12px;
   background-color: $brand-warning;
   border-radius: 50%;
+  opacity: 0.8;
+  &:hover { opacity: 1; }
   &.green { background-color: $brand-success; }
   &.red { background-color: $brand-primary; }
 }

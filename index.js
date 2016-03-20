@@ -45,16 +45,6 @@ var network = spawn(DASHBOARD_NETWORK, options)
 var deamon = spawn(DASHBOARD_DEAMON, options)
 var dns = spawn(DASHBOARD_DNS, options)
 
-network.stdout.on('data', (data) => {
-  console.log(data.toString())
-})
-deamon.stdout.on('data', (data) => {
-  console.log(data.toString())
-})
-dns.stdout.on('data', (data) => {
-  console.log(data.toString())
-})
-
 process.on('exit', function () {
   network.kill('SIGTERM')
   deamon.kill('SIGTERM')

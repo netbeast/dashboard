@@ -5,10 +5,8 @@ var source = require('vinyl-source-stream')
 var buffer = require('vinyl-buffer')
 var browserify = require('browserify')
 var watchify = require('watchify')
-var mocha = require('gulp-mocha')
-var wait = require('gulp-wait')
-var bg = require("gulp-bg");
-var istanbul = require('gulp-istanbul');
+
+var bgTask
 
 gulp.task('default', ['serve', 'watchify'], function () {
   plugins.livereload.listen()
@@ -22,49 +20,45 @@ gulp.task('serve', function () {
   })
 })
 
-gulp.task("start-bg", bgtask = bg("node", "./index.js"));
+gulp.task('start-bg', bgTask = plugins.bg('node', './index.js'))
 
 gulp.task('pre-test', function () {
   return gulp.src(['./test/**/*.js'])
-    .pipe(istanbul())
-    .pipe(istanbul.hookRequire());
-});
-
-gulp.task('coverage',["start-bg","pre-test"], function(){
-    // make test
-    return gulp.src(
-        ['./test/**/*.js'],
-        {read: false})
-      .pipe(wait(3000))
-		  .pipe(mocha({reporter: 'spec', bail: true}))
-      .pipe(gulp.dest(""))
-      .pipe(istanbul.writeReports({dir: "./test/coverage"}))
-      .once('end', function () {
-        bgtask.setCallback(function(){process.exit(0);});
-        bgtask.stop(0);
-      })
-      .once('error', function () {
-        bgtask.setCallback(function(){process.exit(0);});
-        bgtask.stop(0);
-      })
+  .pipe(plugins.istanbul())
+  .pipe(plugins.istanbul.hookRequire())
 })
 
-gulp.task('test',["start-bg"], function(){
-    // make test
-    return gulp.src(
-        ['./test/**/*.js'],
-        {read: false})
-      .pipe(wait(3000))
-		  .pipe(mocha({reporter: 'spec', bail: true}))
-      .pipe(gulp.dest(""))
-      .once('end', function () {
-        bgtask.setCallback(function(){process.exit(0);});
-        bgtask.stop(0);
-      })
-      .once('error', function () {
-        bgtask.setCallback(function(){process.exit(0);});
-        bgtask.stop(0);
-      })
+gulp.task('coverage', ['start-bg', 'pre-test'], function () {
+  // make test
+  return gulp.src(['./test/**/*.js'], { read: false })
+  .pipe(plugins.wait(3000))
+  .pipe(plugins.mocha({reporter: 'spec', bail: true}))
+  .pipe(gulp.dest(''))
+  .pipe(plugins.istanbul.writeReports({ dir: './test/coverage' }))
+  .once('end', function () {
+    bgTask.setCallback(function () { process.exit(0) })
+    bgTask.stop(0)
+  })
+  .once('error', function () {
+    bgTask.setCallback(function () { process.exit(0) })
+    bgTask.stop(0)
+  })
+})
+
+gulp.task('test', ['start-bg'], function () {
+  // make test
+  return gulp.src(['./test/**/*.js'], { read: false })
+  .pipe(plugins.wait(3000))
+  .pipe(plugins.mocha({ reporter: 'spec', bail: true }))
+  .pipe(gulp.dest(''))
+  .once('end', function () {
+    bgTask.setCallback(function () { process.exit(0) })
+    bgTask.stop(0)
+  })
+  .once('error', function () {
+    bgTask.setCallback(function () { process.exit(0) })
+    bgTask.stop(0)
+  })
 })
 
 gulp.task('build', ['sass', 'browserify'])
@@ -88,7 +82,7 @@ gulp.task('watchify', function () {
       entries: './public/components/index.jsx',
       debug: true
     })
-    ).transform('babelify', { presets: ['es2015', 'react'] })
+  ).transform('babelify', { presets: ['es2015', 'react'] })
 
   bundler.on('update', function () { compile(bundler) })
   return compile(bundler)

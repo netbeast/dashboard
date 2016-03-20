@@ -94,6 +94,7 @@
     "start": "gulp serve",
     "clean": "rm -r ./test/coverage; rm .database.sqlite"
   },
+  "engines" : { "node" : ">=0.12" },
   "author": "staff@netbeast",
   "license": "AGPL-3.0"
 }

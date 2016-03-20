@@ -63371,6 +63371,7 @@ var ConnectionPod = function (_React$Component) {
 exports.default = ConnectionPod;
 
 },{"react":551,"superagent":553}],574:[function(require,module,exports){
+(function (process){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63403,7 +63404,7 @@ var VersionPod = function (_React$Component) {
   _createClass(VersionPod, [{
     key: 'render',
     value: function render() {
-      var version = '0.2.4';
+      var version = process.env.VERSION;
       return _react2.default.createElement(
         'span',
         { className: 'version-pod', title: 'Checking for updates...' },
@@ -63418,7 +63419,9 @@ var VersionPod = function (_React$Component) {
 
 exports.default = VersionPod;
 
-},{"react":551}],575:[function(require,module,exports){
+}).call(this,require('_process'))
+
+},{"_process":11,"react":551}],575:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();

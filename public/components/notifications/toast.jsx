@@ -19,7 +19,7 @@ export default class Toast extends React.Component {
         <button type='button' className='close' onClick={this.close}>×</button>
         <br/>
         <div className='body'>
-          {body.toString()}
+          {body}
         </div>
       </div>
     )

@@ -37,12 +37,20 @@ export default class ExplorableApp extends React.Component {
   install () {
     const url = this.props.git_url
 
+    const loader = toastr.info(
+      <span>
+        <div className='loader'></div>
+        Installing app...
+      </span>
+    )
+
     request.post('/api/apps').send({ url }).then((res) => {
       const name = res.body.name
       const props = res.body.netbeast
       const type = props ? props.type : 'app'
 
       toastr.success(`${name} has been installed!`)
+      toastr.dismiss(loader)
 
       if (type === 'plugin' || type === 'service' || props.bootOnLoad)
         return request.post('/api/activities/' + name).promise()

@@ -6,7 +6,7 @@ export default class VersionPod extends React.Component {
   }
 
   render () {
-    const version = '0.2.4'
+    const version = process.env.VERSION
     return (
       <span className='version-pod' title='Checking for updates...'>
         v{version}

@@ -1,15 +1,12 @@
-# Netbeast dashboard
-
 [![Build Status](https://travis-ci.org/netbeast/dashboard.svg)](https://travis-ci.org/netbeast/dashboard)
-[![npm version](https://badge.fury.io/js/nb-dashboard.svg)](https://badge.fury.io/js/nb-dashboard)
 ![dependencies](https://david-dm.org/netbeast/dashboard.svg)
-[![devDependency](https://david-dm.org/netbeast/dashboard/dev-status.svg)](https://david-dm.org/netbeast/dashboard#info=devDependencies)
 
-[![Join the chat at https://gitter.im/netbeast/docs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast/docs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# Netbeast dashboard
+### Connect everything. Regarless its brand or technology,
 
-###Iot in html5.
+This is a web panel from you can install, manage or publish IoT applications. For every platform. Mac, Windows & Linux app/repo. Check out our http://docs.netbeast.co for builds for Raspberry Pi, Beagle Bone and Arduino.
 
-This is a web panel from you can install, manage or publish IoT applications. For Linux + node.js. You already tried the Netbeast dashboard or distro? Let us know http://bit.ly/1dQmFKt!
+[<img src="https://slack.com/img/slack_hash_128.v1442100037.png" height="24px" width="auto"/> Join us in Slack!](https://netbeastco.typeform.com/to/VGLexg)
 
 ## Try it locally
 Find it live at `http://localhost`
@@ -52,7 +49,7 @@ If you want to know how you can compile the Netbeast dashboard to get a desktop 
 * Report a bug or enter discussion at [issues](https://github.com/netbeast/docs/issues)
 * Other resources: [Docs](https://github.com/netbeast/docs/wiki), Netbeast [API](https://github.com/netbeast/API)
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/netbeast/docs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[<img src="https://slack.com/img/slack_hash_128.v1442100037.png" height="24px" width="auto"/> Join us in Slack!](https://netbeastco.typeform.com/to/VGLexg)
 
 
 <img src="https://github.com/netbeast/docs/blob/master/img/open-source.png?raw=true" height="140px" width="auto"/>

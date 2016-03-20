@@ -61329,12 +61329,20 @@ var App = function (_React$Component) {
     value: function install() {
       var url = this.props.git_url;
 
+      var loader = toastr.info(_react2.default.createElement(
+        'span',
+        null,
+        _react2.default.createElement('div', { className: 'loader' }),
+        'Installing app...'
+      ));
+
       _superagentBluebirdPromise2.default.post('/api/apps').send({ url: url }).then(function (res) {
         var name = res.body.name;
         var props = res.body.netbeast;
         var type = props ? props.type : 'app';
 
         toastr.success(name + ' has been installed!');
+        toastr.dismiss(loader);
 
         if (type === 'plugin' || type === 'service' || props.bootOnLoad) return _superagentBluebirdPromise2.default.post('/api/activities/' + name).promise();
       }).then(function (res) {
@@ -61948,12 +61956,20 @@ var ExplorableApp = function (_React$Component) {
     value: function install() {
       var url = this.props.git_url;
 
+      var loader = toastr.info(_react2.default.createElement(
+        'span',
+        null,
+        _react2.default.createElement('div', { className: 'loader' }),
+        'Installing app...'
+      ));
+
       _superagentBluebirdPromise2.default.post('/api/apps').send({ url: url }).then(function (res) {
         var name = res.body.name;
         var props = res.body.netbeast;
         var type = props ? props.type : 'app';
 
         toastr.success(name + ' has been installed!');
+        toastr.dismiss(loader);
 
         if (type === 'plugin' || type === 'service' || props.bootOnLoad) return _superagentBluebirdPromise2.default.post('/api/activities/' + name).promise();
       }).then(function (res) {
@@ -63521,7 +63537,7 @@ var Toast = function (_React$Component) {
         _react2.default.createElement(
           'div',
           { className: 'body' },
-          body.toString()
+          body
         )
       );
     }

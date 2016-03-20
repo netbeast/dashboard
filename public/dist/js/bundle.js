@@ -63598,10 +63598,6 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 
 var _reactRouter = require('react-router');
 
-var _settings = require('./settings.jsx');
-
-var _settings2 = _interopRequireDefault(_settings);
-
 var _notFound = require('./not-found.jsx');
 
 var _notFound2 = _interopRequireDefault(_notFound);
@@ -63637,6 +63633,12 @@ var _login2 = _interopRequireDefault(_login);
 var _signup = require('./user/signup.jsx');
 
 var _signup2 = _interopRequireDefault(_signup);
+
+var _settings = require('./user/settings.jsx');
+
+var _settings2 = _interopRequireDefault(_settings);
+
+var _lib = require('./lib');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -63711,19 +63713,20 @@ _reactDom2.default.render(_react2.default.createElement(
     _react2.default.createElement(_reactRouter.Route, { path: 'activities', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'plugins', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _drawer2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'remove', component: _drawer2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'explore', component: _explore2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'install', component: _install2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: _settings2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'devices', component: _index2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _login2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _signup2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'settings', onEnter: _lib.Auth.isLogged, component: _settings2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'signup', onEnter: _lib.Auth.isLogged, component: _signup2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'i/:appName', component: _live2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: '*', component: _notFound2.default })
   )
 ), document.getElementById('app'));
 
-},{"./apps/drawer.jsx":566,"./apps/explore.jsx":568,"./apps/install.jsx":569,"./apps/live.jsx":570,"./devices/index.jsx":574,"./not-found.jsx":580,"./notifications":581,"./settings.jsx":583,"./user/login.jsx":584,"./user/signup.jsx":585,"react":559,"react-dom":341,"react-router":371}],576:[function(require,module,exports){
+},{"./apps/drawer.jsx":566,"./apps/explore.jsx":568,"./apps/install.jsx":569,"./apps/live.jsx":570,"./devices/index.jsx":574,"./lib":576,"./not-found.jsx":580,"./notifications":581,"./user/login.jsx":583,"./user/settings.jsx":584,"./user/signup.jsx":585,"react":559,"react-dom":341,"react-router":371}],576:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63767,22 +63770,22 @@ var Session = exports.Session = function () {
   return Session;
 }();
 
-var API = exports.API = function () {
-  function API() {
-    _classCallCheck(this, API);
+var Auth = exports.Auth = function () {
+  function Auth() {
+    _classCallCheck(this, Auth);
   }
 
-  _createClass(API, null, [{
-    key: 'install',
-    value: function install(app) {
-      return app;
+  _createClass(Auth, null, [{
+    key: 'isLogged',
+    value: function isLogged(nextState, replace) {
+      if (Session.load('user')) return;else replace({ pathname: '/login', state: { nextPathname: nextState.location.pathname } });
     }
   }]);
 
-  return API;
+  return Auth;
 }();
 
-exports.default = { Session: Session, API: API };
+exports.default = { Session: Session, Auth: Auth };
 
 },{}],577:[function(require,module,exports){
 'use strict';
@@ -64246,107 +64249,6 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = require('react-router');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Settings = function (_React$Component) {
-  _inherits(Settings, _React$Component);
-
-  function Settings() {
-    _classCallCheck(this, Settings);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Settings).apply(this, arguments));
-  }
-
-  _createClass(Settings, [{
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'div',
-        { className: 'not-found' },
-        _react2.default.createElement(
-          'h1',
-          null,
-          'Settings'
-        ),
-        _react2.default.createElement(
-          'ul',
-          null,
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: 'apps' },
-              'Apps'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: 'activities' },
-              'Activities'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: 'plugins' },
-              'Plugins'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: 'remove' },
-              'Remove'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: 'settings' },
-              'Settings'
-            )
-          )
-        )
-      );
-    }
-  }]);
-
-  return Settings;
-}(_react2.default.Component);
-
-exports.default = Settings;
-
-},{"react":559,"react-router":371}],584:[function(require,module,exports){
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRouter = require('react-router');
-
 var _reactBootstrap = require('react-bootstrap');
 
 var _superagent = require('superagent');
@@ -64390,7 +64292,11 @@ var Login = function (_React$Component) {
         if (err) return toastr.error(err.message);
 
         _lib.Session.save('user', resp.body);
-        _this2.router.push('/');
+        if (window.location.state && window.location.state.nextPathname) {
+          _this2.router.replace(window.location.state.nextPathname);
+        } else {
+          _this2.router.replace('/');
+        }
       });
     }
   }, {
@@ -64451,7 +64357,186 @@ Login.contextTypes = {
   router: _react2.default.PropTypes.object.isRequired
 };
 
-},{"../lib":576,"react":559,"react-bootstrap":168,"react-router":371,"superagent":561}],585:[function(require,module,exports){
+},{"../lib":576,"react":559,"react-bootstrap":168,"react-router":371,"superagent":561}],584:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _superagentBluebirdPromise = require('superagent-bluebird-promise');
+
+var _superagentBluebirdPromise2 = _interopRequireDefault(_superagentBluebirdPromise);
+
+var _bluebird = require('bluebird');
+
+var _bluebird2 = _interopRequireDefault(_bluebird);
+
+var _lib = require('../lib');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global toastr */
+
+var API_PATH = "http://localhost:8001" + '/api';
+
+var Settings = function (_React$Component) {
+  _inherits(Settings, _React$Component);
+
+  function Settings(props, context) {
+    _classCallCheck(this, Settings);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Settings).call(this, props));
+
+    _this.router = context.router;
+    _this.state = { user: _lib.Session.load('user') };
+    _this.updateSettings = _this.updateSettings.bind(_this);
+    _this.deleteAccount = _this.deleteAccount.bind(_this);
+    return _this;
+  }
+
+  _createClass(Settings, [{
+    key: 'grabValidFormData',
+    value: function grabValidFormData() {
+      var _refs = this.refs;
+      var alias = _refs.alias;
+      var email = _refs.email;
+      var password = _refs.password;
+      var password_confirmation = _refs.password_confirmation;
+
+      if (!alias.value || !email.value || !password.value) {
+        toastr.warning('Ups! Seems like you forgot some fields');
+        return false;
+      }
+
+      if (password.value !== password_confirmation.value) {
+        toastr.warning("Typed passwords aren't equal");
+        return false;
+      }
+
+      return { alias: alias.value, email: email.value, password: password.value };
+    }
+  }, {
+    key: 'updateSettings',
+    value: function updateSettings(event) {
+      var _this2 = this;
+
+      event.preventDefault();
+
+      var user = this.grabValidFormData();
+      if (!user) return;
+
+      _superagentBluebirdPromise2.default.post(API_PATH + '/users').send(user).then(function (resp) {
+        return _superagentBluebirdPromise2.default.post(API_PATH + '/login').send(user).then(function (resp) {
+          _lib.Session.save('user', resp.body);
+          _this2.router.push('/');
+          return _bluebird2.default.resolve();
+        });
+      }).catch(function (err) {
+        return toastr.error(err.message);
+      });
+    }
+  }, {
+    key: 'deleteAccount',
+    value: function deleteAccount() {
+      var _this3 = this;
+
+      var _state$user = this.state.user;
+      var _id = _state$user._id;
+      var token = _state$user.token;
+
+      if (window.confirm('Are you sure you want to delete your account?')) {
+        _superagentBluebirdPromise2.default.del(API_PATH + '/user/' + _id).set({ 'Authorization': token }).end(function (err, resp) {
+          if (err) return toastr.error(err.message);
+
+          _lib.Session.delete('user');
+          _this3.router.push('/');
+          toastr.info('Sorry to see you go :(');
+        });
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _state$user2 = this.state.user;
+      var alias = _state$user2.alias;
+      var email = _state$user2.email;
+
+      return _react2.default.createElement(
+        _reactBootstrap.Col,
+        { xs: 10, xsOffset: 1, sm: 6, smOffset: 3, md: 4, mdOffset: 4 },
+        _react2.default.createElement('br', null),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          'h4',
+          null,
+          'Update your profile.'
+        ),
+        _react2.default.createElement(
+          'form',
+          { onSubmit: this.updateSettings },
+          _react2.default.createElement('input', { ref: 'alias', type: 'text', placeholder: 'Choose a username', defaultValue: alias, className: 'form-control' }),
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('input', { ref: 'email', type: 'email', placeholder: 'your@email.com', defaultValue: email, className: 'form-control' }),
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('input', { ref: 'password', type: 'password', placeholder: 'Type a password', className: 'form-control' }),
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('input', { ref: 'password_confirmation', type: 'password', placeholder: 'Retype your password', className: 'form-control' }),
+          _react2.default.createElement('br', null),
+          _react2.default.createElement(
+            'button',
+            { type: 'submit', className: 'btn btn-info' },
+            'Update settings'
+          ),
+          ' '
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          'p',
+          null,
+          'Profile pic is grabbed from ',
+          _react2.default.createElement(
+            'a',
+            { target: '_blank', href: 'https://en.gravatar.com/' },
+            'gravatar'
+          ),
+          ' if there is an internet connection.'
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          'a',
+          { onClick: this.deleteAccount, href: 'javascript:void(0)', className: 'btn btn-xs btn-primary' },
+          _react2.default.createElement('i', { className: 'fa fa-exclamation-triangle' }),
+          ' Delete your account'
+        )
+      );
+    }
+  }]);
+
+  return Settings;
+}(_react2.default.Component);
+
+exports.default = Settings;
+
+Settings.contextTypes = {
+  router: _react2.default.PropTypes.object.isRequired
+};
+
+},{"../lib":576,"bluebird":1,"react":559,"react-bootstrap":168,"superagent-bluebird-promise":560}],585:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -64643,6 +64728,8 @@ var UserPod = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(UserPod).call(this));
 
     _this.state = { user: _lib.Session.load('user') };
+    _this.popover = _this.popover.bind(_this);
+    _this.logOut = _this.logOut.bind(_this);
     return _this;
   }
 
@@ -64651,6 +64738,58 @@ var UserPod = function (_React$Component) {
     value: function logOut() {
       _lib.Session.delete('user');
       this.setState({ user: null });
+    }
+  }, {
+    key: 'popover',
+    value: function popover() {
+      var user = this.state.user;
+
+      var logged = _react2.default.createElement(
+        'ul',
+        { className: 'list-unstyled' },
+        _react2.default.createElement(
+          'li',
+          null,
+          _react2.default.createElement(
+            _reactRouter.Link,
+            { to: '/settings' },
+            _react2.default.createElement('i', { className: 'fa fa-gear' }),
+            ' Settings'
+          )
+        ),
+        _react2.default.createElement(
+          'li',
+          { onClick: this.logOut },
+          _react2.default.createElement('i', { className: 'fa fa-sign-out' }),
+          'Log out'
+        )
+      );
+
+      var unlogged = _react2.default.createElement(
+        'ul',
+        { className: 'list-unstyled' },
+        _react2.default.createElement(
+          'li',
+          null,
+          _react2.default.createElement(
+            _reactRouter.Link,
+            { to: '/login' },
+            'Log in'
+          ),
+          ' or ',
+          _react2.default.createElement(
+            _reactRouter.Link,
+            { to: '/login' },
+            'Sign up'
+          )
+        )
+      );
+
+      return _react2.default.createElement(
+        _reactBootstrap.Popover,
+        { id: 'user-pod' },
+        user ? logged : unlogged
+      );
     }
   }, {
     key: 'render',
@@ -64663,33 +64802,9 @@ var UserPod = function (_React$Component) {
       var email = _ref.email;
       var src = _ref.src;
 
-      var popover = _react2.default.createElement(
-        _reactBootstrap.Popover,
-        { id: 'user-pod' },
-        _react2.default.createElement(
-          'ul',
-          { className: 'list-unstyled' },
-          user ? _react2.default.createElement(
-            'li',
-            { onClick: this.logOut.bind(this) },
-            _react2.default.createElement('i', { className: 'fa fa-sign-out' }),
-            'Log out'
-          ) : _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/login' },
-              _react2.default.createElement('i', { className: 'fa fa-sign-in' }),
-              ' Log in'
-            )
-          )
-        )
-      );
-
       return _react2.default.createElement(
         'div',
-        { className: 'user-pod' },
+        { className: 'user-pod clickable' },
         _react2.default.createElement(
           'span',
           { className: 'user-pod-avatar' },
@@ -64697,7 +64812,7 @@ var UserPod = function (_React$Component) {
         ),
         _react2.default.createElement(
           _reactBootstrap.OverlayTrigger,
-          { trigger: ['click'], rootClose: true, placement: 'bottom', overlay: popover },
+          { trigger: ['click'], rootClose: true, placement: 'bottom', overlay: this.popover() },
           _react2.default.createElement(
             'span',
             { className: 'user-pod-name' },

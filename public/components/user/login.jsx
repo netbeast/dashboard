@@ -26,7 +26,11 @@ export default class Login extends React.Component {
       if (err) return toastr.error(err.message)
 
       Session.save('user', resp.body)
-      this.router.push('/')
+      if (window.location.state && window.location.state.nextPathname) {
+        this.router.replace(window.location.state.nextPathname)
+      } else {
+        this.router.replace('/')
+      }
     })
   }
 

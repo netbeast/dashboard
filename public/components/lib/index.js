@@ -20,10 +20,11 @@ export class Session {
   }
 }
 
-export class API {
-  static install (app) {
-    return app
+export class Auth {
+  static isLogged (nextState, replace) {
+    if (Session.load('user')) return
+    else replace({ pathname: '/login', state: { nextPathname: nextState.location.pathname } })
   }
 }
 
-export default { Session, API }
+export default { Session, Auth }

@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, browserHistory, IndexRoute } from 'react-router'
 
-import Settings from './settings.jsx'
 import NotFound from './not-found.jsx'
 
 import Notifications from './notifications'
@@ -14,6 +13,9 @@ import Devices from './devices/index.jsx'
 
 import Login from './user/login.jsx'
 import Signup from './user/signup.jsx'
+import Settings from './user/settings.jsx'
+
+import { Auth } from './lib'
 
 class Dashboard extends React.Component {
   constructor (props) {
@@ -50,7 +52,6 @@ Dashboard.propTypes = {
   children: React.PropTypes.element
 }
 
-
 ReactDOM.render(
   <Router history={browserHistory}>
     <Route path='/' component={Dashboard}>
@@ -58,13 +59,14 @@ ReactDOM.render(
       <Route path='activities' component={Drawer} />
       <Route path='plugins' component={Drawer} />
       <Route path='about' component={Drawer} />
+      <Route path='about' component={Drawer} />
       <Route path='remove' component={Drawer} />
       <Route path='explore' component={Explore} />
       <Route path='install' component={InstallView} />
-      <Route path='settings' component={Settings} />
       <Route path='devices' component={Devices} />
       <Route path='login' component={Login} />
-      <Route path='signup' component={Signup} />
+      <Route path='settings' onEnter={Auth.isLogged} component={Settings} />
+      <Route path='signup' onEnter={Auth.isLogged} component={Signup} />
       <Route path='i/:appName' component={AppLiveView} />
       <Route path='*' component={NotFound} />
     </Route>

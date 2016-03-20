@@ -120,6 +120,7 @@
   z-index: 100;
   width: 300px;
   position: fixed;
+  text-align: left;
   right: 50px; top: 25px;
   transform: scaleY(-1);
   overflow: hidden;
@@ -131,6 +132,7 @@
     &:hover, &.current { opacity: 1 }
   }
 
+  .alert-error { background-color: $brand-primary; }
   .alert .title { text-transform: uppercase; font-weight: bolder; }
   .alert .body { padding-top: 5px; }
 }

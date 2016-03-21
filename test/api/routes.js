@@ -29,7 +29,7 @@ describe('RESTful Resources API', function () {
       body = resp.body
       body.should.be.an('Array')
       body.forEach(function (item) {
-        expect(item).to.have.all.keys('id', 'app', 'topic', 'location', 'groupname', 'hook', 'mac_or_ip')
+        expect(item).to.have.keys('id', 'app', 'topic', 'location', 'groupname', 'hook')
       })
       done()
     })

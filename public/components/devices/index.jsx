@@ -13,18 +13,22 @@ export default class Devices extends React.Component {
   constructor () {
     super()
     this.mqtt = mqtt.connect()
-    this.state = { devices: Session.load('devices') || [], dragging: false, ox: -400, oy: -200 }
+    this.state = { devices: Session.load('devices') || [], dragging: false, ox: -400, oy: -200, zoom: 800 }
+    this.onMouseMove = this.onMouseMove.bind(this)
+    this.onMouseDown = this.onMouseDown.bind(this)
+    this.onMouseUp = this.onMouseUp.bind(this)
+    this.onWheel = this.onWheel.bind(this)
   }
 
   onMouseMove (event) {
     if (!this.state.dragging) return
-    const { rx, ry, ox, oy } = this.state
+    const { rx, ry, ox, oy, zoom } = this.state
     const { left, top } = this.devicesMap.getBoundingClientRect()
     const { x, y } = {
       x: (event.pageX || document.body.scrollLeft + document.documentElement.scrollLeft) - left,
       y: (event.pageY || document.body.scrollTop + document.documentElement.scrollTop) - top
     }
-    this.devicesMap.setAttribute('viewBox', `${rx - x + ox} ${ry - y + oy} 800 800`)
+    this.devicesMap.setAttribute('viewBox', `${rx - x + ox} ${ry - y + oy} ${zoom} ${zoom}`)
   }
 
   onMouseDown (event) {
@@ -47,8 +51,13 @@ export default class Devices extends React.Component {
     this.setState({ ox: rx - x + ox, oy: ry - y + oy })
   }
 
+  onWheel (event) {
+    event.preventDefault()
+  }
+
   zoom (amount) {
-    // TODO
+    console.log(amount)
+    this.setState({ zoom: this.state.zoom * amount })
   }
 
   // Join to the nth element through a path
@@ -75,7 +84,7 @@ export default class Devices extends React.Component {
   }
 
   render () {
-    const { devices, ox, oy } = this.state
+    const { devices, ox, oy, zoom } = this.state
     const filters = [ ... new Set(devices.map((data) => { return data.app || 'default' })) ]
 
     return (
@@ -83,8 +92,9 @@ export default class Devices extends React.Component {
         <div className='devices-view'>
 
           <svg className='devices-map grabbable' ref={(ref) => this.devicesMap = ref}
-          viewBox={`${ox} ${oy} 800 800`} onMouseMove={this.onMouseMove.bind(this)}
-          onMouseDown={this.onMouseDown.bind(this)} onMouseUp={this.onMouseUp.bind(this)}>
+          viewBox={`${ox} ${oy} ${zoom} ${zoom}`} onMouseMove={this.onMouseMove}
+          onMouseDown={this.onMouseDown} onMouseUp={this.onMouseUp}
+          onWheel={this.onWheel}>
 
           {filters.map((src, idx) => <FilterSVG key={src} src={src}/>)}
           {devices.map((src, idx) => this.connect(idx))}
@@ -92,11 +102,15 @@ export default class Devices extends React.Component {
           <filter id={'netbot'} x='0%' y='0%' width='100%' height='100%'>
             <feImage xlinkHref='/img/netbot.png' />
           </filter>
-          <circle cx={0} cy={0} r='50' style={{ filter: 'url(#netbot)' }} />
+          <circle cx={0} cy={0} r='70' style={{ filter: 'url(#netbot)' }} />
 
           {devices.map((data, idx) => <Device key={idx} {...data} idx={idx} />)}
 
           </svg>
+        </div>
+        <div className='zoom-pod'>
+          <div className='zoom-more clickable' onClick={this.zoom.bind(this, 0.9)}>+</div>
+          <div className='zoom-less clickable' onClick={this.zoom.bind(this, 1.1)}>-</div>
         </div>
         <VersionPod />
         <div className='live-return-menu'>

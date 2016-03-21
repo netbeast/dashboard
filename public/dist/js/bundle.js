@@ -62815,7 +62815,11 @@ var Devices = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Devices).call(this));
 
     _this.mqtt = _mqtt2.default.connect();
-    _this.state = { devices: _lib.Session.load('devices') || [], dragging: false, ox: -400, oy: -200 };
+    _this.state = { devices: _lib.Session.load('devices') || [], dragging: false, ox: -400, oy: -200, zoom: 800 };
+    _this.onMouseMove = _this.onMouseMove.bind(_this);
+    _this.onMouseDown = _this.onMouseDown.bind(_this);
+    _this.onMouseUp = _this.onMouseUp.bind(_this);
+    _this.onWheel = _this.onWheel.bind(_this);
     return _this;
   }
 
@@ -62828,6 +62832,7 @@ var Devices = function (_React$Component) {
       var ry = _state.ry;
       var ox = _state.ox;
       var oy = _state.oy;
+      var zoom = _state.zoom;
 
       var _devicesMap$getBoundi = this.devicesMap.getBoundingClientRect();
 
@@ -62840,7 +62845,7 @@ var Devices = function (_React$Component) {
       var x = _x$y.x;
       var y = _x$y.y;
 
-      this.devicesMap.setAttribute('viewBox', rx - x + ox + ' ' + (ry - y + oy) + ' 800 800');
+      this.devicesMap.setAttribute('viewBox', rx - x + ox + ' ' + (ry - y + oy) + ' ' + zoom + ' ' + zoom);
     }
   }, {
     key: 'onMouseDown',
@@ -62881,9 +62886,16 @@ var Devices = function (_React$Component) {
       this.setState({ ox: rx - x + ox, oy: ry - y + oy });
     }
   }, {
+    key: 'onWheel',
+    value: function onWheel(event) {
+      event.preventDefault();
+    }
+  }, {
     key: 'zoom',
-    value: function zoom(amount) {}
-    // TODO
+    value: function zoom(amount) {
+      console.log(amount);
+      this.setState({ zoom: this.state.zoom * amount });
+    }
 
     // Join to the nth element through a path
 
@@ -62935,6 +62947,7 @@ var Devices = function (_React$Component) {
       var devices = _state3.devices;
       var ox = _state3.ox;
       var oy = _state3.oy;
+      var zoom = _state3.zoom;
 
       var filters = [].concat(_toConsumableArray(new Set(devices.map(function (data) {
         return data.app || 'default';
@@ -62951,8 +62964,9 @@ var Devices = function (_React$Component) {
             { className: 'devices-map grabbable', ref: function ref(_ref) {
                 return _this3.devicesMap = _ref;
               },
-              viewBox: ox + ' ' + oy + ' 800 800', onMouseMove: this.onMouseMove.bind(this),
-              onMouseDown: this.onMouseDown.bind(this), onMouseUp: this.onMouseUp.bind(this) },
+              viewBox: ox + ' ' + oy + ' ' + zoom + ' ' + zoom, onMouseMove: this.onMouseMove,
+              onMouseDown: this.onMouseDown, onMouseUp: this.onMouseUp,
+              onWheel: this.onWheel },
             filters.map(function (src, idx) {
               return _react2.default.createElement(_filterSvg2.default, { key: src, src: src });
             }),
@@ -62964,10 +62978,24 @@ var Devices = function (_React$Component) {
               { id: 'netbot', x: '0%', y: '0%', width: '100%', height: '100%' },
               _react2.default.createElement('feImage', { xlinkHref: '/img/netbot.png' })
             ),
-            _react2.default.createElement('circle', { cx: 0, cy: 0, r: '50', style: { filter: 'url(#netbot)' } }),
+            _react2.default.createElement('circle', { cx: 0, cy: 0, r: '70', style: { filter: 'url(#netbot)' } }),
             devices.map(function (data, idx) {
               return _react2.default.createElement(_device2.default, _extends({ key: idx }, data, { idx: idx }));
             })
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'zoom-pod' },
+          _react2.default.createElement(
+            'div',
+            { className: 'zoom-more clickable', onClick: this.zoom.bind(this, 0.9) },
+            '+'
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'zoom-less clickable', onClick: this.zoom.bind(this, 1.1) },
+            '-'
           )
         ),
         _react2.default.createElement(_versionPod2.default, null),
@@ -63220,7 +63248,7 @@ var ConnectionPod = function (_React$Component) {
     value: function ping() {
       var _this3 = this;
 
-      _superagent2.default.get('https://api.github.com/search/repositories?q=netbeast+language:javascript').end(function (err, resp) {
+      _superagent2.default.get('https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js').end(function (err, resp) {
         if (err) return _this3.setState({ connected: false });
         _this3.setState({ connected: true });
       });

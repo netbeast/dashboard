@@ -41,12 +41,12 @@ var env = Object.create(process.env)
 env.NETBEAST_PORT = process.env.PORT
 var options = { env: env }
 
-var network = spawn(DASHBOARD_NETWORK, options)
-var deamon = spawn(DASHBOARD_DEAMON, options)
 var dns = spawn(DASHBOARD_DNS, options)
+var deamon = spawn(DASHBOARD_DEAMON, options)
+
+require('./src/services/scanner')
 
 process.on('exit', function () {
-  network.kill('SIGTERM')
   deamon.kill('SIGTERM')
   dns.kill('SIGTERM')
 })

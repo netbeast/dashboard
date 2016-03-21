@@ -1,17 +1,26 @@
 var helper = require('../helpers/resource')
 var ApiError = require('../util/api-error')
 
+const macRegex = /^(([A-Fa-f0-9]{2}[:]){5}[A-Fa-f0-9]{2}[,]?)+$/
+const ipRegex = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/
+
 helper.createTable(function (err, data) {
   if (err) throw err
 })
 
 function Resource (item) {
+
+  const hookTail = item.hook.split('/')[item.hook.split('/').length - 1]
+
   this.id = item.id
   this.app = item.app
   this.location = item.location
   this.topic = item.topic
   this.groupname = item.groupname
   this.hook = item.hook
+
+  if (macRegex.test(hookTail)) this.mac = hookTail
+  if (ipRegex.test(hookTail)) this.ip = hookTail
 }
 
 Resource.create = function (item, done) {

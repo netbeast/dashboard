@@ -27,7 +27,8 @@ describe('Client', function () {
       function (callback) {
         fs.readFile(PATH_TO_APP + '/server.js', function (err, data) {
           if (err) return callback(err)
-          var shebang = data.slice(0, data.indexOf('\n')).toString()
+          data = data.toString()
+          var shebang = data.slice(0, data.indexOf('\n'))
           shebang.should.equal('#!/usr/bin/env node')
           callback(null, data)
         })

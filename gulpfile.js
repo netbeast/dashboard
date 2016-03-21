@@ -7,6 +7,9 @@ var buffer = require('vinyl-buffer')
 var browserify = require('browserify')
 var watchify = require('watchify')
 
+var manifest = require('./package.json')
+process.env.VERSION = manifest.version
+
 gulp.task('default', ['serve', 'watchify'], function () {
   plugins.livereload.listen()
   gulp.watch('./public/styles/*.scss', ['sass'])

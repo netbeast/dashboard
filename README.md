@@ -70,7 +70,9 @@ Once you have created the Netbeast dashboard app you can run the following comma
 
 ```
 cd Netbeast-darwin-x64
-appdmg ../dashboard/desktop_app/appdmg.json ~/Desktop/Netbeast.dmg
+##Copy files from dashboard folder to the new one
+cp ../dashboard/desktop_app/icon.icns ../dashboard/desktop_app/appdmg.json ../dashboard/desktop_app/background.png .
+appdmg appdmg.json ~/Desktop/Netbeast.dmg
 ```
 
 - Then you will have the Netbeast.dmg file on your desktop :smile:

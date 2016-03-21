@@ -36,9 +36,6 @@ var server = http.createServer(app)
 var broker = new mosca.Server({})
 //broker.attachHttpServer(server)
 
-// ----- WARNING: DONT KNOW IF attachHttpServer here is correct. Need to have a look on the internet about this
-
-
 var settings = {
   secure: {
     keyPath: __dirname + '/ssl/dashboard-key.pem',

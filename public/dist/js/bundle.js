@@ -63720,7 +63720,7 @@ _reactDom2.default.render(_react2.default.createElement(
     _react2.default.createElement(_reactRouter.Route, { path: 'devices', component: _index2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _login2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'settings', onEnter: _lib.Auth.isLogged, component: _settings2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'signup', onEnter: _lib.Auth.isLogged, component: _signup2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _signup2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'i/:appName', component: _live2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: '*', component: _notFound2.default })
   )
@@ -64311,7 +64311,7 @@ var Login = function (_React$Component) {
         _react2.default.createElement(
           'h4',
           null,
-          'Login in.'
+          'Log in.'
         ),
         _react2.default.createElement(
           'form',
@@ -64426,7 +64426,9 @@ var Settings = function (_React$Component) {
         return false;
       }
 
-      return { alias: alias.value, email: email.value, password: password.value };
+      var _id = this.state.user._id;
+
+      return { id: _id, alias: alias.value, email: email.value, password: password.value };
     }
   }, {
     key: 'updateSettings',
@@ -64438,14 +64440,14 @@ var Settings = function (_React$Component) {
       var user = this.grabValidFormData();
       if (!user) return;
 
-      _superagentBluebirdPromise2.default.post(API_PATH + '/users').send(user).then(function (resp) {
-        return _superagentBluebirdPromise2.default.post(API_PATH + '/login').send(user).then(function (resp) {
-          _lib.Session.save('user', resp.body);
-          _this2.router.push('/');
-          return _bluebird2.default.resolve();
-        });
+      var token = this.state.user.token;
+
+      _superagentBluebirdPromise2.default.put(API_PATH + '/users').set({ 'Authorization': token }).send(user).then(function (resp) {
+        _lib.Session.save('user', resp.body);
+        _this2.setState({ user: resp.body });
+        toastr.success('Your params have been updated');
       }).catch(function (err) {
-        return toastr.error(err.message);
+        toastr.error(err.res.text);
       });
     }
   }, {
@@ -64654,7 +64656,7 @@ var Signup = function (_React$Component) {
           _react2.default.createElement(
             'button',
             { type: 'submit', className: 'btn btn-info' },
-            'Log in'
+            'Sign up'
           )
         ),
         _react2.default.createElement('br', null),

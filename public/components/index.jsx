@@ -66,7 +66,7 @@ ReactDOM.render(
       <Route path='devices' component={Devices} />
       <Route path='login' component={Login} />
       <Route path='settings' onEnter={Auth.isLogged} component={Settings} />
-      <Route path='signup' onEnter={Auth.isLogged} component={Signup} />
+      <Route path='signup' component={Signup} />
       <Route path='i/:appName' component={AppLiveView} />
       <Route path='*' component={NotFound} />
     </Route>

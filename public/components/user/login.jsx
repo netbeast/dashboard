@@ -40,7 +40,7 @@ export default class Login extends React.Component {
       <br/>
       <br/>
       <br/>
-        <h4>Login in.</h4>
+        <h4>Log in.</h4>
         <form onSubmit={this.handleSubmit.bind(this)}>
           <input ref='email' type='email' placeholder='your@email.com' className='form-control'></input>
           <br/>

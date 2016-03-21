@@ -31,7 +31,8 @@ export default class Settings extends React.Component {
       return false
     }
 
-    return { alias: alias.value, email: email.value, password: password.value }
+    const { _id } = this.state.user
+    return { id: _id, alias: alias.value, email: email.value, password: password.value }
   }
 
   updateSettings (event) {
@@ -40,14 +41,16 @@ export default class Settings extends React.Component {
     const user = this.grabValidFormData()
     if (!user) return
 
-    request.post(API_PATH + '/users').send(user).then((resp) => {
-      return request.post(API_PATH + '/login').send(user).then((resp) => {
-        Session.save('user', resp.body)
-        this.router.push('/')
-        return Promise.resolve()
-      })
+    const { token } = this.state.user
+
+    request.put(API_PATH + '/users')
+    .set({ 'Authorization': token })
+    .send(user).then((resp) => {
+      Session.save('user', resp.body)
+      this.setState({ user: resp.body } )
+      toastr.success('Your params have been updated')
     })
-    .catch((err) => toastr.error(err.message))
+    .catch((err) => { toastr.error(err.res.text) })
   }
 
   deleteAccount () {

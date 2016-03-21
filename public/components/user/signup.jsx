@@ -64,7 +64,7 @@ export default class Signup extends React.Component {
           <br/>
           <input ref='password_confirmation' type='password' placeholder='Retype your password' className='form-control'></input>
         <br/>
-        <button type='submit' className='btn btn-info'>Log in</button>
+        <button type='submit' className='btn btn-info'>Sign up</button>
         </form>
         <br/>
         <span>

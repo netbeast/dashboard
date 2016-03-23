@@ -21,7 +21,7 @@
     "fstream": "^1.0.8",
     "fstream-ignore": "^1.0.3",
     "gift": "^0.6.1",
-    "http-proxy": "^1.12.0",
+    "http-proxy": "^1.13.2",
     "inquirer": "^0.11.0",
     "jquery": "^2.1.4",
     "morgan": "^1.5.2",
@@ -49,17 +49,17 @@
     "chai": "^3.2.0",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
+    "gulp-bg": "^0.0.8",
     "gulp-cssnano": "^2.1.0",
+    "gulp-istanbul": "^0.10.3",
     "gulp-livereload": "^3.8.1",
     "gulp-load-plugins": "^1.1.0",
+    "gulp-mocha": "^2.2.0",
     "gulp-nodemon": "^2.0.3",
     "gulp-plumber": "^1.0.1",
     "gulp-sass": "^2.0.1",
     "gulp-sourcemaps": "^1.5.2",
     "gulp-util": "^3.0.4",
-    "gulp-istanbul": "^0.10.3",
-    "gulp-bg": "^0.0.8",
-    "gulp-mocha": "^2.2.0",
     "gulp-wait": "^0.0.2",
     "istanbul": "^0.4.0",
     "livereload": "^0.4.1",
@@ -94,7 +94,9 @@
     "start": "gulp serve",
     "clean": "rm -r ./test/coverage; rm .database.sqlite"
   },
-  "engines" : { "node" : ">=0.12" },
+  "engines": {
+    "node": ">=0.12"
+  },
   "author": "staff@netbeast",
   "license": "AGPL-3.0"
 }

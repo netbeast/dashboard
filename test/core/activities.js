@@ -10,7 +10,8 @@ var path = require('path')
 
 var App = require('src/models/app')
 
-const URL = 'http://localhost:' + process.env.PORT + '/api'
+const URL = 'https://localhost:' + process.env.SECURE_PORT + '/api'
+
 const APP_PATH = './test/app.tar.gz'
 
 describe('Activities', function () {

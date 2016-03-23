@@ -13,6 +13,9 @@ import Devices from './devices/index.jsx'
 
 import Dashboard from './dashboard.jsx'
 
+const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://'
+window.mqttUri = protocol + window.location.host
+
 ReactDOM.render(
   <Router history={browserHistory}>
     <Route path='/' component={Dashboard}>

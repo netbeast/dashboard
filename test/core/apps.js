@@ -11,7 +11,8 @@ var fs = require('fs')
 
 var s = 1000 // seconds
 
-const URL = 'http://localhost:' + process.env.PORT + '/api'
+const URL = 'https://localhost:' + process.env.SECURE_PORT + '/api'
+
 const APPS_DIR = process.env.APPS_DIR
 const GITHUB_REPO = 'https://github.com/netbeast/get-started'
 
@@ -87,7 +88,7 @@ describe('Apps', function () {
   })
 
   it('should return 404 when an app does not exist', function (done) {
-    request.del(URL + '/apps/tsaebten').end(function (err, resp, body) {
+    request.del(URL + '/apps/non-existing-app').end(function (err, resp, body) {
       expect(err.status).to.equal(404)
       expect(resp.statusCode).to.equal(404)
       done()

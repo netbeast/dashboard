@@ -22,7 +22,7 @@ Resource.prototype.destroy = function (done) {
   helper.deleteAction(this.id, function (err) {
     if (err) return done(err)
 
-    return done(null)
+    if (typeof done === 'function') return done(null)
   })
 }
 

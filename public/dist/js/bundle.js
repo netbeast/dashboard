@@ -61438,7 +61438,7 @@ var App = function (_React$Component) {
 
       var name = this.props.name;
 
-      this.mqtt = _mqtt2.default.connect();
+      this.mqtt = _mqtt2.default.connect(window.mqttUri);
       this.mqtt.subscribe('netbeast/activities/close');
       this.mqtt.on('message', function (topic, message) {
         if (message.toString() === name) _this4.setState({ isRunning: false });
@@ -62814,7 +62814,7 @@ var Devices = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Devices).call(this));
 
-    _this.mqtt = _mqtt2.default.connect();
+    _this.mqtt = _mqtt2.default.connect(window.mqttUri);
     _this.state = { devices: _lib.Session.load('devices') || [], dragging: false, ox: -400, oy: -200 };
     return _this;
   }
@@ -63039,6 +63039,9 @@ var _dashboard = require('./dashboard.jsx');
 var _dashboard2 = _interopRequireDefault(_dashboard);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+window.mqttUri = protocol + window.location.host;
 
 _reactDom2.default.render(_react2.default.createElement(
   _reactRouter.Router,
@@ -63275,7 +63278,7 @@ var DevicesPod = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DevicesPod).call(this));
 
-    _this.mqtt = _mqtt2.default.connect();
+    _this.mqtt = _mqtt2.default.connect(window.mqttUri);
     _this.state = { devices: _lib.Session.load('devices') || [] };
     return _this;
   }
@@ -63556,7 +63559,7 @@ var Notifications = function (_React$Component) {
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.mqtt = _mqtt2.default.connect();
+      this.mqtt = _mqtt2.default.connect(window.mqttUri);
       this.mqtt.subscribe('netbeast/push');
       this.mqtt.on('message', this.handleNotification.bind(this));
 

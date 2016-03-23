@@ -111,7 +111,7 @@ renderButton () {
 
   componentDidMount () {
     const { name } = this.props
-    this.mqtt = mqtt.connect()
+    this.mqtt = mqtt.connect(window.mqttUri)
     this.mqtt.subscribe('netbeast/activities/close')
     this.mqtt.on('message', (topic, message) => {
       if (message.toString() === name) this.setState({ isRunning: false })

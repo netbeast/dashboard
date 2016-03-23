@@ -33,12 +33,7 @@ broker.attachHttpServer(server)
 process.env.SPORT = cmd.securePort || process.env.SECURE_PORT
 process.env.PORT = cmd.port || process.env.PORT
 
-server.listen(process.env.PORT, function () {
-  console.log('👾  Netbeast dashboard started on %s:%s', server.address().address, server.address().port)
-  bootOnload()
-})
-
-httpProxy.createServer({
+var proxy = httpProxy.createServer({
   target: {
     host: 'localhost',
     port: process.env.PORT
@@ -46,8 +41,18 @@ httpProxy.createServer({
   ssl: {
     key: fs.readFileSync(__dirname + '/ssl/dashboard-key.pem', 'utf8'),
     cert: fs.readFileSync(__dirname + '/ssl/dashboard-cert.pem', 'utf8')
-  }
-}).listen(process.env.SECURE_PORT)
+  },
+  ws: true
+}).listen(process.env.SECURE_PORT, function () {
+  server.listen(process.env.PORT, function () {
+    console.log('👾  Netbeast dashboard started on %s:%s', server.address().address, server.address().port)
+    bootOnload()
+  })
+})
+
+proxy.on('error', function (err) {
+  if (err) console.trace(err)
+})
 
 var env = Object.create(process.env)
 env.NETBEAST_PORT = process.env.PORT

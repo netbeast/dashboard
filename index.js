@@ -3,13 +3,14 @@
 require('./lib/init')
 var path = require('path')
 var http = require('http')
+var fs = require('fs')
 
 // NPM dependencies
 var cmd = require('commander')
 var mosca = require('mosca')
-var fs = require('fs')
 var spawn = require('child_process').spawn
 var httpProxy = require('http-proxy')
+var chalk = require('chalk')
 
 // Project libraries
 var app = require('./src')
@@ -50,8 +51,13 @@ var proxy = httpProxy.createServer({
   })
 })
 
-proxy.on('error', function (err) {
-  if (err) console.trace(err)
+proxy.on('error', function (err, req, res) {
+  if (err.code === 'ECONNRESET') {
+    console.log(chalk.grey('ECONNRESET'))
+    return res.end()
+  } else {
+    return console.trace(err)
+  }
 })
 
 var env = Object.create(process.env)

@@ -3,6 +3,7 @@ var url = require('url')
 
 var express = require('express')
 var httpProxy = require('http-proxy')
+var chalk = require('chalk')
 
 var Activity = require('../models/activity')
 // var broker = require('../helpers/broker')
@@ -10,6 +11,15 @@ var Activity = require('../models/activity')
 var router = module.exports = express.Router()
 
 var proxy = httpProxy.createProxyServer({ ws: true })
+
+proxy.on('error', function (err, req, res) {
+  if (err.code === 'ECONNRESET') {
+    console.log(chalk.grey('ECONNRESET'))
+    return res.end()
+  } else {
+    return console.trace(err)
+  }
+})
 
 // This route is higher priority
 router.use('/i/:name', function (req, res, next) {

@@ -6,7 +6,8 @@ var chai = require('chai')
 var should = chai.should()
 var expect = chai.expect
 
-const URL = 'http://localhost:' + process.env.PORT + '/api'
+const URL = 'https://localhost:' + process.env.SECURE_PORT + '/api'
+
 
 console.log(URL + '/resources')
 

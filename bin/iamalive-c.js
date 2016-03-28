@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var dgram = require('dgram')
 var client = dgram.createSocket('udp4')
 var tunnel = require('./tunnel-c.js')
@@ -8,6 +10,7 @@ var intervalID = setInterval(function () {
   require('getmac').getMac(function (err, macAddress) {
     if (err) throw err
     var msg = new Buffer(macAddress)
+    console.log(process.env.IAMALIVE_SPORT + ' SPORT: ' + process.env.IAMALIVE_CPORT)
     client.send(msg, 0, msg.length, process.env.IAMALIVE_SPORT, process.env.SERVER_IP, function (err) {
       if (err) {
         throw err

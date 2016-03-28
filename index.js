@@ -63,12 +63,31 @@ proxy.on('error', function (err, req, res) {
 })
 
 var env = Object.create(process.env)
+var env_tunnel = Object.create(process.env)
+var env_iamalive = Object.create(process.env)
+
+env_tunnel
+  .NETBEAST_PORT = process.env.PORT
+  .RELAY_PORT = process.env.RELAY_PORT
+  .SERVER_IP = process.SERVER_IP
+
+env_iamalive
+  .NETBEAST_PORT = process.env.PORT
+  .IAMALIVE_SPORT = process.env.IAMALIVE_SPORT
+  .IAMALIVE_CPORT = process.env.IAMALIVE_CPORT
+  .SERVER_IP = process.env.SERVER_IP
+
 env.NETBEAST_PORT = process.env.PORT
+
 var options = { env: env }
+var tunnelOptions = { env: env_tunnel }
+var iamaliveOptions = { env: env_iamalive }
 
 var network = spawn(DASHBOARD_NETWORK, options)
 var deamon = spawn(DASHBOARD_DEAMON, options)
 var dns = spawn(DASHBOARD_DNS, options)
+var tunnel = spawn(DASHBOARD_TUNNEL, options)
+var iamalive = spawn(DASHBOARD_IAMALIVE, options)
 
 // ---------------------------------------- SPAWN CONFIG FOR IAMALIVE NEEDED
 /*
@@ -98,4 +117,6 @@ process.on('exit', function () {
   network.kill('SIGTERM')
   deamon.kill('SIGTERM')
   dns.kill('SIGTERM')
+  tunnel.kill('SIGTERM')
+  iamalive.kill('SIGTERM')
 })

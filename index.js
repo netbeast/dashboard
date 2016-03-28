@@ -86,32 +86,34 @@ var iamaliveOptions = { env: env_iamalive }
 var network = spawn(DASHBOARD_NETWORK, options)
 var deamon = spawn(DASHBOARD_DEAMON, options)
 var dns = spawn(DASHBOARD_DNS, options)
-var tunnel = spawn(DASHBOARD_TUNNEL, options)
-var iamalive = spawn(DASHBOARD_IAMALIVE, options)
+var tunnel = spawn(DASHBOARD_TUNNEL, tunnelOptions)
+var iamalive = spawn(DASHBOARD_IAMALIVE, iamaliveOptions)
 
-// ---------------------------------------- SPAWN CONFIG FOR IAMALIVE NEEDED
-/*
-var tunnel = new (forever.Monitor)(DASHBOARD_TUNNEL, {
-  env: { 'NETBEAST_PORT': process.env.PORT,
-  'RELAY_PORT': process.env.RELAY_PORT,
-  'SERVER_IP': process.env.SERVER_IP },
-  max: 1
+tunnel.stdout.on('data', function (data) {
+  console.log(data.toString())
 })
 
-tunnel.title = 'netbeast-tunnel'
-tunnel.start()
-
-var iamalive = new (forever.Monitor)(DASHBOARD_IAMALIVE, {
-  env: { 'NETBEAST_PORT': process.env.PORT,
-  'IAMALIVE_SPORT': process.env.IAMALIVE_SPORT,
-  'IAMALIVE_CPORT': process.env.IAMALIVE_CPORT,
-  'SERVER_IP': process.env.SERVER_IP },
-  max: 1
+tunnel.stderr.on('data', function (data) {
+  console.log(data.toString())
 })
 
-iamalive.title = 'netbeast-tunnel'
-iamalive.start()
-*/
+iamalive.stdout.on('data', function (data) {
+  console.log(data.toString())
+})
+
+iamalive.stderr.on('data', function (data) {
+  console.log(data.toString())
+})
+
+// ----------------------------- ONLY DEV
+
+iamalive.on('close', function (code) {
+  console.log(`child process iamalive exited with code ${code}`)
+})
+
+tunnel.on('close', function (code) {
+  console.log(`child process iamalive exited with code ${code}`)
+})
 
 process.on('exit', function () {
   network.kill('SIGTERM')

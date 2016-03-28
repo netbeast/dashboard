@@ -112,7 +112,7 @@ iamalive.on('close', function (code) {
 })
 
 tunnel.on('close', function (code) {
-  console.log(`child process iamalive exited with code ${code}`)
+  console.log(`child process tunnel exited with code ${code}`)
 })
 
 process.on('exit', function () {

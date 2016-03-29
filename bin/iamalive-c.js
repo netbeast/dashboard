@@ -20,8 +20,12 @@ var intervalID = setInterval(function () {
 }, 1000)
 
 client.on('message', function (msg, rinfo) {
-  console.log('client got: ' + msg + ' from ' + rinfo.address + ':' + rinfo.port)
-  tunnel.start(msg)
+  var remotePort = msg.toString()
+  console.log('client got: ' + remotePort + ' from ' + rinfo.address + ':' + rinfo.port)
+  if (parseInt(msg, 10) > 0) {
+    console.log()
+    tunnel.start(remotePort)
+  }
 })
 
 client.on('listening', function () {

@@ -108,7 +108,7 @@ iamalive.stderr.on('data', function (data) {
 })
 
 iamalive.on('close', function (code) {
-  console.log(`child process iamalive exited with code ${code}`)
+  console.log('child process iamalive exited with code ' + code.toString())
 })
 /*
 tunnel.on('close', function (code) {

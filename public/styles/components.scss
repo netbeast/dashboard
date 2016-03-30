@@ -61,8 +61,8 @@
 
   .name {
     max-width: 120px;
+    text-transform: capitalize;
     padding-top: 15px;
-    text-transform: uppercase;
     font-size: 1.4rem;
   }
 }
@@ -135,6 +135,13 @@
   .alert-error { background-color: $brand-primary; }
   .alert .title { text-transform: uppercase; font-weight: bolder; }
   .alert .body { padding-top: 5px; }
+}
+
+.notifications-pod {
+  position: fixed;
+  color: white;
+  z-index: 1000;
+  top: 15px; right: 15px;
 }
 
 //====================================
@@ -221,9 +228,12 @@
   color: inherit;
   position: fixed;
   display: block;
-  top: 5px; right: 5px;
+  top: 50%; right: 0;
+  margin-top: -10px;
+  margin-right: -18px;
   text-decoration: none;
-  opacity: 0.5;
+  transform: rotate(-90deg);
+  opacity: 0.4;
   &:hover, &:active {
     color: inherit;
     text-decoration: none;
@@ -250,14 +260,6 @@
 }
 
 //====================================
-// DEVICES POD
-//====================================
-
-.path-devices {
-  text-align: center;
-}
-
-//====================================
 // Connection POD to show online status or internet availability
 //====================================
 
@@ -280,6 +282,10 @@
 
 .popover-content {
   color: $grey;
+}
+
+.path-devices {
+  text-align: center;
 }
 
 .devices-view {
@@ -308,6 +314,23 @@
   }
 }
 
+.zoom-pod {
+  position: fixed;
+  bottom: 50px; left: 50px;
+  .zoom-more, .zoom-less {
+    border: 2px solid $brand-info;
+    color: $brand-info;
+    font-weight: bold;
+    font-size: 1.4em;
+    padding: 5px 10px;
+  }
+}
+
+.refresh-pod {
+  position: fixed;
+  color: $grey-lighter;
+  top: 5px; left: 5px;
+}
 
 //============================
 // notification loader

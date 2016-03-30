@@ -11,12 +11,14 @@ export default class Toast extends React.Component {
   render () {
     const { title, body, emphasis, timeout, isCurrent } = this.props // eslint-disable-line
 
-    // if (timeout) setTimeout(this.close, timeout)
+    if (timeout) setTimeout(this.close, timeout)
 
     return (
       <div className={'alert alert-' + (emphasis) + (isCurrent ? ' current' : '')}>
         <span className='title'> {title || 'dashboard'} </span>
-        <button type='button' className='close' onClick={this.close}>×</button>
+        { typeof this.props.dismiss === 'function'
+          ? <button type='button' className='close' onClick={this.close}>×</button>
+          : null}
         <br/>
         <div className='body'>
           {body}

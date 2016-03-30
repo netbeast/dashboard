@@ -83,11 +83,13 @@ var options = { env: env }
 var tunnelOptions = { env: env_tunnel }
 var iamaliveOptions = { env: env_iamalive }
 
-var network = spawn(DASHBOARD_NETWORK, options)
-var deamon = spawn(DASHBOARD_DEAMON, options)
 var dns = spawn(DASHBOARD_DNS, options)
-//var tunnel = spawn(DASHBOARD_TUNNEL, tunnelOptions)
+var deamon = spawn(DASHBOARD_DEAMON, options)
 var iamalive = spawn(DASHBOARD_IAMALIVE, iamaliveOptions)
+
+require('./src/services/scanner')
+
+// var tunnel = spawn(DASHBOARD_TUNNEL, tunnelOptions)
 
 // ----------------------------- ONLY DEV BLOCK STARTS----------------------- //
 
@@ -110,15 +112,10 @@ iamalive.stderr.on('data', function (data) {
 iamalive.on('close', function (code) {
   console.log('child process iamalive exited with code ' + code.toString())
 })
-/*
-tunnel.on('close', function (code) {
-  console.log(`child process tunnel exited with code ${code}`)
-})
-*/
+
 // ----------------------------- ONLY DEV BLOCK ENDS----------------------- //
 
 process.on('exit', function () {
-  network.kill('SIGTERM')
   deamon.kill('SIGTERM')
   dns.kill('SIGTERM')
 //  tunnel.kill('SIGTERM')

@@ -8,6 +8,8 @@ var client = mqtt.connect()
 
 var broker = module.exports = {}
 
+broker.client = client
+
 // title is optional
 broker.info = function (body, title) {
   broker.emit({ emphasis: 'info', body: body, title: title })

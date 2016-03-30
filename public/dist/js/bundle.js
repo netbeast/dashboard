@@ -61492,7 +61492,7 @@ App.contextTypes = {
   router: _react2.default.PropTypes.object.isRequired
 };
 
-},{"../misc/activity-pulse.jsx":570,"mqtt":36,"react":551,"react-bootstrap":162,"superagent-bluebird-promise":552}],557:[function(require,module,exports){
+},{"../misc/activity-pulse.jsx":571,"mqtt":36,"react":551,"react-bootstrap":162,"superagent-bluebird-promise":552}],557:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -61613,7 +61613,7 @@ var AppsList = function (_React$Component) {
 
 exports.default = AppsList;
 
-},{"../lib":569,"./app.jsx":556,"react":551,"react-router":365,"superagent-bluebird-promise":552}],558:[function(require,module,exports){
+},{"../lib":570,"./app.jsx":556,"react":551,"react-router":365,"superagent-bluebird-promise":552}],558:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -61878,7 +61878,7 @@ var Drawer = function (_React$Component3) {
 
 exports.default = Drawer;
 
-},{"../misc/devices-pod.jsx":572,"../misc/version-pod.jsx":574,"./apps-list.jsx":557,"react":551,"react-router":365}],559:[function(require,module,exports){
+},{"../misc/devices-pod.jsx":573,"../misc/version-pod.jsx":575,"./apps-list.jsx":557,"react":551,"react-router":365}],559:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62231,7 +62231,7 @@ var Explore = function (_React$Component) {
 
 exports.default = Explore;
 
-},{"../misc/devices-pod.jsx":572,"../misc/version-pod.jsx":574,"./explorable-app.jsx":559,"react":551,"react-router":365,"superagent-bluebird-promise":552}],561:[function(require,module,exports){
+},{"../misc/devices-pod.jsx":573,"../misc/version-pod.jsx":575,"./explorable-app.jsx":559,"react":551,"react-router":365,"superagent-bluebird-promise":552}],561:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62444,7 +62444,7 @@ var InstallView = function (_React$Component) {
 
 exports.default = InstallView;
 
-},{"../misc/devices-pod.jsx":572,"../misc/version-pod.jsx":574,"react":551,"react-dropzone":336,"react-router":365,"superagent-bluebird-promise":552}],562:[function(require,module,exports){
+},{"../misc/devices-pod.jsx":573,"../misc/version-pod.jsx":575,"react":551,"react-dropzone":336,"react-router":365,"superagent-bluebird-promise":552}],562:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62595,7 +62595,7 @@ Dashboard.propTypes = {
   children: _react2.default.PropTypes.element
 };
 
-},{"./misc/connection-pod.jsx":571,"./misc/feedback-pod.jsx":573,"./notifications":576,"react":551}],564:[function(require,module,exports){
+},{"./misc/connection-pod.jsx":572,"./misc/feedback-pod.jsx":574,"./notifications":577,"react":551}],564:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62796,6 +62796,10 @@ var _versionPod = require('../misc/version-pod.jsx');
 
 var _versionPod2 = _interopRequireDefault(_versionPod);
 
+var _refreshPod = require('./refresh-pod.jsx');
+
+var _refreshPod2 = _interopRequireDefault(_refreshPod);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -62815,7 +62819,11 @@ var Devices = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Devices).call(this));
 
     _this.mqtt = _mqtt2.default.connect(window.mqttUri);
-    _this.state = { devices: _lib.Session.load('devices') || [], dragging: false, ox: -400, oy: -200 };
+    _this.state = { devices: _lib.Session.load('devices') || [], dragging: false, ox: -400, oy: -200, zoom: 800 };
+    _this.onMouseMove = _this.onMouseMove.bind(_this);
+    _this.onMouseDown = _this.onMouseDown.bind(_this);
+    _this.onMouseUp = _this.onMouseUp.bind(_this);
+    _this.onWheel = _this.onWheel.bind(_this);
     return _this;
   }
 
@@ -62828,6 +62836,7 @@ var Devices = function (_React$Component) {
       var ry = _state.ry;
       var ox = _state.ox;
       var oy = _state.oy;
+      var zoom = _state.zoom;
 
       var _devicesMap$getBoundi = this.devicesMap.getBoundingClientRect();
 
@@ -62840,7 +62849,7 @@ var Devices = function (_React$Component) {
       var x = _x$y.x;
       var y = _x$y.y;
 
-      this.devicesMap.setAttribute('viewBox', rx - x + ox + ' ' + (ry - y + oy) + ' 800 800');
+      this.devicesMap.setAttribute('viewBox', rx - x + ox + ' ' + (ry - y + oy) + ' ' + zoom + ' ' + zoom);
     }
   }, {
     key: 'onMouseDown',
@@ -62881,9 +62890,16 @@ var Devices = function (_React$Component) {
       this.setState({ ox: rx - x + ox, oy: ry - y + oy });
     }
   }, {
+    key: 'onWheel',
+    value: function onWheel(event) {
+      event.preventDefault();
+    }
+  }, {
     key: 'zoom',
-    value: function zoom(amount) {}
-    // TODO
+    value: function zoom(amount) {
+      console.log(amount);
+      this.setState({ zoom: this.state.zoom * amount });
+    }
 
     // Join to the nth element through a path
 
@@ -62935,6 +62951,7 @@ var Devices = function (_React$Component) {
       var devices = _state3.devices;
       var ox = _state3.ox;
       var oy = _state3.oy;
+      var zoom = _state3.zoom;
 
       var filters = [].concat(_toConsumableArray(new Set(devices.map(function (data) {
         return data.app || 'default';
@@ -62951,8 +62968,9 @@ var Devices = function (_React$Component) {
             { className: 'devices-map grabbable', ref: function ref(_ref) {
                 return _this3.devicesMap = _ref;
               },
-              viewBox: ox + ' ' + oy + ' 800 800', onMouseMove: this.onMouseMove.bind(this),
-              onMouseDown: this.onMouseDown.bind(this), onMouseUp: this.onMouseUp.bind(this) },
+              viewBox: ox + ' ' + oy + ' ' + zoom + ' ' + zoom, onMouseMove: this.onMouseMove,
+              onMouseDown: this.onMouseDown, onMouseUp: this.onMouseUp,
+              onWheel: this.onWheel },
             filters.map(function (src, idx) {
               return _react2.default.createElement(_filterSvg2.default, { key: src, src: src });
             }),
@@ -62964,13 +62982,28 @@ var Devices = function (_React$Component) {
               { id: 'netbot', x: '0%', y: '0%', width: '100%', height: '100%' },
               _react2.default.createElement('feImage', { xlinkHref: '/img/netbot.png' })
             ),
-            _react2.default.createElement('circle', { cx: 0, cy: 0, r: '50', style: { filter: 'url(#netbot)' } }),
+            _react2.default.createElement('circle', { cx: 0, cy: 0, r: '70', style: { filter: 'url(#netbot)' } }),
             devices.map(function (data, idx) {
               return _react2.default.createElement(_device2.default, _extends({ key: idx }, data, { idx: idx }));
             })
           )
         ),
+        _react2.default.createElement(
+          'div',
+          { className: 'zoom-pod' },
+          _react2.default.createElement(
+            'div',
+            { className: 'zoom-more clickable', onClick: this.zoom.bind(this, 0.9) },
+            '+'
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'zoom-less clickable', onClick: this.zoom.bind(this, 1.1) },
+            '-'
+          )
+        ),
         _react2.default.createElement(_versionPod2.default, null),
+        _react2.default.createElement(_refreshPod2.default, null),
         _react2.default.createElement(
           'div',
           { className: 'live-return-menu' },
@@ -62993,7 +63026,76 @@ var Devices = function (_React$Component) {
 
 exports.default = Devices;
 
-},{"../lib":569,"../misc/version-pod.jsx":574,"./device.jsx":564,"./filter-svg.jsx":565,"./helper":566,"mqtt":36,"react":551,"react-router":365}],568:[function(require,module,exports){
+},{"../lib":570,"../misc/version-pod.jsx":575,"./device.jsx":564,"./filter-svg.jsx":565,"./helper":566,"./refresh-pod.jsx":568,"mqtt":36,"react":551,"react-router":365}],568:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _superagentBluebirdPromise = require('superagent-bluebird-promise');
+
+var _superagentBluebirdPromise2 = _interopRequireDefault(_superagentBluebirdPromise);
+
+var _bluebird = require('bluebird');
+
+var _bluebird2 = _interopRequireDefault(_bluebird);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var VersionPod = function (_React$Component) {
+  _inherits(VersionPod, _React$Component);
+
+  function VersionPod() {
+    _classCallCheck(this, VersionPod);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(VersionPod).apply(this, arguments));
+  }
+
+  _createClass(VersionPod, [{
+    key: 'refresh',
+    value: function refresh() {
+      var APP_PROXY = '/i/';
+      _superagentBluebirdPromise2.default.get('/api/plugins').then(function (res) {
+        console.log(res);
+        return _bluebird2.default.map(res.body, function (plugin) {
+          return _superagentBluebirdPromise2.default.get(APP_PROXY + plugin.name + '/discover').promise();
+        });
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'span',
+        { className: 'refresh-pod cickable', title: 'Rediscover all devices...' },
+        _react2.default.createElement(
+          'i',
+          { className: 'fa fa-refresh', onClick: this.refresh.bind(this) },
+          ' Rediscover all devices'
+        )
+      );
+    }
+  }]);
+
+  return VersionPod;
+}(_react2.default.Component);
+
+exports.default = VersionPod;
+
+},{"bluebird":1,"react":551,"superagent-bluebird-promise":552}],569:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -63063,7 +63165,7 @@ _reactDom2.default.render(_react2.default.createElement(
   )
 ), document.getElementById('app'));
 
-},{"./apps/drawer.jsx":558,"./apps/explore.jsx":560,"./apps/install.jsx":561,"./apps/live.jsx":562,"./dashboard.jsx":563,"./devices/index.jsx":567,"./not-found.jsx":575,"./settings.jsx":578,"react":551,"react-dom":335,"react-router":365}],569:[function(require,module,exports){
+},{"./apps/drawer.jsx":558,"./apps/explore.jsx":560,"./apps/install.jsx":561,"./apps/live.jsx":562,"./dashboard.jsx":563,"./devices/index.jsx":567,"./not-found.jsx":576,"./settings.jsx":579,"react":551,"react-dom":335,"react-router":365}],570:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63114,7 +63216,7 @@ var API = exports.API = function () {
 
 exports.default = { Session: Session, API: API };
 
-},{}],570:[function(require,module,exports){
+},{}],571:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63169,7 +63271,7 @@ var Pulse = function (_React$Component) {
 
 exports.default = Pulse;
 
-},{"react":551}],571:[function(require,module,exports){
+},{"react":551}],572:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63223,7 +63325,7 @@ var ConnectionPod = function (_React$Component) {
     value: function ping() {
       var _this3 = this;
 
-      _superagent2.default.get('https://api.github.com/search/repositories?q=netbeast+language:javascript').end(function (err, resp) {
+      _superagent2.default.get('https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js').end(function (err, resp) {
         if (err) return _this3.setState({ connected: false });
         _this3.setState({ connected: true });
       });
@@ -63243,7 +63345,7 @@ var ConnectionPod = function (_React$Component) {
 
 exports.default = ConnectionPod;
 
-},{"react":551,"superagent":553}],572:[function(require,module,exports){
+},{"react":551,"superagent":553}],573:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63321,7 +63423,7 @@ var DevicesPod = function (_React$Component) {
 
 exports.default = DevicesPod;
 
-},{"../lib":569,"mqtt":36,"react":551}],573:[function(require,module,exports){
+},{"../lib":570,"mqtt":36,"react":551}],574:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63367,7 +63469,7 @@ var ConnectionPod = function (_React$Component) {
 
 exports.default = ConnectionPod;
 
-},{"react":551}],574:[function(require,module,exports){
+},{"react":551}],575:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -63418,7 +63520,7 @@ exports.default = VersionPod;
 
 }).call(this,require('_process'))
 
-},{"_process":11,"react":551}],575:[function(require,module,exports){
+},{"_process":11,"react":551}],576:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63475,7 +63577,7 @@ var NotFound = function (_React$Component) {
 
 exports.default = NotFound;
 
-},{"react":551,"react-router":365}],576:[function(require,module,exports){
+},{"react":551,"react-router":365}],577:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -63639,7 +63741,7 @@ var Notifications = function (_React$Component) {
 
 exports.default = Notifications;
 
-},{"../lib":569,"./toast.jsx":577,"mqtt":36,"react":551}],577:[function(require,module,exports){
+},{"../lib":570,"./toast.jsx":578,"mqtt":36,"react":551}],578:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63719,7 +63821,7 @@ var Toast = function (_React$Component) {
 
 exports.default = Toast;
 
-},{"react":551}],578:[function(require,module,exports){
+},{"react":551}],579:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63820,7 +63922,7 @@ var Settings = function (_React$Component) {
 
 exports.default = Settings;
 
-},{"react":551,"react-router":365}]},{},[568])
+},{"react":551,"react-router":365}]},{},[569])
 
 
 //# sourceMappingURL=bundle.js.map

@@ -35,7 +35,7 @@ describe('Resources', function () {
     Resource.find({app: 'app'}, function (err, resources) {
       should.not.exist(err)
       resources.forEach(function (item) {
-        expect(item).to.have.all.keys(
+        expect(item).to.have.keys(
           'id', 'app', 'topic', 'location', 'groupname', 'hook')
       })
       done()

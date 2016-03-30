@@ -111,7 +111,7 @@ renderButton () {
   }
 
   componentDidMount () {
-    const { name } = this.props
+    const { name, netbeast } = this.props
     this.mqtt = mqtt.connect(window.mqttUri)
     this.mqtt.subscribe('netbeast/activities/close')
     this.mqtt.on('message', (topic, message) => {
@@ -121,10 +121,12 @@ renderButton () {
     request.get('/api/activities/' + name).end((err, res) => {
       if (!err) this.setState({ isRunning: true })
     })
-
-    const devices = Session.load('devices')
-    const found = devices.find((d) => { return d.app === name })
-    this.setState({ inactive: !found })
+    
+    if (netbeast && (netbeast.type === 'plugin')) {
+      const devices = Session.load('devices')
+      const found = devices.find((d) => { return d.app === name })
+      this.setState({ inactive: !found })
+    }
   }
 
   componentWillUnmount () {

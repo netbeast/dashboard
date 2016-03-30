@@ -61438,7 +61438,9 @@ var App = function (_React$Component) {
     value: function componentDidMount() {
       var _this4 = this;
 
-      var name = this.props.name;
+      var _props4 = this.props;
+      var name = _props4.name;
+      var netbeast = _props4.netbeast;
 
       this.mqtt = _mqtt2.default.connect(window.mqttUri);
       this.mqtt.subscribe('netbeast/activities/close');
@@ -61450,11 +61452,13 @@ var App = function (_React$Component) {
         if (!err) _this4.setState({ isRunning: true });
       });
 
-      var devices = _lib.Session.load('devices');
-      var found = devices.find(function (d) {
-        return d.app === name;
-      });
-      this.setState({ inactive: !found });
+      if (netbeast && netbeast.type === 'plugin') {
+        var devices = _lib.Session.load('devices');
+        var found = devices.find(function (d) {
+          return d.app === name;
+        });
+        this.setState({ inactive: !found });
+      }
     }
   }, {
     key: 'componentWillUnmount',
@@ -61464,11 +61468,11 @@ var App = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _props4 = this.props;
-      var name = _props4.name;
-      var author = _props4.author;
-      var logo = _props4.logo;
-      var netbeast = _props4.netbeast;
+      var _props5 = this.props;
+      var name = _props5.name;
+      var author = _props5.author;
+      var logo = _props5.logo;
+      var netbeast = _props5.netbeast;
 
       var isPlugin = netbeast && netbeast.type === 'plugin';
       var defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)';
@@ -63726,7 +63730,6 @@ var Notifications = function (_React$Component) {
       var history = _state.history;
       var showHistory = _state.showHistory;
 
-      console.log(history);
       return _react2.default.createElement(
         'span',
         null,

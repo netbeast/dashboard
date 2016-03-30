@@ -76,7 +76,7 @@ export default class Notifications extends React.Component {
 
   render () {
     const { toasts, history, showHistory } = this.state
-    console.log(history)
+
     return (
       <span>
         <div className='notifications-pod clickable' onClick={this.toggleHistory}> ({history.length}) Notifications</div>

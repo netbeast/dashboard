@@ -65,6 +65,11 @@
     padding-top: 15px;
     font-size: 1.4rem;
   }
+
+  &.warning {
+    .pulse, .halo { stroke: $yellow; }
+    .center { fill: $yellow; }
+  }
 }
 
 .apps-list .remove.btn, .apps-list .stop.btn, .apps-list .install.btn {

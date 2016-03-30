@@ -5,11 +5,12 @@ import request from 'superagent-bluebird-promise'
 import { OverlayTrigger, Popover } from 'react-bootstrap'
 
 import Pulse from '../misc/activity-pulse.jsx'
+import { Session } from '../lib'
 
 export default class App extends React.Component {
   constructor (props, context) {
     super(props)
-    this.state = { isRunning: false, menuHidden: true }
+    this.state = { isRunning: false, inactive: false, menuHidden: true }
     this.router = context.router
   }
 
@@ -116,9 +117,14 @@ renderButton () {
     this.mqtt.on('message', (topic, message) => {
       if (message.toString() === name) this.setState({ isRunning: false })
     })
+
     request.get('/api/activities/' + name).end((err, res) => {
       if (!err) this.setState({ isRunning: true })
     })
+
+    const devices = Session.load('devices')
+    const found = devices.find((d) => { return d.app === name })
+    this.setState({ inactive: !found })
   }
 
   componentWillUnmount () {
@@ -130,9 +136,13 @@ renderButton () {
     const isPlugin = netbeast && (netbeast.type === 'plugin')
     const defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)'
     const logoStyle = { backgroundImage: logo ? `url(/api/apps/${name}/logo)` : defaultLogo }
+
+    const { inactive, isRunning } = this.state
+    const inactiveClass = inactive && isRunning ? ' warning' : ''
+
     return (
-      <div className='app'>
-      {this.state.isRunning ? <Pulse {...this.props} /> : null}
+      <div className={'app' + inactiveClass}>
+      {(isRunning) ? <Pulse {...this.props} /> : null}
       <OverlayTrigger ref='contextMenu' trigger={[]} rootClose placement='bottom' overlay={this.contextMenu()}>
         <div className='logo' title='Launch app' style={logoStyle} onClick={this.handleClick.bind(this)} onContextMenu={this.toggleMenu.bind(this)} />
       </OverlayTrigger>

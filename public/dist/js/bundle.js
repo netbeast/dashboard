@@ -61267,6 +61267,8 @@ var _activityPulse = require('../misc/activity-pulse.jsx');
 
 var _activityPulse2 = _interopRequireDefault(_activityPulse);
 
+var _lib = require('../lib');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61283,7 +61285,7 @@ var App = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props));
 
-    _this.state = { isRunning: false, menuHidden: true };
+    _this.state = { isRunning: false, inactive: false, menuHidden: true };
     _this.router = context.router;
     return _this;
   }
@@ -61443,9 +61445,16 @@ var App = function (_React$Component) {
       this.mqtt.on('message', function (topic, message) {
         if (message.toString() === name) _this4.setState({ isRunning: false });
       });
+
       _superagentBluebirdPromise2.default.get('/api/activities/' + name).end(function (err, res) {
         if (!err) _this4.setState({ isRunning: true });
       });
+
+      var devices = _lib.Session.load('devices');
+      var found = devices.find(function (d) {
+        return d.app === name;
+      });
+      this.setState({ inactive: !found });
     }
   }, {
     key: 'componentWillUnmount',
@@ -61464,10 +61473,17 @@ var App = function (_React$Component) {
       var isPlugin = netbeast && netbeast.type === 'plugin';
       var defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)';
       var logoStyle = { backgroundImage: logo ? 'url(/api/apps/' + name + '/logo)' : defaultLogo };
+
+      var _state = this.state;
+      var inactive = _state.inactive;
+      var isRunning = _state.isRunning;
+
+      var inactiveClass = inactive && isRunning ? ' warning' : '';
+
       return _react2.default.createElement(
         'div',
-        { className: 'app' },
-        this.state.isRunning ? _react2.default.createElement(_activityPulse2.default, this.props) : null,
+        { className: 'app' + inactiveClass },
+        isRunning ? _react2.default.createElement(_activityPulse2.default, this.props) : null,
         _react2.default.createElement(
           _reactBootstrap.OverlayTrigger,
           { ref: 'contextMenu', trigger: [], rootClose: true, placement: 'bottom', overlay: this.contextMenu() },
@@ -61492,7 +61508,7 @@ App.contextTypes = {
   router: _react2.default.PropTypes.object.isRequired
 };
 
-},{"../misc/activity-pulse.jsx":571,"mqtt":36,"react":551,"react-bootstrap":162,"superagent-bluebird-promise":552}],557:[function(require,module,exports){
+},{"../lib":570,"../misc/activity-pulse.jsx":571,"mqtt":36,"react":551,"react-bootstrap":162,"superagent-bluebird-promise":552}],557:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };

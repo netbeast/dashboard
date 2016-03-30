@@ -63331,10 +63331,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _superagent = require('superagent');
-
-var _superagent2 = _interopRequireDefault(_superagent);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -63343,15 +63339,13 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// var React = require('react')
-
 var ConnectionPod = function (_React$Component) {
   _inherits(ConnectionPod, _React$Component);
 
   function ConnectionPod() {
     _classCallCheck(this, ConnectionPod);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(ConnectionPod).call(this));
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(ConnectionPod).apply(this, arguments));
   }
 
   _createClass(ConnectionPod, [{
@@ -63370,7 +63364,7 @@ var ConnectionPod = function (_React$Component) {
 
 exports.default = ConnectionPod;
 
-},{"react":551,"superagent":553}],574:[function(require,module,exports){
+},{"react":551}],574:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -63501,6 +63495,8 @@ var _toast = require('./toast.jsx');
 
 var _toast2 = _interopRequireDefault(_toast);
 
+var _lib = require('../lib');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -63521,8 +63517,13 @@ var Notifications = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Notifications).call(this, props));
 
-    _this.state = { toasts: [] };
+    _this.state = {
+      toasts: [],
+      history: _lib.Session.load('notifications') || [],
+      showHistory: false
+    };
     _this.dismiss = _this.dismiss.bind(_this);
+    _this.toggleHistory = _this.toggleHistory.bind(_this);
     return _this;
   }
 
@@ -63532,7 +63533,12 @@ var Notifications = function (_React$Component) {
       var id = idx++;
       var timeout = notification.timeout || 4700;
       var toast = Object.assign({ id: id, timeout: timeout }, notification);
-      this.setState({ toasts: [].concat(_toConsumableArray(this.state.toasts), [toast]) });
+      var history = _lib.Session.load('notifications') || [];
+      _lib.Session.save('notifications', [].concat(_toConsumableArray(history), [toast]));
+      this.setState({
+        history: [].concat(_toConsumableArray(history), [toast]),
+        toasts: [].concat(_toConsumableArray(this.state.toasts), [toast])
+      });
       return id;
     }
   }, {
@@ -63552,6 +63558,11 @@ var Notifications = function (_React$Component) {
       if (index < 0) return; // do not change react component
       toasts.splice(index, 1); // splice changes the array
       this.setState({ toasts: toasts });
+    }
+  }, {
+    key: 'toggleHistory',
+    value: function toggleHistory() {
+      this.setState({ showHistory: !this.state.showHistory });
     }
   }, {
     key: 'componentDidMount',
@@ -63589,15 +63600,33 @@ var Notifications = function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      var toasts = this.state.toasts;
+      var _state = this.state;
+      var toasts = _state.toasts;
+      var history = _state.history;
+      var showHistory = _state.showHistory;
 
+      console.log(history);
       return _react2.default.createElement(
-        'div',
-        { className: 'notifications z-super' },
-        toasts.map(function (props, index) {
-          var isCurrent = index === toasts.length - 1;
-          return _react2.default.createElement(_toast2.default, _extends({ isCurrent: isCurrent, key: props.id }, props, { dismiss: _this2.dismiss.bind(_this2) }));
-        })
+        'span',
+        null,
+        _react2.default.createElement(
+          'div',
+          { className: 'notifications-pod clickable', onClick: this.toggleHistory },
+          ' (',
+          history.length,
+          ') Notifications'
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'notifications z-super' },
+          showHistory ? history.map(function (props, index) {
+            var isCurrent = index === toasts.length - 1;
+            return _react2.default.createElement(_toast2.default, _extends({ isCurrent: isCurrent, key: props.id }, props));
+          }) : toasts.map(function (props, index) {
+            var isCurrent = index === toasts.length - 1;
+            return _react2.default.createElement(_toast2.default, _extends({ isCurrent: isCurrent, key: props.id }, props, { dismiss: _this2.dismiss.bind(_this2) }));
+          })
+        )
       );
     }
   }]);
@@ -63607,7 +63636,7 @@ var Notifications = function (_React$Component) {
 
 exports.default = Notifications;
 
-},{"./toast.jsx":577,"mqtt":36,"react":551}],577:[function(require,module,exports){
+},{"../lib":569,"./toast.jsx":577,"mqtt":36,"react":551}],577:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63655,7 +63684,7 @@ var Toast = function (_React$Component) {
       var timeout = _props.timeout;
       var isCurrent = _props.isCurrent; // eslint-disable-line
 
-      // if (timeout) setTimeout(this.close, timeout)
+      if (timeout) setTimeout(this.close, timeout);
 
       return _react2.default.createElement(
         'div',
@@ -63667,11 +63696,11 @@ var Toast = function (_React$Component) {
           title || 'dashboard',
           ' '
         ),
-        _react2.default.createElement(
+        typeof this.props.dismiss === 'function' ? _react2.default.createElement(
           'button',
           { type: 'button', className: 'close', onClick: this.close },
           '×'
-        ),
+        ) : null,
         _react2.default.createElement('br', null),
         _react2.default.createElement(
           'div',

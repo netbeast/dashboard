@@ -2,21 +2,32 @@ import React from 'react'
 import mqtt from 'mqtt'
 
 import Toast from './toast.jsx'
+import { Session } from '../lib'
 
 let idx = 0
 
 export default class Notifications extends React.Component {
   constructor (props) {
     super(props)
-    this.state = { toasts: [] }
+    this.state = {
+      toasts: [],
+      history: Session.load('notifications') || [],
+      showHistory: false
+    }
     this.dismiss = this.dismiss.bind(this)
+    this.toggleHistory = this.toggleHistory.bind(this)
   }
 
   notify (notification) {
     const id = idx++
     const timeout = notification.timeout || 4700
     const toast = Object.assign({ id, timeout }, notification)
-    this.setState({ toasts: [...this.state.toasts, toast] })
+    const history = Session.load('notifications') || []
+    Session.save('notifications', [...history, toast])
+    this.setState({
+      history: [...history, toast],
+      toasts: [...this.state.toasts, toast]
+    })
     return id
   }
 
@@ -33,6 +44,8 @@ export default class Notifications extends React.Component {
     toasts.splice(index, 1) // splice changes the array
     this.setState({ toasts: toasts })
   }
+
+  toggleHistory () { this.setState({ showHistory: !this.state.showHistory }) }
 
   componentDidMount () {
     this.mqtt = mqtt.connect()
@@ -62,14 +75,21 @@ export default class Notifications extends React.Component {
   }
 
   render () {
-    const { toasts } = this.state
+    const { toasts, history, showHistory } = this.state
+    console.log(history)
     return (
-      <div className='notifications z-super'>
-        {toasts.map((props, index) => {
-          const isCurrent = index === (toasts.length - 1)
-          return <Toast isCurrent={isCurrent} key={props.id} {...props} dismiss={this.dismiss.bind(this)}/>
-        })}
-      </div>
+      <span>
+        <div className='notifications-pod clickable' onClick={this.toggleHistory}> ({history.length}) Notifications</div>
+          <div className='notifications z-super'>
+          { showHistory ? history.map((props, index) => {
+            const isCurrent = index === (toasts.length - 1)
+            return <Toast isCurrent={isCurrent} key={props.id} {...props} />
+          }) : toasts.map((props, index) => {
+            const isCurrent = index === (toasts.length - 1)
+            return <Toast isCurrent={isCurrent} key={props.id} {...props} dismiss={this.dismiss.bind(this)}/>
+          })}
+        </div>
+      </span>
     )
   }
 }

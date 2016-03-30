@@ -19,7 +19,6 @@ var bootOnload = require('./src/boot-on-load')
 const DASHBOARD_DEAMON = path.join(__dirname, './bin/deamon.js')
 const DASHBOARD_DNS = path.join(__dirname, './bin/dns.js')
 const DASHBOARD_NETWORK = path.join(__dirname, './bin/network.js')
-const DASHBOARD_TUNNEL = path.join(__dirname, './bin/tunnel-c.js')
 const DASHBOARD_IAMALIVE = path.join(__dirname, './bin/iamalive-c.js')
 
 cmd
@@ -63,13 +62,7 @@ proxy.on('error', function (err, req, res) {
 })
 
 var env = Object.create(process.env)
-var env_tunnel = Object.create(process.env)
 var env_iamalive = Object.create(process.env)
-
-env_tunnel
-  .NETBEAST_PORT = process.env.PORT
-  .RELAY_PORT = process.env.RELAY_PORT
-  .SERVER_IP = process.SERVER_IP
 
 env_iamalive
   .NETBEAST_PORT = process.env.PORT
@@ -80,7 +73,6 @@ env_iamalive
 env.NETBEAST_PORT = process.env.PORT
 
 var options = { env: env }
-var tunnelOptions = { env: env_tunnel }
 var iamaliveOptions = { env: env_iamalive }
 
 var dns = spawn(DASHBOARD_DNS, options)
@@ -89,7 +81,7 @@ var iamalive = spawn(DASHBOARD_IAMALIVE, iamaliveOptions)
 
 require('./src/services/scanner')
 
-// var tunnel = spawn(DASHBOARD_TUNNEL, tunnelOptions)
+//
 
 // ----------------------------- ONLY DEV BLOCK STARTS----------------------- //
 

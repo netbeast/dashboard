@@ -250,14 +250,6 @@
 }
 
 //====================================
-// DEVICES POD
-//====================================
-
-.path-devices {
-  text-align: center;
-}
-
-//====================================
 // Connection POD to show online status or internet availability
 //====================================
 
@@ -280,6 +272,10 @@
 
 .popover-content {
   color: $grey;
+}
+
+.path-devices {
+  text-align: center;
 }
 
 .devices-view {
@@ -318,6 +314,12 @@
     font-size: 1.4em;
     padding: 5px 10px;
   }
+}
+
+.refresh-pod {
+  position: fixed;
+  color: $grey-lighter;
+  top: 5px; left: 5px;
 }
 
 //============================

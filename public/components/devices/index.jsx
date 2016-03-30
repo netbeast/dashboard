@@ -8,6 +8,7 @@ import { _coords } from './helper'
 import FilterSVG from './filter-svg.jsx'
 import Device from './device.jsx'
 import VersionPod from '../misc/version-pod.jsx'
+import RefreshPod from './refresh-pod.jsx'
 
 export default class Devices extends React.Component {
   constructor () {
@@ -113,6 +114,7 @@ export default class Devices extends React.Component {
           <div className='zoom-less clickable' onClick={this.zoom.bind(this, 1.1)}>-</div>
         </div>
         <VersionPod />
+        <RefreshPod />
         <div className='live-return-menu'>
           <Link to='/'> Go back to Netbeast dashboard.</Link>
         </div>

@@ -6,7 +6,7 @@ import { Session } from '../lib'
 export default class DevicesPod extends React.Component {
   constructor () {
     super()
-    this.mqtt = mqtt.connect()
+    this.mqtt = mqtt.connect(window.mqttUri)
     this.state = { devices: Session.load('devices') || [] }
   }
 

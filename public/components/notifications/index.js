@@ -35,7 +35,7 @@ export default class Notifications extends React.Component {
   }
 
   componentDidMount () {
-    this.mqtt = mqtt.connect()
+    this.mqtt = mqtt.connect(window.mqttUri)
     this.mqtt.subscribe('netbeast/push')
     this.mqtt.on('message', this.handleNotification.bind(this))
 

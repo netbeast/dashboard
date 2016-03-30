@@ -12,7 +12,7 @@ import VersionPod from '../misc/version-pod.jsx'
 export default class Devices extends React.Component {
   constructor () {
     super()
-    this.mqtt = mqtt.connect()
+    this.mqtt = mqtt.connect(window.mqttUri)
     this.state = { devices: Session.load('devices') || [], dragging: false, ox: -400, oy: -200 }
   }
 

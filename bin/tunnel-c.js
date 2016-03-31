@@ -5,6 +5,7 @@ var host = '127.0.0.1'
 var port = process.env.PORT
 var relayPort = process.env.RELAY_PORT
 var relayHost = process.env.SERVER_IP
+console.log(port + ' ' + relayPort + ' ' + relayHost);
 
 var net = require('net')
 
@@ -71,14 +72,3 @@ var net = require('net')
     connect()
   }
 //}
-tunnel.stdout.on('data', function (data) {
-  console.log(data.toString())
-})
-
-tunnel.stderr.on('data', function (data) {
-  console.log(data.toString())
-})
-
-tunnel.on('close', function (code) {
-  console.log('child process tunnel exited with code ' + code.toString())
-})

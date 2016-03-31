@@ -2,17 +2,14 @@
 
 var dgram = require('dgram')
 var client = dgram.createSocket('udp4')
-// var tunnel = require('./tunnel-c.js')
 var path = require('path')
 var spawn = require('child_process').spawn
-
 var env_tunnel = Object.create(process.env)
-env_tunnel
-  .NETBEAST_PORT = process.env.PORT
-  .SERVER_IP = process.env.SERVER_IP
 
+env_tunnel
+.NETBEAST_PORT = process.env.PORT
+.SERVER_IP = process.env.SERVER_IP
 const DASHBOARD_TUNNEL = path.join(__dirname, './tunnel-c.js')
-var tunnelOptions = { env: env_tunnel }
 
 console.log('Server ' + process.env.SERVER_IP + ':' + process.env.IAMALIVE_SPORT)
 
@@ -36,14 +33,26 @@ client.on('message', function (msg, rinfo) {
   if (parseInt(msg, 10) > 0) {
     console.log()
     // tunnel.start(remotePort)
-   env_tunnel.RELAY_PORT = remotePort
-   var tunnelOptions = { env: env_tunnel }
-  var tunnel = spawn(DASHBOARD_TUNNEL, tunnelOptions)
-  }
-})
+    env_tunnel.RELAY_PORT = remotePort
+    var tunnelOptions = { env: env_tunnel }
+    var tunnel = spawn(DASHBOARD_TUNNEL, tunnelOptions)
 
-process.on('exit', function () {
-  tunnel.kill('SIGTERM')
+    tunnel.stdout.on('data', function (data) {
+      console.log(data.toString())
+    })
+
+    tunnel.stderr.on('data', function (data) {
+      console.log(data.toString())
+    })
+
+    tunnel.on('close', function (code) {
+      console.log('child process tunnel exited with code ' + code.toString())
+    })
+
+    process.on('exit', function () {
+      tunnel.kill('SIGTERM')
+    })
+  }
 })
 
 client.on('listening', function () {

@@ -40,7 +40,7 @@ describe('Activities', function () {
       should.not.exist(err)
       resp.statusCode.should.equal(200)
       body = resp.body.filter(function (app) {
-        return app.netbeast && app.netbeast.type !== 'service' && !app.netbeast.bootOnLoad
+        return app.netbeast && app.netbeast.type !== 'plugin' && !app.netbeast.bootOnLoad
       })
       body.should.have.length.below(1)
       done()

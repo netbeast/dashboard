@@ -2,10 +2,9 @@ var path = require('path')
 var events = require('events')
 var spawn = require('child_process').spawn
 
-var request = require('request')
 var portfinder = require('portfinder')
 var chalk = require('chalk')
-var async = require('async')
+var request = require('superagent')
 var mqtt = require('mqtt')
 
 var broker = require('../helpers/broker')
@@ -75,33 +74,24 @@ self.all = function (done) {
 
 self.ready = function (child, done) {
   if (child.ready) return done(null, child)
-
   const APP_URL = 'http://localhost:' + child.port
   const MAX_TRIALS = 20
   var k = 0
+  ;(function keepTrying () {
+    if (k >= MAX_TRIALS) return done(new ApiError(405, 'Impossible to launch the application'))
 
-  function keepTrying () { return k < MAX_TRIALS }
-
-  async.whilst(keepTrying, function (callback) {
-    k++
-    request(APP_URL, function (err, resp, body) {
+    request(APP_URL).end(function (err, resp) {
       if (err && err.code !== 'ECONNREFUSED') {
-        done(err)
+        return done(err)
       } else if (err) {
-        setTimeout(callback, 400)
+        k++
+        return setTimeout(keepTrying, 400)
       } else {
-        done(null, child)
+        child.ready = true
+        return done(null, child)
       }
     })
-  }, function (err) {
-    if (err) return done(err)
-    if (k === MAX_TRIALS) {
-      return done(new ApiError(405, 'Impossible to launch the application'))
-    }
-
-    child.ready = true
-    return done(null, child)
-  })
+  })()
 }
 
 self.boot = function (appName, done) {

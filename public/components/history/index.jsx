@@ -1,0 +1,87 @@
+import React from 'react'
+import mqtt from 'mqtt'
+import { Line } from 'react-chartjs'
+
+// import chartOptions from './history-conf'
+
+const DATASET = {
+  fillColor: 'rgba(0, 233, 207, .2)',
+  strokeColor: 'rgb(0, 233, 207)',
+  pointColor: 'rgb(0, 233, 207)',
+  pointStrokeColor: 'rgb(0, 233, 207)',
+  pointHighlightFill: 'rgb(0, 233, 207)',
+  pointHighlightStroke: 'rgb(0, 233, 207)'
+}
+
+const LABELS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
+
+const SCALAR_TYPES = ['volume', 'temperature', 'luminosity', 'humidity']
+
+export default class History extends React.Component {
+  constructor () {
+    super()
+    this.mqtt = mqtt.connect(window.mqttUri)
+    this.state = { topics: {}, scalars: {} }
+  }
+
+  componentWillMount () {
+    this.mqtt.subscribe('#') // subscription to all channels
+    this.mqtt.on('message', (topic, message) => {
+      const { topics, scalars } = this.state
+
+      topic = topic.toString().replace('netbeast/', '')
+      message = JSON.parse(message)
+
+      if (SCALAR_TYPES.indexOf(topic) < 0) {
+        topics[topic] = topics[topic] || []
+        topics[topic] = message
+        this.setState({ topics })
+      } else {
+        scalars[topic] = scalars[topic] || new Array(22)
+        scalars[topic] = [...scalars[topic], message[topic]].slice(1, 22)
+        this.setState({ scalars })
+      }
+    })
+  }
+
+  componentWillUnmount () {
+    this.mqtt.unsubscribe('netbeast/network')
+  }
+
+  render () {
+    const { topics, scalars } = this.state
+
+    return (
+      <span className='history-view'>
+        <div className='history-data'>
+          {Object.keys(scalars).map((topic, idx) => {
+            const localData = Object.create({ labels: LABELS })
+            localData.datasets = [Object.assign({}, DATASET, { label: topic, data: scalars[topic] })]
+            const latestValue = Math.round(scalars[topic][scalars[topic].length - 1] * 100) / 100
+
+            return (
+              <div className='chart' key={topic}>
+                <h6>
+                  {topic}&nbsp;
+                  <span className='latest-value'>{!isNaN(latestValue) ? latestValue : null}</span>
+                </h6>
+                <Line data={localData} height='240px'/>
+                <br/>
+              </div>
+            )
+          })}
+          {Object.keys(topics).map((topic, idx) => {
+            return (
+              <div key={topic} className='topic'>
+                <p>
+                  <h6>{topic}</h6>
+                  {JSON.stringify(topics[topic])}
+                </p>
+              </div>
+            )
+          })}
+        </div>
+      </span>
+      )
+  }
+}

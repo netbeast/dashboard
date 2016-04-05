@@ -67133,7 +67133,7 @@ App.contextTypes = {
   router: _react2.default.PropTypes.object.isRequired
 };
 
-},{"../lib":592,"../misc/activity-pulse.jsx":593,"mqtt":37,"react":568,"react-bootstrap":172,"superagent-bluebird-promise":569}],577:[function(require,module,exports){
+},{"../lib":591,"../misc/activity-pulse.jsx":592,"mqtt":37,"react":568,"react-bootstrap":172,"superagent-bluebird-promise":569}],577:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -67254,7 +67254,7 @@ var AppsList = function (_React$Component) {
 
 exports.default = AppsList;
 
-},{"../lib":592,"./app.jsx":576,"react":568,"react-router":383,"superagent-bluebird-promise":569}],578:[function(require,module,exports){
+},{"../lib":591,"./app.jsx":576,"react":568,"react-router":383,"superagent-bluebird-promise":569}],578:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -67520,7 +67520,7 @@ var Drawer = function (_React$Component3) {
 
 exports.default = Drawer;
 
-},{"../misc/devices-pod.jsx":595,"../misc/version-pod.jsx":597,"./apps-list.jsx":577,"react":568,"react-router":383}],579:[function(require,module,exports){
+},{"../misc/devices-pod.jsx":594,"../misc/version-pod.jsx":596,"./apps-list.jsx":577,"react":568,"react-router":383}],579:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -67877,7 +67877,7 @@ var Explore = function (_React$Component) {
 
 exports.default = Explore;
 
-},{"../misc/devices-pod.jsx":595,"../misc/version-pod.jsx":597,"./explorable-app.jsx":579,"react":568,"react-router":383,"superagent-bluebird-promise":569}],581:[function(require,module,exports){
+},{"../misc/devices-pod.jsx":594,"../misc/version-pod.jsx":596,"./explorable-app.jsx":579,"react":568,"react-router":383,"superagent-bluebird-promise":569}],581:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -68090,7 +68090,7 @@ var InstallView = function (_React$Component) {
 
 exports.default = InstallView;
 
-},{"../misc/devices-pod.jsx":595,"../misc/version-pod.jsx":597,"react":568,"react-dropzone":354,"react-router":383,"superagent-bluebird-promise":569}],582:[function(require,module,exports){
+},{"../misc/devices-pod.jsx":594,"../misc/version-pod.jsx":596,"react":568,"react-dropzone":354,"react-router":383,"superagent-bluebird-promise":569}],582:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -68242,7 +68242,7 @@ Dashboard.propTypes = {
   children: _react2.default.PropTypes.element
 };
 
-},{"./misc/connection-pod.jsx":594,"./misc/feedback-pod.jsx":596,"./notifications":599,"react":568}],584:[function(require,module,exports){
+},{"./misc/connection-pod.jsx":593,"./misc/feedback-pod.jsx":595,"./notifications":598,"react":568}],584:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -68675,7 +68675,7 @@ var Devices = function (_React$Component) {
 
 exports.default = Devices;
 
-},{"../lib":592,"../misc/version-pod.jsx":597,"./device.jsx":584,"./filter-svg.jsx":585,"./helper":586,"./refresh-pod.jsx":588,"mqtt":37,"react":568,"react-router":383}],588:[function(require,module,exports){
+},{"../lib":591,"../misc/version-pod.jsx":596,"./device.jsx":584,"./filter-svg.jsx":585,"./helper":586,"./refresh-pod.jsx":588,"mqtt":37,"react":568,"react-router":383}],588:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -68745,61 +68745,6 @@ var VersionPod = function (_React$Component) {
 exports.default = VersionPod;
 
 },{"bluebird":1,"react":568,"superagent-bluebird-promise":569}],589:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = {
-
-    ///Boolean - Whether grid lines are shown across the chart
-    scaleShowGridLines: true,
-
-    //String - Colour of the grid lines
-    scaleGridLineColor: "rgba(0,0,0,.05)",
-
-    //Number - Width of the grid lines
-    scaleGridLineWidth: 1,
-
-    //Boolean - Whether to show horizontal lines (except X axis)
-    scaleShowHorizontalLines: true,
-
-    //Boolean - Whether to show vertical lines (except Y axis)
-    scaleShowVerticalLines: true,
-
-    //Boolean - Whether the line is curved between points
-    bezierCurve: true,
-
-    //Number - Tension of the bezier curve between points
-    bezierCurveTension: 0.4,
-
-    //Boolean - Whether to show a dot for each point
-    pointDot: true,
-
-    //Number - Radius of each point dot in pixels
-    pointDotRadius: 4,
-
-    //Number - Pixel width of point dot stroke
-    pointDotStrokeWidth: 1,
-
-    //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-    pointHitDetectionRadius: 20,
-
-    //Boolean - Whether to show a stroke for datasets
-    datasetStroke: true,
-
-    //Number - Pixel width of dataset stroke
-    datasetStrokeWidth: 2,
-
-    //Boolean - Whether to fill the dataset with a colour
-    datasetFill: true,
-
-    //String - A legend template
-    legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
-
-};
-
-},{}],590:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -68818,10 +68763,6 @@ var _mqtt2 = _interopRequireDefault(_mqtt);
 
 var _reactChartjs = require('react-chartjs');
 
-var _historyConf = require('./history-conf');
-
-var _historyConf2 = _interopRequireDefault(_historyConf);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -68831,6 +68772,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// import chartOptions from './history-conf'
+
+var DATASET = {
+  fillColor: 'rgba(0, 233, 207, .2)',
+  strokeColor: 'rgb(0, 233, 207)',
+  pointColor: 'rgb(0, 233, 207)',
+  pointStrokeColor: 'rgb(0, 233, 207)',
+  pointHighlightFill: 'rgb(0, 233, 207)',
+  pointHighlightStroke: 'rgb(0, 233, 207)'
+};
+
+var LABELS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
 
 var SCALAR_TYPES = ['volume', 'temperature', 'luminosity', 'humidity'];
 
@@ -68843,7 +68797,7 @@ var History = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(History).call(this));
 
     _this.mqtt = _mqtt2.default.connect(window.mqttUri);
-    _this.state = { topics: {}, scalars: [] };
+    _this.state = { topics: {}, scalars: {} };
     return _this;
   }
 
@@ -68867,11 +68821,10 @@ var History = function (_React$Component) {
           topics[topic] = message;
           _this2.setState({ topics: topics });
         } else {
-          scalars[topic] = scalars[topic] || [];
-          scalars[topic] = [].concat(_toConsumableArray(scalars[topic]), [message]);
+          scalars[topic] = scalars[topic] || new Array(22);
+          scalars[topic] = [].concat(_toConsumableArray(scalars[topic]), [message[topic]]).slice(1, 22);
+          _this2.setState({ scalars: scalars });
         }
-
-        console.log('[%s] %s', topic.toString(), message.toString());
       });
     }
   }, {
@@ -68886,54 +68839,50 @@ var History = function (_React$Component) {
       var topics = _state2.topics;
       var scalars = _state2.scalars;
 
-      var data = {
-        labels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        datasets: [{
-          label: 'My First dataset',
-          fillColor: 'rgba(220,220,220,0.2)',
-          strokeColor: 'rgba(220,220,220,1)',
-          pointColor: 'rgba(220,220,220,1)',
-          pointStrokeColor: '#fff',
-          pointHighlightFill: '#fff',
-          pointHighlightStroke: 'rgba(220,220,220,1)',
-          data: [65, 59, 80, 81, 56, 55, 40, 56, 55, 40]
-        }]
-      };
 
       return _react2.default.createElement(
         'span',
-        null,
+        { className: 'history-view' },
         _react2.default.createElement(
           'div',
-          { className: 'history-scalars' },
+          { className: 'history-data' },
           Object.keys(scalars).map(function (topic, idx) {
-            var localData = Object.assign({}, data);
-            localData.datasets[0].data = scalars[topic];
+            var localData = Object.create({ labels: LABELS });
+            localData.datasets = [Object.assign({}, DATASET, { label: topic, data: scalars[topic] })];
+            var latestValue = Math.round(scalars[topic][scalars[topic].length - 1] * 100) / 100;
+
             return _react2.default.createElement(
-              'span',
-              { key: topic },
+              'div',
+              { className: 'chart', key: topic },
               _react2.default.createElement(
-                'h3',
+                'h6',
                 null,
-                topic
+                topic,
+                ' ',
+                _react2.default.createElement(
+                  'span',
+                  { className: 'latest-value' },
+                  !isNaN(latestValue) ? latestValue : null
+                )
               ),
-              _react2.default.createElement(_reactChartjs.Line, { data: localData, options: _historyConf2.default })
+              _react2.default.createElement(_reactChartjs.Line, { data: localData, height: '240px' }),
+              _react2.default.createElement('br', null)
             );
-          })
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'history-topics' },
+          }),
           Object.keys(topics).map(function (topic, idx) {
             return _react2.default.createElement(
-              'span',
-              { key: topic },
+              'div',
+              { key: topic, className: 'topic' },
               _react2.default.createElement(
-                'h3',
+                'p',
                 null,
-                topic
-              ),
-              topics[topic].toString()
+                _react2.default.createElement(
+                  'h6',
+                  null,
+                  topic
+                ),
+                JSON.stringify(topics[topic])
+              )
             );
           })
         )
@@ -68946,7 +68895,7 @@ var History = function (_React$Component) {
 
 exports.default = History;
 
-},{"./history-conf":589,"mqtt":37,"react":568,"react-chartjs":345}],591:[function(require,module,exports){
+},{"mqtt":37,"react":568,"react-chartjs":345}],590:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -69021,7 +68970,7 @@ _reactDom2.default.render(_react2.default.createElement(
   )
 ), document.getElementById('app'));
 
-},{"./apps/drawer.jsx":578,"./apps/explore.jsx":580,"./apps/install.jsx":581,"./apps/live.jsx":582,"./dashboard.jsx":583,"./devices/index.jsx":587,"./history/index.jsx":590,"./not-found.jsx":598,"./settings.jsx":601,"react":568,"react-dom":353,"react-router":383}],592:[function(require,module,exports){
+},{"./apps/drawer.jsx":578,"./apps/explore.jsx":580,"./apps/install.jsx":581,"./apps/live.jsx":582,"./dashboard.jsx":583,"./devices/index.jsx":587,"./history/index.jsx":589,"./not-found.jsx":597,"./settings.jsx":600,"react":568,"react-dom":353,"react-router":383}],591:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69072,7 +69021,7 @@ var API = exports.API = function () {
 
 exports.default = { Session: Session, API: API };
 
-},{}],593:[function(require,module,exports){
+},{}],592:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69127,7 +69076,7 @@ var Pulse = function (_React$Component) {
 
 exports.default = Pulse;
 
-},{"react":568}],594:[function(require,module,exports){
+},{"react":568}],593:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69201,7 +69150,7 @@ var ConnectionPod = function (_React$Component) {
 
 exports.default = ConnectionPod;
 
-},{"react":568,"superagent":570}],595:[function(require,module,exports){
+},{"react":568,"superagent":570}],594:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69279,7 +69228,7 @@ var DevicesPod = function (_React$Component) {
 
 exports.default = DevicesPod;
 
-},{"../lib":592,"mqtt":37,"react":568}],596:[function(require,module,exports){
+},{"../lib":591,"mqtt":37,"react":568}],595:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69325,7 +69274,7 @@ var ConnectionPod = function (_React$Component) {
 
 exports.default = ConnectionPod;
 
-},{"react":568}],597:[function(require,module,exports){
+},{"react":568}],596:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -69376,7 +69325,7 @@ exports.default = VersionPod;
 
 }).call(this,require('_process'))
 
-},{"_process":10,"react":568}],598:[function(require,module,exports){
+},{"_process":10,"react":568}],597:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69433,7 +69382,7 @@ var NotFound = function (_React$Component) {
 
 exports.default = NotFound;
 
-},{"react":568,"react-router":383}],599:[function(require,module,exports){
+},{"react":568,"react-router":383}],598:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69597,7 +69546,7 @@ var Notifications = function (_React$Component) {
 
 exports.default = Notifications;
 
-},{"../lib":592,"./toast.jsx":600,"mqtt":37,"react":568}],600:[function(require,module,exports){
+},{"../lib":591,"./toast.jsx":599,"mqtt":37,"react":568}],599:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69677,7 +69626,7 @@ var Toast = function (_React$Component) {
 
 exports.default = Toast;
 
-},{"react":568}],601:[function(require,module,exports){
+},{"react":568}],600:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69778,7 +69727,7 @@ var Settings = function (_React$Component) {
 
 exports.default = Settings;
 
-},{"react":568,"react-router":383}]},{},[591])
+},{"react":568,"react-router":383}]},{},[590])
 
 
 //# sourceMappingURL=bundle.js.map

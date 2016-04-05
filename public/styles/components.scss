@@ -367,3 +367,42 @@
     transform: rotate(360deg);
   }
 }
+
+//============================
+// notification loader
+//============================
+
+.history-view {
+  text-align: center;
+}
+
+.history-data {
+  display: inline-block;
+  padding: 40px 80px;
+  * { vertical-align: top; }
+  .chart {
+    display: inline-block;
+    padding: 15px;
+    margin: 15px;
+    text-align: left;
+    .latest-value {
+      top: -2px;
+      position: relative;
+      font-size: 120%;
+      font-weight: bolder;
+      color: $blue;
+    }
+  }
+  .topic {
+    width: 300px;
+    height: 240px;
+    overflow: hidden;
+    display: inline-block;
+    text-overflow: ellipsis;
+    padding: 15px;
+    margin: 15px;
+    color: $grey;
+    background-color: white;
+    border-radius: 4px;
+  }
+}

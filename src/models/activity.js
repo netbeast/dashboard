@@ -20,30 +20,12 @@ var children = {}
 var self = module.exports = new events.EventEmitter()
 var client = mqtt.connect() // for notifications
 
-self.start = function (req, res, next) {
-  self.boot(req.params.name, function (err, child) {
-    if (err) return next(err)
-    self.ready(child, function (err, act) {
-      if (err) return next(err)
-
-      res.json({ name: act.name, port: act.port })
-    })
-  })
-}
-
 self.status = function (req, res, next) {
   var child = children[req.params.name]
-  if (!child) return next(new ApiError(405, 'App not running'))
+  if (!child) return next(new ApiError(404, 'App not running'))
   self.ready(child, function (err, act) {
     if (err) return next(err)
     res.json({ name: act.name, port: act.port })
-  })
-}
-
-self.close = function (req, res, next) {
-  self.stop(req.params.name, function (err) {
-    if (err) return next(err)
-    res.status(204).end()
   })
 }
 
@@ -74,21 +56,24 @@ self.all = function (done) {
 
 self.ready = function (child, done) {
   if (child.ready) return done(null, child)
+
   const APP_URL = 'http://localhost:' + child.port
   const MAX_TRIALS = 20
   var k = 0
+
   ;(function keepTrying () {
     if (k >= MAX_TRIALS) return done(new ApiError(405, 'Impossible to launch the application'))
 
     request(APP_URL).end(function (err, resp) {
-      if (err && err.code !== 'ECONNREFUSED') {
-        return done(err)
-      } else if (err) {
+      if (err && err.code === 'ECONNREFUSED') {
         k++
         return setTimeout(keepTrying, 400)
-      } else {
+      } else if (!err || err.status === 404) {
         child.ready = true
         return done(null, child)
+      } else {
+        console.log(err)
+        return done(err)
       }
     })
   })()
@@ -118,7 +103,10 @@ self.on('start', function (app) {
   App.getPackageJson(app.name, function (err, pkgJson) {
     if (err) return broker.error(err.toString())
 
-    // child management
+    // *****************
+    // Child management
+    // *****************
+
     var entryPoint = path.resolve(APPS_DIR, app.name, pkgJson.main)
 
     var env = Object.create(process.env)

@@ -67750,7 +67750,7 @@ var Explore = function (_React$Component) {
         _this2.setState({ apps: [].concat(_toConsumableArray(items)) });
       });
 
-      _superagentBluebirdPromise2.default.get('/api/apps').end(function (err, res) {
+      _superagentBluebirdPromise2.default.get('/api/modules').end(function (err, res) {
         if (err) return window.toastr.error(err);
         _this2.setState({ installedApps: [].concat(_toConsumableArray(res.body)) });
       });

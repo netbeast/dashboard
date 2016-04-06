@@ -24,7 +24,7 @@ export default class Explore extends React.Component {
       this.setState({ apps: [ ...items ] })
     })
 
-    request.get('/api/apps').end((err, res) => {
+    request.get('/api/modules').end((err, res) => {
       if (err) return window.toastr.error(err)
       this.setState({ installedApps: [ ...res.body ] })
     })

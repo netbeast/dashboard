@@ -12,7 +12,7 @@ setInterval(function () {
 
 function getArp () {
   Resource.find({}, function (err, devices) {
-    if (err) return console.error(err)
+    if (err && err.statusCode !== 404) return console.error(err)
 
       // Get all devices on the database
     var arp_str = ''

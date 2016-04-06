@@ -24,6 +24,11 @@ function getArp () {
       arp_str = data
     })
 
+    arp.on('error', function (err) { 
+      console.trace(err)
+      broker.client.publish('netbeast/network', JSON.stringify(devices))
+    })
+
     arp.on('close', function () {
       var arp_table = parse_arp_table(arp_str)
       var result = joinTables(arp_table, devices)
@@ -93,6 +98,6 @@ function parse_arp_table (arpt) {
 function _merge (obj1, obj2) {
   var obj3 = {}
   for (var attrname in obj1) { obj3[attrname] = obj1[attrname] }
-  for (var attr in obj2) { obj3[attr] = obj2[attr] }
-  return obj3
-}
+    for (var attr in obj2) { obj3[attr] = obj2[attr] }
+      return obj3
+  }

@@ -88,7 +88,7 @@ self.boot = function (appName, done) {
 
   portfinder.getPort(function (err, port) {
     if (err) {
-      done(new ApiError(405, 'Not enough ports'))
+      done(new ApiError(422, 'Not enough ports'))
     } else {
       child.port = port
       self.emit('start', child)
@@ -130,11 +130,7 @@ self.on('start', function (app) {
 
     child.on('close', function (code) {
       client.publish('netbeast/activities/close', app.name)
-      Resource.findOne({ app: app.name }, function (err, resource) {
-        if (err) return console.error(err)
-
-        resource.destroy()
-      })
+      Resource.destroy({ app: app.name })
       children[app.name] = undefined
     })
 

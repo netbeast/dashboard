@@ -9,7 +9,6 @@ helper.createTable(function (err, data) {
 })
 
 function Resource (item) {
-
   const hookTail = item.hook.split('/')[item.hook.split('/').length - 1]
 
   this.id = item.id

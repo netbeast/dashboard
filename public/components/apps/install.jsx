@@ -48,11 +48,11 @@ export default class InstallView extends React.Component {
           <div className='nav'>
             <span className='title'><h4>Install an app.</h4></span>
             <ul className='list-unstyled list-inline'>
-              <li><Link to='/'><i className='glyphicon glyphicon-th' /> Apps</Link></li>
-              <li><Link to='/plugins'><i className='glyphicon glyphicon-package'><img src='/img/plugin.png'/></i> Plugins</Link></li>
-              <li><Link to='/activities'><i className='glyphicon glyphicon-dashboard' /> Activities</Link></li>
-              <li><Link to='/install'> <i className='glyphicon glyphicon-package'><img src='/img/package-unfilled.png'/></i> Install</Link></li>
-              <li><Link to='/remove'> <i className='glyphicon glyphicon-trash' /> Remove</Link></li>
+              <li><Link to='/'><i className='fa fa-th' /> Apps</Link></li>
+              <li><Link to='/plugins'><i className='fa fa-package'><img src='/img/plugin.png'/></i> Plugins</Link></li>
+              <li><Link to='/activities'><i className='fa fa-dashboard' /> Activities</Link></li>
+              <li><Link to='/install'> <i className='fa fa-package'><img src='/img/package-unfilled.png'/></i> Install</Link></li>
+              <li><Link to='/remove'> <i className='fa fa-trash' /> Remove</Link></li>
             </ul>
           </div>
         </span>

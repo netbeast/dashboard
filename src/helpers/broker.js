@@ -10,6 +10,23 @@ var broker = module.exports = {}
 
 broker.client = client
 
+broker.client.subscribe('#')
+
+broker.client.on('message', function (topic, message) {
+  topic = topic.toString()
+  try { 
+    message = JSON.parse(message.toString()) 
+  } catch (e) {
+    message = message.toString()
+  }
+
+  broker.client.emit('#' + topic, message)
+})
+
+broker.on = function (topic, cb) {
+  broker.client.on(topic, cb)
+}
+
 // title is optional
 broker.info = function (body, title) {
   broker.emit({ emphasis: 'info', body: body, title: title })

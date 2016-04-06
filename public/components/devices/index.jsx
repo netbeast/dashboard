@@ -86,7 +86,7 @@ export default class Devices extends React.Component {
 
   render () {
     const { devices, ox, oy, zoom } = this.state
-    const filters = [ ... new Set(devices.map((data) => { return data.app || 'default' })) ]
+    var filters = [ ... new Set(devices.map((data) => { return data.app || 'default' })) ]
 
     return (
       <span>

@@ -20,7 +20,6 @@ module.exports.upload = multer({
 
 module.exports.process = function (req, res, next) {
   const module = (req.files && req.files.length > 0) ? req.files[0].path : req.body.url
-  console.log('MODULE', module)
   if (!module) return next(new ApiError(422, 'App must be a tar.gz file.'))
   App.install(module, function (err, appJson) {
     if (err) return next(err)

@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 var dgram = require('dgram')
 var deamon = dgram.createSocket('udp4')
 

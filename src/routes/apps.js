@@ -100,3 +100,24 @@ router.get('/apps/:name/package', function (req, res, next) {
     res.send('' + data)
   })
 })
+
+router.route('/plugins').get(function (req, res, next) {
+  App.plugins(function (err, plugins) {
+    if (err) return next(err)
+    res.json(plugins)
+  })
+})
+
+router.route('/modules').get(function (req, res, next) {
+  App.modules(function (err, plugins) {
+    if (err) return next(err)
+    res.json(plugins)
+  })
+})
+
+router.get('/topics', function (req, res, next) {
+  App.find({ topic: 'lights' }, function (err, apps) {
+    if (err) return next(err)
+    res.json(apps)
+  })
+})

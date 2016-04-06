@@ -3,7 +3,9 @@ var deamon = dgram.createSocket('udp4')
 
 // aurum number port
 deamon.bind(16180, function () {
-  deamon.addMembership('239.0.16.18')
+  process.env.IPs.split(',').forEach(function (iface) {
+    try { deamon.addMembership('239.0.16.18', iface) } catch (err) { console.trace(err) }
+  })
 })
 
 deamon.on('message', function (msg, req) {

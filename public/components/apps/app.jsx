@@ -81,6 +81,7 @@ export default class App extends React.Component {
 
   uninstall () {
     const { name, kind, dismiss } = this.props
+    if (confirm('Do you really want to remove', name, '?'))
     request.del('/api/apps/' + name).end((err, res) => {
       if (err) return
       dismiss(name)

@@ -45,7 +45,9 @@ export default class Notifications extends React.Component {
     this.setState({ toasts: toasts })
   }
 
-  toggleHistory () { this.setState({ showHistory: !this.state.showHistory }) }
+  toggleHistory () { 
+    console.log('toggle history')
+    this.setState({ showHistory: !this.state.showHistory }) }
 
   componentDidMount () {
     this.mqtt = mqtt.connect(window.mqttUri)
@@ -79,8 +81,10 @@ export default class Notifications extends React.Component {
 
     return (
       <span>
-        <div className='notifications-pod clickable' onClick={this.toggleHistory}> ({history.length}) Notifications</div>
-          <div className='notifications z-super'>
+        <div className='notifications-pod clickable' onClick={this.toggleHistory}>
+          <i className='fa fa-bell'> </i> Notifications
+        </div>
+        <div className='notifications z-super'>
           { showHistory ? history.map((props, index) => {
             const isCurrent = index === (toasts.length - 1)
             return <Toast isCurrent={isCurrent} key={props.id} {...props} />

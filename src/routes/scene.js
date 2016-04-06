@@ -3,7 +3,6 @@ var	router = express.Router()
 var	Scene = require('../models/scene.js')
 var ApiError = require('../util/api-error')
 
-//  GET
 router.get('/scenes', function (req, res, next) {
   Scene.find(req.query, function (err, devices) {
     if (err && err.statusCode !== 404) return next(err)
@@ -11,7 +10,6 @@ router.get('/scenes', function (req, res, next) {
   })
 })
 
-//  POST
 router.post('/scenes', function (req, res, next) {
   Scene.findOne(req.body, function (err, device) {
     if (err && err.statusCode !== 404) return next(err)
@@ -25,7 +23,6 @@ router.post('/scenes', function (req, res, next) {
   })
 })
 
-//  UPDATE
 router.patch('/scenes', function (req, res, next) {
   Scene.findOne(req.query, function (err, device) {
     if (err) return next(err)
@@ -37,7 +34,6 @@ router.patch('/scenes', function (req, res, next) {
   })
 })
 
-//  DELETE
 router.delete('/scenes', function (req, res, next) {
   Scene.find(req.query, function (err, devices) {
     if (err) return next(err)

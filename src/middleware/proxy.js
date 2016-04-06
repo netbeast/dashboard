@@ -40,9 +40,6 @@ router.use('/i/:name', function (req, res, next) {
 
   req.url = pathname
 
-  // Allow CORS on all plugins
-  allowCORS(res)
-
   proxy.web(req, res, { target: proxyUrl })
 })
 
@@ -71,14 +68,5 @@ router.use(function (req, res, next) {
 
   req.url = pathname
 
-  // Allow CORS on all plugins
-  allowCORS(res)
-
   proxy.web(req, res, { target: proxyUrl })
 })
-
-function allowCORS (res) {
-  res.header('Access-Control-Allow-Credentials', 'true')
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Access-Control-Allow-Origin, Content-Type, Accept')
-  res.header('Access-Control-Allow-Origin', '*')
-}

@@ -24,7 +24,8 @@ Thumbs.db
 
 # Project ignores #
 ###################
-# .env is added on purpose
+# .env is forcely added
+.env
 
 public/dist/js
 public/dist/css

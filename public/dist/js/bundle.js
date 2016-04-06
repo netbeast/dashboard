@@ -68991,35 +68991,45 @@ var Session = exports.Session = function () {
   _createClass(Session, null, [{
     key: 'save',
     value: function save(key, value) {
+      if (!key || !value) return;
       if (typeof value !== 'string') value = JSON.stringify(value);
-      localStorage.setItem(key, value);
+      localStorage.setItem('session.' + key, value);
     }
   }, {
     key: 'load',
     value: function load(key) {
-      return JSON.parse(localStorage.getItem(key));
+      try {
+        return JSON.parse(localStorage.getItem('session.' + key));
+      } catch (exception) {
+        return undefined;
+      }
+    }
+  }, {
+    key: 'delete',
+    value: function _delete(key) {
+      localStorage.removeItem('session.' + key);
     }
   }]);
 
   return Session;
 }();
 
-var API = exports.API = function () {
-  function API() {
-    _classCallCheck(this, API);
+var Auth = exports.Auth = function () {
+  function Auth() {
+    _classCallCheck(this, Auth);
   }
 
-  _createClass(API, null, [{
-    key: 'install',
-    value: function install(app) {
-      return app;
+  _createClass(Auth, null, [{
+    key: 'isLogged',
+    value: function isLogged(nextState, replace) {
+      if (Session.load('user')) return;else replace({ pathname: '/login', state: { nextPathname: nextState.location.pathname } });
     }
   }]);
 
-  return API;
+  return Auth;
 }();
 
-exports.default = { Session: Session, API: API };
+exports.default = { Session: Session, Auth: Auth };
 
 },{}],592:[function(require,module,exports){
 'use strict';
@@ -69275,7 +69285,6 @@ var ConnectionPod = function (_React$Component) {
 exports.default = ConnectionPod;
 
 },{"react":568}],596:[function(require,module,exports){
-(function (process){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69308,7 +69317,7 @@ var VersionPod = function (_React$Component) {
   _createClass(VersionPod, [{
     key: 'render',
     value: function render() {
-      var version = process.env.VERSION;
+      var version = "0.2.6";
       return _react2.default.createElement(
         'span',
         { className: 'version-pod', title: 'Checking for updates...' },
@@ -69323,9 +69332,7 @@ var VersionPod = function (_React$Component) {
 
 exports.default = VersionPod;
 
-}).call(this,require('_process'))
-
-},{"_process":10,"react":568}],597:[function(require,module,exports){
+},{"react":568}],597:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

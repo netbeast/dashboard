@@ -1,9 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router'
 
-import UserPod from '../user/user-pod.jsx'
 import VersionPod from '../misc/version-pod.jsx'
-import DevicesPod from '../misc/devices-pod.jsx'
+import NetworkApp from '../devices/network-app.jsx'
 import AppsList from './apps-list.jsx'
 
 class ExploreApp extends React.Component {
@@ -15,7 +14,7 @@ class ExploreApp extends React.Component {
     if (pathname !== 'apps' && pathname !== 'plugins') return null
 
     return (
-      <div className='app app-explore'>
+      <div className='app'>
         <Link to='/explore'>
           <div className='logo' title='Launch app' style={logoStyle} />
         </Link>
@@ -98,9 +97,12 @@ export default class Drawer extends React.Component {
     return (
         <div className='drawer'>
           {this.renderNav()}
-          <AppsList src={'/api/' + this.state.pathname} {...this.props} prepend={<ExploreApp {...this.props} />} append={<InstallApp {...this.props}/>}/>
-          <UserPod />
-          <DevicesPod />
+          <AppsList src={'/api/' + this.state.pathname} {...this.props} 
+          prepend={[
+            <ExploreApp key='explore-app' {...this.props} />,
+            <NetworkApp key='network-app' {...this.props} />]
+          }
+          append={<InstallApp {...this.props}/>}/>
           <VersionPod />
         </div>
     )

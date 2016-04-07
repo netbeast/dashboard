@@ -67636,7 +67636,7 @@ var App = function (_React$Component) {
           _this2.setState({ isRunning: true });
           return toastr.info(name + ' is running');
         }
-        toastr.error(err.message);
+        if (err.res) toastr.error(err.res.text);else toastr.error(err.message);
       });
     }
   }, {
@@ -67826,7 +67826,7 @@ App.contextTypes = {
   router: _react2.default.PropTypes.object.isRequired
 };
 
-},{"../lib":598,"../misc/activity-pulse.jsx":599,"mqtt":37,"react":576,"react-bootstrap":178,"superagent-bluebird-promise":577}],585:[function(require,module,exports){
+},{"../lib":599,"../misc/activity-pulse.jsx":600,"mqtt":37,"react":576,"react-bootstrap":178,"superagent-bluebird-promise":577}],585:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -67947,7 +67947,7 @@ var AppsList = function (_React$Component) {
 
 exports.default = AppsList;
 
-},{"../lib":598,"./app.jsx":584,"react":576,"react-router":389,"superagent-bluebird-promise":577}],586:[function(require,module,exports){
+},{"../lib":599,"./app.jsx":584,"react":576,"react-router":389,"superagent-bluebird-promise":577}],586:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -67964,17 +67964,13 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = require('react-router');
 
-var _userPod = require('../user/user-pod.jsx');
-
-var _userPod2 = _interopRequireDefault(_userPod);
-
 var _versionPod = require('../misc/version-pod.jsx');
 
 var _versionPod2 = _interopRequireDefault(_versionPod);
 
-var _devicesPod = require('../misc/devices-pod.jsx');
+var _networkApp = require('../devices/network-app.jsx');
 
-var _devicesPod2 = _interopRequireDefault(_devicesPod);
+var _networkApp2 = _interopRequireDefault(_networkApp);
 
 var _appsList = require('./apps-list.jsx');
 
@@ -68009,7 +68005,7 @@ var ExploreApp = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'app app-explore' },
+        { className: 'app' },
         _react2.default.createElement(
           _reactRouter.Link,
           { to: '/explore' },
@@ -68200,9 +68196,9 @@ var Drawer = function (_React$Component3) {
         'div',
         { className: 'drawer' },
         this.renderNav(),
-        _react2.default.createElement(_appsList2.default, _extends({ src: '/api/' + this.state.pathname }, this.props, { prepend: _react2.default.createElement(ExploreApp, this.props), append: _react2.default.createElement(InstallApp, this.props) })),
-        _react2.default.createElement(_userPod2.default, null),
-        _react2.default.createElement(_devicesPod2.default, null),
+        _react2.default.createElement(_appsList2.default, _extends({ src: '/api/' + this.state.pathname }, this.props, {
+          prepend: [_react2.default.createElement(ExploreApp, _extends({ key: 'explore-app' }, this.props)), _react2.default.createElement(_networkApp2.default, _extends({ key: 'network-app' }, this.props))],
+          append: _react2.default.createElement(InstallApp, this.props) })),
         _react2.default.createElement(_versionPod2.default, null)
       );
     }
@@ -68218,7 +68214,7 @@ var Drawer = function (_React$Component3) {
 
 exports.default = Drawer;
 
-},{"../misc/devices-pod.jsx":601,"../misc/version-pod.jsx":603,"../user/user-pod.jsx":610,"./apps-list.jsx":585,"react":576,"react-router":389}],587:[function(require,module,exports){
+},{"../devices/network-app.jsx":595,"../misc/version-pod.jsx":603,"./apps-list.jsx":585,"react":576,"react-router":389}],587:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -68402,10 +68398,6 @@ var _versionPod = require('../misc/version-pod.jsx');
 
 var _versionPod2 = _interopRequireDefault(_versionPod);
 
-var _devicesPod = require('../misc/devices-pod.jsx');
-
-var _devicesPod2 = _interopRequireDefault(_devicesPod);
-
 var _explorableApp = require('./explorable-app.jsx');
 
 var _explorableApp2 = _interopRequireDefault(_explorableApp);
@@ -68564,7 +68556,6 @@ var Explore = function (_React$Component) {
           }),
           _react2.default.createElement('br', null)
         ),
-        _react2.default.createElement(_devicesPod2.default, null),
         _react2.default.createElement(_versionPod2.default, null)
       );
     }
@@ -68575,7 +68566,7 @@ var Explore = function (_React$Component) {
 
 exports.default = Explore;
 
-},{"../misc/devices-pod.jsx":601,"../misc/version-pod.jsx":603,"./explorable-app.jsx":587,"react":576,"react-router":389,"superagent-bluebird-promise":577}],589:[function(require,module,exports){
+},{"../misc/version-pod.jsx":603,"./explorable-app.jsx":587,"react":576,"react-router":389,"superagent-bluebird-promise":577}],589:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -68601,10 +68592,6 @@ var _reactRouter = require('react-router');
 var _versionPod = require('../misc/version-pod.jsx');
 
 var _versionPod2 = _interopRequireDefault(_versionPod);
-
-var _devicesPod = require('../misc/devices-pod.jsx');
-
-var _devicesPod2 = _interopRequireDefault(_devicesPod);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -68777,7 +68764,6 @@ var InstallView = function (_React$Component) {
           _react2.default.createElement('input', { name: 'url', type: 'url', onChange: this.handleTextChange.bind(this), placeholder: 'Paste here an URL to install from git' }),
           _react2.default.createElement('input', { type: 'submit', className: 'btn btn-inverted', value: 'install' })
         ),
-        _react2.default.createElement(_devicesPod2.default, null),
         _react2.default.createElement(_versionPod2.default, null)
       );
     }
@@ -68788,7 +68774,7 @@ var InstallView = function (_React$Component) {
 
 exports.default = InstallView;
 
-},{"../misc/devices-pod.jsx":601,"../misc/version-pod.jsx":603,"react":576,"react-dropzone":360,"react-router":389,"superagent-bluebird-promise":577}],590:[function(require,module,exports){
+},{"../misc/version-pod.jsx":603,"react":576,"react-dropzone":360,"react-router":389,"superagent-bluebird-promise":577}],590:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -68822,13 +68808,19 @@ var AppLiveView = function (_React$Component) {
 
   _createClass(AppLiveView, [{
     key: 'render',
+
+
+    // componentDidMount () {
+    //   const { appName } = this.props.params
+    //   this.refs.myIframe.src = '/i/' + appName
+    // }
+
     value: function render() {
       var appName = this.props.params.appName;
 
       return _react2.default.createElement(
         'span',
         null,
-        _react2.default.createElement('iframe', { className: 'app-live', src: '/i/' + appName, frameBorder: '0' }),
         _react2.default.createElement(
           'div',
           { className: 'live-return-menu' },
@@ -68837,7 +68829,8 @@ var AppLiveView = function (_React$Component) {
             { to: '/' },
             ' Go back to Netbeast dashboard.'
           )
-        )
+        ),
+        _react2.default.createElement('iframe', { ref: 'myIframe', className: 'app-live', src: '/i/' + appName, frameBorder: '0' })
       );
     }
   }]);
@@ -69026,8 +69019,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
-
-var _reactRouter = require('react-router');
 
 var _mqtt = require('mqtt');
 
@@ -69256,16 +69247,7 @@ var Devices = function (_React$Component) {
           )
         ),
         _react2.default.createElement(_versionPod2.default, null),
-        _react2.default.createElement(_refreshPod2.default, null),
-        _react2.default.createElement(
-          'div',
-          { className: 'live-return-menu' },
-          _react2.default.createElement(
-            _reactRouter.Link,
-            { to: '/' },
-            ' Go back to Netbeast dashboard.'
-          )
-        )
+        _react2.default.createElement(_refreshPod2.default, null)
       );
     }
   }]);
@@ -69280,7 +69262,7 @@ var Devices = function (_React$Component) {
 
 exports.default = Devices;
 
-},{"../lib":598,"../misc/version-pod.jsx":603,"./device.jsx":591,"./filter-svg.jsx":592,"./helper":593,"./refresh-pod.jsx":595,"mqtt":37,"react":576,"react-router":389}],595:[function(require,module,exports){
+},{"../lib":599,"../misc/version-pod.jsx":603,"./device.jsx":591,"./filter-svg.jsx":592,"./helper":593,"./refresh-pod.jsx":596,"mqtt":37,"react":576}],595:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69292,6 +69274,110 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
+
+var _mqtt = require('mqtt');
+
+var _mqtt2 = _interopRequireDefault(_mqtt);
+
+var _lib = require('../lib');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var NetworkApp = function (_React$Component) {
+  _inherits(NetworkApp, _React$Component);
+
+  function NetworkApp() {
+    _classCallCheck(this, NetworkApp);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NetworkApp).call(this));
+
+    _this.mqtt = _mqtt2.default.connect(window.mqttUri);
+    _this.state = { devicesNumber: _lib.Session.load('devices').length || 0 };
+    return _this;
+  }
+
+  _createClass(NetworkApp, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      var _this2 = this;
+
+      this.mqtt.subscribe('netbeast/network');
+      this.mqtt.on('message', function (topic, message) {
+        if (topic !== 'netbeast/network') return;
+
+        var devices = JSON.parse(message);
+        _this2.setState({ devicesNumber: devices.length });
+      });
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.mqtt.unsubscribe('netbeast/network');
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var devicesNumber = this.state.devicesNumber;
+      var route = this.props.route;
+
+      var pathname = route.path ? route.path : 'apps';
+      var logoStyle = { backgroundImage: 'url(/img/network.png)' };
+
+      if (pathname !== 'apps' && pathname !== 'plugins') return null;
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'app network-app' },
+        devicesNumber ? _react2.default.createElement(
+          'div',
+          { className: 'network-app-badge' },
+          _react2.default.createElement(
+            'span',
+            { className: 'content' },
+            devicesNumber
+          )
+        ) : null,
+        _react2.default.createElement(
+          _reactRouter.Link,
+          { to: '/devices' },
+          _react2.default.createElement('div', { className: 'logo', title: 'Open network explorer', style: logoStyle })
+        ),
+        _react2.default.createElement(
+          'h4',
+          { className: 'name' },
+          ' Network '
+        )
+      );
+    }
+  }]);
+
+  return NetworkApp;
+}(_react2.default.Component);
+
+exports.default = NetworkApp;
+
+},{"../lib":599,"mqtt":37,"react":576,"react-router":389}],596:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
 
 var _superagentBluebirdPromise = require('superagent-bluebird-promise');
 
@@ -69334,12 +69420,14 @@ var VersionPod = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'span',
-        { className: 'refresh-pod cickable', title: 'Rediscover all devices...' },
+        { className: 'refresh-pod clickable', title: 'Rediscover all devices...' },
         _react2.default.createElement(
-          'i',
-          { className: 'fa fa-refresh', onClick: this.refresh.bind(this) },
-          ' Rediscover all devices'
-        )
+          _reactRouter.Link,
+          { to: '/', title: 'go back', style: { color: 'white' } },
+          _react2.default.createElement('i', { className: 'fa fa-arrow-left' })
+        ),
+        '   ',
+        _react2.default.createElement('i', { className: 'fa fa-refresh', onClick: this.refresh.bind(this) })
       );
     }
   }]);
@@ -69349,7 +69437,7 @@ var VersionPod = function (_React$Component) {
 
 exports.default = VersionPod;
 
-},{"bluebird":1,"react":576,"superagent-bluebird-promise":577}],596:[function(require,module,exports){
+},{"bluebird":1,"react":576,"react-router":389,"superagent-bluebird-promise":577}],597:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69500,7 +69588,7 @@ var History = function (_React$Component) {
 
 exports.default = History;
 
-},{"mqtt":37,"react":576,"react-chartjs":351}],597:[function(require,module,exports){
+},{"mqtt":37,"react":576,"react-chartjs":351}],598:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69563,6 +69651,10 @@ var _login = require('./user/login.jsx');
 
 var _login2 = _interopRequireDefault(_login);
 
+var _userPod = require('./user/user-pod.jsx');
+
+var _userPod2 = _interopRequireDefault(_userPod);
+
 var _signup = require('./user/signup.jsx');
 
 var _signup2 = _interopRequireDefault(_signup);
@@ -69620,6 +69712,7 @@ var Dashboard = function (_React$Component) {
         'div',
         { id: 'dashboard', className: 'path' + path },
         _react2.default.createElement(_notifications2.default, null),
+        _react2.default.createElement(_userPod2.default, null),
         _react2.default.createElement(_feedbackPod2.default, null),
         _react2.default.createElement(_connectionPod2.default, null),
         _react2.default.createElement(
@@ -69668,7 +69761,7 @@ _reactDom2.default.render(_react2.default.createElement(
   )
 ), document.getElementById('app'));
 
-},{"./apps/drawer.jsx":586,"./apps/explore.jsx":588,"./apps/install.jsx":589,"./apps/live.jsx":590,"./devices/index.jsx":594,"./history/index.jsx":596,"./lib":598,"./misc/connection-pod.jsx":600,"./misc/feedback-pod.jsx":602,"./not-found.jsx":604,"./notifications":605,"./user/login.jsx":607,"./user/settings.jsx":608,"./user/signup.jsx":609,"react":576,"react-dom":359,"react-router":389}],598:[function(require,module,exports){
+},{"./apps/drawer.jsx":586,"./apps/explore.jsx":588,"./apps/install.jsx":589,"./apps/live.jsx":590,"./devices/index.jsx":594,"./history/index.jsx":597,"./lib":599,"./misc/connection-pod.jsx":601,"./misc/feedback-pod.jsx":602,"./not-found.jsx":604,"./notifications":605,"./user/login.jsx":607,"./user/settings.jsx":608,"./user/signup.jsx":609,"./user/user-pod.jsx":610,"react":576,"react-dom":359,"react-router":389}],599:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69729,7 +69822,7 @@ var Auth = exports.Auth = function () {
 
 exports.default = { Session: Session, Auth: Auth };
 
-},{}],599:[function(require,module,exports){
+},{}],600:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69784,7 +69877,7 @@ var Pulse = function (_React$Component) {
 
 exports.default = Pulse;
 
-},{"react":576}],600:[function(require,module,exports){
+},{"react":576}],601:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69858,85 +69951,7 @@ var ConnectionPod = function (_React$Component) {
 
 exports.default = ConnectionPod;
 
-},{"react":576,"superagent":578}],601:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _mqtt = require('mqtt');
-
-var _mqtt2 = _interopRequireDefault(_mqtt);
-
-var _lib = require('../lib');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var DevicesPod = function (_React$Component) {
-  _inherits(DevicesPod, _React$Component);
-
-  function DevicesPod() {
-    _classCallCheck(this, DevicesPod);
-
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DevicesPod).call(this));
-
-    _this.mqtt = _mqtt2.default.connect(window.mqttUri);
-    _this.state = { devices: _lib.Session.load('devices') || [] };
-    return _this;
-  }
-
-  _createClass(DevicesPod, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      var _this2 = this;
-
-      this.mqtt.subscribe('netbeast/network');
-      this.mqtt.on('message', function (topic, message) {
-        if (topic !== 'netbeast/network') return;
-
-        var devices = JSON.parse(message);
-        _lib.Session.save('devices', devices);
-        _this2.setState({ devices: devices });
-      });
-    }
-  }, {
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
-      this.mqtt.unsubscribe('netbeast/network');
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var devices = this.state.devices;
-
-      return _react2.default.createElement(
-        'a',
-        { href: 'devices', className: 'devices-pod', title: 'Checking for updates...' },
-        devices.length,
-        ' devices connected'
-      );
-    }
-  }]);
-
-  return DevicesPod;
-}(_react2.default.Component);
-
-exports.default = DevicesPod;
-
-},{"../lib":598,"mqtt":37,"react":576}],602:[function(require,module,exports){
+},{"react":576,"superagent":578}],602:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -70019,7 +70034,7 @@ var VersionPod = function (_React$Component) {
       return _react2.default.createElement(
         'span',
         { className: 'version-pod', title: 'Checking for updates...' },
-        'v',
+        'Beta v',
         version
       );
     }
@@ -70255,7 +70270,7 @@ var Notifications = function (_React$Component) {
 
 exports.default = Notifications;
 
-},{"../lib":598,"./toast.jsx":606,"mqtt":37,"react":576}],606:[function(require,module,exports){
+},{"../lib":599,"./toast.jsx":606,"mqtt":37,"react":576}],606:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -70459,7 +70474,7 @@ Login.contextTypes = {
   router: _react2.default.PropTypes.object.isRequired
 };
 
-},{"../lib":598,"react":576,"react-bootstrap":178,"react-router":389,"superagent":578}],608:[function(require,module,exports){
+},{"../lib":599,"react":576,"react-bootstrap":178,"react-router":389,"superagent":578}],608:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -70644,7 +70659,7 @@ Settings.contextTypes = {
   router: _react2.default.PropTypes.object.isRequired
 };
 
-},{"../lib":598,"bluebird":1,"react":576,"react-bootstrap":178,"superagent-bluebird-promise":577}],609:[function(require,module,exports){
+},{"../lib":599,"bluebird":1,"react":576,"react-bootstrap":178,"superagent-bluebird-promise":577}],609:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -70798,7 +70813,7 @@ Signup.contextTypes = {
   router: _react2.default.PropTypes.object.isRequired
 };
 
-},{"../lib":598,"bluebird":1,"react":576,"react-bootstrap":178,"react-router":389,"superagent-bluebird-promise":577}],610:[function(require,module,exports){
+},{"../lib":599,"bluebird":1,"react":576,"react-bootstrap":178,"react-router":389,"superagent-bluebird-promise":577}],610:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -70943,7 +70958,7 @@ var UserPod = function (_React$Component) {
 
 exports.default = UserPod;
 
-},{"../lib":598,"react":576,"react-avatar":92,"react-bootstrap":178,"react-router":389}]},{},[597])
+},{"../lib":599,"react":576,"react-avatar":92,"react-bootstrap":178,"react-router":389}]},{},[598])
 
 
 //# sourceMappingURL=bundle.js.map

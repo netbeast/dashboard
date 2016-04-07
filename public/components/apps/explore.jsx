@@ -3,7 +3,6 @@ import React from 'react'
 import { Link } from 'react-router'
 
 import VersionPod from '../misc/version-pod.jsx'
-import DevicesPod from '../misc/devices-pod.jsx'
 import ExplorableApp from './explorable-app.jsx'
 
 export default class Explore extends React.Component {
@@ -64,7 +63,6 @@ export default class Explore extends React.Component {
             })}
             <br/>
           </div>
-          <DevicesPod />
           <VersionPod />
         </div>
     )

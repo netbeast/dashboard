@@ -54,7 +54,7 @@ export default class Signup extends React.Component {
       <br/>
       <br/>
       <br/>
-        <h4>Login in.</h4>
+        <h4>Sing up.</h4>
         <form onSubmit={this.handleSubmit.bind(this)}>
           <input ref='alias' type='text' placeholder='Choose a username' className='form-control'></input>
           <br/>

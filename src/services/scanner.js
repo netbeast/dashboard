@@ -39,7 +39,7 @@ function getArp () {
 }
 
 function joinTables (arp_table, devices_table) {
-  var result = devices_table
+  var result = devices_table || []
 
   arp_table.forEach(function (device) {
     var found = false

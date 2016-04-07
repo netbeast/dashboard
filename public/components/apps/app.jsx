@@ -40,7 +40,8 @@ export default class App extends React.Component {
         this.setState({ isRunning: true })
         return toastr.info(`${name} is running`)
       }
-      toastr.error(err.message)
+      if (err.res) toastr.error(err.res.text)
+      else toastr.error(err.message)
     })
   }
 

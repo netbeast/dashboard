@@ -4,7 +4,6 @@ import request from 'superagent-bluebird-promise'
 import { Link } from 'react-router'
 
 import VersionPod from '../misc/version-pod.jsx'
-import DevicesPod from '../misc/devices-pod.jsx'
 
 export default class InstallView extends React.Component {
   constructor (props) {
@@ -67,7 +66,6 @@ export default class InstallView extends React.Component {
           <input name='url' type='url' onChange={this.handleTextChange.bind(this)} placeholder='Paste here an URL to install from git' />
           <input type='submit' className='btn btn-inverted' value='install' />
         </form>}
-        <DevicesPod />
         <VersionPod />
       </div>
     )

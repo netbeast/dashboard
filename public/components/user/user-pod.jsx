@@ -30,7 +30,7 @@ export default class UserPod extends React.Component {
 
     const unlogged = (
       <ul className='list-unstyled'>
-        <li><Link to='/login'>Log in</Link> or <Link to='/login'>Sign up</Link></li>
+        <li><Link to='/login'>Log in</Link> or <Link to='/signup'>Sign up</Link></li>
       </ul>
     )
 

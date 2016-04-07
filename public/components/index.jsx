@@ -14,6 +14,7 @@ import History from './history/index.jsx'
 import FeedbackPod from './misc/feedback-pod.jsx'
 import ConnectionPod from './misc/connection-pod.jsx'
 import Login from './user/login.jsx'
+import UserPod from './user/user-pod.jsx'
 import Signup from './user/signup.jsx'
 import Settings from './user/settings.jsx'
 
@@ -43,6 +44,7 @@ export default class Dashboard extends React.Component {
     return (
       <div id='dashboard' className={`path${path}`}>
         <Notifications />
+        <UserPod />
         <FeedbackPod />
         <ConnectionPod />
         <main>

@@ -157,14 +157,15 @@
 .app-live {
   width: 100%; height: 100%;
   background-color: white;
+  margin-top: 50px;
 }
 
 .live-return-menu {
-  background-color: black;
-  text-align: center;
+  background-color: $grey;
+  text-align: left;
   font-size: 75%;
   position: fixed;
-  bottom: 0;
+  padding: 25px;
   width: 100%;
 }
 
@@ -334,8 +335,9 @@
 
 .refresh-pod {
   position: fixed;
-  color: $grey-lighter;
-  top: 5px; left: 5px;
+  color: white;
+  font-size: 140%;
+  top: 25px; left: 60px;
 }
 
 //============================
@@ -413,6 +415,7 @@
 //==============================
 
 .user-pod {
+  z-index: 1000;
   position: fixed;
   display: block;
   right: 25px;
@@ -424,4 +427,20 @@
   display: inline-block;
   vertical-align: top;
   float: right;
+}
+
+
+//=====================
+// Network app
+//=====================
+.network-app-badge {
+  @extend .pulse-container;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background-color: white;
+  .content {
+    display: inline-block;
+    padding: 3px;
+    color: $grey;
+  }
 }

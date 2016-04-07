@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router'
 import mqtt from 'mqtt'
 
 import { Session } from '../lib'
@@ -115,9 +114,6 @@ export default class Devices extends React.Component {
         </div>
         <VersionPod />
         <RefreshPod />
-        <div className='live-return-menu'>
-          <Link to='/'> Go back to Netbeast dashboard.</Link>
-        </div>
       </span>
     )
   }

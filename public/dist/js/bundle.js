@@ -69300,7 +69300,7 @@ var NetworkApp = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NetworkApp).call(this));
 
     _this.mqtt = _mqtt2.default.connect(window.mqttUri);
-    _this.state = { devicesNumber: _lib.Session.load('devices').length || 0 };
+    _this.state = { devicesNumber: _lib.Session.load('devices') ? _lib.Session.load('devices').length : 0 };
     return _this;
   }
 

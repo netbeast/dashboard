@@ -8,7 +8,7 @@ export default class NetworkApp extends React.Component {
   constructor () {
     super()
     this.mqtt = mqtt.connect(window.mqttUri)
-    this.state = { devicesNumber: Session.load('devices').length || 0 }
+    this.state = { devicesNumber: Session.load('devices') ? Session.load('devices').length : 0 }
   }
 
   componentWillMount () {

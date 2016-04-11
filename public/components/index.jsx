@@ -78,7 +78,7 @@ ReactDOM.render(
       <Route path='login' component={Login} />
       <Route path='settings' onEnter={Auth.isLogged} component={Settings} />
       <Route path='signup' component={Signup} />
-      <Route path='i/:appName' component={AppLiveView} />
+      <Route path='live/:appName' component={AppLiveView} />
       <Route path='*' component={NotFound} />
     </Route>
   </Router>

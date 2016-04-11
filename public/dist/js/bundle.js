@@ -68452,7 +68452,6 @@ var Explore = function (_React$Component) {
       var index = apps.findIndex(function (app) {
         return app.name === appName;
       });
-      console.log(appName, index);
       return index >= 0;
     }
   }, {
@@ -69800,6 +69799,12 @@ var Session = exports.Session = function () {
     value: function _delete(key) {
       localStorage.removeItem('session.' + key);
     }
+  }, {
+    key: 'remove',
+    value: function remove(key) {
+      localStorage.removeItem('session.' + key);
+    } // alias
+
   }]);
 
   return Session;
@@ -70154,21 +70159,18 @@ var Notifications = function (_React$Component) {
     };
     _this.dismiss = _this.dismiss.bind(_this);
     _this.toggleHistory = _this.toggleHistory.bind(_this);
+    _this.clearHistory = _this.clearHistory.bind(_this);
     return _this;
   }
 
   _createClass(Notifications, [{
     key: 'notify',
     value: function notify(notification) {
-      var id = idx++;
+      var id = new Date().getTime() + idx++;
       var timeout = notification.timeout || 4700;
       var toast = Object.assign({ id: id, timeout: timeout }, notification);
-      var history = _lib.Session.load('notifications') || [];
-      _lib.Session.save('notifications', [].concat(_toConsumableArray(history), [toast]));
-      this.setState({
-        history: [].concat(_toConsumableArray(history), [toast]),
-        toasts: [].concat(_toConsumableArray(this.state.toasts), [toast])
-      });
+      this.storeNotifications(toast);
+      this.setState({ toasts: [].concat(_toConsumableArray(this.state.toasts), [toast]) });
       return id;
     }
   }, {
@@ -70177,6 +70179,17 @@ var Notifications = function (_React$Component) {
       // console.log('mqtt://push ->', message.toString())
       var notification = JSON.parse(message.toString());
       this.notify(notification);
+    }
+  }, {
+    key: 'storeNotifications',
+    value: function storeNotifications(notification) {
+      var body = notification.body;
+
+      if (_react2.default.isValidElement(body) || typeof body !== 'string') return;
+
+      var history = _lib.Session.load('history') || [];
+      _lib.Session.save('history', [].concat(_toConsumableArray(history), [notification]));
+      this.setState({ history: [].concat(_toConsumableArray(history), [notification]) });
     }
   }, {
     key: 'dismiss',
@@ -70192,8 +70205,14 @@ var Notifications = function (_React$Component) {
   }, {
     key: 'toggleHistory',
     value: function toggleHistory() {
-      console.log('toggle history');
+      // console.log('toggle history', this.state.history)
       this.setState({ showHistory: !this.state.showHistory });
+    }
+  }, {
+    key: 'clearHistory',
+    value: function clearHistory() {
+      _lib.Session.remove('history');
+      this.setState({ history: [], showHistory: !this.state.showHistory });
     }
   }, {
     key: 'componentDidMount',
@@ -70243,22 +70262,34 @@ var Notifications = function (_React$Component) {
         _react2.default.createElement(
           'div',
           { className: 'notifications-pod clickable', onClick: this.toggleHistory },
-          _react2.default.createElement(
-            'i',
-            { className: 'fa fa-bell' },
-            ' '
-          ),
-          ' Notifications'
+          !showHistory ? _react2.default.createElement(
+            'span',
+            null,
+            _react2.default.createElement('i', { className: 'fa fa-bell' }),
+            ' Notifications'
+          ) : _react2.default.createElement(
+            'span',
+            null,
+            _react2.default.createElement('i', { className: 'fa fa-close' }),
+            ' Close log |',
+            _react2.default.createElement(
+              'span',
+              { onClick: this.clearHistory },
+              ' ',
+              _react2.default.createElement('i', { className: 'fa fa-bell-slash' }),
+              ' Clear '
+            )
+          )
         ),
         _react2.default.createElement(
           'div',
           { className: 'notifications z-super' },
-          showHistory ? history.map(function (props, index) {
+          showHistory ? history.map(function (data, index) {
             var isCurrent = index === toasts.length - 1;
-            return _react2.default.createElement(_toast2.default, _extends({ isCurrent: isCurrent, key: props.id }, props));
-          }) : toasts.map(function (props, index) {
+            return _react2.default.createElement(_toast2.default, _extends({ isCurrent: isCurrent, key: 'history-' + data.id }, data));
+          }) : toasts.map(function (data, index) {
             var isCurrent = index === toasts.length - 1;
-            return _react2.default.createElement(_toast2.default, _extends({ isCurrent: isCurrent, key: props.id }, props, { dismiss: _this2.dismiss.bind(_this2) }));
+            return _react2.default.createElement(_toast2.default, _extends({ isCurrent: isCurrent, key: data.id }, data, { dismiss: _this2.dismiss.bind(_this2) }));
           })
         )
       );
@@ -70306,7 +70337,9 @@ var Toast = function (_React$Component) {
   _createClass(Toast, [{
     key: 'close',
     value: function close() {
-      this.props.dismiss(this.props.id);
+      if (typeof this.props.dismiss === 'function') {
+        this.props.dismiss(this.props.id);
+      }
     }
   }, {
     key: 'render',

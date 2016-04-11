@@ -63,7 +63,6 @@ describe('Resources', function () {
         should.not.exist(err)
         //  .then...
         Resource.find({ id: item.id }, function (err, item) {
-          err.statusCode.should.equal(404)
           expect(item).to.be.empty
           done()
         })

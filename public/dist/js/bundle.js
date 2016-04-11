@@ -67628,9 +67628,9 @@ var App = function (_React$Component) {
 
 
       _superagentBluebirdPromise2.default.post('/api/activities/' + name).then(function () {
-        return _superagentBluebirdPromise2.default.get('/i/' + name).promise();
+        return _superagentBluebirdPromise2.default.get('/live/' + name).promise();
       }).then(function () {
-        _this2.router.push('/i/' + name);
+        _this2.router.push('/live/' + name);
       }).catch(function (err) {
         if (err.status === 404) {
           _this2.setState({ isRunning: true });
@@ -67766,7 +67766,7 @@ var App = function (_React$Component) {
       });
 
       if (netbeast && netbeast.type === 'plugin') {
-        var devices = _lib.Session.load('devices');
+        var devices = _lib.Session.load('devices') || [];
         var found = devices.find(function (d) {
           return d.app === name;
         });
@@ -69755,7 +69755,7 @@ _reactDom2.default.render(_react2.default.createElement(
     _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _login2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'settings', onEnter: _lib.Auth.isLogged, component: _settings2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _signup2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'i/:appName', component: _live2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'live/:appName', component: _live2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: '*', component: _notFound2.default })
   )
 ), document.getElementById('app'));

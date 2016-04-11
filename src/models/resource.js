@@ -1,3 +1,5 @@
+var util = require('util')
+
 var Promise = require('bluebird')
 var chalk = require('chalk')
 
@@ -23,8 +25,8 @@ function Resource (item) {
   try {
     const hookTail = item.hook.split('/')[item.hook.split('/').length - 1]
     if (macRegex.test(hookTail)) this.mac = hookTail
-      if (ipRegex.test(hookTail)) this.ip = hookTail
-    } catch (e) { /* console.log(chalk.grey('[warning] rosources without hook')) */ }
+    if (ipRegex.test(hookTail)) this.ip = hookTail
+  } catch (e) { /* console.log(chalk.grey('[warning] rosources without hook')) */ }
 }
 
 Resource.create = function (item, done) {
@@ -43,11 +45,11 @@ Resource.find = function (query, done) {
   var result = []
   helper.findAction(query, function (err, row) {
     if (err) return done(err)
-      if (!row.length) return done(new ApiError(404, 'Resource not found DB'))
+      if (!util.isArray(row)) return done(new ApiError(404, 'Resource not found DB'))
 
-        row.forEach(function (action) {
-          result.push(new Resource(action))
-        })
+      row.forEach(function (action) {
+        result.push(new Resource(action))
+      })
       return done(null, result)
     })
 }
@@ -55,7 +57,7 @@ Resource.find = function (query, done) {
 Resource.findOne = function (query, done) {
   helper.findAction(query, function (err, row) {
     if (err) return done(err)
-      if (!row.length) return done(new ApiError(404, 'Resource not found DB'))
+      if (row.length < 1) return done(new ApiError(404, 'Resource not found DB'))
 
         return done(null, new Resource(row[row.length - 1]))
     })

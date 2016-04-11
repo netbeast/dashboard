@@ -32,7 +32,6 @@ export default class Explore extends React.Component {
   isInstalled (appName) {
     let apps = [ ...this.state.installedApps ] // smart copy
     const index = apps.findIndex((app) => { return app.name === appName })
-    console.log(appName, index)
     return index >= 0
   }
 

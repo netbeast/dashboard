@@ -69767,8 +69767,8 @@ var SwitchButton = function (_React$Component) {
 
       this.setState({ switch: !this.state.switch });
       if (typeof toggle === 'function') return toggle(this.state);
-      if (typeof whenOn === 'function' && this.state.switch) return whenOn();
-      if (typeof whenOff === 'function' && !this.state.switch) return whenOff();
+      if (typeof whenOn === 'function' && !this.state.switch) return whenOn();
+      if (typeof whenOff === 'function' && this.state.switch) return whenOff();
     }
   }, {
     key: 'render',
@@ -69807,12 +69807,12 @@ var Switch = function (_React$Component2) {
   _createClass(Switch, [{
     key: 'turnOn',
     value: function turnOn() {
-      (0, _netbeast2.default)('switch').set({ power: 1 });
+      (0, _netbeast2.default)('switch').setById(this.props.info.id, { power: 1 });
     }
   }, {
     key: 'turnOff',
     value: function turnOff() {
-      (0, _netbeast2.default)('switch').set({ power: 0 });
+      (0, _netbeast2.default)('switch').setById(this.props.info.id, { power: 0 });
     }
   }, {
     key: 'render',
@@ -69820,7 +69820,7 @@ var Switch = function (_React$Component2) {
       return _react2.default.createElement(
         _reactBootstrap.Popover,
         _extends({}, this.props, { id: this.props.idx }),
-        _react2.default.createElement(SwitchButton, { whenOn: this.turnOn, whenOff: this.turnOff })
+        _react2.default.createElement(SwitchButton, { whenOn: this.turnOn.bind(this), whenOff: this.turnOff.bind(this) })
       );
     }
   }]);

@@ -13,8 +13,8 @@ class SwitchButton extends React.Component {
     const { toggle, whenOn, whenOff } = this.props
     this.setState({ switch: !this.state.switch })
     if (typeof toggle === 'function') return toggle(this.state)
-    if (typeof whenOn === 'function' && this.state.switch) return whenOn()
-    if (typeof whenOff === 'function' && !this.state.switch) return whenOff()
+    if (typeof whenOn === 'function' && !this.state.switch) return whenOn()
+    if (typeof whenOff === 'function' && this.state.switch) return whenOff()
   }
 
   render () {
@@ -35,17 +35,17 @@ class SwitchButton extends React.Component {
 
 class Switch extends React.Component {
   turnOn () {
-    netbeast('switch').set({ power: 1 })
+    netbeast('switch').setById(this.props.info.id, { power: 1 })
   }
 
   turnOff () {
-    netbeast('switch').set({ power: 0 })
+    netbeast('switch').setById(this.props.info.id, { power: 0 })
   }
 
   render () {
     return (
       <Popover {...this.props} id={this.props.idx}>
-        <SwitchButton whenOn={this.turnOn} whenOff={this.turnOff}/>
+        <SwitchButton whenOn={this.turnOn.bind(this)} whenOff={this.turnOff.bind(this)}/>
       </Popover>
     )
   }

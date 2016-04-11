@@ -71,6 +71,7 @@
     "react-avatar": "^0.7.2",
     "react-bootstrap": "^0.28.3",
     "react-chartjs": "^0.7.3",
+    "react-color": "^2.0.0",
     "react-dom": "^0.14.7",
     "react-dropzone": "^3.3.2",
     "react-router": "^2.0.0-rc5",

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Popover } from 'react-bootstrap'
+import ColorPicker from 'react-color'
 import netbeast from 'netbeast'
 
 class SwitchButton extends React.Component {
@@ -51,6 +52,32 @@ class Switch extends React.Component {
   }
 }
 
+class Lights extends React.Component {
+  turnOn () {
+    netbeast('lights').setById(this.props.info.id, { power: 1 })
+  }
+
+  turnOff () {
+    netbeast('lights').setById(this.props.info.id, { power: 0 })
+  }
+
+  setColor (color) {
+    netbeast('lights').setById(this.props.info.id, { color: color.rgb })
+  }
+
+  render () {
+    return (
+      <Popover {...this.props} id={this.props.idx}>
+        <div className='devices-bulb-control'>
+          <ColorPicker color='#00e9cf' type='chrome' onChangeComplete={this.setColor.bind(this)} />
+          <br/>
+          <SwitchButton whenOn={this.turnOn.bind(this)} whenOff={this.turnOff.bind(this)}/>
+        </div>
+      </Popover>
+    )
+  }
+}
+
 export class Default extends React.Component {
   render () {
     return (
@@ -72,6 +99,8 @@ export default function Adapter (device) {
   switch(device.info.topic) {
     case 'switch':
       return <Switch {...device} />
+    case 'lights':
+      return <Lights {...device} />
     default:
       return <Default {...device} />
   }

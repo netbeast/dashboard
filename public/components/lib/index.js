@@ -15,9 +15,8 @@ export class Session {
     }
   }
 
-  static delete (key) {
-    localStorage.removeItem('session.' + key)
-  }
+  static delete (key) { localStorage.removeItem('session.' + key) }
+  static remove (key) { localStorage.removeItem('session.' + key) } // alias
 }
 
 export class Auth {

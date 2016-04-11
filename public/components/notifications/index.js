@@ -16,18 +16,15 @@ export default class Notifications extends React.Component {
     }
     this.dismiss = this.dismiss.bind(this)
     this.toggleHistory = this.toggleHistory.bind(this)
+    this.clearHistory = this.clearHistory.bind(this)
   }
 
   notify (notification) {
-    const id = idx++
+    const id = new Date().getTime() + idx++
     const timeout = notification.timeout || 4700
     const toast = Object.assign({ id, timeout }, notification)
-    const history = Session.load('notifications') || []
-    Session.save('notifications', [...history, toast])
-    this.setState({
-      history: [...history, toast],
-      toasts: [...this.state.toasts, toast]
-    })
+    this.storeNotifications(toast)
+    this.setState({ toasts: [...this.state.toasts, toast] })
     return id
   }
 
@@ -35,6 +32,15 @@ export default class Notifications extends React.Component {
     // console.log('mqtt://push ->', message.toString())
     const notification = JSON.parse(message.toString())
     this.notify(notification)
+  }
+
+  storeNotifications (notification) {
+    const { body } = notification
+    if (React.isValidElement(body) || typeof body !== 'string') return
+    
+    const history = Session.load('history') || []
+    Session.save('history', [...history, notification])
+    this.setState({ history: [...history, notification] })
   }
 
   dismiss (toastId) {
@@ -46,8 +52,14 @@ export default class Notifications extends React.Component {
   }
 
   toggleHistory () { 
-    console.log('toggle history')
-    this.setState({ showHistory: !this.state.showHistory }) }
+    // console.log('toggle history', this.state.history)
+    this.setState({ showHistory: !this.state.showHistory }) 
+  }
+
+  clearHistory () { 
+    Session.remove('history')
+    this.setState({ history: [], showHistory: !this.state.showHistory })
+  }
 
   componentDidMount () {
     this.mqtt = mqtt.connect(window.mqttUri)
@@ -82,15 +94,21 @@ export default class Notifications extends React.Component {
     return (
       <span>
         <div className='notifications-pod clickable' onClick={this.toggleHistory}>
-          <i className='fa fa-bell'> </i> Notifications
+          { (!showHistory)
+            ? <span><i className='fa fa-bell'/> Notifications</span>
+            : <span>
+              <i className='fa fa-close'/> Close log |
+              <span onClick={this.clearHistory}> <i className='fa fa-bell-slash'/> Clear </span>
+              </span>
+          }
         </div>
         <div className='notifications z-super'>
-          { showHistory ? history.map((props, index) => {
+          { showHistory ? history.map((data, index) => {
             const isCurrent = index === (toasts.length - 1)
-            return <Toast isCurrent={isCurrent} key={props.id} {...props} />
-          }) : toasts.map((props, index) => {
+            return <Toast isCurrent={isCurrent} key={'history-' + data.id} {...data} />
+          }) : toasts.map((data, index) => {
             const isCurrent = index === (toasts.length - 1)
-            return <Toast isCurrent={isCurrent} key={props.id} {...props} dismiss={this.dismiss.bind(this)}/>
+            return <Toast isCurrent={isCurrent} key={data.id} {...data} dismiss={this.dismiss.bind(this)}/>
           })}
         </div>
       </span>

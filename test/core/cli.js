@@ -9,7 +9,7 @@ var exec = require('child_process').exec
 var Promise = require('bluebird')
 var fs = Promise.promisifyAll(require('fs-extra'))
 
-const CLI = path.join(process.cwd(), 'bin', 'cli.js')
+const CLI = 'netbeast'
 const PATH_TO_APP = './test-app'
 const INSTALLED_APP = '.sandbox/myapp'
 

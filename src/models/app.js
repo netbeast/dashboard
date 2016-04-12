@@ -1,6 +1,7 @@
 var path = require('path')
-var fs = require('fs-extra')
-var async = require('async')
+
+var Promise = require('bluebird')
+var fs = Promise.promisifyAll(require('fs-extra'))
 
 var broker = require('../helpers/broker')
 var NotFound = require('../util/not-found')
@@ -11,19 +12,23 @@ var App = module.exports = {}
 const APPS_DIR = process.env.APPS_DIR
 
 App.modules = function (done) {
-  fs.readdir(APPS_DIR, function (err, files) {
-    if (err) return done(err)
-    async.filter(files, function (file, callback) {
-      fs.lstat(APPS_DIR + '/' + file, function (err, stats) {
-        if (err) return done(err) // done reports error to App.modules
-        return callback(stats.isDirectory())
+  fs.readdirAsync(APPS_DIR).then(function (files) {
+    return Promise.filter(files, function (file, callback) {
+      return fs.lstatAsync(APPS_DIR + '/' + file).then(function (stats) {
+        return stats.isDirectory()
       })
-    }, function (directories) {
-      async.map(directories, App.getPackageJson, function (err, modules) {
-        // App get package json may return `undefined` to prevent crashes
-        done(err, modules.filter(function (d) { return d }))
+    }).then(function (directories) {
+      return Promise.map(directories, function (directory) {
+        return new Promise(function (resolve, reject) {
+          App.getPackageJson(directory, function (err, pkg) {
+            if (err) return reject(err)
+            return resolve(pkg)
+          })
+        })
       })
-    })
+    }).then(function (packages) {
+      return done(null, packages)
+    }).catch(done)
   })
 }
 

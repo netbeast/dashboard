@@ -32,15 +32,16 @@ export default class App extends React.Component {
     const { name } = this.props
 
     request.post('/api/activities/' + name).then(() => {
-      return request.get('/i/' + name).promise()
+      return request.get('/live/' + name).promise()
     }).then(() => {
-      this.router.push('/i/' + name)
+      this.router.push('/live/' + name)
     }).catch((err) => {
       if (err.status === 404) {
         this.setState({ isRunning: true })
         return toastr.info(`${name} is running`)
       }
-      toastr.error(err.message)
+      if (err.res) toastr.error(err.res.text)
+      else toastr.error(err.message)
     })
   }
 
@@ -81,6 +82,7 @@ export default class App extends React.Component {
 
   uninstall () {
     const { name, kind, dismiss } = this.props
+    if (confirm('Do you really want to remove', name, '?'))
     request.del('/api/apps/' + name).end((err, res) => {
       if (err) return
       dismiss(name)
@@ -125,7 +127,7 @@ renderButton () {
     })
 
     if (netbeast && (netbeast.type === 'plugin')) {
-      const devices = Session.load('devices')
+      const devices = Session.load('devices') || []
       const found = devices.find((d) => { return d.app === name })
       this.setState({ inactive: !found })
     }

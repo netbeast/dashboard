@@ -18,6 +18,7 @@ app.use(logger('dev', {
   // skip: function (req, res) { return res.statusCode < 400 }
 }))
 
+app.use(require('./middleware/cors'))
 app.use(require('./middleware/proxy'))
 
 app.use(cookieParser())
@@ -25,7 +26,6 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(favicon(path.join(process.env.PUBLIC_DIR, 'img/favicon.png')))
 
-app.use(require('./middleware/cors'))
 app.use('/api', require('./routes'))
 
 app.use(express.static(process.env.PUBLIC_DIR))

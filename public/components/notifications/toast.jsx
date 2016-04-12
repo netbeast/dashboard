@@ -6,7 +6,11 @@ export default class Toast extends React.Component {
     this.close = this.close.bind(this)
   }
 
-  close () { this.props.dismiss(this.props.id) }
+  close () { 
+    if (typeof (this.props.dismiss) === 'function') {
+      this.props.dismiss(this.props.id)
+    }
+  }
 
   render () {
     const { title, body, emphasis, timeout, isCurrent } = this.props // eslint-disable-line

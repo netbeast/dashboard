@@ -12,7 +12,7 @@ setInterval(function () {
 
 function getArp () {
   Resource.find({}, function (err, devices) {
-    if (err) return console.error(err)
+    if (err && err.statusCode !== 404) return console.error(err)
 
       // Get all devices on the database
     var arp_str = ''
@@ -22,6 +22,11 @@ function getArp () {
     arp.stdout.setEncoding('utf8')
     arp.stdout.on('data', function (data) {
       arp_str = data
+    })
+
+    arp.on('error', function (err) { 
+      console.trace(err)
+      broker.client.publish('netbeast/network', JSON.stringify(devices))
     })
 
     arp.on('close', function () {
@@ -34,7 +39,7 @@ function getArp () {
 }
 
 function joinTables (arp_table, devices_table) {
-  var result = devices_table
+  var result = devices_table || []
 
   arp_table.forEach(function (device) {
     var found = false
@@ -93,6 +98,6 @@ function parse_arp_table (arpt) {
 function _merge (obj1, obj2) {
   var obj3 = {}
   for (var attrname in obj1) { obj3[attrname] = obj1[attrname] }
-  for (var attr in obj2) { obj3[attr] = obj2[attr] }
-  return obj3
-}
+    for (var attr in obj2) { obj3[attr] = obj2[attr] }
+      return obj3
+  }

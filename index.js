@@ -16,8 +16,6 @@ var chalk = require('chalk')
 var app = require('./src')
 var bootOnload = require('./src/boot-on-load')
 
-const DASHBOARD_NETWORK = path.join(__dirname, './bin/network.js')
-const DASHBOARD_DEAMON = path.join(__dirname, './bin/deamon.js')
 const DASHBOARD_DNS = path.join(__dirname, './bin/dns.js')
 
 cmd
@@ -65,11 +63,10 @@ env.NETBEAST_PORT = process.env.PORT
 var options = { env: env }
 
 var dns = spawn(DASHBOARD_DNS, options)
-var deamon = spawn(DASHBOARD_DEAMON, options)
 
 require('./src/services/scanner')
+require('./src/services/advertiser')
 
 process.on('exit', function () {
-  deamon.kill('SIGTERM')
   dns.kill('SIGTERM')
 })

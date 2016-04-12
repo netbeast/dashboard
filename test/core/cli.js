@@ -6,8 +6,8 @@ var should = require('chai').should()
 var path = require('path')
 var exec = require('child_process').exec
 
-var fs = require('fs-extra')
-var async = require('async')
+var Promise = require('bluebird')
+var fs = Promise.promisifyAll(require('fs-extra'))
 
 const CLI = path.join(process.cwd(), 'bin', 'cli.js')
 const PATH_TO_APP = './test-app'
@@ -20,31 +20,24 @@ describe('Client', function () {
   })
 
   it('should create an app called test-app', function (done) {
-    async.series([
-      async.apply(exec, CLI + ' new test-app'),
-      async.apply(fs.readdir, PATH_TO_APP),
-      async.apply(fs.readdir, PATH_TO_APP + '/public'),
-      function (callback) {
-        fs.readFile(PATH_TO_APP + '/server.js', function (err, data) {
-          if (err) return callback(err)
-          data = data.toString()
-          var shebang = data.slice(0, data.indexOf('\n'))
-          shebang.should.equal('#!/usr/bin/env node')
-          callback(null, data)
-        })
-      },
-      function (callback) {
-        fs.readJson(PATH_TO_APP + '/package.json', function (err, data) {
-          if (err) return callback(err)
-          fs.access(PATH_TO_APP + '/' + data.main, fs.X_OK, callback)
-        })
-      }
-    ],
-    function (err, results) {
-      should.not.exist(err)
-      should.exist(results)
-      done()
+    new Promise(function (resolve, reject) {
+      exec(CLI + ' new test-app', function (err, stdout, stderr) {
+        if (err) return reject(err)
+        else return resolve(PATH_TO_APP)
+      })
     })
+    .then(fs.readdirAsync)
+    .then(fs.readFileAsync.bind(fs, PATH_TO_APP + '/server.js'))
+    .then(function (data) {
+      var shebang = data.toString().slice(0, data.toString().indexOf('\n'))
+      shebang.should.equal('#!/usr/bin/env node')
+      return Promise.resolve()
+    })
+    .then(fs.readJsonAsync.bind(fs, PATH_TO_APP + '/package.json'))
+    .then(function (data) {
+      return fs.accessAsync(PATH_TO_APP + '/' + data.main, fs.X_OK)
+    })
+    .then(done)
   })
 
   it('should install test/app.tar.gz', function (done) {
@@ -62,9 +55,9 @@ describe('Client', function () {
   it('should package test-app into app.tar.gz', function (done) {
     exec(CLI + ' package test-app', function (err, stdout, stderr) {
       should.not.exist(err)
-      fs.access('app.tar.gz', fs.F_OK, function (err) {
+      fs.access('netbeast-app.tar.gz', fs.F_OK, function (err) {
         should.not.exist(err)
-        fs.removeSync('app.tar.gz')
+        fs.removeSync('netbeast-app.tar.gz')
         done()
       })
     })

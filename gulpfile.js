@@ -1,3 +1,4 @@
+require('dotenv').load()
 
 var gulp = require('gulp')
 var plugins = require('gulp-load-plugins')()
@@ -7,6 +8,9 @@ var browserify = require('browserify')
 var watchify = require('watchify')
 
 var bgTask
+
+var manifest = require('./package.json')
+process.env.VERSION = manifest.version
 
 gulp.task('default', ['serve', 'watchify'], function () {
   plugins.livereload.listen()
@@ -83,6 +87,7 @@ gulp.task('watchify', function () {
       debug: true
     })
   ).transform('babelify', { presets: ['es2015', 'react'] })
+  .transform('envify')
 
   bundler.on('update', function () { compile(bundler) })
   return compile(bundler)
@@ -94,6 +99,7 @@ gulp.task('browserify', function () {
     entries: './public/components/index.jsx',
     debug: true
   }).transform('babelify', { presets: ['es2015', 'react'] })
+  .transform('envify')
 
   return compile(bundler)
 })

@@ -2,10 +2,9 @@ var path = require('path')
 var events = require('events')
 var spawn = require('child_process').spawn
 
-var request = require('request')
 var portfinder = require('portfinder')
 var chalk = require('chalk')
-var async = require('async')
+var request = require('superagent')
 var mqtt = require('mqtt')
 
 var broker = require('../helpers/broker')
@@ -21,30 +20,12 @@ var children = {}
 var self = module.exports = new events.EventEmitter()
 var client = mqtt.connect() // for notifications
 
-self.start = function (req, res, next) {
-  self.boot(req.params.name, function (err, child) {
-    if (err) return next(err)
-    self.ready(child, function (err, act) {
-      if (err) return next(err)
-
-      res.json({ name: act.name, port: act.port })
-    })
-  })
-}
-
 self.status = function (req, res, next) {
   var child = children[req.params.name]
-  if (!child) return next(new ApiError(405, 'App not running'))
+  if (!child) return next(new ApiError(404, 'App not running'))
   self.ready(child, function (err, act) {
     if (err) return next(err)
     res.json({ name: act.name, port: act.port })
-  })
-}
-
-self.close = function (req, res, next) {
-  self.stop(req.params.name, function (err) {
-    if (err) return next(err)
-    res.status(204).end()
   })
 }
 
@@ -80,28 +61,22 @@ self.ready = function (child, done) {
   const MAX_TRIALS = 20
   var k = 0
 
-  function keepTrying () { return k < MAX_TRIALS }
+  ;(function keepTrying () {
+    if (k >= MAX_TRIALS) return done(new ApiError(405, 'Impossible to launch the application'))
 
-  async.whilst(keepTrying, function (callback) {
-    k++
-    request(APP_URL, function (err, resp, body) {
-      if (err && err.code !== 'ECONNREFUSED') {
-        done(err)
-      } else if (err) {
-        setTimeout(callback, 400)
+    request(APP_URL).end(function (err, resp) {
+      if (err && err.code === 'ECONNREFUSED') {
+        k++
+        return setTimeout(keepTrying, 400)
+      } else if (!err || err.status === 404) {
+        child.ready = true
+        return done(null, child)
       } else {
-        done(null, child)
+        console.log(err)
+        return done(err)
       }
     })
-  }, function (err) {
-    if (err) return done(err)
-    if (k === MAX_TRIALS) {
-      return done(new ApiError(405, 'Impossible to launch the application'))
-    }
-
-    child.ready = true
-    return done(null, child)
-  })
+  })()
 }
 
 self.boot = function (appName, done) {
@@ -113,7 +88,7 @@ self.boot = function (appName, done) {
 
   portfinder.getPort(function (err, port) {
     if (err) {
-      done(new ApiError(405, 'Not enough ports'))
+      done(new ApiError(422, 'Not enough ports'))
     } else {
       child.port = port
       self.emit('start', child)
@@ -128,7 +103,10 @@ self.on('start', function (app) {
   App.getPackageJson(app.name, function (err, pkgJson) {
     if (err) return broker.error(err.toString())
 
-    // child management
+    // *****************
+    // Child management
+    // *****************
+
     var entryPoint = path.resolve(APPS_DIR, app.name, pkgJson.main)
 
     var env = Object.create(process.env)
@@ -152,11 +130,7 @@ self.on('start', function (app) {
 
     child.on('close', function (code) {
       client.publish('netbeast/activities/close', app.name)
-      Resource.findOne({ app: app.name }, function (err, resource) {
-        if (err) return console.error(err)
-
-        resource.destroy()
-      })
+      Resource.destroy({ app: app.name })
       children[app.name] = undefined
     })
 

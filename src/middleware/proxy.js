@@ -37,11 +37,9 @@ router.use('/i/:name', function (req, res, next) {
   // This block of code actually pipes the request
   // to the running app and pass it to the client
   var proxyUrl = req.protocol + '://localhost:' + app.port
+  console.log(chalk.magenta('[proxy -> %s%s]'), proxyUrl, pathname)
 
   req.url = pathname
-
-  // Allow CORS on all plugins
-  allowCORS(res)
 
   proxy.web(req, res, { target: proxyUrl })
 })
@@ -67,18 +65,9 @@ router.use(function (req, res, next) {
   // This block of code actually pipes the request
   // to the running app and pass it to the client
   var proxyUrl = req.protocol + '://localhost:' + app.port
-  console.log('[proxy -> %s%s]', proxyUrl, pathname)
+  console.log(chalk.magenta('[%s proxy-> %s%s]'), req.method, proxyUrl, pathname)
 
   req.url = pathname
 
-  // Allow CORS on all plugins
-  allowCORS(res)
-
   proxy.web(req, res, { target: proxyUrl })
 })
-
-function allowCORS (res) {
-  res.header('Access-Control-Allow-Credentials', 'true')
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Access-Control-Allow-Origin, Content-Type, Accept')
-  res.header('Access-Control-Allow-Origin', '*')
-}

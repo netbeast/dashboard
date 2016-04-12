@@ -24,17 +24,12 @@ Thumbs.db
 
 # Project ignores #
 ###################
-# .env is forcely added
-.env
-
-public/dist/js
-public/dist/css
-
 .log
 .sass-cache/
 .ftpconfig
 
 .sandbox/*
+!.sandbox/installed_apps_live_here
 *.sqlite
 
 node_modules

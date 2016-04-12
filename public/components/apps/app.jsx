@@ -89,11 +89,13 @@ export default class App extends React.Component {
   }
 
   contextMenu () {
-    const { name } = this.props
+    const { name, netbeast } = this.props
+    const settings = netbeast && netbeast.settings
     return (
       <Popover id={name} className='context-menu'>
       <a href='javascript:void(0)' onClick={this.stop.bind(this)} className='stop btn btn-filled btn-warning'> Stop </a>
       <a href='javascript:void(0)' onClick={this.uninstall.bind(this)} className='remove btn btn-filled btn-primary'> Remove </a>
+      {settings ? <a onClick={this.router.push.bind(this, '/i/' + name + ((settings === true && typeof settings === 'boolean') ? '/settings' : settings))} className='settings btn btn-filled btn-success'> Settings </a> : null}
       </Popover>
     )
   }
@@ -121,7 +123,7 @@ renderButton () {
     request.get('/api/activities/' + name).end((err, res) => {
       if (!err) this.setState({ isRunning: true })
     })
-    
+
     if (netbeast && (netbeast.type === 'plugin')) {
       const devices = Session.load('devices')
       const found = devices.find((d) => { return d.app === name })

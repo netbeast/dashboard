@@ -29,6 +29,7 @@ ReactDOM.render(
       <Route path='settings' component={Settings} />
       <Route path='devices' component={Devices} />
       <Route path='i/:appName' component={AppLiveView} />
+      <Route path='i/:appName/:path' component={AppLiveView} />
       <Route path='*' component={NotFound} />
     </Route>
   </Router>

@@ -1,7 +1,7 @@
 {
   "name": "netbeast-cli",
   "description": "Netbeast OS dashboard, IoT apps manager",
-  "version": "0.2.86",
+  "version": "0.2.87",
   "preferGlobal": "true",
   "dependencies": {
     "bluebird": "^3.2.2",
@@ -93,7 +93,7 @@
     "router"
   ],
   "scripts": {
-    "preinstall": "export NODE_ENV=development",
+    "preinstall": "export NODE_ENV=production",
     "test": "export NODE_PATH=.:$NODE_PATH && ./node_modules/.bin/gulp test",
     "coverage": "export NODE_PATH=.:$NODE_PATH && ./node_modules/.bin/gulp coverage",
     "build": "./node_modules/.bin/gulp build",

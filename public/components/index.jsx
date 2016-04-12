@@ -33,7 +33,7 @@ export default class Dashboard extends React.Component {
     const pathname = location.pathname.replace(regexp, '-')
     return (pathname === '-') ? '-root' : pathname
   }
- 
+
   componentWillReceiveProps (nextProps) {
     this.setState({ path: this.getPathClassName(nextProps) })
   }
@@ -79,6 +79,7 @@ ReactDOM.render(
       <Route path='settings' onEnter={Auth.isLogged} component={Settings} />
       <Route path='signup' component={Signup} />
       <Route path='live/:appName' component={AppLiveView} />
+      <Route path='live/:appName/:path' component={AppLiveView} />
       <Route path='*' component={NotFound} />
     </Route>
   </Router>

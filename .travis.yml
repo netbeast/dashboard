@@ -1,6 +1,8 @@
 language: node_js
 sudo: false
-script: npm install -g netbeast-cli # check that the package is installable and works on linux
+install: npm install -g netbeast-cli # check that the package is installable and works on linux 
+service: netbeast start
+script: mocha test test/core/cli.js
 node_js:
   - "0.12"
   - "4.2.1"

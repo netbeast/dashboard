@@ -104,7 +104,7 @@ export default class Devices extends React.Component {
           </filter>
           <circle cx={0} cy={0} r='70' style={{ filter: 'url(#netbot)' }} />
 
-          {devices.map((data, idx) => <Device key={idx} {...data} idx={idx} />)}
+          {devices.map((data, idx) => <Device key={idx} info={data} idx={idx} />)}
 
           </svg>
         </div>

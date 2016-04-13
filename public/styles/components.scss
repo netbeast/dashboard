@@ -265,6 +265,7 @@
 }
 
 .zoom-pod {
+  user-select: none;
   position: fixed;
   bottom: 50px; left: 50px;
   .zoom-more, .zoom-less {

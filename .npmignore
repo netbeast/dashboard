@@ -1,4 +1,38 @@
-public/assets/*
-gulpfile.js
-test
-.travis.yml
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.iso
+*.jar
+*.rar
+# *.gz
+# *.tar so it uploads test prepackaged app
+*.zip
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+
+# Project ignores #
+###################
+.log
+.sass-cache/
+.ftpconfig
+
+.sandbox/*
+!.sandbox/installed_apps_live_here
+*.sqlite
+
+node_modules
+
+test/coverage
+.errorlog

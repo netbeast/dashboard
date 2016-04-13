@@ -34,7 +34,6 @@ public/dist/css
 .sass-cache/
 .ftpconfig
 
-node_modules
 .sandbox/*
 *.sqlite
 

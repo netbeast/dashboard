@@ -9,7 +9,7 @@ var exec = require('child_process').exec
 var Promise = require('bluebird')
 var fs = Promise.promisifyAll(require('fs-extra'))
 
-const CLI = path.join(process.cwd(), 'bin', 'cli.js')
+const CLI = 'netbeast'
 const PATH_TO_APP = './test-app'
 const INSTALLED_APP = '.sandbox/myapp'
 
@@ -19,7 +19,7 @@ describe('Client', function () {
     fs.removeSync(PATH_TO_APP)
   })
 
-  it('should create an app called test-app', function (done) {
+  it('should create an app called test-app', function (done) { 
     new Promise(function (resolve, reject) {
       exec(CLI + ' new test-app', function (err, stdout, stderr) {
         if (err) return reject(err)

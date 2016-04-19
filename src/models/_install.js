@@ -7,6 +7,7 @@ var request = require('superagent')
 var git = require('gift')
 var fs = require('fs-extra')
 
+var ApiError = require('../util/api-error')
 var broker = require('../helpers/broker')
 
 function _installDeps (app, done) {
@@ -38,7 +39,7 @@ function _installFromDir (dir, done) {
 
   const appRoot = path.join(process.env.APPS_DIR, appJson.name)
   if (fs.existsSync(appRoot)) {
-    return done(new Error('App already exists'))
+    return done(new ApiError(422, 'App already exists'))
   }
 
   // Check if main is an executable file

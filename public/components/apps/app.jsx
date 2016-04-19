@@ -5,11 +5,12 @@ import request from 'superagent-bluebird-promise'
 import { OverlayTrigger, Popover } from 'react-bootstrap'
 
 import Pulse from '../misc/activity-pulse.jsx'
+import { Session } from '../lib'
 
 export default class App extends React.Component {
   constructor (props, context) {
     super(props)
-    this.state = { isRunning: false, menuHidden: true }
+    this.state = { isRunning: false, inactive: false, menuHidden: true }
     this.router = context.router
   }
 
@@ -31,15 +32,16 @@ export default class App extends React.Component {
     const { name } = this.props
 
     request.post('/api/activities/' + name).then(() => {
-      return request.get('/i/' + name).promise()
+      return request.get('/live/' + name).promise()
     }).then(() => {
-      this.router.push('/i/' + name)
+      this.router.push('/live/' + name)
     }).catch((err) => {
       if (err.status === 404) {
         this.setState({ isRunning: true })
         return toastr.info(`${name} is running`)
       }
-      toastr.error(err.message)
+      if (err.res) toastr.error(err.res.text)
+      else toastr.error(err.message)
     })
   }
 
@@ -80,6 +82,7 @@ export default class App extends React.Component {
 
   uninstall () {
     const { name, kind, dismiss } = this.props
+    if (confirm('Do you really want to remove', name, '?'))
     request.del('/api/apps/' + name).end((err, res) => {
       if (err) return
       dismiss(name)
@@ -88,11 +91,13 @@ export default class App extends React.Component {
   }
 
   contextMenu () {
-    const { name } = this.props
+    const { name, netbeast } = this.props
+    const settings = netbeast && netbeast.settings
     return (
       <Popover id={name} className='context-menu'>
       <a href='javascript:void(0)' onClick={this.stop.bind(this)} className='stop btn btn-filled btn-warning'> Stop </a>
       <a href='javascript:void(0)' onClick={this.uninstall.bind(this)} className='remove btn btn-filled btn-primary'> Remove </a>
+      {settings ? <a onClick={this.router.push.bind(this, '/i/' + name + ((settings === true && typeof settings === 'boolean') ? '/settings' : settings))} className='settings btn btn-filled btn-success'> Settings </a> : null}
       </Popover>
     )
   }
@@ -110,15 +115,22 @@ renderButton () {
   }
 
   componentDidMount () {
-    const { name } = this.props
+    const { name, netbeast } = this.props
     this.mqtt = mqtt.connect(window.mqttUri)
     this.mqtt.subscribe('netbeast/activities/close')
     this.mqtt.on('message', (topic, message) => {
       if (message.toString() === name) this.setState({ isRunning: false })
     })
+
     request.get('/api/activities/' + name).end((err, res) => {
       if (!err) this.setState({ isRunning: true })
     })
+
+    if (netbeast && (netbeast.type === 'plugin')) {
+      const devices = Session.load('devices') || []
+      const found = devices.find((d) => { return d.app === name })
+      this.setState({ inactive: !found })
+    }
   }
 
   componentWillUnmount () {
@@ -130,9 +142,13 @@ renderButton () {
     const isPlugin = netbeast && (netbeast.type === 'plugin')
     const defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)'
     const logoStyle = { backgroundImage: logo ? `url(/api/apps/${name}/logo)` : defaultLogo }
+
+    const { inactive, isRunning } = this.state
+    const inactiveClass = inactive && isRunning ? ' warning' : ''
+
     return (
-      <div className='app'>
-      {this.state.isRunning ? <Pulse {...this.props} /> : null}
+      <div className={'app' + inactiveClass}>
+      {(isRunning) ? <Pulse {...this.props} /> : null}
       <OverlayTrigger ref='contextMenu' trigger={[]} rootClose placement='bottom' overlay={this.contextMenu()}>
         <div className='logo' title='Launch app' style={logoStyle} onClick={this.handleClick.bind(this)} onContextMenu={this.toggleMenu.bind(this)} />
       </OverlayTrigger>

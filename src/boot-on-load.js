@@ -1,4 +1,4 @@
-var async = require('async')
+var Promise = require('bluebird')
 var chalk = require('chalk')
 
 var App = require('./models/app')
@@ -9,17 +9,16 @@ module.exports = function bootOnload () {
   App.modules(function (err, apps) {
     if (err) throw err
 
-    async.map(apps, function (app, done) {
-      if (!app.netbeast || !app.netbeast.bootOnLoad) return done()
+    Promise.map(apps, function (app) {
+      if (!app || !app.netbeast || !app.netbeast.bootOnLoad) return Promise.resolve()
 
       Activity.boot(app.name, function (err, port) {
-        if (err) return done(err)
+        if (err) return Promise.reject(err)
 
         console.info('🚀  [booting] %s launched on port %s ', app.name, port.port)
-        done(null, port.port)
+        Promise.resolve(port.port)
       })
-    },
-    function (err) {
+    }).catch(function (err) {
       if (err) throw err
     })
   })

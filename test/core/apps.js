@@ -54,7 +54,7 @@ describe('Apps', function () {
     .end(function (err, resp, body) {
       should.not.exist(err)
       expect(resp.statusCode).to.equal(200)
-      fs.stat(path.join(APPS_DIR, 'xy-get-started'), function (err, stats) {
+      fs.stat(path.join(APPS_DIR, 'get-started'), function (err, stats) {
         should.not.exist(err)
         expect(stats.isDirectory()).to.equal(true)
         done()
@@ -79,8 +79,8 @@ describe('Apps', function () {
     })
   })
 
-  it("should remove 'xy-get-started' from repository", function (done) {
-    request.del(URL + '/apps/xy-get-started').end(function (err, resp, body) {
+  it("should remove 'get-started' from repository", function (done) {
+    request.del(URL + '/apps/get-started').end(function (err, resp, body) {
       should.not.exist(err)
       expect(resp.statusCode).to.equal(204)
       done()

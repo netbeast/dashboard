@@ -13,6 +13,7 @@ const DASHBOARD_TUNNEL = path.join(__dirname, './tunnel-c.js')
 
 console.log('Server ' + process.env.SERVER_IP + ':' + process.env.IAMALIVE_SPORT)
 
+console.log('📡  Sending:' + process.env.IAMALIVE_SPORT + ' to ' + process.env.SERVER_IP)
 setInterval(function () {
   require('getmac').getMac(function (err, macAddress) {
     if (err) throw err
@@ -21,11 +22,10 @@ setInterval(function () {
       if (err) {
         throw err
       }
-      console.log('Sendend:' + process.env.IAMALIVE_SPORT + ' to ' + process.env.SERVER_IP)
       // client.close()
     })
   })
-}, 1000)
+}, 5000)
 
 client.on('message', function (msg, rinfo) {
   var remotePort = msg.toString()

@@ -16,7 +16,6 @@ var chalk = require('chalk')
 var app = require('./src')
 var bootOnload = require('./src/boot-on-load')
 
-const DASHBOARD_DEAMON = path.join(__dirname, './bin/deamon.js')
 const DASHBOARD_DNS = path.join(__dirname, './bin/dns.js')
 const DASHBOARD_NETWORK = path.join(__dirname, './bin/network.js')
 const DASHBOARD_IAMALIVE = path.join(__dirname, './bin/iamalive-c.js')
@@ -76,23 +75,11 @@ var options = { env: env }
 var iamaliveOptions = { env: env_iamalive }
 
 var dns = spawn(DASHBOARD_DNS, options)
-var deamon = spawn(DASHBOARD_DEAMON, options)
 var iamalive = spawn(DASHBOARD_IAMALIVE, iamaliveOptions)
 
 require('./src/services/scanner')
+require('./src/services/advertiser')
 
-//
-
-// ----------------------------- ONLY DEV BLOCK STARTS----------------------- //
-
-/* tunnel.stdout.on('data', function (data) {
-  console.log(data.toString())
-})
-
-tunnel.stderr.on('data', function (data) {
-  console.log(data.toString())
-})
-*/
 iamalive.stdout.on('data', function (data) {
   console.log(data.toString())
 })
@@ -105,11 +92,7 @@ iamalive.on('close', function (code) {
   console.log('child process iamalive exited with code ' + code.toString())
 })
 
-// ----------------------------- ONLY DEV BLOCK ENDS----------------------- //
-
 process.on('exit', function () {
-  deamon.kill('SIGTERM')
   dns.kill('SIGTERM')
-//  tunnel.kill('SIGTERM')
   iamalive.kill('SIGTERM')
 })

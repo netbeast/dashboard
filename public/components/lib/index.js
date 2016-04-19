@@ -2,19 +2,28 @@
 
 export class Session {
   static save (key, value) {
+    if (!key || !value) return
     if (typeof value !== 'string') value = JSON.stringify(value)
-    localStorage.setItem(key, value)
+    localStorage.setItem('session.' + key, value)
   }
 
   static load (key) {
-    return JSON.parse(localStorage.getItem(key))
+    try {
+      return JSON.parse(localStorage.getItem('session.' + key))
+    } catch (exception) {
+      return undefined
+    }
+  }
+
+  static delete (key) { localStorage.removeItem('session.' + key) }
+  static remove (key) { localStorage.removeItem('session.' + key) } // alias
+}
+
+export class Auth {
+  static isLogged (nextState, replace) {
+    if (Session.load('user')) return
+    else replace({ pathname: '/login', state: { nextPathname: nextState.location.pathname } })
   }
 }
 
-export class API {
-  static install (app) {
-    return app
-  }
-}
-
-export default { Session, API }
+export default { Session, Auth }

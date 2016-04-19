@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router'
 import mqtt from 'mqtt'
 
 import { Session } from '../lib'
@@ -86,7 +85,7 @@ export default class Devices extends React.Component {
 
   render () {
     const { devices, ox, oy, zoom } = this.state
-    const filters = [ ... new Set(devices.map((data) => { return data.app || 'default' })) ]
+    var filters = [ ... new Set(devices.map((data) => { return data.app || 'default' })) ]
 
     return (
       <span>
@@ -105,7 +104,7 @@ export default class Devices extends React.Component {
           </filter>
           <circle cx={0} cy={0} r='70' style={{ filter: 'url(#netbot)' }} />
 
-          {devices.map((data, idx) => <Device key={idx} {...data} idx={idx} />)}
+          {devices.map((data, idx) => <Device key={idx} info={data} idx={idx} />)}
 
           </svg>
         </div>
@@ -115,9 +114,6 @@ export default class Devices extends React.Component {
         </div>
         <VersionPod />
         <RefreshPod />
-        <div className='live-return-menu'>
-          <Link to='/'> Go back to Netbeast dashboard.</Link>
-        </div>
       </span>
     )
   }

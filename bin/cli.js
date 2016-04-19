@@ -20,11 +20,11 @@ var uninstall = require('../lib/uninstall')
 var stop = require('../lib/stop')
 var restart = require('../lib/restart')
 var launch = require('../lib/launch')
-var ipkg = require('../lib/ipkg')
+var _pkg = require('../lib/pkg')
 
-const ACTIONS_LIST = ['new', 'create', 'package', 'pkg', 'unpackage', 'unpkg',
+const ACTIONS_LIST = ['new', 'create', 'package', 'unpackage', 'unpkg',
 'publish', 'scan', 'install', 'forget', 'start', 'uninstall', 'stop', 'restart',
- 'launch', 'ipkg']
+ 'launch', 'pkg']
 
 var pkg = require('../package.json')
 
@@ -44,7 +44,7 @@ cli.command('new <app>').alias('create')
 cli.command('package [app]').alias('pkg')
 .option('-o, --to <path>', 'Output file name')
 .description('Compress your app as tar.gz')
-.action(App.package)
+.action(_pkg)
 
 cli.command('unpackage [app]').alias('unpkg')
 .option('-o, --to <path>', 'Output dir name')
@@ -90,10 +90,6 @@ cli.command('restart <app name>')
 cli.command('launch <app name>')
 .description('Launches an installed app')
 .action(launch)
-
-cli.command('ipkg <appname>')
-.description('Compress an app as a tar avoiding .git and packages inside app folder')
-.action(ipkg)
 
 cli.parse(process.argv)
 

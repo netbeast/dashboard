@@ -17,6 +17,8 @@ var app = require('./src')
 var bootOnload = require('./src/boot-on-load')
 
 const DASHBOARD_DNS = path.join(__dirname, './bin/dns.js')
+const DASHBOARD_NETWORK = path.join(__dirname, './bin/network.js')
+const DASHBOARD_IAMALIVE = path.join(__dirname, './bin/iamalive-c.js')
 
 cmd
 .version('0.1.42')
@@ -59,14 +61,38 @@ proxy.on('error', function (err, req, res) {
 })
 
 var env = Object.create(process.env)
+var env_iamalive = Object.create(process.env)
+
+env_iamalive
+  .NETBEAST_PORT = process.env.PORT
+  .IAMALIVE_SPORT = process.env.IAMALIVE_SPORT
+  .IAMALIVE_CPORT = process.env.IAMALIVE_CPORT
+  .SERVER_IP = process.env.SERVER_IP
+
 env.NETBEAST_PORT = process.env.PORT
+
 var options = { env: env }
+var iamaliveOptions = { env: env_iamalive }
 
 var dns = spawn(DASHBOARD_DNS, options)
+var iamalive = spawn(DASHBOARD_IAMALIVE, iamaliveOptions)
 
 require('./src/services/scanner')
 require('./src/services/advertiser')
 
+iamalive.stdout.on('data', function (data) {
+  console.log(data.toString())
+})
+
+iamalive.stderr.on('data', function (data) {
+  console.log(data.toString())
+})
+
+iamalive.on('close', function (code) {
+  console.log('child process iamalive exited with code ' + code.toString())
+})
+
 process.on('exit', function () {
   dns.kill('SIGTERM')
+  iamalive.kill('SIGTERM')
 })

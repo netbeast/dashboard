@@ -19,6 +19,7 @@
     "fs-extra": "^0.26.0",
     "fstream": "^1.0.8",
     "fstream-ignore": "^1.0.3",
+    "getmac": "^1.0.7",
     "gift": "^0.6.1",
     "http-proxy": "^1.13.2",
     "inquirer": "^0.11.0",

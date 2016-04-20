@@ -17,10 +17,12 @@ export default class Explore extends React.Component {
 
     request.get(GITHUB_Q).end((err, res) => {
       if (err) return window.toastr.error(err)
-      const items = JSON.parse(res.text).items.filter((app) => {
+      
+      let modules = JSON.parse(res.text).items.filter((app) => {
         return app.name !== 'dashboard' && app.name !== 'api'
       })
-      this.setState({ apps: [ ...items ] })
+
+      this.setState({ apps: modules })
     })
 
     request.get('/api/modules').end((err, res) => {
@@ -36,9 +38,11 @@ export default class Explore extends React.Component {
   }
 
   renderNav () {
+    const { filter } = this.props.params
+
     return (
       <div className='nav'>
-        <span className='title'><h4>All available apps.</h4></span>
+        <span className='title'><h4>All available {filter || 'apps'}.</h4></span>
         <ul className='list-unstyled list-inline'>
           <li><Link to='/'><i className='fa fa-th' /> Apps</Link></li>
           <li><Link to='/plugins'><i className='fa fa-package'><img src='/img/plugin.png'/></i> Plugins</Link></li>
@@ -51,6 +55,7 @@ export default class Explore extends React.Component {
   }
 
   render () {
+    const { filter } = this.props.params
     const { apps } = this.state
 
     return (
@@ -58,7 +63,7 @@ export default class Explore extends React.Component {
         {this.renderNav()}
           <div className='apps-list'>
             {apps.map((data) => {
-              return <ExplorableApp key={data.id} { ...data } installed={this.isInstalled(data.name)}/>
+              return <ExplorableApp key={data.id} { ...data } filter={filter} installed={this.isInstalled(data.name)}/>
             })}
             <br/>
           </div>

@@ -31,7 +31,7 @@ export default class NetworkApp extends React.Component {
     const pathname = route.path ? route.path : 'apps'
     const logoStyle = { backgroundImage: 'url(/img/network.png)' }
 
-    if (pathname !== 'apps' && pathname !== 'plugins') return null
+    if (pathname !== 'apps') return null
 
     return (
       <div className='app network-app'>

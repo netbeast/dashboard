@@ -71,7 +71,9 @@ ReactDOM.render(
       <Route path='about' component={Drawer} />
       <Route path='about' component={Drawer} />
       <Route path='remove' component={Drawer} />
-      <Route path='explore' component={Explore} />
+      <Route path='explore' component={Explore} >
+        <Route path=':filter' component={Explore} />
+      </Route>
       <Route path='install' component={InstallView} />
       <Route path='history' component={History} />
       <Route path='devices' component={Devices} />

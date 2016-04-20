@@ -62,7 +62,7 @@ var env = Object.create(process.env)
 env.NETBEAST_PORT = process.env.PORT
 var options = { env: env }
 
-var dns = spawn(DASHBOARD_DNS, options)
+//var dns = spawn(DASHBOARD_DNS, options)
 
 require('./src/services/scanner')
 require('./src/services/advertiser')

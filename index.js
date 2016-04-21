@@ -21,7 +21,7 @@ const DASHBOARD_DNS = path.join(__dirname, './bin/dns.js')
 cmd
 .version('0.1.42')
 .option('-p, --port <n>', 'Port to start the HTTP server', parseInt)
-.option('-sp, --securePort <n>', 'Secure Port to start the HTTPS server', parseInt)
+.option('-sp, --secure_port <n>', 'Secure port to start the HTTPS server', parseInt)
 .parse(process.argv)
 
 // Launch server with web sockets
@@ -29,7 +29,9 @@ var server = http.createServer(app)
 var broker = new mosca.Server({})
 broker.attachHttpServer(server)
 
-process.env.SPORT = cmd.securePort || process.env.SECURE_PORT
+console.log(cmd)
+
+process.env.SPORT = cmd.secure_port || process.env.SECURE_PORT
 process.env.PORT = cmd.port || process.env.PORT
 
 var proxy = httpProxy.createServer({

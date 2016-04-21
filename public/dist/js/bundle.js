@@ -91445,8 +91445,11 @@ var App = function (_React$Component) {
   }, {
     key: 'contextMenu',
     value: function contextMenu() {
-      var name = this.props.name;
+      var _props3 = this.props;
+      var name = _props3.name;
+      var netbeast = _props3.netbeast;
 
+      var settings = netbeast && netbeast.settings;
       return _react2.default.createElement(
         _reactBootstrap.Popover,
         { id: name, className: 'context-menu' },
@@ -91459,15 +91462,20 @@ var App = function (_React$Component) {
           'a',
           { href: 'javascript:void(0)', onClick: this.uninstall.bind(this), className: 'remove btn btn-filled btn-primary' },
           ' Remove '
-        )
+        ),
+        settings ? _react2.default.createElement(
+          'a',
+          { onClick: this.router.push.bind(this, '/i/' + name + (settings === true && typeof settings === 'boolean' ? '/settings' : settings)), className: 'settings btn btn-filled btn-success' },
+          ' Settings '
+        ) : null
       );
     }
   }, {
     key: 'renderButton',
     value: function renderButton() {
-      var _props3 = this.props;
-      var kind = _props3.kind;
-      var git_url = _props3.git_url;
+      var _props4 = this.props;
+      var kind = _props4.kind;
+      var git_url = _props4.git_url;
 
       switch (kind) {
         case 'activities':
@@ -91495,9 +91503,9 @@ var App = function (_React$Component) {
     value: function componentDidMount() {
       var _this4 = this;
 
-      var _props4 = this.props;
-      var name = _props4.name;
-      var netbeast = _props4.netbeast;
+      var _props5 = this.props;
+      var name = _props5.name;
+      var netbeast = _props5.netbeast;
 
       this.mqtt = _mqtt2.default.connect(window.mqttUri);
       this.mqtt.subscribe('netbeast/activities/close');
@@ -91525,11 +91533,11 @@ var App = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _props5 = this.props;
-      var name = _props5.name;
-      var author = _props5.author;
-      var logo = _props5.logo;
-      var netbeast = _props5.netbeast;
+      var _props6 = this.props;
+      var name = _props6.name;
+      var author = _props6.author;
+      var logo = _props6.logo;
+      var netbeast = _props6.netbeast;
 
       var isPlugin = netbeast && netbeast.type === 'plugin';
       var defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)';
@@ -92559,7 +92567,9 @@ var AppLiveView = function (_React$Component) {
     // }
 
     value: function render() {
-      var appName = this.props.params.appName;
+      var _props$params = this.props.params;
+      var appName = _props$params.appName;
+      var path = _props$params.path;
 
       return _react2.default.createElement(
         'span',
@@ -92573,7 +92583,7 @@ var AppLiveView = function (_React$Component) {
             ' Go back to Netbeast dashboard.'
           )
         ),
-        _react2.default.createElement('iframe', { ref: 'myIframe', className: 'app-live', src: '/i/' + appName, frameBorder: '0' })
+        _react2.default.createElement('iframe', { ref: 'myIframe', className: 'app-live', src: '/i/' + appName + (path ? path : ''), frameBorder: '0' })
       );
     }
   }]);
@@ -93698,6 +93708,7 @@ _reactDom2.default.render(_react2.default.createElement(
     _react2.default.createElement(_reactRouter.Route, { path: 'settings', onEnter: _lib.Auth.isLogged, component: _settings2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _signup2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'live/:appName', component: _live2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'live/:appName/:path', component: _live2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: '*', component: _notFound2.default })
   )
 ), document.getElementById('app'));
@@ -93977,7 +93988,7 @@ var VersionPod = function (_React$Component) {
   _createClass(VersionPod, [{
     key: 'render',
     value: function render() {
-      var version = "0.2.6";
+      var version = "0.2.9";
       return _react2.default.createElement(
         'span',
         { className: 'version-pod', title: 'Checking for updates...' },

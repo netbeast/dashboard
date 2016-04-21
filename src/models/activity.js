@@ -114,10 +114,10 @@ self.on('start', function (app) {
     env.APP_NAME = app.name
     env.NETBEAST = process.env.IPs.split(',')[0] + ':' + process.env.PORT
 
-    var child = spawn(entryPoint, ['--port', app.port], {
-      cwd: path.join(APPS_DIR, app.name),
-      env: env
-    })
+      var child = spawn('node', [entryPoint, '--port', app.port], {
+          cwd: path.join(APPS_DIR, app.name),
+          env: env
+      })
 
     child.stdout.on('data', function (data) {
       console.log(chalk.grey('[%s] %s'), app.name, data)

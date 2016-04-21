@@ -15,7 +15,7 @@ router.route('/resources')
 .get(function (req, res, next) {
   Resource.find(req.query, function (err, resources) {
     if (err && err.statusCode !== 404) return next(err)
-    res.json(resources)
+    res.json(resources || [])
   })
 })
 

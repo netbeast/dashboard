@@ -39,7 +39,7 @@ function _installFromDir (dir, done) {
 
   const appRoot = path.join(process.env.APPS_DIR, appJson.name)
   if (fs.existsSync(appRoot)) {
-    return done(new ApiError('App already exists', 422))
+    return done(new ApiError(422, 'App already exists'))
   }
 
   // Check if main is an executable file

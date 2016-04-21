@@ -71,8 +71,8 @@ cli.command('forget')
 
 cli.command('start')
 .description('Launches netbeast dashboard')
-.option('--silent', 'Capture dashboard output on console')
 .option('-p, --port <n>', 'Port to start the HTTP server', parseInt)
+.option('-sp, --secure_port <n>', 'Secure port to start the HTTPS server', parseInt)
 .action(start)
 
 cli.command('uninstall <app name>')

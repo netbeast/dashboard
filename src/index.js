@@ -1,7 +1,4 @@
 
-// load environment variables
-require('dotenv').load()
-
 var path = require('path')
 
 var fs = require('fs-extra')

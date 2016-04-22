@@ -25,9 +25,6 @@ Find it live at `http://localhost:8000`
 Use the [Netbeast API](https://github.com/netbeast/api) along with the dashboard to publish data through MQTT or reuse it in your apps. http://docs.netbeast.co/chapters/api_reference/index.html 
 ![Dashboard live GIF](public/img/history.gif)
 
-## Turn your Raspberry Pi in a home automation gateway!
-http://docs.netbeast.co/chapters/get_started/get_started_with_raspberry_pi_2.html
-
 ## Docs
 You can build IoT apps using only web technologies: javascript and HTML5! Also we hace tutorials at our docs to build apps with python.
 http://docs.netbeast.co
@@ -35,6 +32,12 @@ http://docs.netbeast.co
 ##Desktop version compilation
 
 If you want to know how you can compile the Netbeast dashboard to get a desktop application go [here](https://github.com/netbeast/dashboard/tree/electron)
+
+## Contribute
+
+Take a look to our CONTRIBUTING file in order to see how you can be part of this project. [Contribue](https://github.com/netbeast/dashboard/blob/master/CONTRIBUTING.md)
+
+If you are part of the Netbeast community don't forget to write down your name on the AUTHORS file. [Authors](https://github.com/netbeast/dashboard/blob/master/AUTHORS)
 
 ## Contact
 * Visit our site [https://netbeast.co](https://netbeast.co)

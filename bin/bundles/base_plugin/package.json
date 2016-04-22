@@ -1,7 +1,7 @@
 {
-  "name": "NAME_PLUGIN",
-  "version": "VERSION_PLUGIN",
-  "description": "DESCRIPTION_PLUGIN",
+  "name": "<Your plugin name>",
+  "version": "0.0.0",
+  "description": "Netbeast plugin for... <your description>",
   "main": "index.js",
   "netbeast": {
     "bootOnLoad": true,
@@ -9,15 +9,11 @@
   },
   "dependencies": {
     "body-parser": "^1.14.0",
-    "chai": "^3.2.0",
     "commander": "^2.8.1",
     "express": "^4.13.3",
-    "fs": "0.0.2",
-    "http": "0.0.0",
     "mocha": "^2.3.2",
     "morgan": "^1.6.1",
-    "netbeast": "^1.0.2",
-    "request": "^2.62.0",
+    "netbeast": "^1.0.2"
   },
   "devDependencies": {},
   "scripts": {

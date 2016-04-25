@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 require('./lib/init')
+process.chdir(__dirname)
+
 var path = require('path')
 var http = require('http')
 var fs = require('fs')

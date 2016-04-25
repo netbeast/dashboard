@@ -67,16 +67,18 @@ Also since GitHub pegs and syncs a pull request to a specific branch, it is the 
 
 To create a topic branch, its easiest to use the convenient `-b` argument to git checkout:
 
-```bash
+```
 git checkout -b fix-broken-thing
-Switched to a new branch 'fix-broken-thing'```
+Switched to a new branch 'fix-broken-thing'
+```
 
 You should use a verbose enough name for your branch so it is clear what it is about. Now you can commit your changes and regularly merge in the upstream develop as described below.
 
 When you are ready to generate a pull request, either for preliminary review, or for consideration of merging into the project you must first push your local topic branch back up to GitHub:
 
-```bash
-git push origin fix-broken-thing```
+```
+git push origin fix-broken-thing
+```
 
 Now when you go to your fork on GitHub, you will see this branch listed under the “Source” tab where it says “Switch Branches”. Go ahead and select your topic branch from this list, and then click the “Pull request” button.
 
@@ -88,19 +90,22 @@ Netbeast is advancing quickly. It is critical that you pull upstream changes fro
 
 To pull in upstream changes (`<repo-name>` is the name of the repo you are contributing to):
 
-```bash
+```
 git remote add upstream https://github.com/netbeast/<repo-name>.git
-git fetch upstream develop```
+git fetch upstream develop
+```
 
 Check the log to be sure that you actually want the changes, before merging:
 
-```bash
-git log upstream/develop```
+```
+git log upstream/develop
+```
 
 Then merge the changes that you fetched:
 
-```bash
-git merge upstream/develop```
+```
+git merge upstream/develop
+```
 
 ### How to get your pull request accepted
 
@@ -127,10 +132,11 @@ We’ve learned the hard way that code without tests is undependable. If your pu
 
 We run our tests as a script contained in package.json file:
 
-```json
+```
 "scripts": {
     "test": "export NODE_PATH=.:$NODE_PATH && export ENV=development && ./node_modules/.bin/gulp test",
-}```
+}
+```
 
 For now, we mainly use [the mocha test framework](https://mochajs.org/) and [travis ci](https://travis-ci.org/) to test the Dashboard and API. Feel free to experiment with other frameworks if these don't get the job done for you.
 
@@ -165,9 +171,10 @@ Any css/layout changes need to be tested in Chrome, Safari, Firefox, IE8, and IE
 
 First we pull the code into a local branch:
 
-```bash
+```
 git checkout -b <branch-name> <submitter-github-name>
-git pull git://github.com/<submitter-github-name>/<repo-name>.git develop```
+git pull git://github.com/<submitter-github-name>/<repo-name>.git develop
+```
 
 Then we run the tests:
 
@@ -185,10 +192,11 @@ Furthermore, pull requests to the `dashboard`and `api`repos will be checked thro
 
 We finish with a merge and push to GitHub:
 
-```bash
+```
 git checkout develop
 git merge <branch-name>
-git push origin develop```
+git push origin develop
+```
 
 ## License
 By contributing to Netbeast, you agree that your contributions will be licensed under its GPL-3.0 license. Which is developed [here](https://github.com/netbeast/dashboard/blob/master/LICENSE.txt).

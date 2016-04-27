@@ -16,6 +16,7 @@ helper.createTable(function (err, data) {
 function Resource (item) {
 
   this.id = item.id
+  this.alias = item.alias
   this.app = item.app
   this.location = item.location
   this.topic = item.topic
@@ -66,6 +67,7 @@ Resource.findOne = function (query, done) {
 Resource.prototype.save = function (done) {
   var self = this
   var schema = {
+    alias: this.alias,
     app: this.app,
     location: this.location,
     topic: this.topic,
@@ -103,7 +105,7 @@ Resource.destroy = function (query, done) {
             return resolve()
           })
         })
-      }).then(function () { 
+      }).then(function () {
         if (typeof done === 'function') return done()
       }).catch(done)
     }

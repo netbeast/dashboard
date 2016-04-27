@@ -3,3 +3,8 @@ sudo: false
 node_js:
   - "0.12"
   - "4.2.1"
+  
+after_success:
+  - |
+      curl -H "Content-Type: application/json" --data '{"build": true}' -X POST https://registry.hub.docker.com/u/luisfpinto/netbeast/trigger/23956e30-92e2-42df-bdae-98044d6bcc59/
+  

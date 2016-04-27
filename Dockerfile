@@ -27,4 +27,4 @@ RUN cd /src; npm install
 
 # Bind port 8000 & run app
 EXPOSE 8000
-CMD cd /src && nodejs ./index.js
+CMD nodejs ./index.js

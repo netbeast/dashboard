@@ -31,8 +31,6 @@ var server = http.createServer(app)
 var broker = new mosca.Server({})
 broker.attachHttpServer(server)
 
-console.log(cmd)
-
 process.env.SPORT = cmd.secure_port || process.env.SECURE_PORT
 process.env.PORT = cmd.port || process.env.PORT
 

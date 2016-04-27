@@ -56,7 +56,7 @@ cli.command('unpackage [app]').alias('unpkg')
 // .action(publish)
 
 cli.command('scan').alias('discover')
-.description('Find available Netbeasts in range and shows their IP')
+.description('Find available Netbeasts in the subnet')
 .action(scan)
 
 cli.command('install <file> [host]')
@@ -75,19 +75,19 @@ cli.command('start')
 .option('-sp, --secure_port <n>', 'Secure port to start the HTTPS server', parseInt)
 .action(start)
 
-cli.command('uninstall <app name>')
+cli.command('uninstall <app>')
 .description('Uninstall an app')
 .action(uninstall)
 
-cli.command('stop <app name>')
+cli.command('stop <app>')
 .description('Stops a running app')
 .action(stop)
 
-cli.command('restart <app name>')
+cli.command('restart <app>')
 .description('Restarts a running app')
 .action(restart)
 
-cli.command('launch <app name>')
+cli.command('launch <app>')
 .description('Launches an installed app')
 .action(launch)
 

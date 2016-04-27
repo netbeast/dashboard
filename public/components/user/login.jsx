@@ -50,7 +50,7 @@ export default class Login extends React.Component {
         </form>
         <br/>
         <span>
-          Do you already have an account? <Link to='/signup'>Sign up</Link>.
+          Don't you have an account yet? <Link to='/signup'>Sign up</Link>.
           <br/>
           <small>Check out our terms and services.</small>
         </span>

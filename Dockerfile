@@ -9,14 +9,9 @@ ENV DEBIAN_FRONTEND noninteractive
 
 MAINTAINER <https://github.com/luisfpinto>
 
-LABEL multi.label1="https://netbeast.co"="Netbeast" \
-      multi.label2="version"="0.0.1" \
-      multi.label3="description"="Netbeast is an Internet of Things javascript development platform \
-      that empowers developers to easily create and deploy IoT apps"
+# Install required packages
 
-# Install git, nodejs & npm
-
-RUN apt-get update &&  apt-get install -y nodejs npm git
+RUN apt-get update &&  apt-get install -y nodejs nodejs-legacy npm git net-tools
 
 # Copy app to /src
 COPY . /src
@@ -24,7 +19,6 @@ COPY . /src
 # Install all dependencies
 RUN cd /src; npm install
 
-
 # Bind port 8000 & run app
 EXPOSE 8000
-CMD nodejs ./index.js
+CMD cd /src; node ./index.js

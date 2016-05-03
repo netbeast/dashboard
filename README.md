@@ -21,7 +21,7 @@ Find it live at `http://localhost:8000`
 
 ![Dashboard live GIF](public/img/dashboard-demo.gif)
 
-### Measure all your data
+## Measure all your data
 Use the [Netbeast API](https://github.com/netbeast/api) along with the dashboard to publish data through MQTT or reuse it in your apps. http://docs.netbeast.co/chapters/api_reference/index.html 
 ![Dashboard live GIF](public/img/history.gif)
 
@@ -32,6 +32,34 @@ http://docs.netbeast.co
 ##Desktop version compilation
 
 If you want to know how you can compile the Netbeast dashboard to get a desktop application go [here](https://github.com/netbeast/dashboard/tree/electron)
+
+## We are also on Docker! :whale:
+
+First you need to install docker. Click [here](https://docs.docker.com/engine/installation/) to see how
+
+Once we have all set up, start a docker terminal and see what is the **IP assigned** to that container
+
+#### Download the netbeast image from dockerhub
+
+```
+docker pull netbeast/netbeast
+```
+
+#### Run it
+
+```
+docker run -p 49160:8000 -d netbeast/netbeast
+```
+
+This will run your docker container on the port 49160
+
+#### Play with it
+
+Now access to the docker container url
+
+http://IP_assigned:49160
+
+Et voilà
 
 ## Contribute
 
@@ -50,3 +78,5 @@ If you are part of the Netbeast community don't forget to write down your name o
 
 <img src="https://github.com/netbeast/docs/blob/master/img/open-source.png?raw=true" height="140px" width="auto"/>
 <img src="https://github.com/netbeast/docs/blob/master/img/open-hw.png?raw=true" height="140px" width="auto"/>
+
+Check out [npm dependencies](http://npm.anvaka.com/#/view/2d/netbeast-cli) we relay on

@@ -94432,7 +94432,7 @@ var Login = function (_React$Component) {
         _react2.default.createElement(
           'span',
           null,
-          'Do you already have an account? ',
+          'Don\'t you have an account yet? ',
           _react2.default.createElement(
             _reactRouter.Link,
             { to: '/signup' },
@@ -94774,8 +94774,8 @@ var Signup = function (_React$Component) {
           'Do you already have an account? ',
           _react2.default.createElement(
             _reactRouter.Link,
-            { to: '/signup' },
-            'Sign up'
+            { to: '/login' },
+            'Log in'
           ),
           '.',
           _react2.default.createElement('br', null),

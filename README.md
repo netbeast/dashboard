@@ -78,3 +78,5 @@ If you are part of the Netbeast community don't forget to write down your name o
 
 <img src="https://github.com/netbeast/docs/blob/master/img/open-source.png?raw=true" height="140px" width="auto"/>
 <img src="https://github.com/netbeast/docs/blob/master/img/open-hw.png?raw=true" height="140px" width="auto"/>
+
+Check out [npm dependencies](http://npm.anvaka.com/#/view/2d/netbeast-cli) we relay on

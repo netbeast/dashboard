@@ -3,7 +3,6 @@ var path = require('path')
 var Promise = require('bluebird')
 var fs = Promise.promisifyAll(require('fs-extra'))
 
-var broker = require('../helpers/broker')
 var NotFound = require('../util/not-found')
 var InvalidFormat = require('../util/invalid-format')
 var _install = require('./_install')
@@ -60,7 +59,6 @@ App.delete = function (app, done) {
     return done(new NotFound(app + ' is not installed'))
   }
 
-  broker.info('Uninstalling ' + app + '...')
   fs.remove(path.join(APPS_DIR, app), done)
 }
 

@@ -2,7 +2,7 @@ var path = require('path')
 var events = require('events')
 var spawn = require('child_process').spawn
 
-var portfinder = require('portfinder')
+var freeport = require('freeport')
 var chalk = require('chalk')
 var request = require('superagent')
 var mqtt = require('mqtt')
@@ -12,7 +12,6 @@ var ApiError = require('../util/api-error')
 var Resource = require('./resource')
 var App = require('./app')
 
-portfinder.basePort = 3000
 const APPS_DIR = process.env.APPS_DIR
 
 // Apps with their child object running
@@ -86,7 +85,7 @@ self.boot = function (appName, done) {
     return done(null, children[child.name])
   }
 
-  portfinder.getPort(function (err, port) {
+  freeport(function (err, port) {
     if (err) {
       done(new ApiError(422, 'Not enough ports'))
     } else {

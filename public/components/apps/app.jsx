@@ -32,7 +32,7 @@ export default class App extends React.Component {
     const { name } = this.props
 
     request.post('/api/activities/' + name).then(() => {
-      return request.get('/live/' + name).promise()
+      return request.get('/i/' + name).promise()
     }).then(() => {
       this.router.push('/live/' + name)
     }).catch((err) => {

@@ -1,5 +1,5 @@
 var express	 = require('express')
-var router = express.Router()
+var router = module.exports = express.Router()
 
 /* Allow CORS */
 router.use(function (req, res, next) {
@@ -10,4 +10,3 @@ router.use(function (req, res, next) {
   next()
 })
 
-module.exports = router

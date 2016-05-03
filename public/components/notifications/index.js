@@ -19,7 +19,7 @@ export default class Notifications extends React.Component {
     this.clearHistory = this.clearHistory.bind(this)
   }
 
-  notify (notification) {
+  notify (notification) { 
     const id = new Date().getTime() + idx++
     const timeout = notification.timeout || 4700
     const toast = Object.assign({ id, timeout }, notification)

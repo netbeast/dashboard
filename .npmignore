@@ -1,4 +1,4 @@
-public/assets/*
-gulpfile.js
+public/components/*
 test
 .travis.yml
+.sandbox/*

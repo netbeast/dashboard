@@ -32,7 +32,7 @@ export default class App extends React.Component {
     const { name } = this.props
 
     request.post('/api/activities/' + name).then(() => {
-      return request.get('/i/' + name).promise()
+      return request.get('/live/' + name).promise()
     }).then(() => {
       this.router.push('/live/' + name)
     }).catch((err) => {
@@ -48,11 +48,13 @@ export default class App extends React.Component {
   install () {
     const url = this.props.git_url
 
-    const loader = toastr.info(
-      <span>
-        <div className='loader'></div>
-        Installing app...
-      </span>
+    const loader = window.notify({ 
+      body: (
+        <span>
+         <div className='loader'></div>
+         Installing app...
+        </span>
+      ), timeout: 0} 
     )
 
     request.post('/api/apps').send({ url }).then((res) => {
@@ -82,10 +84,22 @@ export default class App extends React.Component {
 
   uninstall () {
     const { name, kind, dismiss } = this.props
-    if (confirm('Do you really want to remove', name, '?'))
+    
+    if (!confirm('Do you really want to remove', name, '?')) return
+    
+    const loader = window.notify({ 
+      body: (
+        <span>
+        <div className='loader'></div>
+        Uninstalling {name}...
+        </span>
+      ), timeout: 0} 
+    )
+
     request.del('/api/apps/' + name).end((err, res) => {
       if (err) return
       dismiss(name)
+      toastr.dismiss(loader)
       toastr.info(name + ' has been removed.')
     })
   }
@@ -127,7 +141,7 @@ renderButton () {
     })
 
     if (netbeast && (netbeast.type === 'plugin')) {
-      const devices = Session.load('devices') || []
+      const devices = Session.load('devices') || []
       const found = devices.find((d) => { return d.app === name })
       this.setState({ inactive: !found })
     }

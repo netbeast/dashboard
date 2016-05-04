@@ -149,7 +149,8 @@
     opacity: 0.9;
     transform: scaleY(-1);
     border-width: 0;
-    &:hover, &.current { opacity: 1 }
+    &:hover, &.current { opacity: 1; }
+    background-color: white; color: $grey; 
   }
 
   .alert.alert-info { background-color: white; color: $grey; }

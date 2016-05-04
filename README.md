@@ -13,7 +13,7 @@ This is a web panel from you can install, manage or publish IoT applications. Fo
 git clone https://github.com/netbeast/dashboard
 cd dashboard
 npm i # by default, dependencies are ignored
-npm start
+npm run dev
 ```
 
 Find it live at `http://localhost:8000` 

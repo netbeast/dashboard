@@ -35,13 +35,16 @@ export default class ExplorableApp extends React.Component {
   }
 
   install () {
+    const name = this.props.name
     const url = this.props.git_url
 
-    const loader = toastr.info(
-      <span>
-        <div className='loader'></div>
-        Installing app...
-      </span>
+    const loader = window.notify({ 
+      body: (
+        <span>
+         <div className='loader'></div>
+         Installing {name}...
+        </span>
+      ), timeout: 0, emphasis: 'info'}
     )
 
     request.post('/api/apps').send({ url }).then((res) => {

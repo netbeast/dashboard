@@ -1,6 +1,7 @@
 import request from 'superagent-bluebird-promise'
 import React from 'react'
 import { Link } from 'react-router'
+import Typist from 'react-typist'
 
 import VersionPod from '../misc/version-pod.jsx'
 import ExplorableApp from './explorable-app.jsx'
@@ -60,12 +61,14 @@ export default class Explore extends React.Component {
 
     return (
         <div className='drawer'>
-        {this.renderNav()}
+          {this.renderNav()}
           <div className='apps-list'>
             {apps.map((data) => {
-              return <ExplorableApp key={data.id} { ...data } filter={filter} installed={this.isInstalled(data.name)}/>
+                return <ExplorableApp key={data.id} { ...data } filter={filter} installed={this.isInstalled(data.name)}/>
             })}
-            <br/>
+            <span style={{ display: apps.length > 0 ? 'none' : 'block' }}><Typist>
+              Looking for Netbeast packages on the registry...
+            </Typist></span>
           </div>
           <VersionPod />
         </div>

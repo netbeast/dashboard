@@ -10,8 +10,8 @@ var Promise = require('bluebird')
 var fs = Promise.promisifyAll(require('fs-extra'))
 
 const CLI = path.join(process.cwd(), 'bin', 'cli.js')
-const PATH_TO_APP = './test-app'
-const INSTALLED_APP = '.sandbox/myapp'
+const PATH_TO_APP = 'test-app'
+const INSTALLED_APP = '_apps/myapp'
 
 describe('Client', function () {
   after('Should remove test-app', function () {
@@ -45,7 +45,7 @@ describe('Client', function () {
     exec(CLI + ' install test/app.tar.gz ' + 'http://localhost:' + process.env.PORT,
     function (err, stdout, stderr) {
       should.not.exist(err)
-      fs.access('./.sandbox/myapp', fs.F_OK, function (err) {
+      fs.access('_apps/myapp', fs.F_OK, function (err) {
         should.not.exist(err)
         done()
       })

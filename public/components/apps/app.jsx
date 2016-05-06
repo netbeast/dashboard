@@ -32,7 +32,7 @@ export default class App extends React.Component {
     const { name } = this.props
 
     request.post('/api/activities/' + name).then(() => {
-      return request.get('/live/' + name).promise()
+      return request.get('/i/' + name).promise()
     }).then(() => {
       this.router.push('/live/' + name)
     }).catch((err) => {
@@ -137,7 +137,7 @@ renderButton () {
     })
 
     request.get('/api/activities/' + name).end((err, res) => {
-      if (!err) this.setState({ isRunning: true })
+      if (!err && res.body.port > 0) this.setState({ isRunning: true })
     })
 
     if (netbeast && (netbeast.type === 'plugin')) {

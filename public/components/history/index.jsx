@@ -69,7 +69,7 @@ export default class History extends React.Component {
         {areThereTopics ? this.renderHistoryData.call(this) : (
         <div> 
           <h2> <br/> <br/> Reading data from <br/>
-            <Typist key={autotype} className='MyTypist' onTypingDone={this.changeAutoTypes.bind(this)}> 
+            <Typist key={autotype} onTypingDone={this.changeAutoTypes.bind(this)}> 
               {autotype}.&nbsp;
             </Typist>
           </h2>

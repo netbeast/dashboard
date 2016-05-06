@@ -21,7 +21,8 @@ var client = mqtt.connect() // for notifications
 
 self.status = function (req, res, next) {
   var child = children[req.params.name]
-  if (!child) return next(new ApiError(404, 'App not running'))
+  if (!child) return res.json({ name: req.params.name, port: -1, status: 'Not running' })
+
   self.ready(child, function (err, act) {
     if (err) return next(err)
     res.json({ name: act.name, port: act.port })
@@ -119,12 +120,12 @@ self.on('start', function (app) {
       })
 
     child.stdout.on('data', function (data) {
-      console.log(chalk.grey('[%s] %s'), app.name, data)
+      process.stdout.write(chalk.grey('[' + app.name + '] '+ data))
     })
 
     child.stderr.on('data', function (data) {
-      console.log(chalk.red('[%s] %s'), app.name, data)
-      // broker.error(data.toString(), app.name)
+      process.stdout.write(chalk.red('[' + app.name + '] '+ data))
+      broker.error(data.toString(), app.name)
     })
 
     child.on('close', function (code) {

@@ -50,6 +50,14 @@ export default class Explore extends React.Component {
     )
   }
 
+  handleSubmit () {
+
+  }
+
+  handleChange () {
+
+  }
+
   render () {
     const { apps } = this.state
 
@@ -62,6 +70,11 @@ export default class Explore extends React.Component {
             })}
             <br/>
           </div>
+          <form className='module-search' onSubmit={this.handleSubmit.bind(this)}>
+            <i className='fa fa-search'/> 
+            <input name='url' type='url' onChange={this.handleChange.bind(this)} placeholder='Search here or paste a git url to install' />
+            <input type='submit' className='btn btn-inverted' value='install' />
+          </form>
           <VersionPod />
         </div>
     )

@@ -5,7 +5,6 @@ var express = require('express')
 
 // librerias propias
 var Resource = require('../models/resource')
-var ApiError = require('../util/api-error')
 var broker = require('../helpers/broker')
 
 var	router = module.exports = express.Router()
@@ -14,8 +13,8 @@ router.route('/resources')
 
 .get(function (req, res, next) {
   Resource.find(req.query, function (err, resources) {
-    if (err && err.statusCode !== 404) return next(err)
-    res.json(resources || [])
+    if (err) return next(err)
+    res.json(resources)
   })
 })
 
@@ -23,7 +22,7 @@ router.route('/resources')
   Resource.findOne(req.body, function (err, resource) {
     if (err && err.statusCode !== 404) return next(err)
 
-    if (resource) return next(new ApiError(405, 'This resource exists!'))
+    if (resource) return res.json(resource)
 
     Resource.create(req.body, function (err, item) {
       if (err) return next(err)

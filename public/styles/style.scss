@@ -7,11 +7,42 @@
 //
 // jesus@netbeast.co
 
-@import 'colors';
-@import 'bootstrap';
-@import 'components';
-@import 'vendor/font-awesome';
-@import 'vendor/Typist';
+
+// Dependencies
+
+@import "variables";
+@import "components";
+@import "vendor/normalize";
+@import "vendor/bootstrap-subset";
+@import "vendor/font-awesome";
+@import "vendor/Typist";
+
+/*
+  Fonts setup
+*/
+
+@font-face {
+  font-family: "Fira Sans";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Fira Sans"), url("/fonts/fira-sans/FiraSans-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Fira Sans";
+  font-style: italic;
+  font-weight: normal;
+  src: local("Fira Sans"), url("/fonts/fira-sans/FiraSans-Italic.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Proxima Nova";
+  font-style: normal;
+  font-weight: bold;
+  src: local("Proxima Nova"), url("/fonts/proxima-nova/ProximaNova-Bold.otf") format("opentype");
+}
+
+/*
+ Defaults
+*/
 
 * {
   margin: 0;
@@ -24,7 +55,18 @@ body, html {
   width: 100%;
   background-color: $grey-dark;
   color: white;
+  font-family: "Fira Sans", sans-serif, arial;
 }
+
+h1, h2, h3, h4, h5, h6 { font-family: "Proxima Nova", sans-serif, arial; }
+
+input {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* Reusable classes and shortcuts */
 
 .invert {
   -webkit-filter: brightness(0) invert(1);
@@ -35,13 +77,61 @@ body, html {
   cursor: pointer;
 }
 
-.btn {
-  transition: background 0.2s ease-in-out;
-}
-
 .grabbable {
   cursor: grab;
   &:focus, &:active {
     cursor: grabbing;
   }
+}
+
+/*
+* ===============================================
+* BUTTONS
+* ===============================================
+*/
+
+.btn {
+  padding: 5px 10px;
+  border-radius: 1px;
+  text-decoration: none;
+  background-color: rgba(0,0,0,0);
+  border-width: 2px 2px 4px 2px;
+}
+
+.btn.btn-info { color: $brand-info; border-color: $brand-info; }
+.btn.btn-primary { color: $brand-primary; border-color: $brand-primary; }
+.btn.btn-success { color: $brand-success; border-color: $brand-success; }
+.btn.btn-danger { color: $brand-danger; border-color: $brand-danger; }
+.btn.btn-warning { color: $brand-warning; border-color: $brand-warning; }
+
+.btn.btn-filled { color: white; }
+
+.btn.btn-filled.btn-info {
+  background-color: $brand-info;
+  border: 0px solid darken($brand-info, 10%);
+  border-bottom-width: 4px;
+}
+
+.btn.btn-filled.btn-primary {
+  background-color: $brand-primary;
+  border: 0px solid darken($brand-primary, 10%);
+  border-bottom-width: 4px;
+}
+
+.btn.btn-filled.btn-success {
+  background-color: $brand-success;
+  border: 0px solid darken($brand-success, 10%);
+  border-bottom-width: 4px;
+}
+
+.btn.btn-filled.btn-warning {
+  background-color: $brand-warning;
+  border: 0px solid darken($brand-warning, 10%);
+  border-bottom-width: 4px;
+}
+
+.btn.btn-filled.btn-danger {
+  background-color: $brand-danger;
+  border: 0px solid darken($brand-danger, 10%);
+  border-bottom-width: 4px;
 }

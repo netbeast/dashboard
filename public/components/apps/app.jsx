@@ -48,13 +48,13 @@ export default class App extends React.Component {
   install () {
     const url = this.props.git_url
 
-    const loader = window.notify({ 
+    const loader = window.notify({
       body: (
         <span>
          <div className='loader'></div>
          Installing app...
         </span>
-      ), timeout: 0} 
+      ), timeout: 0}
     )
 
     request.post('/api/apps').send({ url }).then((res) => {
@@ -84,16 +84,16 @@ export default class App extends React.Component {
 
   uninstall () {
     const { name, kind, dismiss } = this.props
-    
+
     if (!confirm('Do you really want to remove', name, '?')) return
-    
-    const loader = window.notify({ 
+
+    const loader = window.notify({
       body: (
         <span>
         <div className='loader'></div>
         Uninstalling {name}...
         </span>
-      ), timeout: 0} 
+      ), timeout: 0}
     )
 
     request.del('/api/apps/' + name).end((err, res) => {
@@ -162,12 +162,12 @@ renderButton () {
 
     return (
       <div className={'app' + inactiveClass}>
-      {(isRunning) ? <Pulse {...this.props} /> : null}
-      <OverlayTrigger ref='contextMenu' trigger={[]} rootClose placement='bottom' overlay={this.contextMenu()}>
-        <div className='logo' title='Launch app' style={logoStyle} onClick={this.handleClick.bind(this)} onContextMenu={this.toggleMenu.bind(this)} />
-      </OverlayTrigger>
-      {this.renderButton()}
-      <h4 className='name'>{name}</h4>
+        {(isRunning) ? <Pulse {...this.props} /> : null}
+        <OverlayTrigger ref='contextMenu' trigger={[]} rootClose placement='bottom' overlay={this.contextMenu()}>
+          <div className='logo' title='Launch app' style={logoStyle} onClick={this.handleClick.bind(this)} onContextMenu={this.toggleMenu.bind(this)} />
+        </OverlayTrigger>
+        {this.renderButton()}
+        <p className='name'>{name}</p>
       </div>
     )
   }

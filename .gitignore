@@ -27,15 +27,14 @@ Thumbs.db
 # .env is forcely added
 .env
 
-public/dist/js/*
-public/dist/css/*
+public/dist/*
 
 .log
 .sass-cache/
 .ftpconfig
 
 node_modules
-.sandbox/*
+_apps/*
 *.sqlite
 
 node_modules

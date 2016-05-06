@@ -9,8 +9,18 @@ import ExplorableApp from './explorable-app.jsx'
 export default class Explore extends React.Component {
   constructor (props, context) {
     super(props, context)
-    this.state = { apps: [], installedApps: [] }
+    this.router = context.router
+    this.state = {
+      apps: [],
+      installedApps: [],
+      filter: this.props.location.query
+    }
+
+    /* Methods */
     this.isInstalled = this.isInstalled.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+    this.onChange = this.onChange.bind(this)
+    this.onFocus = this.onFocus.bind(this)
   }
 
   componentDidMount () {
@@ -18,7 +28,7 @@ export default class Explore extends React.Component {
 
     request.get(GITHUB_Q).end((err, res) => {
       if (err) return window.toastr.error(err)
-      
+
       let modules = JSON.parse(res.text).items.filter((app) => {
         return app.name !== 'dashboard' && app.name !== 'api'
       })
@@ -38,38 +48,23 @@ export default class Explore extends React.Component {
     return index >= 0
   }
 
-  renderNav () {
-    const { filter } = this.props.params
-
-    return (
-      <div className='nav'>
-        <span className='title'><h4>All available {filter || 'apps'}.</h4></span>
-        <ul className='list-unstyled list-inline'>
-          <li><Link to='/'><i className='fa fa-th' /> Apps</Link></li>
-          <li><Link to='/plugins'><i className='fa fa-package'><img src='/img/plugin.png'/></i> Plugins</Link></li>
-          <li><Link to='/activities'><i className='fa fa-dashboard' /> Activities</Link></li>
-          <li><Link to='/install'> <i className='fa fa-package'><img src='/img/package-unfilled.png'/></i> Install</Link></li>
-          <li><Link to='/remove'> <i className='fa fa-trash' /> Remove</Link></li>
-        </ul>
-      </div>
-    )
+  onSubmit () {
+    return
   }
 
-  handleSubmit () {
-
+  onChange () {
+    return
   }
 
-  handleChange () {
-
+  onFocus () {
+    this.setState({ filter: this.refs.search.value })
   }
 
   render () {
-    const { filter } = this.props.params
-    const { apps } = this.state
+    const { filter, apps } = this.state
 
     return (
         <div className='drawer'>
-          {this.renderNav()}
           <div className='apps-list'>
             {apps.map((data) => {
                 return <ExplorableApp key={data.id} { ...data } filter={filter} installed={this.isInstalled(data.name)}/>
@@ -78,9 +73,9 @@ export default class Explore extends React.Component {
               Looking for Netbeast packages on the registry...
             </Typist></span>
           </div>
-          <form className='module-search' onSubmit={this.handleSubmit.bind(this)}>
-            <i className='fa fa-search'/> 
-            <input name='url' type='url' onChange={this.handleChange.bind(this)} placeholder='Search here or paste a git url to install' />
+          <form className='module-search' onSubmit={this.onSubmit}>
+            <i className='fa fa-search'/>
+            <input ref='search' name='url' type='url' onFocus={this.onFocus} onChange={this.onFocus} placeholder='Search here or paste a git url to install' />
             <input type='submit' className='btn btn-inverted' value='install' />
           </form>
           <VersionPod />

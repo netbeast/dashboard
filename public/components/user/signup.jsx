@@ -50,29 +50,26 @@ export default class Signup extends React.Component {
 
   render () {
     return (
-      <Col xs={10} xsOffset={1} sm={6} smOffset={3} md={4} mdOffset={4}>
-      <br/>
-      <br/>
-      <br/>
-        <h4>Sing up.</h4>
+      <div className='user-view'>
         <form onSubmit={this.handleSubmit.bind(this)}>
-          <input ref='alias' type='text' placeholder='Choose a username' className='form-control'></input>
+          <h1>Sign up.</h1>
+            <input ref='alias' type='text' placeholder='Choose a username' className='form-control'></input>
+            <br/>
+            <input ref='email' type='email' placeholder='your@email.com' className='form-control'></input>
+            <br/>
+            <input ref='password' type='password' placeholder='Type a password' className='form-control'></input>
+            <br/>
+            <input ref='password_confirmation' type='password' placeholder='Retype your password' className='form-control'></input>
           <br/>
-          <input ref='email' type='email' placeholder='your@email.com' className='form-control'></input>
+          <button type='submit' className='btn btn-info'>Sign up</button>
           <br/>
-          <input ref='password' type='password' placeholder='Type a password' className='form-control'></input>
-          <br/>
-          <input ref='password_confirmation' type='password' placeholder='Retype your password' className='form-control'></input>
-        <br/>
-        <button type='submit' className='btn btn-info'>Sign up</button>
+          <span>
+            Do you already have an account? <Link to='/login'>Log in</Link>.
+            <br/>
+            <small>Check out our terms and services.</small>
+          </span>
         </form>
-        <br/>
-        <span>
-          Do you already have an account? <Link to='/login'>Log in</Link>.
-          <br/>
-          <small>Check out our terms and services.</small>
-        </span>
-      </Col>
+      </div>
     )
   }
 }

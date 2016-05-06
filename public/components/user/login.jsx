@@ -36,25 +36,22 @@ export default class Login extends React.Component {
 
   render () {
     return (
-      <Col xs={10} xsOffset={1} sm={6} smOffset={3} md={4} mdOffset={4}>
-      <br/>
-      <br/>
-      <br/>
-        <h4>Log in.</h4>
+      <div className='user-view'>
         <form onSubmit={this.handleSubmit.bind(this)}>
+          <h1>Log in.</h1>
           <input ref='email' type='email' placeholder='your@email.com' className='form-control'></input>
           <br/>
           <input ref='password' type='password' placeholder='password' className='form-control'></input>
-        <br/>
-        <button type='submit' className='btn btn-info'>Log in</button>
-        </form>
-        <br/>
-        <span>
-          Don't you have an account yet? <Link to='/signup'>Sign up</Link>.
           <br/>
-          <small>Check out our terms and services.</small>
-        </span>
-      </Col>
+          <button type='submit' className='btn btn-info'>Log in</button>
+          <br/>
+          <span>
+            Don't you have an account yet? <Link to='/signup'>Sign up</Link>.
+            <br/>
+            <small>Check out our terms and services.</small>
+          </span>
+        </form>
+      </div>
     )
   }
 }

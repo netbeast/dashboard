@@ -36,7 +36,7 @@ describe('Resources', function () {
       should.not.exist(err)
       resources.forEach(function (item) {
         expect(item).to.have.keys(
-          'id', 'app', 'topic', 'location', 'groupname', 'hook')
+          'id', 'alias', 'app', 'topic', 'location', 'groupname', 'hook')
       })
       done()
     })

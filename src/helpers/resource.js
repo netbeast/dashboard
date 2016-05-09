@@ -48,6 +48,6 @@ helper.findAction = function (query, done) {
 helper.updateAction = function (query, value, done) {
   var key = Object.keys(query)[0]
   var newvalue = Object.keys(value)[0]
-  db.run('UPDATE resources SET ' + newvalue + "= '" + value[newvalue] +
-  "' WHERE " + key + "= '" + query[key] + "'", done)
+  db.run('UPDATE resources SET ' + newvalue + "='" + value[newvalue] +
+  "' WHERE " + key + "='" + query[key] + "'", done)
 }

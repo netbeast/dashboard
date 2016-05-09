@@ -91,7 +91,6 @@ Resource.update = function (query, value, done) {
 
 Resource.destroy = function (query, done) {
   Resource.find(query, function (err, resources) {
-    console.log(err)
     if (err && err.statusCode !== 404) {
       return done(err)
     }

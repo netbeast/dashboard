@@ -17,13 +17,9 @@ router.route('/i/:key/:value')
   req.query[req.params.key] = req.params.value
 
   for (var key in req.query) {
-    console.log(key)
     if (req.query[key] === '') delete req.query[key]
-    console.log(req.query)
   }
-  console.log('req.query')
 
-  console.log(req.query)
   Resource.find(req.query, function (err, resources) {
     if (err) return next(err)
 

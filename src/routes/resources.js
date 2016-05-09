@@ -32,11 +32,8 @@ router.route('/resources')
 })
 
 .patch(function (req, res, next) {
-  console.log(req.query)
-  console.log(req.body)
   Resource.findOne(req.query, function (err, resource) {
     if (err) return next(err)
-
     Resource.update(req.query, req.body, function (err) {
       if (err) return next(err)
       return res.status(204).end()

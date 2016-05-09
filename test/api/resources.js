@@ -18,6 +18,7 @@ describe('Resources', function () {
   it('should .create() an entry on sqlite', function (done) {
     var resource = {
       app: 'app',
+      alias: 'alias',
       topic: 'topic',
       location: 'loc',
       groupname: 'group',

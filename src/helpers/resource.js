@@ -21,7 +21,7 @@ helper.insertAction = function (query, done) {
   var id = crypto.createHash('sha1').update(query.app + query.hook).digest('hex')
   var statement = db.prepare('INSERT INTO resources (' +
   "'id', 'alias', 'app', 'location', 'topic', 'groupname', 'hook') " +
-  'VALUES (?,?,?,?,?,?)')
+  'VALUES (?,?,?,?,?,?,?)')
   statement
   .run(id, query.alias, query.app, query.location, query.topic, query.groupname, query.hook, done)
   statement.finalize()

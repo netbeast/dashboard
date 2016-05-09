@@ -2,6 +2,7 @@
 
 // modules
 var express = require('express')
+var Promise = require('bluebird')
 
 // librerias propias
 var Resource = require('../models/resource')
@@ -9,12 +10,20 @@ var request = require('superagent-bluebird-promise')
 
 var	router = module.exports = express.Router()
 
-const APP_PROXY = 'http://' + process.env.NETBEAST + '/i/'
+const APP_PROXY = 'http://' + process.env.IPs + ':' + process.env.PORT + '/i/'
 
 router.route('/i/:key/:value')
 .get(function (req, res, next) {
   req.query[req.params.key] = req.params.value
 
+  for (var key in req.query) {
+    console.log(key)
+    if (req.query[key] === '') delete req.query[key]
+    console.log(req.query)
+  }
+  console.log('req.query')
+
+  console.log(req.query)
   Resource.find(req.query, function (err, resources) {
     if (err) return next(err)
 

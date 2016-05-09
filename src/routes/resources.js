@@ -13,8 +13,8 @@ router.route('/resources')
 
 .get(function (req, res, next) {
   Resource.find(req.query, function (err, resources) {
-    if (err) return next(err)
-    res.json(resources)
+    if (err && err.statusCode !== 404) return next(err)
+    res.json(resources || {})
   })
 })
 
@@ -32,6 +32,8 @@ router.route('/resources')
 })
 
 .patch(function (req, res, next) {
+  console.log(req.query)
+  console.log(req.body)
   Resource.findOne(req.query, function (err, resource) {
     if (err) return next(err)
 
@@ -43,7 +45,7 @@ router.route('/resources')
 })
 
 .delete(function (req, res, next) {
-  Resource.destroy(req.query, function (err, resources) {
+  Resource.destroy(req.query, function cb (err, resources) {
     if (err) return next(err)
     return res.status(204).end()
   })

@@ -6,6 +6,5 @@ router.use(require('./activities'))
 // API routes
 router.use(require('./resources'))
 router.use(require('./scene'))
-router.use(require('./device'))
 
 module.exports = router

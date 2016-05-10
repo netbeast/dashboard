@@ -107,6 +107,7 @@ input {
 .btn.btn-filled { color: white; }
 
 .btn.btn-filled.btn-info {
+  color: $grey;
   background-color: $brand-info;
   border: 0px solid darken($brand-info, 10%);
   border-bottom-width: 4px;
@@ -119,12 +120,14 @@ input {
 }
 
 .btn.btn-filled.btn-success {
+  color: $grey;
   background-color: $brand-success;
   border: 0px solid darken($brand-success, 10%);
   border-bottom-width: 4px;
 }
 
 .btn.btn-filled.btn-warning {
+  color: $grey;
   background-color: $brand-warning;
   border: 0px solid darken($brand-warning, 10%);
   border-bottom-width: 4px;

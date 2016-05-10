@@ -75,18 +75,15 @@ App.getPackageJson = function (app, done) {
 }
 
 App.install = function (bundle, done) {
-  if (_isUrl(bundle)) return _install.from.url(bundle, done)
+  if (_isUrl(bundle)) return _install.from.git(bundle, done)
 
   fs.lstat(bundle, function (err, stats) {
     if (err) return done(err)
 
-    if (stats.isDirectory()) {
-      _install.from.dir(bundle, done)
-    } else if (stats.isFile()) {
-      _install.from.tar(bundle, done)
-    } else {
-      return done(new InvalidFormat('App does not have proper format'))
-    }
+    if (stats.isDirectory())
+      return _install.from.dir(bundle, done)
+
+    return done(new InvalidFormat('App does not have proper format'))
   })
 }
 

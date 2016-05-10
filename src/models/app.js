@@ -3,8 +3,7 @@ var path = require('path')
 var Promise = require('bluebird')
 var fs = Promise.promisifyAll(require('fs-extra'))
 
-var NotFound = require('../util/not-found')
-var InvalidFormat = require('../util/invalid-format')
+var ApiError = require('../util/api-error')
 var _install = require('./_install')
 
 var App = module.exports = {}
@@ -56,7 +55,7 @@ App.plugins = function (done) {
 
 App.delete = function (app, done) {
   if (!fs.existsSync(path.join(APPS_DIR, app))) {
-    return done(new NotFound(app + ' is not installed'))
+    return done(new ApiError(404, app + ' is not installed'))
   }
 
   fs.remove(path.join(APPS_DIR, app), done)
@@ -65,7 +64,7 @@ App.delete = function (app, done) {
 App.getPackageJson = function (app, done) {
   const dir = path.join(APPS_DIR, app)
   if (!fs.existsSync(dir)) {
-    return done(new NotFound(app + ' is not installed'))
+    return done(new ApiError(404, app + ' is not installed'))
   }
 
   fs.readJson(path.join(dir, 'package.json'), function (err, pkg) {
@@ -80,10 +79,9 @@ App.install = function (bundle, done) {
   fs.lstat(bundle, function (err, stats) {
     if (err) return done(err)
 
-    if (stats.isDirectory())
-      return _install.from.dir(bundle, done)
+    if (stats.isDirectory()) return _install.from.dir(bundle, done)
 
-    return done(new InvalidFormat('App does not have proper format'))
+    return done(new ApiError(422, 'App does not have proper format'))
   })
 }
 

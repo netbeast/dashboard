@@ -27,7 +27,7 @@ export default class ExplorableApp extends React.Component {
     request.post('/api/activities/' + name).then(() => {
       return request.get('/i/' + name).promise()
     }).then(() => {
-      this.router.push('/i/' + name)
+      this.router.push('/live/' + name)
     }).catch((err) => {
       if (err.status === 404) return toastr.info(`${name} is running`)
       toastr.error(err.message)
@@ -58,7 +58,7 @@ export default class ExplorableApp extends React.Component {
       if (type === 'plugin' || type === 'service' || props.bootOnLoad)
         return request.post('/api/activities/' + name).promise()
     }).then((res) => { toastr.success(`${res.body.name} is running`) })
-    .catch((fail, res) => toastr.error(res.text))
+    .catch((err) => toastr.error(err.res.text))
   }
 
   renderButton () {

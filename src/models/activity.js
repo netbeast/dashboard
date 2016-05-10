@@ -112,6 +112,7 @@ self.on('start', function (app) {
     env.APP_PORT = app.port
     env.APP_NAME = app.name
     env.NETBEAST = process.env.IPs.split(',')[0] + ':' + process.env.PORT
+    env.SECURE_NETBEAST = process.env.IPs.split(',')[0] + ':' + process.env.SECURE_PORT
 
       var child = spawn('node', [entryPoint, '--port', app.port], {
           cwd: path.join(APPS_DIR, app.name),

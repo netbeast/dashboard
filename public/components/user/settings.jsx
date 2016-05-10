@@ -47,7 +47,7 @@ export default class Settings extends React.Component {
     .set({ 'Authorization': token })
     .send(user).then((resp) => {
       Session.save('user', resp.body)
-      this.setState({ user: resp.body } )
+      this.setState({ user: resp.body })
       toastr.success('Your params have been updated')
     })
     .catch((err) => { toastr.error(err.res.text) })
@@ -59,9 +59,9 @@ export default class Settings extends React.Component {
       request.del(API_PATH + '/user/' + _id)
       .set({ 'Authorization': token })
       .end((err, resp) => {
-        if (err) return toastr.error(err.message)
+        if (err) return toastr.error(resp.text)
 
-        Session.delete('user')
+        window.logOut()
         this.router.push('/')
         toastr.info('Sorry to see you go :(')
       })
@@ -90,7 +90,7 @@ export default class Settings extends React.Component {
           </p>
           <br/>
           <br/>
-          <a onClick={this.deleteAccount} href='javascript:void(0)' className='btn btn-xs btn-primary'>
+          <a onClick={this.deleteAccount} href='javascript:void(0)' className='btn btn-primary'>
             <i className='fa fa-exclamation-triangle'/> Delete your account
           </a>
         </form>

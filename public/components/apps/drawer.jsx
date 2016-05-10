@@ -52,6 +52,8 @@ export default class Drawer extends React.Component {
     return (pathname === '') ? 'apps' : pathname
   }
 
+  componentDidMount () { window.title('Netbeast') }
+
   render () {
     return (
         <div className='drawer'>

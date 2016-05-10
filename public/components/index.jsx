@@ -24,18 +24,15 @@ export class Navigation extends React.Component {
   constructor () {
     super()
     this.state = { title: 'Netbeast' }
+    window.title = this.title.bind(this)
   }
 
   title (str) {
     if (str) {
-      this.setTitle({ title: str })
+      this.setState({ title: str })
       document.title = str
     }
     return document.title
-  }
-
-  componentDidMount () {
-    window.title = this.title.bind(this)
   }
 
   render () {
@@ -81,8 +78,10 @@ export default class Dashboard extends React.Component {
         <FeedbackPod />
         <ConnectionPod />
         <Notifications />
-        <UserPod />
-        {nav || <Navigation />}
+        <div style={{ width: '100%', height: 70 }}>
+          <UserPod />
+          {nav || <Navigation />}
+        </div>
         <main>
           {main || this.props.children}
         </main>

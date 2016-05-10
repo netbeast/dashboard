@@ -17,10 +17,6 @@
 // DRAWER COMPONENT
 //====================================
 
-.drawer {
-  padding: 80px 50px 0 50px;
-}
-
 nav {
   position: fixed;
   background-color: $grey-dark;
@@ -34,17 +30,23 @@ nav {
   ul { padding: 25px 40px; }
 }
 
-.drawer .fa.fa-package img { max-height: 20px; }
+.drawer {
+  padding: 0 50px;
+  justify-content: space-around;
+  display: flex;
+}
 
 .drawer .apps-list {
-  @media (max-width: 920px) { padding: 20px 0 0 20px; }
-  padding: 20px 160px 80px 160px;
-  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  max-width: 890px;
+  @media (max-width: 890px) {
+    justify-content: center;
+  }
 }
 
 .drawer .apps-list .app {
-  display: inline-block;
-  vertical-align: top;
   border-radius: 3px;
   padding: 40px 23px;
   margin-top: 15px;
@@ -190,7 +192,7 @@ nav {
 //====================================
 
 .app-live {
-  width: 100%; height: 100%; margin-top: 70px;
+  width: 100%; height: 100%;
 }
 
 //====================================
@@ -420,12 +422,19 @@ nav {
 // USER LOGIN, SIGNUP & SETTINGS FORMS
 //====================================
 
+.user-pod__menu {
+  font-size: 18px;
+  padding: 10px;
+  a { color: $brand-primary; }
+}
+
 .user-view {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%; height: 100%;
   font-size: 18px;
+  a { color: $brand-info; }
 }
 
 .user-view form {
@@ -441,7 +450,6 @@ nav {
   padding: 15px 30px;
   border-radius: 3px;
   width: 100%;
-  max-width: 500px;
 }
 
 .user-view button[type=submit] {

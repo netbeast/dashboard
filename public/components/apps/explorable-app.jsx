@@ -38,7 +38,7 @@ export default class ExplorableApp extends React.Component {
     const name = this.props.name
     const url = this.props.git_url
 
-    const loader = window.notify({ 
+    const loader = window.notify({
       body: (
         <span>
          <div className='loader'></div>
@@ -76,8 +76,8 @@ export default class ExplorableApp extends React.Component {
     const defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)'
     const logoStyle = { backgroundImage: logo ? `url(${logo})` : defaultLogo }
 
-    if (filter === 'plugins' && !isPlugin) return null
-    if (filter === 'apps' && isPlugin) return null
+    if (filter.type === 'plugins' && !isPlugin) return null
+    if (filter.type === 'apps' && isPlugin) return null
 
     return (
       <div className='app'>

@@ -6,30 +6,45 @@ import { OverlayTrigger, Popover } from 'react-bootstrap'
 import { Session } from '../lib'
 
 export default class UserPod extends React.Component {
-  constructor () {
-    super()
+  constructor (props, context) {
+    super(props)
     this.state = { user: Session.load('user') }
     this.popover = this.popover.bind(this)
-    this.logOut = this.logOut.bind(this)
+    this.router = context.router
+
+    /* Methods */
+    window.logOut = this.logOut = this.logOut.bind(this)
+    window.logIn = this.logIn = this.logIn.bind(this)
+  }
+
+  logIn (user) {
+    Session.save('user', user)
+    this.setState({ user })
+    if (window.location.state && window.location.state.nextPathname) {
+      this.router.replace(window.location.state.nextPathname)
+    } else {
+      this.router.replace('/')
+    }
   }
 
   logOut () {
     Session.delete('user')
     this.setState({ user: null })
+    return this.router.push('/')
   }
 
   popover () {
     const { user } = this.state
 
     const logged = (
-      <ul className='list-unstyled'>
+      <ul className='user-pod__menu list-unstyled'>
         <li><Link to='/settings'><i className='fa fa-gear'/> Settings</Link></li>
         <li onClick={this.logOut}><i className='fa fa-sign-out'/>Log out</li>
       </ul>
     )
 
     const unlogged = (
-      <ul className='list-unstyled'>
+      <ul className='user-pod__menu list-unstyled'>
         <li><Link to='/login'>Log in</Link> or <Link to='/signup'>Sign up</Link></li>
       </ul>
     )
@@ -43,7 +58,7 @@ export default class UserPod extends React.Component {
 
   render () {
     const { user } = this.state
-    const { alias, email, src } = user ? user : { alias: 'Guest' }
+    const { alias, src } = user ? user : { alias: 'Guest' }
 
     return (
       <div className='user-pod clickable'>
@@ -56,4 +71,8 @@ export default class UserPod extends React.Component {
       </div>
     )
   }
+}
+
+UserPod.contextTypes = {
+  router: React.PropTypes.object.isRequired
 }

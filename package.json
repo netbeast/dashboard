@@ -23,7 +23,6 @@
     "multer": "^1.1.0",
     "netbeast": "^1.0.5",
     "react-bootstrap": "^0.28.5",
-    "request": "^2.55.0",
     "serve-favicon": "^2.2.0",
     "sqlite3": "^3.1.0",
     "superagent": "^1.7.2",

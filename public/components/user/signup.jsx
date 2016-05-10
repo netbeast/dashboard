@@ -2,20 +2,11 @@
 
 import React from 'react'
 import { Link } from 'react-router'
-import { Col } from 'react-bootstrap'
 import request from 'superagent-bluebird-promise'
-import Promise from 'bluebird'
-
-import { Session } from '../lib'
 
 const API_PATH = process.env.API_URL + '/api'
 
 export default class Signup extends React.Component {
-  constructor (props, context) {
-    super(props)
-    this.router = context.router
-  }
-
   grabValidFormData () {
     const { alias, email, password, password_confirmation } = this.refs
 
@@ -40,12 +31,12 @@ export default class Signup extends React.Component {
 
     request.post(API_PATH + '/users').send(user).then((resp) => {
       return request.post(API_PATH + '/login').send(user).then((resp) => {
-        Session.save('user', resp.body)
-        this.router.push('/')
-        return Promise.resolve()
+        window.logIn(resp.body)
       })
     })
-    .catch((err) => toastr.error(err.message))
+    .catch((err) => {
+      toastr.error(err.res.text)
+    })
   }
 
   render () {
@@ -53,13 +44,13 @@ export default class Signup extends React.Component {
       <div className='user-view'>
         <form onSubmit={this.handleSubmit.bind(this)}>
           <h1>Sign up.</h1>
-            <input ref='alias' type='text' placeholder='Choose a username' className='form-control'></input>
-            <br/>
-            <input ref='email' type='email' placeholder='your@email.com' className='form-control'></input>
-            <br/>
-            <input ref='password' type='password' placeholder='Type a password' className='form-control'></input>
-            <br/>
-            <input ref='password_confirmation' type='password' placeholder='Retype your password' className='form-control'></input>
+          <input ref='alias' type='text' placeholder='Choose a username' className='form-control'></input>
+          <br/>
+          <input ref='email' type='email' placeholder='your@email.com' className='form-control'></input>
+          <br/>
+          <input ref='password' type='password' placeholder='Type a password' className='form-control'></input>
+          <br/>
+          <input ref='password_confirmation' type='password' placeholder='Retype your password' className='form-control'></input>
           <br/>
           <button type='submit' className='btn btn-info'>Sign up</button>
           <br/>
@@ -72,8 +63,4 @@ export default class Signup extends React.Component {
       </div>
     )
   }
-}
-
-Signup.contextTypes = {
-  router: React.PropTypes.object.isRequired
 }

@@ -2,10 +2,7 @@
 
 import React from 'react'
 import { Link } from 'react-router'
-import { Col } from 'react-bootstrap'
 import request from 'superagent'
-
-import { Session } from '../lib'
 
 const API_PATH = process.env.API_URL + '/api'
 
@@ -23,14 +20,10 @@ export default class Login extends React.Component {
     request.post(API_PATH + '/login')
     .send({ email, password })
     .end((err, resp) => {
-      if (err) return toastr.error(err.message)
+      console.log(err)
+      if (err) return toastr.error(resp ? resp.text : err.message)
 
-      Session.save('user', resp.body)
-      if (window.location.state && window.location.state.nextPathname) {
-        this.router.replace(window.location.state.nextPathname)
-      } else {
-        this.router.replace('/')
-      }
+      window.logIn(resp.body)
     })
   }
 

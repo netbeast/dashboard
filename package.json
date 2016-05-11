@@ -1,7 +1,7 @@
 {
   "name": "netbeast-cli",
   "description": "Netbeast OS dashboard, IoT apps manager",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "preferGlobal": "true",
   "dependencies": {
     "bluebird": "^3.2.2",

@@ -1,8 +1,6 @@
 /* global describe, after, it*/
 require('dotenv').load()
 
-var should = require('chai').should()
-
 var path = require('path')
 var exec = require('child_process').exec
 
@@ -13,7 +11,7 @@ const CLI = path.join(process.cwd(), 'bin', 'cli.js')
 const PATH_TO_APP = 'test-app'
 const INSTALLED_APP = '_apps/myapp'
 
-describe('Client', function () {
+describe.skip('Client', function () {
   after('Should remove test-app', function () {
     fs.removeSync(INSTALLED_APP)
     fs.removeSync(PATH_TO_APP)

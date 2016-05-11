@@ -2,8 +2,6 @@ language: node_js
 sudo: false
 node_js:
   - "0.12"
-  - "4.2.1"
 after_success:
   - |
       curl -H "Content-Type: application/json" --data '{"build": true}' -X POST https://registry.hub.docker.com/u/netbeast/netbeast/trigger/2bb7b475-adc4-4e3a-bf25-496da5c8d9e9/
-  

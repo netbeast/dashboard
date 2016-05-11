@@ -1,7 +1,7 @@
 /* global toastr */
 
 import React from 'react'
-import { Col } from 'react-bootstrap'
+import { div } from 'react-bootstrap'
 import request from 'superagent-bluebird-promise'
 import Promise from 'bluebird'
 
@@ -47,7 +47,7 @@ export default class Settings extends React.Component {
     .set({ 'Authorization': token })
     .send(user).then((resp) => {
       Session.save('user', resp.body)
-      this.setState({ user: resp.body } )
+      this.setState({ user: resp.body })
       toastr.success('Your params have been updated')
     })
     .catch((err) => { toastr.error(err.res.text) })
@@ -59,9 +59,9 @@ export default class Settings extends React.Component {
       request.del(API_PATH + '/user/' + _id)
       .set({ 'Authorization': token })
       .end((err, resp) => {
-        if (err) return toastr.error(err.message)
+        if (err) return toastr.error(resp.text)
 
-        Session.delete('user')
+        window.logOut()
         this.router.push('/')
         toastr.info('Sorry to see you go :(')
       })
@@ -72,32 +72,29 @@ export default class Settings extends React.Component {
     const { alias, email } = this.state.user
 
     return (
-      <Col xs={10} xsOffset={1} sm={6} smOffset={3} md={4} mdOffset={4}>
-      <br/>
-      <br/>
-      <br/>
-        <h4>Update your profile.</h4>
+      <div className='user-view'>
         <form onSubmit={this.updateSettings}>
-          <input ref='alias' type='text' placeholder='Choose a username' defaultValue={alias} className='form-control'></input>
+          <h1>Update your profile.</h1>
+            <input ref='alias' type='text' placeholder='Choose a username' defaultValue={alias} className='form-control'></input>
+            <br/>
+            <input ref='email' type='email' placeholder='your@email.com' defaultValue={email} className='form-control'></input>
+            <br/>
+            <input ref='password' type='password' placeholder='Type a password' className='form-control'></input>
+            <br/>
+            <input ref='password_confirmation' type='password' placeholder='Retype your password' className='form-control'></input>
           <br/>
-          <input ref='email' type='email' placeholder='your@email.com' defaultValue={email} className='form-control'></input>
+          <button type='submit' className='btn btn-info'>Update settings</button>&nbsp;
           <br/>
-          <input ref='password' type='password' placeholder='Type a password' className='form-control'></input>
+          <p>
+            Profile pic is grabbed from <a target='_blank' href='https://en.gravatar.com/'>gravatar</a> if there is an internet connection.
+          </p>
           <br/>
-          <input ref='password_confirmation' type='password' placeholder='Retype your password' className='form-control'></input>
-        <br/>
-        <button type='submit' className='btn btn-info'>Update settings</button>&nbsp;
+          <br/>
+          <a onClick={this.deleteAccount} href='javascript:void(0)' className='btn btn-primary'>
+            <i className='fa fa-exclamation-triangle'/> Delete your account
+          </a>
         </form>
-        <br/>
-        <p>
-          Profile pic is grabbed from <a target='_blank' href='https://en.gravatar.com/'>gravatar</a> if there is an internet connection.
-        </p>
-        <br/>
-        <br/>
-        <a onClick={this.deleteAccount} href='javascript:void(0)' className='btn btn-xs btn-primary'>
-          <i className='fa fa-exclamation-triangle'/> Delete your account
-        </a>
-      </Col>
+      </div>
     )
   }
 }

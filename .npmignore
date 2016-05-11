@@ -1,4 +1,3 @@
-public/components/*
 test
 .travis.yml
-.sandbox/*
+_apps/*

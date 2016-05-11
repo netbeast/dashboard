@@ -1,27 +1,35 @@
 import request from 'superagent-bluebird-promise'
 import React from 'react'
-import { Link } from 'react-router'
+import Typist from 'react-typist'
 
 import VersionPod from '../misc/version-pod.jsx'
 import ExplorableApp from './explorable-app.jsx'
 
+const GITHUB_API = 'https://api.github.com'
+const GITHUB_Q = GITHUB_API + '/search/repositories?q=netbeast+language:javascript'
+
 export default class Explore extends React.Component {
   constructor (props, context) {
     super(props, context)
-    this.state = { apps: [], installedApps: [] }
+    this.router = context.router
+    this.state = {
+      apps: [],
+      installedApps: [],
+      filter: this.props.location.query
+    }
+
+    /* Methods */
+    this.query = this.query.bind(this)
     this.isInstalled = this.isInstalled.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+    this.onChange = this.onChange.bind(this)
+    this.onFocus = this.onFocus.bind(this)
+    // this.onBlur = this.onBlur.bind(this)
   }
 
   componentDidMount () {
-    const GITHUB_Q = 'https://api.github.com/search/repositories?q=netbeast+language:javascript'
-
-    request.get(GITHUB_Q).end((err, res) => {
-      if (err) return window.toastr.error(err)
-      const items = JSON.parse(res.text).items.filter((app) => {
-        return app.name !== 'dashboard' && app.name !== 'api'
-      })
-      this.setState({ apps: [ ...items ] })
-    })
+    this.query(GITHUB_Q)
+    window.title('Explore ' + (this.state.filter.type || 'apps & plugins'))
 
     request.get('/api/modules').end((err, res) => {
       if (err) return window.toastr.error(err)
@@ -29,41 +37,87 @@ export default class Explore extends React.Component {
     })
   }
 
+  query (str) {
+    console.log('querying %s', str || GITHUB_Q)
+    request.get(str || GITHUB_Q).end((err, res) => {
+      if (err) return window.toastr.error(err.res.text)
+
+      let result = JSON.parse(res.text)
+      result = result.items ? result.items : [result]
+      let modules = result.filter((app) => {
+        return app.name !== 'dashboard' && app.name !== 'api' && app.name !== 'workshop'
+      })
+
+      this.setState({ apps: modules })
+    })
+  }
+
   isInstalled (appName) {
-    let apps = [ ...this.state.installedApps ] // smart copy
+    const apps = [ ...this.state.installedApps ] // smart copy
     const index = apps.findIndex((app) => { return app.name === appName })
     return index >= 0
   }
 
-  renderNav () {
-    return (
-      <div className='nav'>
-        <span className='title'><h4>All available apps.</h4></span>
-        <ul className='list-unstyled list-inline'>
-          <li><Link to='/'><i className='fa fa-th' /> Apps</Link></li>
-          <li><Link to='/plugins'><i className='fa fa-package'><img src='/img/plugin.png'/></i> Plugins</Link></li>
-          <li><Link to='/activities'><i className='fa fa-dashboard' /> Activities</Link></li>
-          <li><Link to='/install'> <i className='fa fa-package'><img src='/img/package-unfilled.png'/></i> Install</Link></li>
-          <li><Link to='/remove'> <i className='fa fa-trash' /> Remove</Link></li>
-        </ul>
-      </div>
-    )
+  onSubmit () {
+    return
+  }
+
+  onChange (event) {
+    const searchText = event.target.value.toLowerCase()
+    if (!searchText) return this.setState({ apps: this.cachedApps })
+
+    const repo = getRepo(searchText)
+    if (repo) return this.query(GITHUB_API + '/repos' + repo)
+
+    const apps = this.cachedApps.filter(function (app) {
+      return app.name.toLowerCase().includes(searchText)
+    })
+
+    this.setState({ apps })
+  }
+
+  onFocus () {
+    const { filter, apps } = this.state
+    this.cachedApps = apps
+    filter.type = undefined
+    filter.name = this.refs.search.value
+    this.setState({ filter })
+    this.router.push('/explore')
+    window.title('Explore apps & plugins')
   }
 
   render () {
-    const { apps } = this.state
-
+    const { filter, apps } = this.state
     return (
         <div className='drawer'>
-        {this.renderNav()}
           <div className='apps-list'>
             {apps.map((data) => {
-              return <ExplorableApp key={data.id} { ...data } installed={this.isInstalled(data.name)}/>
+                return <ExplorableApp key={data.id} { ...data } filter={filter} installed={this.isInstalled(data.name)}/>
             })}
-            <br/>
+            <span style={{ display: apps.length > 0 ? 'none' : 'block' }}><Typist>
+              Looking for Netbeast packages on the registry...
+            </Typist></span>
           </div>
+          <form className='module-search' onSubmit={this.onSubmit}>
+            <i className='fa fa-search'/>
+            <input ref='search' name='url' type='url' onFocus={this.onFocus} onChange={this.onChange} placeholder='Search here or paste a git url to install' autoComplete='off' />
+            <input type='submit' className='btn btn-inverted' value='install' />
+          </form>
           <VersionPod />
         </div>
     )
   }
+}
+
+Explore.contextTypes = {
+  router: React.PropTypes.object.isRequired
+}
+
+function getRepo (s) {
+  const regexp = /(git|ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+  if (!regexp.test(s)) return undefined
+
+  const anchor = document.createElement('a')
+  anchor.href = s
+  return anchor.pathname
 }

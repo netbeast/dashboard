@@ -6,8 +6,7 @@ var App = require('../models/app')
 var Activity = require('../models/activity')
 var installer = require('../middleware/installer')
 
-var NotFound = require('../util/not-found')
-var InvalidFormat = require('../util/invalid-format')
+var ApiError = require('../util/api-error')
 
 var router = module.exports = express.Router()
 
@@ -33,7 +32,7 @@ router.route('/apps/:name')
   const file = path.join(process.env.APPS_DIR, req.params.name, 'package.json')
   fs.writeJson(file, req.body, function (err) {
     if (err) {
-      next(new InvalidFormat('Not a valid package.json'))
+      next(new ApiError(422, 'Not a valid package.json'))
     } else {
       res.status(204).end()
     }
@@ -46,7 +45,7 @@ router.route('/apps/:name')
     } else {
       App.delete(req.params.name, function (err) {
         if (err && err.code === 404) {
-          return next(new NotFound())
+          return next(new ApiError(404))
         } else if (err) {
           return next(err)
         } else {

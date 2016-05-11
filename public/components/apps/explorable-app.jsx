@@ -27,7 +27,7 @@ export default class ExplorableApp extends React.Component {
     request.post('/api/activities/' + name).then(() => {
       return request.get('/i/' + name).promise()
     }).then(() => {
-      this.router.push('/i/' + name)
+      this.router.push('/live/' + name)
     }).catch((err) => {
       if (err.status === 404) return toastr.info(`${name} is running`)
       toastr.error(err.message)
@@ -38,7 +38,7 @@ export default class ExplorableApp extends React.Component {
     const name = this.props.name
     const url = this.props.git_url
 
-    const loader = window.notify({ 
+    const loader = window.notify({
       body: (
         <span>
          <div className='loader'></div>
@@ -58,7 +58,7 @@ export default class ExplorableApp extends React.Component {
       if (type === 'plugin' || type === 'service' || props.bootOnLoad)
         return request.post('/api/activities/' + name).promise()
     }).then((res) => { toastr.success(`${res.body.name} is running`) })
-    .catch((fail, res) => toastr.error(res.text))
+    .catch((err) => toastr.error(err.res.text))
   }
 
   renderButton () {
@@ -70,11 +70,14 @@ export default class ExplorableApp extends React.Component {
   render () {
     if (this.state.hidden) return null
 
-    const { name, author } = this.props
+    const { name, author, filter } = this.props
     const { netbeast, logo } = this.state
     const isPlugin = netbeast && (netbeast.type === 'plugin')
     const defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)'
     const logoStyle = { backgroundImage: logo ? `url(${logo})` : defaultLogo }
+
+    if (filter.type === 'plugins' && !isPlugin) return null
+    if (filter.type === 'apps' && isPlugin) return null
 
     return (
       <div className='app'>

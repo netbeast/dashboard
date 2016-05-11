@@ -41,6 +41,11 @@ export default class InstallView extends React.Component {
       this.setState({ gitFieldsHidden: !this.state.gitFieldsHidden })
     }
 
+    // <Dropzone onDrop={this.handleDrop.bind(this)} className='preview' activeClassName='preview active' multiple={false} >
+    //   <h2>Drop apps here to install them.</h2>
+    //   <h6>(or click here to browse among your files).</h6>
+    // </Dropzone>
+
     return (
       <div className='app-install'>
         <span className='drawer'>
@@ -55,10 +60,6 @@ export default class InstallView extends React.Component {
             </ul>
           </div>
         </span>
-        <Dropzone onDrop={this.handleDrop.bind(this)} className='preview' activeClassName='preview active' multiple={false} >
-          <h2>Drop apps here to install them.</h2>
-          <h6>(or click here to browse among your files).</h6>
-        </Dropzone>
         <br/>
         <a href='explore' className='btn btn-info'>Explore</a> &nbsp;
         <a href='#' onClick={toggleGitFields.bind(this)} className='btn btn-inverted'>with git</a>

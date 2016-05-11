@@ -123,20 +123,36 @@ router.route('/resources/update')
 .post(function (req, res, next) {
   if (!req.body.hook || !req.body.topic || !req.body.app) return res.json(new ApiError(404))
   else {
-    Resource.find({app: req.body.app, topic: req.body.topic}, function (err, resources) {
-      if (err) return next(err)
+    if (typeof req.body.hook === 'string') req.body.hook = [req.body.hook]
 
+    Resource.find({app: req.body.app, topic: req.body.topic}, function (err, resources) {
+      if (err && err.statusCode !== 404) return next(err)
       var objects = []
-      if (resources.length > 0) {
+      if (resources && resources.length > 0) {
         resources.forEach(function (device) {
           if (objects.indexOf(device.hook) < 0) objects.push(device.hook)
+          console.log(objects)
         })
       }
 
       req.body.hook.forEach(function (id) {
+
         var indx = objects.indexOf(id)
         if (indx >= 0) objects.splice(indx, 1)
-        else netbeast(req.body.topic).create({app: req.body.app, hook: id})
+        else {
+          var device = {
+            app: req.body.app,
+            topic: req.body.topic,
+            hook: id
+          }
+          Resource.findOne(device, function (err, resource) {
+            if (err && err.statusCode !== 404) return next(err)
+
+            Resource.create(device, function (err, item) {
+              if (err) return next(err)
+            })
+          })
+        }
       })
 
       if (objects.length > 0) {

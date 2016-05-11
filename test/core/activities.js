@@ -2,36 +2,37 @@
 require('dotenv').load()
 
 var chai = require('chai')
-var should = chai.should()
+var expect = chai.expect
 
 var request = require('superagent')
 var fs = require('fs-extra')
 var path = require('path')
 
-var App = require('../../src/models/app')
-
 const URL = 'https://localhost:' + process.env.SECURE_PORT + '/api'
 
-const APP_PATH = './test/app.tar.gz'
+const APPS_DIR = process.env.APPS_DIR
+const GITHUB_REPO = 'https://github.com/netbeast/get-started'
 
 describe('Activities', function () {
-  before('it should install myapp for tests', function (done) {
-    fs.copy(APP_PATH + '.bck', APP_PATH, function (err) {
+  before('should install get-started from github', function (done) {
+    this.timeout(20000) // this also takes time
+    request.post(URL + '/apps')
+    .send({ url: GITHUB_REPO })
+    .end(function (err, resp, body) {
       if (err) throw err
-      App.install(APP_PATH, function (err) {
+      expect(resp.statusCode).to.equal(200)
+      fs.stat(path.join(APPS_DIR, 'get-started'), function (err, stats) {
         if (err) throw err
+        expect(stats.isDirectory()).to.equal(true)
         done()
       })
     })
   })
 
-  after('it should remove myapp', function (done) {
-    fs.remove(path.join(process.env.APPS_DIR, 'myapp'), function (err) {
+  after('it should remove get-started', function (done) {
+    fs.remove(path.join(process.env.APPS_DIR, 'get-started'), function (err) {
       if (err) throw err
-      fs.copy(APP_PATH + '.bck', APP_PATH, function (err) {
-        if (err) throw err
-        done()
-      })
+      done()
     })
   })
 
@@ -47,16 +48,16 @@ describe('Activities', function () {
     })
   })
 
-  it('should start correctly myapp', function (done) {
-    request.post(URL + '/activities/myapp').end(function (err, resp, body) {
+  it('should start correctly get-started', function (done) {
+    request.post(URL + '/activities/get-started').end(function (err, resp, body) {
       if (err) throw err
       resp.statusCode.should.equal(200)
       done()
     })
   })
 
-  it('myapp should be running', function (done) {
-    request(URL + '/activities/myapp').end(function (err, resp, body) {
+  it('get-started should be running', function (done) {
+    request(URL + '/activities/get-started').end(function (err, resp, body) {
       if (err) throw err
       resp.statusCode.should.equal(200) // app is running
       done()

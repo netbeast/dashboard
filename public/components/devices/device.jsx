@@ -8,6 +8,7 @@ export default class Device extends React.Component {
 
   render () {
     const { idx, info } = this.props
+    const u = Math.min(window.innerHeight, window.innerWidth) / 100 // size unit relative to the canvas
     const { x, y } = _coords(idx)
 
     const style = {

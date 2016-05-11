@@ -11,7 +11,7 @@ class ExploreApp extends React.Component {
 
     return (
       <div className='app'>
-        <Link to='/explore'>
+        <Link to={'/explore?type=' + this.props.pathname}>
           <div className='logo' title='Explore apps or plugins' style={logoStyle} />
         </Link>
         <h4 className='name'> Explore </h4>
@@ -52,46 +52,14 @@ export default class Drawer extends React.Component {
     return (pathname === '') ? 'apps' : pathname
   }
 
-  renderNav () {
-    let title = ''
-
-    switch (this.state.pathname) {
-      case 'apps':
-        title = 'Apps installed.'
-        break
-      case 'plugins':
-        title = 'Plugins installed.'
-        break
-      case 'activities':
-        title = 'Applications running.'
-        break
-      case 'remove':
-        title = 'Remove any module.'
-        break
-    }
-
-    return (
-      <div className='nav'>
-        <span className='title'><h4>{title}</h4></span>
-        <ul className='list-unstyled list-inline'>
-          <li><Link to='/'><i className='fa fa-th' /> Apps</Link></li>
-          <li><Link to='/plugins'><i className='fa fa-package'><img src='/img/plugin.png'/></i> Plugins</Link></li>
-          <li><Link to='/activities'><i className='fa fa-dashboard' /> Activities</Link></li>
-          <li><Link to='/install'> <i className='fa fa-package'><img src='/img/package-unfilled.png'/></i> Install</Link></li>
-          <li><Link to='/remove'> <i className='fa fa-trash' /> Remove</Link></li>
-        </ul>
-      </div>
-    )
-  }
+  componentDidMount () { window.title('Netbeast') }
 
   render () {
-    const pathname = 'apps'
     return (
         <div className='drawer'>
-          {this.renderNav()}
-          <AppsList src={'/api/' + this.state.pathname} {...this.props} 
+          <AppsList src={'/api/' + this.state.pathname} {...this.props}
           prepend={[
-            <ExploreApp key='explore-app' {...this.props} />,
+            <ExploreApp key='explore-app' {...this.props} {...this.state} />,
             <NetworkApp key='network-app' {...this.props} />,
             <HistoryApp key='history-app' {...this.props} />]
           }/>

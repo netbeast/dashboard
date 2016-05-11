@@ -56,7 +56,6 @@ export default class AppsList extends React.Component {
           return <App key={data.name} { ...data } dismiss={this.dismiss.bind(this)} />
         })}
         {this.props.append}
-        <br/>
       </div>
     )
   }

@@ -11,12 +11,12 @@ export default class Notifications extends React.Component {
     super(props)
     this.state = {
       toasts: [],
-      history: Session.load('notifications') || [],
+      history: Session.load('history') || [],
       showHistory: false
     }
     this.dismiss = this.dismiss.bind(this)
     this.toggleHistory = this.toggleHistory.bind(this)
-    this.clearHistory = this.clearHistory.bind(this)
+    window.clearHistory = this.clearHistory = this.clearHistory.bind(this)
   }
 
   notify (notification) {
@@ -37,7 +37,7 @@ export default class Notifications extends React.Component {
   storeNotifications (notification) {
     const { body } = notification
     if (React.isValidElement(body) || typeof body !== 'string') return
-    
+
     const history = Session.load('history') || []
     Session.save('history', [...history, notification])
     this.setState({ history: [...history, notification] })
@@ -51,12 +51,12 @@ export default class Notifications extends React.Component {
     this.setState({ toasts: toasts })
   }
 
-  toggleHistory () { 
+  toggleHistory () {
     // console.log('toggle history', this.state.history)
-    this.setState({ showHistory: !this.state.showHistory }) 
+    this.setState({ showHistory: !this.state.showHistory })
   }
 
-  clearHistory () { 
+  clearHistory () {
     Session.remove('history')
     this.setState({ history: [], showHistory: !this.state.showHistory })
   }
@@ -96,10 +96,12 @@ export default class Notifications extends React.Component {
         <div className='notifications-pod clickable' onClick={this.toggleHistory}>
           { (!showHistory)
             ? <span><i className='fa fa-bell'/> Notifications</span>
-            : <span>
-              <i className='fa fa-close'/> Close log |
-              <span onClick={this.clearHistory}> <i className='fa fa-bell-slash'/> Clear </span>
+            : (
+              <span>
+                <i className='fa fa-close'/> Close log
+                <span onClick={this.clearHistory}> | <i className='fa fa-bell-slash'/> Clear </span>
               </span>
+            )
           }
         </div>
         <div className='notifications z-super'>

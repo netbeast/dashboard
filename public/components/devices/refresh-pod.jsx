@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 import request from 'superagent-bluebird-promise'
 import Promise from 'bluebird'
 
-export default class VersionPod extends React.Component {
+export default class RefreshPod extends React.Component {
 
   refresh () {
     const APP_PROXY = '/i/'

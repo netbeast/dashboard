@@ -8,7 +8,7 @@ var request = require('superagent')
 var fs = require('fs-extra')
 var path = require('path')
 
-var App = require('src/models/app')
+var App = require('../../src/models/app')
 
 const URL = 'https://localhost:' + process.env.SECURE_PORT + '/api'
 
@@ -17,9 +17,9 @@ const APP_PATH = './test/app.tar.gz'
 describe('Activities', function () {
   before('it should install myapp for tests', function (done) {
     fs.copy(APP_PATH + '.bck', APP_PATH, function (err) {
-      should.not.exist(err)
+      if (err) throw err
       App.install(APP_PATH, function (err) {
-        should.not.exist(err)
+        if (err) throw err
         done()
       })
     })
@@ -27,9 +27,9 @@ describe('Activities', function () {
 
   after('it should remove myapp', function (done) {
     fs.remove(path.join(process.env.APPS_DIR, 'myapp'), function (err) {
-      should.not.exist(err)
+      if (err) throw err
       fs.copy(APP_PATH + '.bck', APP_PATH, function (err) {
-        should.not.exist(err)
+        if (err) throw err
         done()
       })
     })
@@ -37,7 +37,7 @@ describe('Activities', function () {
 
   it('should show no apps running', function (done) {
     request(URL + '/activities/').end(function (err, resp, body) {
-      should.not.exist(err)
+      if (err) throw err
       resp.statusCode.should.equal(200)
       body = resp.body.filter(function (app) {
         return app.netbeast && app.netbeast.type !== 'plugin' && !app.netbeast.bootOnLoad
@@ -49,7 +49,7 @@ describe('Activities', function () {
 
   it('should start correctly myapp', function (done) {
     request.post(URL + '/activities/myapp').end(function (err, resp, body) {
-      should.not.exist(err)
+      if (err) throw err
       resp.statusCode.should.equal(200)
       done()
     })
@@ -57,7 +57,7 @@ describe('Activities', function () {
 
   it('myapp should be running', function (done) {
     request(URL + '/activities/myapp').end(function (err, resp, body) {
-      should.not.exist(err)
+      if (err) throw err
       resp.statusCode.should.equal(200) // app is running
       done()
     })

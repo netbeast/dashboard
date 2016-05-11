@@ -1,7 +1,3 @@
-[![Build Status](https://travis-ci.org/netbeast/dashboard.svg)](https://travis-ci.org/netbeast/dashboard)
-![Windows Build Status](https://ci.appveyor.com/api/projects/status/l67h46kbdxtvy43p?svg=true)
-![dependencies](https://david-dm.org/netbeast/dashboard.svg)
-
 | Linux & Mac   |      Windows      |  Dependencies |
 |----------|:-------------:|------:|
 | [![Build Status](https://travis-ci.org/netbeast/dashboard.svg)](https://travis-ci.org/netbeast/dashboard) |  ![Windows Build Status](https://ci.appveyor.com/api/projects/status/l67h46kbdxtvy43p?svg=true) | ![dependencies](https://david-dm.org/netbeast/dashboard.svg) |

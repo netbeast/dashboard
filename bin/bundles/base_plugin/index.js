@@ -12,6 +12,19 @@ cmd
 var app = express()
 
 /*
+* Discover your resources / scan the network 
+* And declare your routes into the API
+*/
+
+app.get('/discover', function () {
+	/* TODO, implement discovery */
+
+	/* for each device */
+	netbeast('topic').create({ app: 'my-first-plugin', hook: 'DEVICE_ID' })
+	/* end of for */
+})
+
+/*
 * Create here your API routes
 * app.get(...), app.post(...), app.put(...), app.delete(...)
 */

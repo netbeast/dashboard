@@ -41,3 +41,4 @@ node_modules
 
 test/coverage
 .errorlog
+npm-debug.log

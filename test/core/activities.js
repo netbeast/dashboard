@@ -20,7 +20,7 @@ describe('Activities', function () {
     request.post(URL + '/apps')
     .send({ url: GITHUB_REPO })
     .end(function (err, resp, body) {
-      should.not.exist(err)
+      if (err) throw err
       expect(resp.statusCode).to.equal(200)
       fs.stat(path.join(APPS_DIR, 'get-started'), function (err, stats) {
         if (err) throw err
@@ -51,7 +51,7 @@ describe('Activities', function () {
 
   it('should start correctly get-started', function (done) {
     request.post(URL + '/activities/get-started').end(function (err, resp, body) {
-      should.not.exist(err)
+      if (err) throw err
       resp.statusCode.should.equal(200)
       done()
     })
@@ -59,7 +59,7 @@ describe('Activities', function () {
 
   it('get-started should be running', function (done) {
     request(URL + '/activities/get-started').end(function (err, resp, body) {
-      should.not.exist(err)
+      if (err) throw err
       resp.statusCode.should.equal(200) // app is running
       done()
     })

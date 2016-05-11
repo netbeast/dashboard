@@ -60,15 +60,9 @@ proxy.on('error', function (err, req, res) {
   }
 })
 
-var env = Object.create(process.env)
-env.NETBEAST_PORT = process.env.PORT
-var options = { env: env }
-
-//var dns = spawn(DASHBOARD_DNS, options)
-
 require('./src/services/scanner')
 require('./src/services/advertiser')
 
-process.on('exit', function () {
-  dns.kill('SIGTERM')
-})
+// process.on('exit', function () {
+//   dns.kill('SIGTERM')
+// })

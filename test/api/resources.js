@@ -18,6 +18,7 @@ describe('Resources', function () {
   it('should .create() an entry on sqlite', function (done) {
     var resource = {
       app: 'app',
+      alias: 'alias',
       topic: 'topic',
       location: 'loc',
       groupname: 'group',
@@ -36,7 +37,7 @@ describe('Resources', function () {
       should.not.exist(err)
       resources.forEach(function (item) {
         expect(item).to.have.keys(
-          'id', 'app', 'topic', 'location', 'groupname', 'hook')
+          'id', 'alias', 'app', 'topic', 'location', 'groupname', 'hook')
       })
       done()
     })

@@ -8,6 +8,7 @@ var helper = module.exports = {}
 helper.createTable = function (done) {
   db.run('CREATE TABLE IF NOT EXISTS resources(' +
   'id TEXT PRIMARY KEY NOT NULL, ' +
+  'alias TEXT, ' +
   'app TEXT NOT NULL, ' +
   'location TEXT, ' +
   'topic TEXT NOT NULL, ' +
@@ -19,10 +20,10 @@ helper.createTable = function (done) {
 helper.insertAction = function (query, done) {
   var id = crypto.createHash('sha1').update(query.app + query.hook).digest('hex')
   var statement = db.prepare('INSERT INTO resources (' +
-  "'id', 'app', 'location', 'topic', 'groupname', 'hook') " +
-  'VALUES (?,?,?,?,?,?)')
+  "'id', 'alias', 'app', 'location', 'topic', 'groupname', 'hook') " +
+  'VALUES (?,?,?,?,?,?,?)')
   statement
-  .run(id, query.app, query.location, query.topic, query.groupname, query.hook, done)
+  .run(id, query.alias, query.app, query.location, query.topic, query.groupname, query.hook, done)
   statement.finalize()
 }
 

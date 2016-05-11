@@ -25,6 +25,7 @@ App.modules = function (done) {
         })
       })
     }).then(function (packages) {
+      packages = packages.filter(function (pkg) { return pkg }) // Avoid crash when app folder is empty
       return done(null, packages)
     }).catch(done)
   })

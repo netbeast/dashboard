@@ -6,7 +6,6 @@ os:
   - windows
 node_js:
   - "0.12"
-  - "4.2.1"
 after_install:
   - npm link
 after_success:

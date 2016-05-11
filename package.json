@@ -63,7 +63,7 @@
     "react-bootstrap": "^0.29.4",
     "react-chartjs": "^0.7.3",
     "react-color": "^2.0.0",
-    "react-dom": "^15.0.2",
+    "react-dom": "^14.0.0",
     "react-dropzone": "^3.3.2",
     "react-router": "^2.0.0-rc5",
     "react-typist": "^0.3.0",

@@ -75,7 +75,7 @@ gulp.task('sass', function () {
   .pipe(plugins.autoprefixer())
   .pipe(plugins.cssnano())
   .pipe(plugins.sourcemaps.write('./'))
-  .pipe(gulp.dest('./public/dist/css'))
+  .pipe(gulp.dest('./public/dist'))
   .pipe(plugins.livereload())
 })
 
@@ -114,6 +114,6 @@ function compile (bundler) {
   .pipe(buffer())
   .pipe(plugins.sourcemaps.init({ loadMaps: true }))
   .pipe(plugins.sourcemaps.write('./'))
-  .pipe(gulp.dest('./public/dist/js/'))
+  .pipe(gulp.dest('./public/dist'))
   .pipe(plugins.livereload())
 }

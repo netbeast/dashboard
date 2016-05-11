@@ -6,7 +6,7 @@ export default class Toast extends React.Component {
     this.close = this.close.bind(this)
   }
 
-  close () { 
+  close () {
     if (typeof (this.props.dismiss) === 'function') {
       this.props.dismiss(this.props.id)
     }
@@ -18,13 +18,13 @@ export default class Toast extends React.Component {
     if (timeout) setTimeout(this.close, timeout)
 
     return (
-      <div className={'alert alert-' + (emphasis) + (isCurrent ? ' current' : '')}>
-        <span className='title'> {title || 'dashboard'} </span>
+      <div className={'toast toast--' + (emphasis) + (isCurrent ? ' current' : '')}>
+        <span className='toast__title'> {title || 'dashboard'} </span>
         { typeof this.props.dismiss === 'function'
-          ? <button type='button' className='close' onClick={this.close}>×</button>
+          ? <i className='fa fa-times clickable pull-right' onClick={this.close} />
           : null}
         <br/>
-        <div className='body'>
+        <div className='toast__body'>
           {body}
         </div>
       </div>

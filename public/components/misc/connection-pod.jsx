@@ -16,7 +16,7 @@ export default class ConnectionPod extends React.Component {
   }
 
   ping () {
-    request.get('https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js')
+    request.get('https://node.netbeast.co')
     .end((err, resp) => {
       if (err) return this.setState({connected: false})
       this.setState({connected: true})

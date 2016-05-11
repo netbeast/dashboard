@@ -10,7 +10,6 @@ var fs = require('fs')
 // NPM dependencies
 var cmd = require('commander')
 var mosca = require('mosca')
-var spawn = require('child_process').spawn
 var httpProxy = require('http-proxy')
 var chalk = require('chalk')
 
@@ -18,7 +17,7 @@ var chalk = require('chalk')
 var app = require('./src')
 var bootOnload = require('./src/boot-on-load')
 
-const DASHBOARD_DNS = path.join(__dirname, './bin/dns.js')
+// const DASHBOARD_DNS = path.join(__dirname, './bin/dns.js')
 
 cmd
 .version('0.1.42')
@@ -60,15 +59,9 @@ proxy.on('error', function (err, req, res) {
   }
 })
 
-var env = Object.create(process.env)
-env.NETBEAST_PORT = process.env.PORT
-var options = { env: env }
-
-//var dns = spawn(DASHBOARD_DNS, options)
-
 require('./src/services/scanner')
 require('./src/services/advertiser')
 
-process.on('exit', function () {
-  dns.kill('SIGTERM')
-})
+// process.on('exit', function () {
+//   dns.kill('SIGTERM')
+// })

@@ -3,7 +3,6 @@
 // modules
 var express = require('express')
 var Promise = require('bluebird')
-var netbeast = require('netbeast')
 
 // librerias propias
 var Resource = require('../models/resource')
@@ -131,12 +130,10 @@ router.route('/resources/update')
       if (resources && resources.length > 0) {
         resources.forEach(function (device) {
           if (objects.indexOf(device.hook) < 0) objects.push(device.hook)
-          console.log(objects)
         })
       }
 
       req.body.hook.forEach(function (id) {
-
         var indx = objects.indexOf(id)
         if (indx >= 0) objects.splice(indx, 1)
         else {

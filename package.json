@@ -86,8 +86,8 @@
     "router"
   ],
   "scripts": {
-    "test": "export NODE_PATH=.:$NODE_PATH && ./node_modules/.bin/gulp test",
-    "coverage": "export NODE_PATH=.:$NODE_PATH && ./node_modules/.bin/gulp coverage",
+    "test": "./node_modules/.bin/gulp test",
+    "coverage": "./node_modules/.bin/gulp coverage",
     "build": "./node_modules/.bin/gulp build",
     "dev": "./node_modules/.bin/gulp",
     "start": "./node_modules/.bin/gulp serve",

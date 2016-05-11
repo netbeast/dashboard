@@ -2,7 +2,6 @@
 require('dotenv').load()
 
 var chai = require('chai')
-var should = chai.should()
 var expect = chai.expect
 
 var request = require('superagent')
@@ -39,7 +38,7 @@ describe('Activities', function () {
 
   it('should show no apps running', function (done) {
     request(URL + '/activities/').end(function (err, resp, body) {
-      should.not.exist(err)
+      if (err) throw err
       resp.statusCode.should.equal(200)
       body = resp.body.filter(function (app) {
         return app.netbeast && app.netbeast.type !== 'plugin' && !app.netbeast.bootOnLoad

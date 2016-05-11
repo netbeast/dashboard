@@ -8,9 +8,6 @@ var expect = chai.expect
 
 const URL = 'https://localhost:' + process.env.SECURE_PORT + '/api'
 
-
-console.log(URL + '/resources')
-
 describe('RESTful Resources API', function () {
   it('should insert a new action in db', function (done) {
     var req = request.post(URL + '/resources')

@@ -9,7 +9,6 @@ var exec = require('child_process').exec
 var Promise = require('bluebird')
 var fs = Promise.promisifyAll(require('fs-extra'))
 
-const CLI = path.join(process.cwd(), 'bin', 'cli.js')
 const PATH_TO_APP = 'test-app'
 const INSTALLED_APP = '_apps/myapp'
 
@@ -21,7 +20,7 @@ describe('Client', function () {
 
   it('should create an app called test-app', function (done) {
     new Promise(function (resolve, reject) {
-      exec(CLI + ' new test-app', function (err, stdout, stderr) {
+      exec('netbeast new test-app', function (err, stdout, stderr) {
         if (err) return reject(err)
         else return resolve(PATH_TO_APP)
       })
@@ -42,7 +41,7 @@ describe('Client', function () {
 
   it('should install test/app.tar.gz', function (done) {
     this.timeout(25000)
-    exec(CLI + ' install test/app.tar.gz ' + 'http://localhost:' + process.env.PORT,
+    exec('netbeast install test/app.tar.gz ' + 'http://localhost:' + process.env.PORT,
     function (err, stdout, stderr) {
       should.not.exist(err)
       fs.access('_apps/myapp', fs.F_OK, function (err) {
@@ -53,7 +52,7 @@ describe('Client', function () {
   })
 
   it('should package test-app into app.tar.gz', function (done) {
-    exec(CLI + ' package test-app', function (err, stdout, stderr) {
+    exec('netbeast package test-app', function (err, stdout, stderr) {
       should.not.exist(err)
       fs.access('netbeast-app.tar.gz', fs.F_OK, function (err) {
         should.not.exist(err)
@@ -65,7 +64,7 @@ describe('Client', function () {
 
   // package app with option --to (alias -o)
   it('should create a packaged app from test-app called test-app.tar.gz (option --to)', function (done) {
-    exec(CLI + ' package test-app --to test-app__to.tar.gz', function (err, stdout, stderr) {
+    exec('netbeast package test-app --to test-app__to.tar.gz', function (err, stdout, stderr) {
       should.not.exist(err)
       fs.access('test-app__to.tar.gz', fs.F_OK, function (err) {
         should.not.exist(err)
@@ -76,7 +75,7 @@ describe('Client', function () {
 
   // unpkg option --to
   it('should test-app.tar.gz unpackage to ./test-app folder (option --to)', function (done) {
-    exec(CLI + ' unpkg test-app__to.tar.gz --to test-app__to', function (err, stdout, stderr) {
+    exec('netbeast unpkg test-app__to.tar.gz --to test-app__to', function (err, stdout, stderr) {
       should.not.exist(err)
       fs.access('test-app__to', fs.F_OK, function (err) {
         should.not.exist(err)

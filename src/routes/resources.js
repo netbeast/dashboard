@@ -48,7 +48,7 @@ router.route('/resources')
 })
 
 .delete(function (req, res, next) {
-  Resource.destroy(req.query, function cb (err, resources) {
+  Resource.destroy(req.query, function (err, resources) {
     if (err) return next(err)
     return res.status(204).end()
   })
@@ -140,10 +140,12 @@ router.route('/resources/update')
       })
 
       if (objects.length > 0) {
-        objects.forEach(function (hooks) {
-          netbeast().delete({ hook: hooks })
+        objects.forEach(function (hook) {
+          Resource.destroy({ hook: hook }, function (err, resources) {
+            if (err) return next(err)
+          })
         })
-      }
+      } return res.status(204).end()
     })
   }
 })

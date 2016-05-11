@@ -408,7 +408,7 @@
   opacity: 0.8;
   &:hover { opacity: 1; }
   &.green { background-color: $brand-success; }
-  &.red { background-color: $brand-primary; }
+  &.red { background-color: $brand-primary; color: white; }
 }
 
 //====================================

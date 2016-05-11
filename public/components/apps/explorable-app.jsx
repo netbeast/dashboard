@@ -70,11 +70,14 @@ export default class ExplorableApp extends React.Component {
   render () {
     if (this.state.hidden) return null
 
-    const { name, author } = this.props
+    const { name, author, filter } = this.props
     const { netbeast, logo } = this.state
     const isPlugin = netbeast && (netbeast.type === 'plugin')
     const defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)'
     const logoStyle = { backgroundImage: logo ? `url(${logo})` : defaultLogo }
+
+    if (filter === 'plugins' && !isPlugin) return null
+    if (filter === 'apps' && isPlugin) return null
 
     return (
       <div className='app'>

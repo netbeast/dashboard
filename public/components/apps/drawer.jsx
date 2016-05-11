@@ -11,7 +11,7 @@ class ExploreApp extends React.Component {
 
     return (
       <div className='app'>
-        <Link to='/explore'>
+        <Link to={'/explore/' + this.props.pathname}>
           <div className='logo' title='Explore apps or plugins' style={logoStyle} />
         </Link>
         <h4 className='name'> Explore </h4>
@@ -91,7 +91,7 @@ export default class Drawer extends React.Component {
           {this.renderNav()}
           <AppsList src={'/api/' + this.state.pathname} {...this.props} 
           prepend={[
-            <ExploreApp key='explore-app' {...this.props} />,
+            <ExploreApp key='explore-app' {...this.props} {...this.state} />,
             <NetworkApp key='network-app' {...this.props} />,
             <HistoryApp key='history-app' {...this.props} />]
           }/>

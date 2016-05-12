@@ -1,13 +1,11 @@
 /* global describe, after, it*/
 require('dotenv').load()
 
-var path = require('path')
 var exec = require('child_process').exec
 
 var Promise = require('bluebird')
 var fs = Promise.promisifyAll(require('fs-extra'))
 
-const CLI = path.join(process.cwd(), 'bin', 'cli.js')
 const PATH_TO_APP = 'test-app'
 const INSTALLED_APP = '_apps/myapp'
 
@@ -19,7 +17,7 @@ describe.skip('Client', function () {
 
   it('should create an app called test-app', function (done) {
     new Promise(function (resolve, reject) {
-      exec(CLI + ' new test-app', function (err, stdout, stderr) {
+      exec('netbeast new test-app', function (err, stdout, stderr) {
         if (err) return reject(err)
         else return resolve(PATH_TO_APP)
       })

@@ -1,9 +1,10 @@
 {
   "name": "netbeast-cli",
   "description": "Netbeast OS dashboard, IoT apps manager",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "preferGlobal": "true",
   "dependencies": {
+    "aedes": "^0.17.1",
     "bluebird": "^3.2.2",
     "body-parser": "^1.12.2",
     "chalk": "^1.1.1",
@@ -18,14 +19,14 @@
     "http-proxy": "^1.13.2",
     "inquirer": "^1.0.2",
     "morgan": "^1.5.2",
-    "mosca": "^1.3.0",
     "mqtt": "^1.6.3",
     "multer": "^1.1.0",
     "netbeast": "^1.0.5",
     "serve-favicon": "^2.2.0",
-    "sqlite3": "^3.1.0",
+    "sqlite3": "^3.1.3",
     "superagent": "^1.7.2",
-    "superagent-bluebird-promise": "^3.0.0"
+    "superagent-bluebird-promise": "^3.0.0",
+    "websocket-stream": "^3.1.0"
   },
   "bin": {
     "beast": "bin/cli.js",
@@ -39,6 +40,7 @@
     "chai": "^3.2.0",
     "chart.js": ">= 1.1.1 & < 2.0",
     "envify": "^3.4.0",
+    "enzyme": "^2.3.0",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-bg": "^0.0.8",
@@ -88,7 +90,7 @@
     "coverage": "./node_modules/.bin/gulp coverage",
     "build": "./node_modules/.bin/gulp build",
     "dev": "./node_modules/.bin/gulp",
-    "start": "./node_modules/.bin/gulp serve",
+    "start": "node index.js",
     "clean": "rm -r ./test/coverage; rm .database.sqlite",
     "prepublish": "npm run build",
     "release:major": "npm version major && npm publish && git push --follow-tags",

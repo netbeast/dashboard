@@ -40,4 +40,5 @@ _apps/*
 node_modules
 
 test/coverage
+npm-debug.log
 .errorlog

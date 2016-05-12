@@ -1,6 +1,6 @@
-| Linux & Mac   |      Windows      |  Dependencies |
-|----------|:-------------:|------:|
-| [![Build Status](https://travis-ci.org/netbeast/dashboard.svg)](https://travis-ci.org/netbeast/dashboard) |  ![Windows Build Status](https://ci.appveyor.com/api/projects/status/l67h46kbdxtvy43p?svg=true) | ![dependencies](https://david-dm.org/netbeast/dashboard.svg) |
+| Linux & Mac   |      Windows      | Docker | Docs | Forum |
+|----------|:-------------:|:------:|:------:|:------:|------:|
+| [![Build Status](https://travis-ci.org/netbeast/dashboard.svg)](https://travis-ci.org/netbeast/dashboard) |  ![Windows Build Status](https://ci.appveyor.com/api/projects/status/l67h46kbdxtvy43p?svg=true) | [<img src="https://pbs.twimg.com/profile_images/378800000124779041/fbbb494a7eef5f9278c6967b6072ca3e_400x400.png" height="24px" width="auto"/>](http://dashboard.827722d5.svc.dockerapp.io/) | [<img src="https://avatars2.githubusercontent.com/u/7111340?v=3&s=400" height="24px" width="auto"/>](https://docs.netbeast.co) |  [<img src="https://pbs.twimg.com/profile_images/3264780953/6c9a2cd7bb2efcb4c53d32900e52c8ac_400x400.png" height="24px" width="auto"/>](https://forum.netbeast.co) |
 
 # Netbeast dashboard
 ### Connect everything. Regarless its brand or technology,
@@ -74,10 +74,10 @@ If you are part of the Netbeast community don't forget to write down your name o
 * Report a bug or enter discussion at [issues](https://github.com/netbeast/docs/issues)
 * Other resources: [Docs](https://github.com/netbeast/docs/wiki), Netbeast [API](https://github.com/netbeast/API)
 
-[<img src="https://slack.com/img/slack_hash_128.v1442100037.png" height="24px" width="auto"/> Join us in Slack!](https://netbeastco.typeform.com/to/VGLexg)
-
+##### <img src="https://pbs.twimg.com/profile_images/3264780953/6c9a2cd7bb2efcb4c53d32900e52c8ac_400x400.png" height="24px" width="auto"/> Join us in our forum https://forum.netbeast.co
+##### <img src="https://slack.com/img/slack_hash_128.v1442100037.png" height="24px" width="auto"/> Ask for an invitation to join our Slack team [here](https://netbeastco.typeform.com/to/VGLexg)
 
 <img src="https://github.com/netbeast/docs/blob/master/img/open-source.png?raw=true" height="140px" width="auto"/>
 <img src="https://github.com/netbeast/docs/blob/master/img/open-hw.png?raw=true" height="140px" width="auto"/>
 
-Check out [npm dependencies](http://npm.anvaka.com/#/view/2d/netbeast-cli) we relay on
+Docker Live image running [here](http://dashboard.827722d5.svc.dockerapp.io/) | Check out [npm dependencies](http://npm.anvaka.com/#/view/2d/netbeast-cli) we relay on

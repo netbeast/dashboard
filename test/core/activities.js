@@ -18,7 +18,7 @@ describe('Activities', function () {
     this.timeout(20000) // this also takes time
     request.post(URL + '/apps')
     .send({ url: GITHUB_REPO })
-    .end(function (err, resp, body) {
+    .end(function (err, resp) {
       if (err) throw err
       expect(resp.statusCode).to.equal(200)
       fs.stat(path.join(APPS_DIR, 'get-started'), function (err, stats) {

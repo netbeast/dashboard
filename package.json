@@ -92,6 +92,7 @@
     "dev": "./node_modules/.bin/gulp",
     "start": "./node_modules/.bin/gulp serve",
     "clean": "rm -r ./test/coverage; rm .database.sqlite",
+    "preinstall": "NODE_ENV=production",
     "prepublish": "npm run build",
     "release:major": "npm version major && npm publish && git push --follow-tags",
     "release:minor": "npm version minor && npm publish && git push --follow-tags",

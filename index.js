@@ -3,13 +3,16 @@
 require('./lib/init')
 process.chdir(__dirname)
 
-var path = require('path')
 var http = require('http')
 var fs = require('fs')
 
 // NPM dependencies
 var cmd = require('commander')
-var mosca = require('mosca')
+var websocket = require('websocket-stream')
+var aedes = require('aedes')({
+    concurrency: 1000
+})
+
 var httpProxy = require('http-proxy')
 var chalk = require('chalk')
 
@@ -25,10 +28,8 @@ cmd
 .option('-sp, --secure_port <n>', 'Secure port to start the HTTPS server', parseInt)
 .parse(process.argv)
 
-// Launch server with web sockets
+
 var server = http.createServer(app)
-var broker = new mosca.Server({})
-broker.attachHttpServer(server)
 
 process.env.SPORT = cmd.secure_port || process.env.SECURE_PORT
 process.env.PORT = cmd.port || process.env.PORT
@@ -45,7 +46,11 @@ var proxy = httpProxy.createServer({
   ws: true
 }).listen(process.env.SECURE_PORT, function () {
   server.listen(process.env.PORT, function () {
-    console.log('👾  Netbeast dashboard started on %s:%s', server.address().address, server.address().port)
+    const addr = server.address().address
+    const port = server.address().port
+    console.log('👾  Netbeast dashboard started on %s:%s', addr, port)
+    // attach mqtt broker to websockets stream
+    websocket.createServer({ server: server }, aedes.handle)
     bootOnload()
   })
 })

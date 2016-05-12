@@ -25,7 +25,7 @@ export default class History extends React.Component {
     this.state = { topics: {}, scalars: {}, autotype: 'your garden' }
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.mqtt.subscribe('#') // subscription to all channels
     this.mqtt.on('message', (topic, message) => {
       const { topics, scalars } = this.state
@@ -40,6 +40,7 @@ export default class History extends React.Component {
       } else {
         scalars[topic] = scalars[topic] || new Array(22)
         scalars[topic] = [...scalars[topic], message[topic]].slice(1, 22)
+        console.log(scalars)
         this.setState({ scalars })
       }
     })
@@ -59,7 +60,7 @@ export default class History extends React.Component {
 
   render () {
     const { topics, scalars, autotype } = this.state
-    const areThereTopics = ( 
+    const areThereTopics = (
       Object.keys(topics).length > 0 ||
       Object.keys(scalars).length > 0
     )
@@ -67,9 +68,9 @@ export default class History extends React.Component {
     return (
       <span className='history-view'>
         {areThereTopics ? this.renderHistoryData.call(this) : (
-        <div> 
+        <div>
           <h2> <br/> <br/> Reading data from <br/>
-            <Typist key={autotype} onTypingDone={this.changeAutoTypes.bind(this)}> 
+            <Typist key={autotype} onTypingDone={this.changeAutoTypes.bind(this)}>
               {autotype}.&nbsp;
             </Typist>
           </h2>

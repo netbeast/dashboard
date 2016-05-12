@@ -1,7 +1,7 @@
 {
   "name": "netbeast-cli",
   "description": "Netbeast OS dashboard, IoT apps manager",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "preferGlobal": "true",
   "dependencies": {
     "aedes": "^0.17.1",
@@ -90,7 +90,7 @@
     "coverage": "./node_modules/.bin/gulp coverage",
     "build": "./node_modules/.bin/gulp build",
     "dev": "./node_modules/.bin/gulp",
-    "start": "./node_modules/.bin/gulp serve",
+    "start": "node index.js",
     "clean": "rm -r ./test/coverage; rm .database.sqlite",
     "prepublish": "npm run build",
     "release:major": "npm version major && npm publish && git push --follow-tags",

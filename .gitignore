@@ -27,7 +27,7 @@ Thumbs.db
 # .env is forcely added
 .env
 
-public/dist/*
+# public/dist/* keep track of dist files so we can avoid installing devDependencies
 
 .log
 .sass-cache/
@@ -40,5 +40,5 @@ _apps/*
 node_modules
 
 test/coverage
-.errorlog
 npm-debug.log
+.errorlog

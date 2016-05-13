@@ -2,7 +2,7 @@
 |----------|:-------------:|:------:|:------:|:------:|:------:|------:|
 | [![Build Status](https://travis-ci.org/netbeast/dashboard.svg)](https://travis-ci.org/netbeast/dashboard) |  [![Windows Build Status](https://ci.appveyor.com/api/projects/status/l67h46kbdxtvy43p?svg=true)](https://ci.appveyor.com/project/jsdario/dashboard) | [<img src="https://pbs.twimg.com/profile_images/378800000124779041/fbbb494a7eef5f9278c6967b6072ca3e_400x400.png" height="24px" width="auto"/>](https://dashboard.netbeast.co/) | [<img src="https://avatars2.githubusercontent.com/u/7111340?v=3&s=400" height="24px" width="auto"/>](https://docs.netbeast.co) |  [<img src="https://pbs.twimg.com/profile_images/3264780953/6c9a2cd7bb2efcb4c53d32900e52c8ac_400x400.png" height="24px" width="auto"/>](https://forum.netbeast.co) | [<img src="https://www.iconexperience.com/_img/i_collection_png/512x512/plain/graph.png" height="24px" width="auto"/>](http://npm.anvaka.com/#/view/2d/netbeast-cli)
 
-# Netbeast dashboard
+# Netbeast Dashboard
 ### Connect everything. Regardless its brand or technology,
 
 One API, unlimited products and hacks. Netbeast middleware translates messages from different IoT protocols and device interfaces so they work as one. Have no more "hubs". Work across **devices** not _brands_.
@@ -21,12 +21,12 @@ netbeast.find().then(function () {
   * [Using docker](#installation-docker)
 * [Overview](#overview)
 * [Documentation](#documentation)
-* Create IoT with Node.js
-  * apps
-  * devices
+* [Create IoT with Node.js](#iot-with-node)
+  * [Apps](#apps)
+  * [Connect devices](#connect-devices)
 * [Community](#community)
 * [Contribute](#contribute)
-* [License](https://github.com/netbeast/dashboard/blob/master/LICENSE.txt)
+* [LICENSE.md](https://github.com/netbeast/dashboard/blob/master/LICENSE.txt)
 
 <a name="installation">
 # Installation
@@ -114,14 +114,111 @@ Find tutorials in the [docs](https://docs.netbeast.co), read a blog post about i
 
 <a name="documentation">
 ## Documentation
-We publish a gitbook with fresh documentation on https://docs.netbeast.co. If you want to open an issue, contribute or edit it, find your way on its github repo https://github.com/netbeast/docs.
+We publish a [gitbook](https://www.gitbook.com/book/netbeast/docs/details) with fresh documentation on https://docs.netbeast.co. If you want to open an issue, contribute or edit it, find your way on its github repo https://github.com/netbeast/docs.
+
+<a name="iot-with-node">
+# Create IoT with Node.js
+In Netbeast we care about education, openness and interoperability. We have created a series of workshops to teach developers to better use HTTP, MQTT in combination with the **Dashboard** to create data bindings and incredible apps. Use your favorite boards and platforms as Arduino, Pi Zero, Pine64, Belkin Wemo, Homekit and a infinite list, connected.
+
+<a name="apps">
+## Apps
+A Netbeast app allows you to run the Dashboard unique API in the browser or backend equally. Just expose some user interface in your apps root. In the following snippet we serve in the root all files inside `public` folder.
+
+```
+var express = require('express')
+var app = express()
+
+// Netbeast apps need to accept the port to be launched by parameters
+var argv = require('minimist')(process.argv.slice(2))
+
+app.use(express.static('public'))
+
+var server = app.listen(argv.port || 31416, function () {
+  var host = server.address().address
+  var port = server.address().port
+  console.log('Example app listening at http://%s:%s', host, port)
+})
+```
+
+Learn how to create new scenes and user interfaces as bots, speech recognition, smart triggers. Learn how to develop Netbeast apps, debug and publish them on the [documentation](https://docs.netbeast.co/chapters/developing/apps/write_your_first_app.html)
+
+<a name="connect-devices">
+## Connect Devices
+> A plugin is an app that enables your Dashboard to communicate with a different protocol or proprietary device.
+> It's like if you, that want to learn Chinese, could speak Chinese by installing an app.
+> Luis, cofounder of Netbeast
+
+A basic plugin must implement at least a `discovery` primitive to declare itself on Netbeast's database.
+Fill the gaps to create your first hardware integration into Netbeast:
+```
+var netbeast = require('netbeast')
+var express = require('express')
+var cmd = require('commander') // reads --port from command line
+
+// Netbeast tells you in which port to run your Plugin endpoint
+cmd.option('-p, --port <n>', 'Port to start the HTTP server', parseInt)
+.parse(process.argv)
+
+var app = express()
+
+/*
+* Discover your resources / scan the network
+* And declare your routes into the API
+*/
+
+app.get('/discover', function () {
+	/* TODO, implement discovery */
+
+	/* for each device */
+	netbeast('topic').create({ app: 'my-first-plugin', hook: 'DEVICE_ID' })
+	/* end of for */
+
+	/* or */
+	/* Register all device together and delete the resources no longer available */
+	netbeast('topic').udateDB({ app: 'my-first-plugin', hook: ['DEVICE1_ID', 'DEVICE2_ID', 'DEVICE3_ID', 'DEVICE4_ID'] })
+})
+
+/*
+* Create here your API routes
+* app.get(...), app.post(...), app.put(...), app.delete(...)
+*/
+
+app.get('/:device_id', function (req, res) {
+	// id of the device the dashboard wants
+	// << req.params.device_id >>
+	// dashboard will do GET on this route when
+	// netbeast('topic').get({})
+
+	/* TODO: Return device values from req.query */
+
+	// res.json({ YOUR_PLUGIN_DATA })
+})
+
+app.post('/:device_id', function (req, res) {
+	// id of the device the dashboard wants
+	// << req.params.device_id >>
+	// dashboard will do POST on this route when
+	// netbeast('topic').set({})
+
+	/* TODO: Change device values from req.body */
+
+	// res.json({ YOUR_PLUGIN_DATA })
+})
+
+
+var server = app.listen(cmd.port || 4000, function () {
+  console.log('Netbeast plugin started on %s:%s',
+  server.address().address,
+  server.address().port)
+})
+```
+
+Learn how to launch it, debug it and publish it on the [documentation](https://docs.netbeast.co/chapters/developing/plugins/write_your_first_plugin.html).
 
 <a name="community">
 ## Community
-* Visit our site [https://netbeast.co](https://netbeast.co)
-* Mail us: staff [at] netbeast.co
-* Report a bug or enter discussion at [issues](https://github.com/netbeast/docs/issues)
-* Other resources: [Docs](https://github.com/netbeast/docs/wiki), Netbeast [API](https://github.com/netbeast/API)
+##### <img src="https://pbs.twimg.com/profile_images/3264780953/6c9a2cd7bb2efcb4c53d32900e52c8ac_400x400.png" height="24px" width="auto"/> Join us in our forum https://forum.netbeast.co
+##### <img src="https://slack.com/img/slack_hash_128.v1442100037.png" height="24px" width="auto"/> Ask for an invitation to join our Slack team [here](https://netbeastco.typeform.com/to/VGLexg)
 
 <a name="contribute">
 ## Contribute
@@ -130,8 +227,7 @@ Take a look to our [CONTRIBUTING.md](https://github.com/netbeast/dashboard/blob/
 **TL;DR** Make a Pull Request.
 If your PR is eventually merged don't forget to write down your name on the [AUTHORS.txt](https://github.com/netbeast/dashboard/blob/master/AUTHORS) file.
 
-##### <img src="https://pbs.twimg.com/profile_images/3264780953/6c9a2cd7bb2efcb4c53d32900e52c8ac_400x400.png" height="24px" width="auto"/> Join us in our forum https://forum.netbeast.co
-##### <img src="https://slack.com/img/slack_hash_128.v1442100037.png" height="24px" width="auto"/> Ask for an invitation to join our Slack team [here](https://netbeastco.typeform.com/to/VGLexg)
-
+---
 <img src="https://github.com/netbeast/docs/blob/master/img/open-source.png?raw=true" height="140px" width="auto"/>
-<img src="https://github.com/netbeast/docs/blob/master/img/open-hw.png?raw=true" height="140px" width="auto"/>
+<img src="https://github.com/netbeast/docs/blob/master/img/open-hw.png?raw=true" height="140px" width="auto"/>&nbsp;&nbsp;&nbsp;
+<img src="https://camo.githubusercontent.com/41830215b4097f57cd7780ad127fb0917fc8f818/68747470733a2f2f63646e2e7261776769742e636f6d2f6665726f73732f7374616e646172642f6d61737465722f737469636b65722e737667" height="140px" width="auto"/>

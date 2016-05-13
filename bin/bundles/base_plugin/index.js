@@ -22,6 +22,10 @@ app.get('/discover', function () {
 	/* for each device */
 	netbeast('topic').create({ app: 'my-first-plugin', hook: 'DEVICE_ID' })
 	/* end of for */
+	
+	/* or */
+	/* Register all device together and delete the resources no longer available */
+	netbeast('topic').udateDB({ app: 'my-first-plugin', hook: ['DEVICE1_ID', 'DEVICE2_ID', 'DEVICE3_ID', 'DEVICE4_ID'] })
 })
 
 /*

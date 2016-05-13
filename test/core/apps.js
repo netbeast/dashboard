@@ -1,4 +1,4 @@
-/* global describe, it */
+/* global describe, it, after */
 require('dotenv').load()
 
 var chai = require('chai')

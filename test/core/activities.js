@@ -30,8 +30,9 @@ describe('Activities', function () {
   })
 
   after('it should remove get-started', function (done) {
-    fs.remove(path.join(process.env.APPS_DIR, 'get-started'), function (err) {
+    request.del(URL + '/apps/get-started').end(function (err, resp, body) {
       if (err) throw err
+      expect(resp.statusCode).to.equal(204)
       done()
     })
   })

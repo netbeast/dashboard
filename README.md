@@ -1,6 +1,6 @@
 | Linux & Mac   |      Windows      | Docker | Docs | Forum | *
 |----------|:-------------:|:------:|:------:|:------:|:------:|------:|
-| [![Build Status](https://travis-ci.org/netbeast/dashboard.svg)](https://travis-ci.org/netbeast/dashboard) |  [![Windows Build Status](https://ci.appveyor.com/api/projects/status/l67h46kbdxtvy43p?svg=true)](https://ci.appveyor.com/project/jsdario/dashboard) | [<img src="https://pbs.twimg.com/profile_images/378800000124779041/fbbb494a7eef5f9278c6967b6072ca3e_400x400.png" height="24px" width="auto"/>](https://dashboard.netbeast.co/) | [<img src="https://avatars2.githubusercontent.com/u/7111340?v=3&s=400" height="24px" width="auto"/>](https://docs.netbeast.co) |  [<img src="https://pbs.twimg.com/profile_images/3264780953/6c9a2cd7bb2efcb4c53d32900e52c8ac_400x400.png" height="24px" width="auto"/>](https://forum.netbeast.co) | [<img src="https://www.iconexperience.com/_img/i_collection_png/512x512/plain/graph.png" height="24px" width="auto"/>](http://npm.anvaka.com/#/view/2d/netbeast-cli)
+| [![Build Status](https://travis-ci.org/netbeast/dashboard.svg)](https://travis-ci.org/netbeast/dashboard) |  [![Windows Build Status](https://ci.appveyor.com/api/projects/status/l67h46kbdxtvy43p?svg=true)](https://ci.appveyor.com/project/jsdario/dashboard) | [<img src="https://pbs.twimg.com/profile_images/378800000124779041/fbbb494a7eef5f9278c6967b6072ca3e_400x400.png" height="24px" width="auto"/>](https://dashboard.netbeast.co/) | [<img src="https://avatars2.githubusercontent.com/u/7111340?v=3&s=400" height="24px" width="auto"/>](http://bit.ly/1VYfqDH) |  [<img src="https://pbs.twimg.com/profile_images/3264780953/6c9a2cd7bb2efcb4c53d32900e52c8ac_400x400.png" height="24px" width="auto"/>](http://bit.ly/23UyVMR) | [<img src="https://www.iconexperience.com/_img/i_collection_png/512x512/plain/graph.png" height="24px" width="auto"/>](http://npm.anvaka.com/#/view/2d/netbeast-cli)
 
 # Netbeast Dashboard
 ### Connect everything. Regardless its brand or technology,
@@ -53,7 +53,7 @@ npm start
 
 <a name="installation-board">
 ## Raspberry / Beagle Bone / Pine64 or your choice of board
-Make sure again you have installed [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [nodejs](https://nodejs.org/en/). It can be tricky depending on your OS & architecture. If any doubts please reach https://forum.netbeast.co or open an [issue](https://github.com/netbeast/dashboard/issues).
+Make sure again you have installed [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [nodejs](https://nodejs.org/en/). It can be tricky depending on your OS & architecture. If any doubts please reach [forum](http://bit.ly/23UyVMR) or open an [issue](https://github.com/netbeast/dashboard/issues).
 1. Apply the basic installation from above, preferably using git.
 ```
 git clone https://github.com/netbeast/dashboard . # clone in this folder
@@ -110,11 +110,11 @@ Take advance of Netbeast IoT middleware to test your apps with software that moc
 
 ![Virtual plugins](https://docs.netbeast.co/img/bulb-padjs.gif)
 
-Find tutorials in the [docs](https://docs.netbeast.co), read a blog post about it on [TopTal](https://www.toptal.com/nodejs/programming-visually-with-node-red) or join the [forum](https://forum.netbeast.co) to ask how to do it.
+Find tutorials in the [docs](http://bit.ly/1VYfqDH), read a blog post about it on [TopTal](https://www.toptal.com/nodejs/programming-visually-with-node-red) or join the [forum](http://bit.ly/23UyVMR) to ask how to do it.
 
 <a name="documentation">
 ## Documentation
-We publish a [gitbook](https://www.gitbook.com/book/netbeast/docs/details) with fresh documentation on https://docs.netbeast.co. If you want to open an issue, contribute or edit it, find your way on its github repo https://github.com/netbeast/docs.
+We publish a [gitbook](https://www.gitbook.com/book/netbeast/docs/details) with fresh documentation on [https://docs.netbeast.co](http://bit.ly/1VYfqDH). If you want to open an issue, contribute or edit it, find your way on its github repo https://github.com/netbeast/docs.
 
 <a name="iot-with-node">
 # Create IoT with Node.js
@@ -217,12 +217,12 @@ Learn how to launch it, debug it and publish it on the [documentation](https://d
 
 <a name="community">
 ## Community
-##### <img src="https://pbs.twimg.com/profile_images/3264780953/6c9a2cd7bb2efcb4c53d32900e52c8ac_400x400.png" height="24px" width="auto"/> Join us in our forum https://forum.netbeast.co
+##### <img src="https://pbs.twimg.com/profile_images/3264780953/6c9a2cd7bb2efcb4c53d32900e52c8ac_400x400.png" height="24px" width="auto"/> Join us in our [forum](http://bit.ly/23UyVMR)
 ##### <img src="https://slack.com/img/slack_hash_128.v1442100037.png" height="24px" width="auto"/> Ask for an invitation to join our Slack team [here](https://netbeastco.typeform.com/to/VGLexg)
 
 <a name="contribute">
 ## Contribute
-Take a look to our [CONTRIBUTING.md](https://github.com/netbeast/dashboard/blob/master/CONTRIBUTING.md) file in order to see how can you be part of this project. Or take a look on [Netbeast's discourse forum](https://forum.netbeast.co) to find for inspiration, projects and help.
+Take a look to our [CONTRIBUTING.md](https://github.com/netbeast/dashboard/blob/master/CONTRIBUTING.md) file in order to see how can you be part of this project. Or take a look on [Netbeast's discourse forum](http://bit.ly/23UyVMR) to find for inspiration, projects and help.
 
 **TL;DR** Make a Pull Request.
 If your PR is eventually merged don't forget to write down your name on the [AUTHORS.txt](https://github.com/netbeast/dashboard/blob/master/AUTHORS) file.

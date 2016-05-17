@@ -15,7 +15,7 @@ export default class Notifications extends React.Component {
       showHistory: false
     }
     this.dismiss = this.dismiss.bind(this)
-    this.toggleHistory = this.toggleHistory.bind(this)
+    window.toggleHistory = this.toggleHistory = this.toggleHistory.bind(this)
     window.clearHistory = this.clearHistory = this.clearHistory.bind(this)
   }
 
@@ -92,28 +92,15 @@ export default class Notifications extends React.Component {
     const { toasts, history, showHistory } = this.state
 
     return (
-      <span>
-        <div className='notifications-pod clickable' onClick={this.toggleHistory}>
-          { (!showHistory)
-            ? <span><i className='fa fa-bell'/> Notifications</span>
-            : (
-              <span>
-                <i className='fa fa-close'/> Close log
-                <span onClick={this.clearHistory}> | <i className='fa fa-bell-slash'/> Clear </span>
-              </span>
-            )
-          }
-        </div>
-        <div className='notifications z-super'>
-          { showHistory ? history.map((data, index) => {
-            const isCurrent = index === (toasts.length - 1)
-            return <Toast isCurrent={isCurrent} key={'history-' + data.id} {...data} />
-          }) : toasts.map((data, index) => {
-            const isCurrent = index === (toasts.length - 1)
-            return <Toast isCurrent={isCurrent} key={data.id} {...data} dismiss={this.dismiss.bind(this)}/>
-          })}
-        </div>
-      </span>
+      <div className='notifications z-super'>
+        { showHistory ? history.map((data, index) => {
+          const isCurrent = index === (toasts.length - 1)
+          return <Toast isCurrent={isCurrent} key={'history-' + data.id} {...data} />
+        }) : toasts.map((data, index) => {
+          const isCurrent = index === (toasts.length - 1)
+          return <Toast isCurrent={isCurrent} key={data.id} {...data} dismiss={this.dismiss.bind(this)}/>
+        })}
+      </div>
     )
   }
 }

@@ -32,7 +32,7 @@ export default class Settings extends React.Component {
     }
 
     const { _id } = this.state.user
-    return { id: _id, alias: alias.value, email: email.value, password: password.value }
+    return { _id: _id, alias: alias.value, email: email.value, password: password.value }
   }
 
   updateSettings (event) {

@@ -10,23 +10,6 @@ import Device from './device.jsx'
 import VersionPod from '../misc/version-pod.jsx'
 import RefreshPod from './refresh-pod.jsx'
 
-export class DevicesNavigation extends React.Component {
-  render () {
-    return (
-      <nav>
-        <h1 className='pull-left'>TITLE</h1>
-        <RefreshPod />
-        <ul className='list-unstyled list-inline pull-left'>
-          <li><Link to='/'><i className='fa fa-th' /> Apps</Link></li>
-          <li><Link to='/plugins'><i className='fa fa-puzzle-piece' /> Plugins</Link></li>
-          <li><Link to='/activities'><i className='fa fa-dashboard' /> Activities</Link></li>
-          <li><Link to='/remove'> <i className='fa fa-trash' /> Remove</Link></li>
-        </ul>
-      </nav>
-    )
-  }
-}
-
 export class Devices extends React.Component {
   constructor () {
     super()
@@ -122,7 +105,6 @@ export class Devices extends React.Component {
     return (
       <span>
         <div className='devices-view'>
-
           <svg className='devices-map grabbable' ref='network'
           viewBox={`${ox} ${oy} ${zoom} ${zoom}`} onMouseMove={this.onMouseMove}
           onMouseDown={this.onMouseDown} onMouseUp={this.onMouseUp}
@@ -140,10 +122,13 @@ export class Devices extends React.Component {
 
           </svg>
         </div>
-        <div className='zoom-pod'>
-          <div className='zoom-more clickable' onClick={this.zoom.bind(this, 0.9)}>+</div>
-          <div className='zoom-less clickable' onClick={this.zoom.bind(this, 1.1)}>-</div>
-        </div>
+
+        <ul className='network__controls list-unstyled'>
+          <li><RefreshPod /></li>
+          <li><i className='fa fa-plus-circle zoom-more clickable' onClick={this.zoom.bind(this, 0.9)} /></li>
+          <li><i className='fa fa-minus-circle zoom-less clickable' onClick={this.zoom.bind(this, 1.1)} /></li>
+        </ul>
+
         <VersionPod />
       </span>
     )

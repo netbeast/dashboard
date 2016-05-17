@@ -18205,13 +18205,15 @@ var KNOWN_STATICS = {
 };
 
 module.exports = function hoistNonReactStatics(targetComponent, sourceComponent) {
-    var keys = Object.getOwnPropertyNames(sourceComponent);
-    for (var i=0; i<keys.length; ++i) {
-        if (!REACT_STATICS[keys[i]] && !KNOWN_STATICS[keys[i]]) {
-            try {
-                targetComponent[keys[i]] = sourceComponent[keys[i]];
-            } catch (error) {
+    if (typeof sourceComponent !== 'string') { // don't hoist over string (html) components
+        var keys = Object.getOwnPropertyNames(sourceComponent);
+        for (var i=0; i<keys.length; ++i) {
+            if (!REACT_STATICS[keys[i]] && !KNOWN_STATICS[keys[i]]) {
+                try {
+                    targetComponent[keys[i]] = sourceComponent[keys[i]];
+                } catch (error) {
 
+                }
             }
         }
     }
@@ -95171,7 +95173,7 @@ function _coords(n, array) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Devices = exports.DevicesNavigation = undefined;
+exports.Devices = undefined;
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
@@ -95217,101 +95219,28 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var DevicesNavigation = exports.DevicesNavigation = function (_React$Component) {
-  _inherits(DevicesNavigation, _React$Component);
-
-  function DevicesNavigation() {
-    _classCallCheck(this, DevicesNavigation);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(DevicesNavigation).apply(this, arguments));
-  }
-
-  _createClass(DevicesNavigation, [{
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'nav',
-        null,
-        _react2.default.createElement(
-          'h1',
-          { className: 'pull-left' },
-          'TITLE'
-        ),
-        _react2.default.createElement(_refreshPod2.default, null),
-        _react2.default.createElement(
-          'ul',
-          { className: 'list-unstyled list-inline pull-left' },
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/' },
-              _react2.default.createElement('i', { className: 'fa fa-th' }),
-              ' Apps'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/plugins' },
-              _react2.default.createElement('i', { className: 'fa fa-puzzle-piece' }),
-              ' Plugins'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/activities' },
-              _react2.default.createElement('i', { className: 'fa fa-dashboard' }),
-              ' Activities'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/remove' },
-              ' ',
-              _react2.default.createElement('i', { className: 'fa fa-trash' }),
-              ' Remove'
-            )
-          )
-        )
-      );
-    }
-  }]);
-
-  return DevicesNavigation;
-}(_react2.default.Component);
-
-var Devices = exports.Devices = function (_React$Component2) {
-  _inherits(Devices, _React$Component2);
+var Devices = exports.Devices = function (_React$Component) {
+  _inherits(Devices, _React$Component);
 
   function Devices() {
     _classCallCheck(this, Devices);
 
-    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Devices).call(this));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Devices).call(this));
 
-    _this2.mqtt = _mqtt2.default.connect(window.mqttUri);
-    _this2.state = {
+    _this.mqtt = _mqtt2.default.connect(window.mqttUri);
+    _this.state = {
       devices: _lib.Session.load('devices') || [], dragging: false,
       ox: -300, oy: -300,
       zoom: 600
     };
 
     /* Methods */
-    _this2.onMouseMove = _this2.onMouseMove.bind(_this2);
-    _this2.onMouseDown = _this2.onMouseDown.bind(_this2);
-    _this2.onMouseUp = _this2.onMouseUp.bind(_this2);
-    _this2.onWheel = _this2.onWheel.bind(_this2);
-    _this2.onResize = _this2.onResize.bind(_this2);
-    return _this2;
+    _this.onMouseMove = _this.onMouseMove.bind(_this);
+    _this.onMouseDown = _this.onMouseDown.bind(_this);
+    _this.onMouseUp = _this.onMouseUp.bind(_this);
+    _this.onWheel = _this.onWheel.bind(_this);
+    _this.onResize = _this.onResize.bind(_this);
+    return _this;
   }
 
   _createClass(Devices, [{
@@ -95419,7 +95348,7 @@ var Devices = exports.Devices = function (_React$Component2) {
   }, {
     key: 'componentWillMount',
     value: function componentWillMount() {
-      var _this3 = this;
+      var _this2 = this;
 
       window.addEventListener('resize', this.handleResize);
       this.mqtt.subscribe('netbeast/network');
@@ -95428,7 +95357,7 @@ var Devices = exports.Devices = function (_React$Component2) {
 
         var devices = JSON.parse(message);
         _lib.Session.save('devices', devices);
-        _this3.setState({ devices: devices });
+        _this2.setState({ devices: devices });
       });
     }
   }, {
@@ -95440,7 +95369,7 @@ var Devices = exports.Devices = function (_React$Component2) {
   }, {
     key: 'render',
     value: function render() {
-      var _this4 = this;
+      var _this3 = this;
 
       var _state3 = this.state;
       var devices = _state3.devices;
@@ -95468,7 +95397,7 @@ var Devices = exports.Devices = function (_React$Component2) {
               return _react2.default.createElement(_filterSvg2.default, { key: src, src: src });
             }),
             devices.map(function (src, idx) {
-              return _this4.connect(idx);
+              return _this3.connect(idx);
             }),
             _react2.default.createElement(
               'filter',
@@ -95482,17 +95411,22 @@ var Devices = exports.Devices = function (_React$Component2) {
           )
         ),
         _react2.default.createElement(
-          'div',
-          { className: 'zoom-pod' },
+          'ul',
+          { className: 'network__controls list-unstyled' },
           _react2.default.createElement(
-            'div',
-            { className: 'zoom-more clickable', onClick: this.zoom.bind(this, 0.9) },
-            '+'
+            'li',
+            null,
+            _react2.default.createElement(_refreshPod2.default, null)
           ),
           _react2.default.createElement(
-            'div',
-            { className: 'zoom-less clickable', onClick: this.zoom.bind(this, 1.1) },
-            '-'
+            'li',
+            null,
+            _react2.default.createElement('i', { className: 'fa fa-plus-circle zoom-more clickable', onClick: this.zoom.bind(this, 0.9) })
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            _react2.default.createElement('i', { className: 'fa fa-minus-circle zoom-less clickable', onClick: this.zoom.bind(this, 1.1) })
           )
         ),
         _react2.default.createElement(_versionPod2.default, null)
@@ -95665,13 +95599,7 @@ var RefreshPod = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'span',
-        { className: 'refresh-pod clickable', title: 'Rediscover all devices...' },
-        _react2.default.createElement(
-          _reactRouter.Link,
-          { to: '/', title: 'go back', style: { color: 'white' } },
-          _react2.default.createElement('i', { className: 'fa fa-arrow-left' })
-        ),
-        '   ',
+        { className: 'refresh-pod ', title: 'Rediscover all devices...' },
         _react2.default.createElement('i', { className: 'fa fa-refresh', onClick: this.refresh.bind(this) })
       );
     }
@@ -95962,6 +95890,10 @@ var _userPod = require('./user/user-pod.jsx');
 
 var _userPod2 = _interopRequireDefault(_userPod);
 
+var _notificationsPod = require('./notifications/notifications-pod.jsx');
+
+var _notificationsPod2 = _interopRequireDefault(_notificationsPod);
+
 var _signup = require('./user/signup.jsx');
 
 var _signup2 = _interopRequireDefault(_signup);
@@ -95988,8 +95920,9 @@ var Navigation = exports.Navigation = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Navigation).call(this));
 
-    _this.state = { title: 'Netbeast' };
+    _this.state = { title: 'Netbeast', hideDrawer: true };
     window.title = _this.title.bind(_this);
+    _this.toggleDrawer = _this.toggleDrawer.bind(_this);
     return _this;
   }
 
@@ -96003,62 +95936,155 @@ var Navigation = exports.Navigation = function (_React$Component) {
       return document.title;
     }
   }, {
+    key: 'toggleDrawer',
+    value: function toggleDrawer() {
+      this.setState({ hideDrawer: !this.state.hideDrawer });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
-        'nav',
+        'span',
         null,
         _react2.default.createElement(
-          _reactRouter.Link,
-          { to: '/' },
+          'nav',
+          { className: 'navigation-bar' },
           _react2.default.createElement(
-            'h1',
-            { className: 'pull-left' },
-            this.state.title
-          )
+            'ul',
+            { className: 'collapsed list-unstyled list-inline pull-left' },
+            _react2.default.createElement(
+              'li',
+              null,
+              _react2.default.createElement('i', { className: 'fa fa-bars clickable', onClick: this.toggleDrawer })
+            )
+          ),
+          _react2.default.createElement(
+            _reactRouter.Link,
+            { to: '/' },
+            _react2.default.createElement(
+              'h1',
+              { className: 'pull-left' },
+              this.state.title
+            )
+          ),
+          _react2.default.createElement(
+            'ul',
+            { className: 'expanded list-unstyled list-inline pull-left' },
+            _react2.default.createElement(
+              'li',
+              null,
+              _react2.default.createElement(
+                _reactRouter.Link,
+                { to: '/' },
+                _react2.default.createElement('i', { className: 'fa fa-th' }),
+                ' Apps'
+              )
+            ),
+            _react2.default.createElement(
+              'li',
+              null,
+              _react2.default.createElement(
+                _reactRouter.Link,
+                { to: '/plugins' },
+                _react2.default.createElement('i', { className: 'fa fa-puzzle-piece' }),
+                ' Plugins'
+              )
+            ),
+            _react2.default.createElement(
+              'li',
+              null,
+              _react2.default.createElement(
+                _reactRouter.Link,
+                { to: '/activities' },
+                _react2.default.createElement('i', { className: 'fa fa-dashboard' }),
+                ' Activities'
+              )
+            ),
+            _react2.default.createElement(
+              'li',
+              null,
+              _react2.default.createElement(
+                _reactRouter.Link,
+                { to: '/remove' },
+                ' ',
+                _react2.default.createElement('i', { className: 'fa fa-trash' }),
+                ' Remove'
+              )
+            )
+          ),
+          _react2.default.createElement(_userPod2.default, null),
+          _react2.default.createElement(_notificationsPod2.default, null)
         ),
-        _react2.default.createElement(
-          'ul',
-          { className: 'list-unstyled list-inline pull-left' },
+        this.state.hideDrawer ? null : _react2.default.createElement(
+          'nav',
+          { className: 'navigation-drawer' },
           _react2.default.createElement(
-            'li',
+            'p',
             null,
             _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/' },
-              _react2.default.createElement('i', { className: 'fa fa-th' }),
-              ' Apps'
+              'ul',
+              { className: 'collapsed list-unstyled list-inline pull-left' },
+              _react2.default.createElement(
+                'li',
+                null,
+                _react2.default.createElement('i', { className: 'fa fa-bars clickable', onClick: this.toggleDrawer })
+              )
             )
           ),
           _react2.default.createElement(
-            'li',
-            null,
+            _reactRouter.Link,
+            { to: '/' },
             _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/plugins' },
-              _react2.default.createElement('i', { className: 'fa fa-puzzle-piece' }),
-              ' Plugins'
+              'h1',
+              { className: 'pull-left' },
+              this.state.title
             )
           ),
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('br', null),
           _react2.default.createElement(
-            'li',
-            null,
+            'ul',
+            { className: 'expanded list-unstyled' },
             _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/activities' },
-              _react2.default.createElement('i', { className: 'fa fa-dashboard' }),
-              ' Activities'
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
+              'li',
+              null,
+              _react2.default.createElement(
+                _reactRouter.Link,
+                { to: '/' },
+                _react2.default.createElement('i', { className: 'fa fa-th' }),
+                ' Apps'
+              )
+            ),
             _react2.default.createElement(
-              _reactRouter.Link,
-              { to: '/remove' },
-              ' ',
-              _react2.default.createElement('i', { className: 'fa fa-trash' }),
-              ' Remove'
+              'li',
+              null,
+              _react2.default.createElement(
+                _reactRouter.Link,
+                { to: '/plugins' },
+                _react2.default.createElement('i', { className: 'fa fa-puzzle-piece' }),
+                ' Plugins'
+              )
+            ),
+            _react2.default.createElement(
+              'li',
+              null,
+              _react2.default.createElement(
+                _reactRouter.Link,
+                { to: '/activities' },
+                _react2.default.createElement('i', { className: 'fa fa-dashboard' }),
+                ' Activities'
+              )
+            ),
+            _react2.default.createElement(
+              'li',
+              null,
+              _react2.default.createElement(
+                _reactRouter.Link,
+                { to: '/remove' },
+                ' ',
+                _react2.default.createElement('i', { className: 'fa fa-trash' }),
+                ' Remove'
+              )
             )
           )
         )
@@ -96117,7 +96143,6 @@ var Dashboard = function (_React$Component2) {
         _react2.default.createElement(
           'div',
           { style: { width: '100%', height: 70 } },
-          _react2.default.createElement(_userPod2.default, null),
           nav || _react2.default.createElement(Navigation, null)
         ),
         _react2.default.createElement(
@@ -96160,7 +96185,7 @@ _reactDom2.default.render(_react2.default.createElement(
     ),
     _react2.default.createElement(_reactRouter.Route, { path: 'install', component: _install2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'history', component: _index3.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: 'network', components: { main: _index.Devices, nav: _index.DevicesNavigation } }),
+    _react2.default.createElement(_reactRouter.Route, { path: 'network', components: _index.Devices }),
     _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _login2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'settings', onEnter: _lib.Auth.isLogged, component: _settings2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _signup2.default }),
@@ -96170,7 +96195,7 @@ _reactDom2.default.render(_react2.default.createElement(
   )
 ), document.getElementById('render-target'));
 
-},{"./apps/drawer.jsx":654,"./apps/explore.jsx":656,"./apps/install.jsx":657,"./apps/live.jsx":658,"./devices/index.jsx":663,"./history/index.jsx":666,"./lib":668,"./misc/connection-pod.jsx":670,"./misc/feedback-pod.jsx":671,"./not-found.jsx":673,"./notifications":674,"./user/login.jsx":676,"./user/settings.jsx":677,"./user/signup.jsx":678,"./user/user-pod.jsx":679,"react":593,"react-dom":399,"react-router":454}],668:[function(require,module,exports){
+},{"./apps/drawer.jsx":654,"./apps/explore.jsx":656,"./apps/install.jsx":657,"./apps/live.jsx":658,"./devices/index.jsx":663,"./history/index.jsx":666,"./lib":668,"./misc/connection-pod.jsx":670,"./misc/feedback-pod.jsx":671,"./not-found.jsx":673,"./notifications":674,"./notifications/notifications-pod.jsx":675,"./user/login.jsx":677,"./user/settings.jsx":678,"./user/signup.jsx":679,"./user/user-pod.jsx":680,"react":593,"react-dom":399,"react-router":454}],668:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -96445,7 +96470,7 @@ var VersionPod = function (_React$Component) {
   _createClass(VersionPod, [{
     key: 'render',
     value: function render() {
-      var version = "0.4.2";
+      var version = "0.5.1";
       return _react2.default.createElement(
         'span',
         { className: 'version-pod', title: 'Checking for updates...' },
@@ -96568,7 +96593,7 @@ var Notifications = function (_React$Component) {
       showHistory: false
     };
     _this.dismiss = _this.dismiss.bind(_this);
-    _this.toggleHistory = _this.toggleHistory.bind(_this);
+    window.toggleHistory = _this.toggleHistory = _this.toggleHistory.bind(_this);
     window.clearHistory = _this.clearHistory = _this.clearHistory.bind(_this);
     return _this;
   }
@@ -96667,41 +96692,15 @@ var Notifications = function (_React$Component) {
 
 
       return _react2.default.createElement(
-        'span',
-        null,
-        _react2.default.createElement(
-          'div',
-          { className: 'notifications-pod clickable', onClick: this.toggleHistory },
-          !showHistory ? _react2.default.createElement(
-            'span',
-            null,
-            _react2.default.createElement('i', { className: 'fa fa-bell' }),
-            ' Notifications'
-          ) : _react2.default.createElement(
-            'span',
-            null,
-            _react2.default.createElement('i', { className: 'fa fa-close' }),
-            ' Close log',
-            _react2.default.createElement(
-              'span',
-              { onClick: this.clearHistory },
-              ' | ',
-              _react2.default.createElement('i', { className: 'fa fa-bell-slash' }),
-              ' Clear '
-            )
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'notifications z-super' },
-          showHistory ? history.map(function (data, index) {
-            var isCurrent = index === toasts.length - 1;
-            return _react2.default.createElement(_toast2.default, _extends({ isCurrent: isCurrent, key: 'history-' + data.id }, data));
-          }) : toasts.map(function (data, index) {
-            var isCurrent = index === toasts.length - 1;
-            return _react2.default.createElement(_toast2.default, _extends({ isCurrent: isCurrent, key: data.id }, data, { dismiss: _this2.dismiss.bind(_this2) }));
-          })
-        )
+        'div',
+        { className: 'notifications z-super' },
+        showHistory ? history.map(function (data, index) {
+          var isCurrent = index === toasts.length - 1;
+          return _react2.default.createElement(_toast2.default, _extends({ isCurrent: isCurrent, key: 'history-' + data.id }, data));
+        }) : toasts.map(function (data, index) {
+          var isCurrent = index === toasts.length - 1;
+          return _react2.default.createElement(_toast2.default, _extends({ isCurrent: isCurrent, key: data.id }, data, { dismiss: _this2.dismiss.bind(_this2) }));
+        })
       );
     }
   }]);
@@ -96711,7 +96710,97 @@ var Notifications = function (_React$Component) {
 
 exports.default = Notifications;
 
-},{"../lib":668,"./toast.jsx":675,"mqtt":199,"react":593}],675:[function(require,module,exports){
+},{"../lib":668,"./toast.jsx":676,"mqtt":199,"react":593}],675:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var VersionPod = function (_React$Component) {
+  _inherits(VersionPod, _React$Component);
+
+  function VersionPod() {
+    _classCallCheck(this, VersionPod);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(VersionPod).call(this));
+
+    _this.state = { showHistory: false };
+    return _this;
+  }
+
+  _createClass(VersionPod, [{
+    key: 'toggleHistory',
+    value: function toggleHistory() {
+      this.setState({ showHistory: !this.state.showHistory });
+      window.toggleHistory();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { className: 'notifications-pod clickable', onClick: this.toggleHistory.bind(this) },
+        !this.state.showHistory ? _react2.default.createElement(
+          'span',
+          null,
+          _react2.default.createElement('i', { className: 'fa fa-bell' }),
+          _react2.default.createElement(
+            'span',
+            { className: 'notifications-pod__text' },
+            ' Notifications '
+          )
+        ) : _react2.default.createElement(
+          'span',
+          null,
+          _react2.default.createElement(
+            'span',
+            { className: 'notifications-pod__close' },
+            _react2.default.createElement('i', { className: 'fa fa-close' }),
+            ' ',
+            _react2.default.createElement(
+              'span',
+              { className: 'notifications-pod__close__text' },
+              ' Close log '
+            )
+          ),
+          ' | ',
+          _react2.default.createElement(
+            'span',
+            { className: 'notifications-pod__clear' },
+            _react2.default.createElement('i', { onClick: window.clearHistory, className: 'fa fa-bell-slash' }),
+            ' ',
+            _react2.default.createElement(
+              'span',
+              { className: 'notifications-pod__clear__text' },
+              ' Clear '
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return VersionPod;
+}(_react2.default.Component);
+
+exports.default = VersionPod;
+
+},{"react":593}],676:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -96789,7 +96878,7 @@ var Toast = function (_React$Component) {
 
 exports.default = Toast;
 
-},{"react":593}],676:[function(require,module,exports){
+},{"react":593}],677:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -96900,7 +96989,7 @@ Login.contextTypes = {
   router: _react2.default.PropTypes.object.isRequired
 };
 
-},{"react":593,"react-router":454,"superagent":627}],677:[function(require,module,exports){
+},{"react":593,"react-router":454,"superagent":627}],678:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -96972,7 +97061,7 @@ var Settings = function (_React$Component) {
 
       var _id = this.state.user._id;
 
-      return { id: _id, alias: alias.value, email: email.value, password: password.value };
+      return { _id: _id, alias: alias.value, email: email.value, password: password.value };
     }
   }, {
     key: 'updateSettings',
@@ -97082,7 +97171,7 @@ Settings.contextTypes = {
   router: _react2.default.PropTypes.object.isRequired
 };
 
-},{"../lib":668,"bluebird":5,"react":593,"react-bootstrap":308,"superagent-bluebird-promise":626}],678:[function(require,module,exports){
+},{"../lib":668,"bluebird":5,"react":593,"react-bootstrap":308,"superagent-bluebird-promise":626}],679:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -97213,7 +97302,7 @@ var Signup = function (_React$Component) {
 
 exports.default = Signup;
 
-},{"react":593,"react-router":454,"superagent-bluebird-promise":626}],679:[function(require,module,exports){
+},{"react":593,"react-router":454,"superagent-bluebird-promise":626}],680:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -97345,19 +97434,19 @@ var UserPod = function (_React$Component) {
 
 
       return _react2.default.createElement(
-        'div',
-        { className: 'user-pod clickable' },
+        _reactBootstrap.OverlayTrigger,
+        { trigger: ['click'], rootClose: true, placement: 'bottom', overlay: this.popover() },
         _react2.default.createElement(
-          'span',
-          { className: 'user-pod-avatar' },
-          _react2.default.createElement(_reactAvatar2.default, { round: true, name: alias, src: src, size: 32 })
-        ),
-        _react2.default.createElement(
-          _reactBootstrap.OverlayTrigger,
-          { trigger: ['click'], rootClose: true, placement: 'bottom', overlay: this.popover() },
+          'div',
+          { className: 'user-pod clickable' },
           _react2.default.createElement(
             'span',
-            { className: 'user-pod-name' },
+            { className: 'user-pod__avatar' },
+            _react2.default.createElement(_reactAvatar2.default, { round: true, name: alias, src: src, size: 32 })
+          ),
+          _react2.default.createElement(
+            'span',
+            { className: 'user-pod__name' },
             ' ',
             alias,
             ' ',

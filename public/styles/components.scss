@@ -17,40 +17,72 @@
 // DRAWER COMPONENT
 //====================================
 
-nav {
+nav a {
+  font-family: 'Proxima Nova';
+  text-decoration: none;
+  color: inherit;
+}
+
+nav ul { padding: 25px 40px; }
+
+nav.navigation-bar {
   position: fixed;
   background-color: $grey-dark;
   width: 100%; height: 70px;
-  a {
-    font-family: 'Proxima Nova';
-    text-decoration: none;
-    color: inherit;
+
+  h1 { 
+    padding-left: 40px; 
+    @media (max-width: 820px) { padding-left: 0px; }
   }
-  h1 { padding-left: 40px; }
-  ul { padding: 25px 40px; }
+    
+  .user-pod {
+    float: right;
+    padding: 20px 30px;
+  }
+
+  .notifications-pod { 
+    color: #fff;
+    float: right;
+    padding: 25px 0px;
+  }
+
+  .collapsed { display: none; }
+  @media (max-width: 920px) {
+    .expanded { display: none; }
+    .collapsed { display: block; }
+    .user-pod__name { display: none; }
+    .notifications-pod__text { display: none }
+    .notifications-pod__close__text { display: none; }
+    .notifications-pod__clear__text { display: none; }
+  }
+}
+
+nav.navigation-drawer {
+  position: fixed;
+  z-index: 1000;
+  height: 100%; width: 300px;
+  background-color: $grey-darker;
 }
 
 .drawer {
-  padding: 0 50px;
-  justify-content: space-around;
-  display: flex;
+  text-align: center;
 }
 
 .drawer .apps-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  max-width: 890px;
-  @media (max-width: 890px) {
-    justify-content: center;
-  }
+  display: inline-block;
+  text-align: left;
+  width: 1000px;
+  @media (max-width: 1260px) { max-width: 860px; }
+  @media (max-width: 960px) { max-width: 500px; }
+  @media (max-width: 660px) { max-width: 340px; }
 }
 
 .drawer .apps-list .app {
+  display: inline-block;
+  text-align: center; 
   border-radius: 3px;
   padding: 40px 23px;
   margin-top: 15px;
-  text-align: center;
 
   .logo {
     width: 120px;
@@ -180,13 +212,6 @@ nav {
   &__body { padding-top: 5px; }
 }
 
-.notifications-pod {
-  position: fixed;
-  color: #fff;
-  z-index: 1000;
-  top: 25px; right: 150px;
-}
-
 //====================================
 // App LiveView
 //====================================
@@ -235,23 +260,12 @@ nav {
   }
 }
 
-.zoom-pod {
+.network__controls {  
   position: fixed;
   bottom: 50px; left: 50px;
-  .zoom-more, .zoom-less {
-    border: 2px solid $brand-info;
-    color: $brand-info;
-    font-weight: bold;
-    font-size: 1.4em;
-    padding: 5px 10px;
-  }
-}
-
-.refresh-pod {
-  color: #fff;
-  float: left;
-  padding: 18px 40px;
-  font-size: 140%;
+  color: $brand-info;
+  font-size: 2em;
+  font-weight: bold;
 }
 
 //===================================
@@ -343,25 +357,6 @@ nav {
     background-color: #fff;
     border-radius: 4px;
   }
-}
-
-//==============================
-// User pod
-//==============================
-
-.user-pod {
-  z-index: 1000;
-  position: fixed;
-  display: block;
-  right: 25px;
-  top: 15px;
-}
-
-.user-pod-name {
-  padding: 10px;
-  display: inline-block;
-  vertical-align: top;
-  float: right;
 }
 
 //====================================

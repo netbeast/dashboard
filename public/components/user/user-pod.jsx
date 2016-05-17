@@ -61,14 +61,14 @@ export default class UserPod extends React.Component {
     const { alias, src } = user ? user : { alias: 'Guest' }
 
     return (
-      <div className='user-pod clickable'>
-        <span className='user-pod-avatar'>
-          <Avatar round={true} name={alias} src={src} size={32} />
-        </span>
-        <OverlayTrigger trigger={['click']} rootClose placement='bottom' overlay={this.popover()}>
-          <span className='user-pod-name'> {alias} <i className='fa fa-caret-down'></i></span>
-        </OverlayTrigger>
-      </div>
+      <OverlayTrigger trigger={['click']} rootClose placement='bottom' overlay={this.popover()}>
+        <div className='user-pod clickable'>
+          <span className='user-pod__avatar'>
+            <Avatar round={true} name={alias} src={src} size={32} />
+          </span>
+          <span className='user-pod__name'> {alias} <i className='fa fa-caret-down'></i></span>
+        </div>
+      </OverlayTrigger>
     )
   }
 }

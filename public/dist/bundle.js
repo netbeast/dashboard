@@ -95943,6 +95943,8 @@ var Navigation = exports.Navigation = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var marginLeft = -300 * this.state.hideDrawer;
+      console.log('marginLeft', marginLeft);
       return _react2.default.createElement(
         'span',
         null,
@@ -96015,9 +96017,9 @@ var Navigation = exports.Navigation = function (_React$Component) {
           _react2.default.createElement(_userPod2.default, null),
           _react2.default.createElement(_notificationsPod2.default, null)
         ),
-        this.state.hideDrawer ? null : _react2.default.createElement(
+        _react2.default.createElement(
           'nav',
-          { className: 'navigation-drawer' },
+          { className: 'navigation-drawer', style: { 'margin-left': marginLeft } },
           _react2.default.createElement(
             'p',
             null,
@@ -96027,7 +96029,7 @@ var Navigation = exports.Navigation = function (_React$Component) {
               _react2.default.createElement(
                 'li',
                 null,
-                _react2.default.createElement('i', { className: 'fa fa-bars clickable', onClick: this.toggleDrawer })
+                _react2.default.createElement('i', { className: 'fa fa-close clickable', onClick: this.toggleDrawer })
               )
             )
           ),
@@ -96472,8 +96474,8 @@ var VersionPod = function (_React$Component) {
     value: function render() {
       var version = "0.5.1";
       return _react2.default.createElement(
-        'span',
-        { className: 'version-pod', title: 'Checking for updates...' },
+        'a',
+        { target: '_blank', href: 'https://github.com/netbeast/dashboard', className: 'version-pod', title: 'npm package version' },
         'Beta v',
         version
       );

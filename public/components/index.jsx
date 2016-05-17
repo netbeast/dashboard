@@ -42,6 +42,8 @@ export class Navigation extends React.Component {
   }
 
   render () {
+    const marginLeft = -300 * this.state.hideDrawer
+    console.log('marginLeft', marginLeft)
     return (
       <span>
         <nav className='navigation-bar'>
@@ -59,13 +61,12 @@ export class Navigation extends React.Component {
           </ul>
           <UserPod />
           <NotificationsPod />
-        </nav>
-        {this.state.hideDrawer ? null : 
-        <nav className='navigation-drawer'>
+        </nav> 
+        <nav className='navigation-drawer' style={{ 'margin-left': marginLeft }}>
           <p>
           <ul className='collapsed list-unstyled list-inline pull-left'>
             <li>
-              <i className='fa fa-bars clickable' onClick={this.toggleDrawer} />
+              <i className='fa fa-close clickable' onClick={this.toggleDrawer} />
             </li>
           </ul>
           </p>
@@ -78,7 +79,7 @@ export class Navigation extends React.Component {
             <li><Link to='/activities'><i className='fa fa-dashboard' /> Activities</Link></li>
             <li><Link to='/remove'> <i className='fa fa-trash' /> Remove</Link></li>
           </ul>
-        </nav>}
+        </nav>
       </span>
     )
   }

@@ -62,6 +62,8 @@ nav.navigation-drawer {
   z-index: 1000;
   height: 100%; width: 300px;
   background-color: $grey-darker;
+  transition: all 1s cubic-bezier(0, 1, 0.5, 1);
+  box-shadow: 0px 0px 10px 1px rgba(0,0,0,.7);
 }
 
 .drawer {
@@ -382,9 +384,12 @@ nav.navigation-drawer {
 //====================================
 
 .version-pod {
+  color: white;
   position: fixed;
-  display: block;
+  height: 20px;
   bottom: 5px; left: 5px;
+  text-decoration: none;
+  border-bottom: 1px dotted;
   opacity: 0.25;
   &:hover {
     cursor: default;

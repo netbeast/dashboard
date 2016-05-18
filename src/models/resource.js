@@ -2,6 +2,7 @@ var util = require('util')
 
 var Promise = require('bluebird')
 var chalk = require('chalk')
+var _ = require('lodash')
 
 var helper = require('../helpers/resource')
 var ApiError = require('../util/api-error')
@@ -46,11 +47,12 @@ Resource.find = function (query, done) {
   var result = []
   helper.findAction(query, function (err, row) {
     if (err) return done(err)
-      if (!util.isArray(row)) return done(new ApiError(404, 'Resource not found DB'))
+      if (_.isEmpty(row)) return done(new ApiError(404, 'Resource not found DB'))
 
       row.forEach(function (action) {
         result.push(new Resource(action))
       })
+
       return done(null, result)
     })
 }
@@ -91,12 +93,12 @@ Resource.update = function (query, value, done) {
 
 Resource.destroy = function (query, done) {
   Resource.find(query, function (err, resources) {
-    if (err && err.statusCode !== 404 && (typeof done === 'function')) {
+    if (err && err.statusCode !== 404) {
       return done(err)
     }
 
-    if ((!resources || resources.length < 1) && (typeof done === 'function')) {
-      return done(null, 0)
+    if (!resources || _.isEmpty(resources)) {
+      if (typeof done === 'function') return done(null, 0)
     } else {
       Promise.map(resources, function (item) {
         return new Promise(function (resolve, reject) {

@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default class VersionPod extends React.Component {
+export default class NotificationsPod extends React.Component {
   constructor () {
     super()
-    this.state = { showHistory: false}
+    this.state = { showHistory: false }
   }
 
   toggleHistory () {
@@ -15,7 +15,7 @@ export default class VersionPod extends React.Component {
     return (
       <div className='notifications-pod clickable' onClick={this.toggleHistory.bind(this)}>
         { (!this.state.showHistory)
-          ? <span><i className='fa fa-bell'/> 
+          ? <span><i className='fa fa-bell'/>
               <span className='notifications-pod__text'> Notifications </span>
             </span>
           : (

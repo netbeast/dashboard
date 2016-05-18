@@ -1,7 +1,7 @@
 {
   "name": "netbeast-cli",
   "description": "Netbeast OS dashboard, IoT apps manager",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "preferGlobal": "true",
   "dependencies": {
     "aedes": "^0.17.1",

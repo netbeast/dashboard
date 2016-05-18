@@ -61,7 +61,7 @@ describe('Resources', function () {
       item.destroy(function (err) {
         if (err) throw err
         Resource.find({ id: item.id }, function (err, item) {
-          if (err) throw err
+          if (err && err.statusCode !== 404) throw err
           expect(item).to.be.empty
           done()
         })

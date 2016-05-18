@@ -10,7 +10,7 @@ var fs = require('fs')
 var cmd = require('commander')
 var websocket = require('websocket-stream')
 var aedes = require('aedes')({
-    concurrency: 1000
+  concurrency: 1000
 })
 
 var httpProxy = require('http-proxy')
@@ -31,7 +31,7 @@ cmd
 
 var server = http.createServer(app)
 
-process.env.SPORT = cmd.secure_port || process.env.SECURE_PORT
+process.env.SECURE_PORT = cmd.secure_port || process.env.SECURE_PORT
 process.env.PORT = cmd.port || process.env.PORT
 
 var proxy = httpProxy.createServer({

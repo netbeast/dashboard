@@ -58,7 +58,10 @@ export default class ExplorableApp extends React.Component {
       if (type === 'plugin' || type === 'service' || props.bootOnLoad)
         return request.post('/api/activities/' + name).promise()
     }).then((res) => { toastr.success(`${res.body.name} is running`) })
-    .catch((err) => toastr.error(err.res.text))
+    .catch((err) => {
+      if (err.res) toastr.error(err.res.text)
+      else toastr.error(err.message)
+    })
   }
 
   renderButton () {

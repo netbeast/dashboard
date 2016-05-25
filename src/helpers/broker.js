@@ -4,22 +4,27 @@
 var chalk = require('chalk')
 
 var mqtt = require('mqtt')
-var client = mqtt.connect()
+var client = mqtt.connect('ws://localhost:' + process.env.PORT)
 
 var broker = module.exports = {}
 
 broker.client = client
 
-broker.client.subscribe('#')
+broker.client.on('connect', function () {
+  console.log('[broker] online')
+  broker.client.subscribe('#')
+})
 
-broker.client.on('message', function (topic, message) {
+client.on('message', function (topic, message) {
   topic = topic.toString()
-  try { 
-    message = JSON.parse(message.toString()) 
+
+  try {
+    message = JSON.parse(message.toString())
+    if (topic === 'netbeast/push') notificationLogger(message)
   } catch (e) {
+    console.log('broker got a non JSON object')
     message = message.toString()
   }
-
   broker.client.emit('#' + topic, message)
 })
 
@@ -45,25 +50,34 @@ broker.warning = function (body, title) {
 }
 
 broker.emit = function (msg) {
+  client.publish('netbeast/push', JSON.stringify(msg))
+}
+
+function notificationLogger (msg) {
   // Log notification through console
-  var str = chalk.bgCyan('ws') +
-  chalk.bold.bgCyan(msg.title || '::')
+  var str = ''
+
+  msg.emphasis = msg.emphasis || 'info'
+  msg.body = ' ' + msg.body + ' '
 
   switch (msg.emphasis) {
     case 'error':
+      str = chalk.bold.bgRed(' #' + msg.title + ' ')
       str = str + chalk.bgRed(msg.body)
       break
     case 'warning':
+      str = chalk.bold.bgYellow(' #' + msg.title + ' ')
       str = str + chalk.bgYellow(msg.body)
       break
     case 'info':
-      str = str + chalk.bgBlue(msg.body)
+      str = chalk.bold.bgCyan(' #' + msg.title + ' ')
+      str = str + chalk.bgCyan(msg.body)
       break
     case 'success':
+      str = chalk.bold.bgGreen(' #' + msg.title + ' ')
       str = str + chalk.bgGreen(msg.body)
       break
   }
 
   console.log(str)
-  client.publish('netbeast/push', JSON.stringify(msg))
 }

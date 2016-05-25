@@ -38,9 +38,9 @@ export default class Explore extends React.Component {
   }
 
   query (str) {
-    console.log('querying %s', str || GITHUB_Q)
     request.get(str || GITHUB_Q).end((err, res) => {
-      if (err) return window.toastr.error(err.res.text)
+      if (err && err.res) return window.toastr.error(err.res.text)
+      if (err) return window.toastr.error(err.message)
 
       let result = JSON.parse(res.text)
       result = result.items ? result.items : [result]

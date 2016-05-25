@@ -94286,7 +94286,7 @@ var ExplorableApp = function (_React$Component) {
       }).then(function (res) {
         toastr.success(res.body.name + ' is running');
       }).catch(function (err) {
-        return toastr.error(err.res.text);
+        if (err.res) toastr.error(err.res.text);else toastr.error(err.message);
       });
     }
   }, {
@@ -94437,9 +94437,9 @@ var Explore = function (_React$Component) {
     value: function query(str) {
       var _this3 = this;
 
-      console.log('querying %s', str || GITHUB_Q);
       _superagentBluebirdPromise2.default.get(str || GITHUB_Q).end(function (err, res) {
-        if (err) return window.toastr.error(err.res.text);
+        if (err && err.res) return window.toastr.error(err.res.text);
+        if (err) return window.toastr.error(err.message);
 
         var result = JSON.parse(res.text);
         result = result.items ? result.items : [result];
@@ -96472,7 +96472,7 @@ var VersionPod = function (_React$Component) {
   _createClass(VersionPod, [{
     key: 'render',
     value: function render() {
-      var version = "0.5.1";
+      var version = "0.5.2";
       return _react2.default.createElement(
         'a',
         { target: '_blank', href: 'https://github.com/netbeast/dashboard', className: 'version-pod', title: 'npm package version' },

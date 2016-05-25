@@ -9,6 +9,8 @@ var cookieParser = require('cookie-parser')
 var express = require('express')
 var chalk = require('chalk')
 
+require('./helpers/broker.js')
+
 var app = module.exports = express()
 
 app.use(logger('dev', {

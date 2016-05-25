@@ -95852,6 +95852,10 @@ var _notifications = require('./notifications');
 
 var _notifications2 = _interopRequireDefault(_notifications);
 
+var _notificationsPod = require('./notifications/notifications-pod.jsx');
+
+var _notificationsPod2 = _interopRequireDefault(_notificationsPod);
+
 var _drawer = require('./apps/drawer.jsx');
 
 var _drawer2 = _interopRequireDefault(_drawer);
@@ -95889,10 +95893,6 @@ var _login2 = _interopRequireDefault(_login);
 var _userPod = require('./user/user-pod.jsx');
 
 var _userPod2 = _interopRequireDefault(_userPod);
-
-var _notificationsPod = require('./notifications/notifications-pod.jsx');
-
-var _notificationsPod2 = _interopRequireDefault(_notificationsPod);
 
 var _signup = require('./user/signup.jsx');
 
@@ -95944,7 +95944,7 @@ var Navigation = exports.Navigation = function (_React$Component) {
     key: 'render',
     value: function render() {
       var marginLeft = -300 * this.state.hideDrawer;
-      console.log('marginLeft', marginLeft);
+
       return _react2.default.createElement(
         'span',
         null,
@@ -96019,9 +96019,9 @@ var Navigation = exports.Navigation = function (_React$Component) {
         ),
         _react2.default.createElement(
           'nav',
-          { className: 'navigation-drawer', style: { 'margin-left': marginLeft } },
+          { className: 'navigation-drawer', style: { marginLeft: marginLeft } },
           _react2.default.createElement(
-            'p',
+            'div',
             null,
             _react2.default.createElement(
               'ul',
@@ -96733,19 +96733,19 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var VersionPod = function (_React$Component) {
-  _inherits(VersionPod, _React$Component);
+var NotificationsPod = function (_React$Component) {
+  _inherits(NotificationsPod, _React$Component);
 
-  function VersionPod() {
-    _classCallCheck(this, VersionPod);
+  function NotificationsPod() {
+    _classCallCheck(this, NotificationsPod);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(VersionPod).call(this));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NotificationsPod).call(this));
 
     _this.state = { showHistory: false };
     return _this;
   }
 
-  _createClass(VersionPod, [{
+  _createClass(NotificationsPod, [{
     key: 'toggleHistory',
     value: function toggleHistory() {
       this.setState({ showHistory: !this.state.showHistory });
@@ -96797,10 +96797,10 @@ var VersionPod = function (_React$Component) {
     }
   }]);
 
-  return VersionPod;
+  return NotificationsPod;
 }(_react2.default.Component);
 
-exports.default = VersionPod;
+exports.default = NotificationsPod;
 
 },{"react":593}],676:[function(require,module,exports){
 'use strict';

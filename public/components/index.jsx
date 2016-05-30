@@ -5,17 +5,17 @@ import { Router, Route, browserHistory, IndexRoute, Link } from 'react-router'
 import NotFound from './not-found.jsx'
 
 import Notifications from './notifications'
+import NotificationsPod from './notifications/notifications-pod.jsx'
 import Drawer from './apps/drawer.jsx'
 import AppLiveView from './apps/live.jsx'
 import InstallView from './apps/install.jsx'
 import Explore from './apps/explore.jsx'
-import { Devices, DevicesNavigation } from './devices/index.jsx'
+import { Devices } from './devices/index.jsx'
 import History from './history/index.jsx'
 import FeedbackPod from './misc/feedback-pod.jsx'
 import ConnectionPod from './misc/connection-pod.jsx'
 import Login from './user/login.jsx'
 import UserPod from './user/user-pod.jsx'
-import NotificationsPod from './notifications/notifications-pod.jsx'
 import Signup from './user/signup.jsx'
 import Settings from './user/settings.jsx'
 
@@ -43,7 +43,7 @@ export class Navigation extends React.Component {
 
   render () {
     const marginLeft = -300 * this.state.hideDrawer
-    console.log('marginLeft', marginLeft)
+
     return (
       <span>
         <nav className='navigation-bar'>
@@ -61,15 +61,15 @@ export class Navigation extends React.Component {
           </ul>
           <UserPod />
           <NotificationsPod />
-        </nav> 
-        <nav className='navigation-drawer' style={{ 'margin-left': marginLeft }}>
-          <p>
+        </nav>
+        <nav className='navigation-drawer' style={{ marginLeft }}>
+          <div>
           <ul className='collapsed list-unstyled list-inline pull-left'>
             <li>
               <i className='fa fa-close clickable' onClick={this.toggleDrawer} />
             </li>
           </ul>
-          </p>
+          </div>
           <Link to='/'><h1 className='pull-left'>{this.state.title}</h1></Link>
           <br/>
           <br/>

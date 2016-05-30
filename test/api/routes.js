@@ -13,7 +13,7 @@ describe('RESTful Resources API', function () {
     request.post(URL + '/resources')
     .send({ app: 'app', location: 'location', topic: 'topic', groupname: 'group', hook: 'hook' })
     .end(function (err, resp, body) {
-      should.not.exist(err)
+      if (err) throw err
       resp.statusCode.should.equal(200)
       done()
     })
@@ -23,7 +23,7 @@ describe('RESTful Resources API', function () {
     request.get(URL + '/resources')
     .query({ app: 'app', topic: 'topic' })
     .end(function (err, resp, body) {
-      should.not.exist(err)
+      if (err) throw err
       resp.statusCode.should.equal(200)
       body = resp.body
       body.should.be.an('Array')
@@ -39,7 +39,7 @@ describe('RESTful Resources API', function () {
     .query({ app: 'app', topic: 'topic' })
     .send({app: 'app2'})
     .end(function (err, resp, body) {
-      should.not.exist(err)
+      if (err) throw err
       resp.statusCode.should.equal(204)
       expect(body).to.be.empty
       done()
@@ -50,7 +50,7 @@ describe('RESTful Resources API', function () {
     request.del(URL + '/resources')
     .query({ hook: 'hook' })
     .end(function (err, resp, body) {
-      should.not.exist(err)
+      if (err) throw err
       resp.statusCode.should.equal(204)
       expect(body).to.be.empty
       done()

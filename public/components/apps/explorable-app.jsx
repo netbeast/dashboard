@@ -1,6 +1,12 @@
 /* global toastr */
 import React from 'react'
 import request from 'superagent-bluebird-promise'
+import { Session } from '../lib'
+
+// Analytics
+var Mixpanel = require('mixpanel')
+var mixpanel = Mixpanel.init('e794af6318eedbddd288e440a50c16f5')
+var user = Session.load('user')
 
 export default class ExplorableApp extends React.Component {
   constructor (props, context) {
@@ -55,8 +61,21 @@ export default class ExplorableApp extends React.Component {
       toastr.success(`${name} has been installed!`)
       toastr.dismiss(loader)
 
-      if (type === 'plugin' || type === 'service' || props.bootOnLoad)
+      mixpanel.track('Installed app/plugin', {
+        distinct_id: user.email,
+        name: name,
+        type: props ? props.type : 'app'
+      })
+
+      if (type === 'plugin' || type === 'service' || props.bootOnLoad) {
+
+        mixpanel.track('Running app/plugin', {
+          distinct_id: user.email,
+          name: name,
+          type: 'plugin'
+        })
         return request.post('/api/activities/' + name).promise()
+      }
     }).then((res) => { toastr.success(`${res.body.name} is running`) })
     .catch((err) => {
       if (err.res) toastr.error(err.res.text)

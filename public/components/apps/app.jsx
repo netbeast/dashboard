@@ -7,6 +7,11 @@ import { OverlayTrigger, Popover } from 'react-bootstrap'
 import Pulse from '../misc/activity-pulse.jsx'
 import { Session } from '../lib'
 
+// Analytics
+var Mixpanel = require('mixpanel')
+var mixpanel = Mixpanel.init('e794af6318eedbddd288e440a50c16f5')
+var user = Session.load('user')
+
 export default class App extends React.Component {
   constructor (props, context) {
     super(props)
@@ -31,6 +36,12 @@ export default class App extends React.Component {
   launch () {
     const { name } = this.props
 
+    mixpanel.track('Running app/plugin', {
+      distinct_id: user.email,
+      name: name,
+      type: 'app'
+    })
+
     request.post('/api/activities/' + name).then(() => {
       return request.get('/i/' + name).promise()
     }).then(() => {
@@ -45,9 +56,9 @@ export default class App extends React.Component {
     })
   }
 
+ //I really don't know what is the function of this if there is another one on explorable-app 
   install () {
     const url = this.props.git_url
-
     const loader = window.notify({
       body: (
         <span>
@@ -66,7 +77,7 @@ export default class App extends React.Component {
       toastr.dismiss(loader)
 
       if (type === 'plugin' || type === 'service' || props.bootOnLoad)
-      return request.post('/api/activities/' + name).promise()
+        return request.post('/api/activities/' + name).promise()
     }).then((res) => { toastr.success(`${res.body.name} is running`) })
     .catch((fail, res) => toastr.error(res.text))
   }
@@ -95,6 +106,12 @@ export default class App extends React.Component {
         </span>
       ), timeout: 0}
     )
+
+    mixpanel.track('Uninstalled app/plugin', {
+        distinct_id: user.email,
+        type: kind,
+        name: name
+    })
 
     request.del('/api/apps/' + name).end((err, res) => {
       if (err) return

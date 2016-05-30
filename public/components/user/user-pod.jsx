@@ -5,6 +5,10 @@ import { OverlayTrigger, Popover } from 'react-bootstrap'
 
 import { Session } from '../lib'
 
+// Analytics
+var Mixpanel = require('mixpanel')
+var mixpanel = Mixpanel.init('e794af6318eedbddd288e440a50c16f5')
+
 export default class UserPod extends React.Component {
   constructor (props, context) {
     super(props)
@@ -28,6 +32,13 @@ export default class UserPod extends React.Component {
   }
 
   logOut () {
+
+    let user = Session.load('user')
+
+    mixpanel.track('User Logged Out', {
+        distinct_id: user.email
+    })
+    
     Session.delete('user')
     this.setState({ user: null })
     return this.router.push('/')

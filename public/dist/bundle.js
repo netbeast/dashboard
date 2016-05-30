@@ -97091,12 +97091,10 @@ var Settings = function (_React$Component) {
     value: function deleteAccount() {
       var _this3 = this;
 
-      var _state$user = this.state.user;
-      var _id = _state$user._id;
-      var token = _state$user.token;
+      var token = this.state.user.token;
 
       if (window.confirm('Are you sure you want to delete your account?')) {
-        _superagentBluebirdPromise2.default.del(API_PATH + '/user/' + _id).set({ 'Authorization': token }).end(function (err, resp) {
+        _superagentBluebirdPromise2.default.del(API_PATH + '/users/').set({ 'Authorization': token }).end(function (err, resp) {
           if (err) return toastr.error(resp.text);
 
           window.logOut();
@@ -97108,9 +97106,9 @@ var Settings = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _state$user2 = this.state.user;
-      var alias = _state$user2.alias;
-      var email = _state$user2.email;
+      var _state$user = this.state.user;
+      var alias = _state$user.alias;
+      var email = _state$user.email;
 
 
       return _react2.default.createElement(

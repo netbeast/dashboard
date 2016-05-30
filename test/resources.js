@@ -4,8 +4,8 @@ require('dotenv').load()
 var should = require('chai').should()
 var expect = require('chai').expect
 
-var Resource = require('../../src/models/resource')
-var helper = require('../../src/helpers/resource')
+var Resource = require('../src/models/resource')
+var helper = require('../src/helpers/resource')
 
 describe('Resources', function () {
   before(function (done) {

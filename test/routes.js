@@ -1,4 +1,4 @@
-/* global describe, it*/
+/* global describe, it */
 require('dotenv').load()
 
 var request = require('superagent')

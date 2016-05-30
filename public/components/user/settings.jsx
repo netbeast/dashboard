@@ -32,7 +32,7 @@ export default class Settings extends React.Component {
     }
 
     const { _id } = this.state.user
-    return { _id: _id, alias: alias.value, email: email.value, password: password.value }
+    return { _id, alias: alias.value, email: email.value, password: password.value }
   }
 
   updateSettings (event) {
@@ -54,9 +54,9 @@ export default class Settings extends React.Component {
   }
 
   deleteAccount () {
-    const { _id, token } = this.state.user
+    const { token } = this.state.user
     if (window.confirm('Are you sure you want to delete your account?')) {
-      request.del(API_PATH + '/user/' + _id)
+      request.del(API_PATH + '/users/')
       .set({ 'Authorization': token })
       .end((err, resp) => {
         if (err) return toastr.error(resp.text)

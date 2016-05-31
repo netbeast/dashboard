@@ -8,9 +8,9 @@ export default class VersionPod extends React.Component {
   render () {
     const version = process.env.VERSION
     return (
-      <span className='version-pod' title='Checking for updates...'>
+      <a target='_blank' href='https://github.com/netbeast/dashboard' className='version-pod' title='npm package version'>
         Beta v{version}
-      </span>
+      </a>
     )
   }
 }

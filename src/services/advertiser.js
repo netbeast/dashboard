@@ -14,6 +14,6 @@ deamon.on('message', function (msg, req) {
   var message = new Buffer(process.env.PORT)
   deamon.send(message, 0, message.length, req.port, req.address, function (err, bytes) {
     if (err) throw err
-    console.log('[deamon] UDP message "%s" sent to %s:%s', message, req.address, req.port)
+    console.log('[deamon] UDP message %s sent to %s:%s', message, req.address, req.port)
   })
 })

@@ -2,10 +2,7 @@
 
 import React from 'react'
 import { Link } from 'react-router'
-import { Col } from 'react-bootstrap'
 import request from 'superagent'
-
-import { Session } from '../lib'
 
 const API_PATH = process.env.API_URL + '/api'
 
@@ -23,38 +20,31 @@ export default class Login extends React.Component {
     request.post(API_PATH + '/login')
     .send({ email, password })
     .end((err, resp) => {
-      if (err) return toastr.error(err.message)
+      console.log(err)
+      if (err) return toastr.error(resp ? resp.text : err.message)
 
-      Session.save('user', resp.body)
-      if (window.location.state && window.location.state.nextPathname) {
-        this.router.replace(window.location.state.nextPathname)
-      } else {
-        this.router.replace('/')
-      }
+      window.logIn(resp.body)
     })
   }
 
   render () {
     return (
-      <Col xs={10} xsOffset={1} sm={6} smOffset={3} md={4} mdOffset={4}>
-      <br/>
-      <br/>
-      <br/>
-        <h4>Log in.</h4>
+      <div className='user-view'>
         <form onSubmit={this.handleSubmit.bind(this)}>
+          <h1>Log in.</h1>
           <input ref='email' type='email' placeholder='your@email.com' className='form-control'></input>
           <br/>
           <input ref='password' type='password' placeholder='password' className='form-control'></input>
-        <br/>
-        <button type='submit' className='btn btn-info'>Log in</button>
-        </form>
-        <br/>
-        <span>
-          Do you already have an account? <Link to='/signup'>Sign up</Link>.
           <br/>
-          <small>Check out our terms and services.</small>
-        </span>
-      </Col>
+          <button type='submit' className='btn btn-info'>Log in</button>
+          <br/>
+          <span>
+            Don't you have an account yet? <Link to='/signup'>Sign up</Link>.
+            <br/>
+            <small>Check out our terms and services.</small>
+          </span>
+        </form>
+      </div>
     )
   }
 }

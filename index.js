@@ -1,14 +1,20 @@
 #!/usr/bin/env node
 
 require('./lib/init')
-var path = require('path')
+process.chdir(__dirname)
+
 var http = require('http')
 var fs = require('fs')
+const spawn = require('child_process').spawn
+var path = require('path')
 
 // NPM dependencies
 var cmd = require('commander')
-var mosca = require('mosca')
-var spawn = require('child_process').spawn
+var websocket = require('websocket-stream')
+var aedes = require('aedes')({
+  concurrency: 1000
+})
+
 var httpProxy = require('http-proxy')
 var chalk = require('chalk')
 
@@ -16,22 +22,18 @@ var chalk = require('chalk')
 var app = require('./src')
 var bootOnload = require('./src/boot-on-load')
 
-const DASHBOARD_DNS = path.join(__dirname, './bin/dns.js')
-const DASHBOARD_NETWORK = path.join(__dirname, './bin/network.js')
 const DASHBOARD_IAMALIVE = path.join(__dirname, './bin/iamalive-c.js')
+// const DASHBOARD_DNS = path.join(__dirname, './bin/dns.js')
 
 cmd
 .version('0.1.42')
 .option('-p, --port <n>', 'Port to start the HTTP server', parseInt)
-.option('-sp, --securePort <n>', 'Secure Port to start the HTTPS server', parseInt)
+.option('-sp, --secure_port <n>', 'Secure port to start the HTTPS server', parseInt)
 .parse(process.argv)
 
-// Launch server with web sockets
 var server = http.createServer(app)
-var broker = new mosca.Server({})
-broker.attachHttpServer(server)
 
-process.env.SPORT = cmd.securePort || process.env.SECURE_PORT
+process.env.SECURE_PORT = cmd.secure_port || process.env.SECURE_PORT
 process.env.PORT = cmd.port || process.env.PORT
 
 var proxy = httpProxy.createServer({
@@ -46,7 +48,11 @@ var proxy = httpProxy.createServer({
   ws: true
 }).listen(process.env.SECURE_PORT, function () {
   server.listen(process.env.PORT, function () {
-    console.log('👾  Netbeast dashboard started on %s:%s', server.address().address, server.address().port)
+    const addr = server.address().address
+    const port = server.address().port
+    console.log('👾  Netbeast dashboard started on %s:%s', addr, port)
+    // attach mqtt broker to websockets stream
+    websocket.createServer({ server: server }, aedes.handle)
     bootOnload()
   })
 })
@@ -71,14 +77,9 @@ env_iamalive
 
 env.NETBEAST_PORT = process.env.PORT
 
-var options = { env: env }
 var iamaliveOptions = { env: env_iamalive }
 
-var dns = spawn(DASHBOARD_DNS, options)
 var iamalive = spawn(DASHBOARD_IAMALIVE, iamaliveOptions)
-
-require('./src/services/scanner')
-require('./src/services/advertiser')
 
 iamalive.stdout.on('data', function (data) {
   console.log(data.toString())
@@ -93,6 +94,12 @@ iamalive.on('close', function (code) {
 })
 
 process.on('exit', function () {
-  dns.kill('SIGTERM')
   iamalive.kill('SIGTERM')
 })
+
+require('./src/services/scanner')
+require('./src/services/advertiser')
+
+// process.on('exit', function () {
+//   dns.kill('SIGTERM')
+// })

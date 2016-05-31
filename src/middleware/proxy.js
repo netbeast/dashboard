@@ -37,7 +37,7 @@ router.use('/i/:name', function (req, res, next) {
   // This block of code actually pipes the request
   // to the running app and pass it to the client
   var proxyUrl = req.protocol + '://localhost:' + app.port
-  console.log(chalk.magenta('[proxy -> %s%s]'), proxyUrl, pathname)
+  // console.log(chalk.magenta('[proxy -> %s%s]'), proxyUrl, pathname)
 
   req.url = pathname
 
@@ -65,7 +65,7 @@ router.use(function (req, res, next) {
   // This block of code actually pipes the request
   // to the running app and pass it to the client
   var proxyUrl = req.protocol + '://localhost:' + app.port
-  console.log(chalk.magenta('[%s proxy-> %s%s]'), req.method, proxyUrl, pathname)
+  // console.log(chalk.magenta('[%s proxy-> %s%s]'), req.method, proxyUrl, pathname)
 
   req.url = pathname
 

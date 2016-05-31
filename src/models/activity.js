@@ -2,7 +2,7 @@ var path = require('path')
 var events = require('events')
 var spawn = require('child_process').spawn
 
-var portfinder = require('portfinder')
+var freeport = require('freeport')
 var chalk = require('chalk')
 var request = require('superagent')
 var mqtt = require('mqtt')
@@ -12,7 +12,6 @@ var ApiError = require('../util/api-error')
 var Resource = require('./resource')
 var App = require('./app')
 
-portfinder.basePort = 3000
 const APPS_DIR = process.env.APPS_DIR
 
 // Apps with their child object running
@@ -22,7 +21,8 @@ var client = mqtt.connect() // for notifications
 
 self.status = function (req, res, next) {
   var child = children[req.params.name]
-  if (!child) return next(new ApiError(404, 'App not running'))
+  if (!child) return res.json({ name: req.params.name, port: -1, status: 'Not running' })
+
   self.ready(child, function (err, act) {
     if (err) return next(err)
     res.json({ name: act.name, port: act.port })
@@ -86,7 +86,7 @@ self.boot = function (appName, done) {
     return done(null, children[child.name])
   }
 
-  portfinder.getPort(function (err, port) {
+  freeport(function (err, port) {
     if (err) {
       done(new ApiError(422, 'Not enough ports'))
     } else {
@@ -113,19 +113,20 @@ self.on('start', function (app) {
     env.APP_PORT = app.port
     env.APP_NAME = app.name
     env.NETBEAST = process.env.IPs.split(',')[0] + ':' + process.env.PORT
+    env.SECURE_NETBEAST = process.env.IPs.split(',')[0] + ':' + process.env.SECURE_PORT
 
-    var child = spawn(entryPoint, ['--port', app.port], {
-      cwd: path.join(APPS_DIR, app.name),
-      env: env
-    })
+      var child = spawn('node', [entryPoint, '--port', app.port], {
+          cwd: path.join(APPS_DIR, app.name),
+          env: env
+      })
 
     child.stdout.on('data', function (data) {
-      console.log(chalk.grey('[%s] %s'), app.name, data)
+      process.stdout.write(chalk.grey('[' + app.name + '] '+ data))
     })
 
     child.stderr.on('data', function (data) {
-      console.log(chalk.red('[%s] %s'), app.name, data)
-      // broker.error(data.toString(), app.name)
+      process.stdout.write(chalk.red('[' + app.name + '] '+ data))
+      broker.error(data.toString(), app.name)
     })
 
     child.on('close', function (code) {

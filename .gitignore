@@ -27,18 +27,18 @@ Thumbs.db
 # .env is forcely added
 .env
 
-public/dist/js
-public/dist/css
+# public/dist/* keep track of dist files so we can avoid installing devDependencies
 
 .log
 .sass-cache/
 .ftpconfig
 
 node_modules
-.sandbox/*
+_apps/*
 *.sqlite
 
 node_modules
 
 test/coverage
+npm-debug.log
 .errorlog

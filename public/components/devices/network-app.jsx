@@ -4,7 +4,7 @@ import mqtt from 'mqtt'
 
 import { Session } from '../lib'
 
-export default class NetworkApp extends React.Component {  
+export default class NetworkApp extends React.Component {
   constructor () {
     super()
     this.mqtt = mqtt.connect(window.mqttUri)
@@ -31,16 +31,16 @@ export default class NetworkApp extends React.Component {
     const pathname = route.path ? route.path : 'apps'
     const logoStyle = { backgroundImage: 'url(/img/network.png)' }
 
-    if (pathname !== 'apps' && pathname !== 'plugins') return null
+    if (pathname !== 'apps') return null
 
     return (
       <div className='app network-app'>
-        { devicesNumber ? 
+        { devicesNumber ?
           <div className='network-app-badge'>
             <span className='content'>{devicesNumber}</span>
           </div> : null
         }
-        <Link to='/devices'>
+        <Link to='/network'>
           <div className='logo' title='Open network explorer' style={logoStyle} />
         </Link>
         <h4 className='name'> Network </h4>

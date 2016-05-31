@@ -1,6 +1,12 @@
 /* global toastr */
 import React from 'react'
 import request from 'superagent-bluebird-promise'
+import { Session } from '../lib'
+
+// Analytics
+var Mixpanel = require('mixpanel')
+var mixpanel = Mixpanel.init('e794af6318eedbddd288e440a50c16f5')
+var user = Session.load('user')
 
 export default class ExplorableApp extends React.Component {
   constructor (props, context) {
@@ -27,7 +33,7 @@ export default class ExplorableApp extends React.Component {
     request.post('/api/activities/' + name).then(() => {
       return request.get('/i/' + name).promise()
     }).then(() => {
-      this.router.push('/i/' + name)
+      this.router.push('/live/' + name)
     }).catch((err) => {
       if (err.status === 404) return toastr.info(`${name} is running`)
       toastr.error(err.message)
@@ -35,13 +41,16 @@ export default class ExplorableApp extends React.Component {
   }
 
   install () {
+    const name = this.props.name
     const url = this.props.git_url
 
-    const loader = toastr.info(
-      <span>
-        <div className='loader'></div>
-        Installing app...
-      </span>
+    const loader = window.notify({
+      body: (
+        <span>
+         <div className='loader'></div>
+         Installing {name}...
+        </span>
+      ), timeout: 0, emphasis: 'info'}
     )
 
     request.post('/api/apps').send({ url }).then((res) => {
@@ -52,10 +61,26 @@ export default class ExplorableApp extends React.Component {
       toastr.success(`${name} has been installed!`)
       toastr.dismiss(loader)
 
-      if (type === 'plugin' || type === 'service' || props.bootOnLoad)
+      mixpanel.track('Installed app/plugin', {
+        distinct_id: user.email,
+        name: name,
+        type: props ? props.type : 'app'
+      })
+
+      if (type === 'plugin' || type === 'service' || props.bootOnLoad) {
+
+        mixpanel.track('Running app/plugin', {
+          distinct_id: user.email,
+          name: name,
+          type: 'plugin'
+        })
         return request.post('/api/activities/' + name).promise()
+      }
     }).then((res) => { toastr.success(`${res.body.name} is running`) })
-    .catch((fail, res) => toastr.error(res.text))
+    .catch((err) => {
+      if (err.res) toastr.error(err.res.text)
+      else toastr.error(err.message)
+    })
   }
 
   renderButton () {
@@ -67,11 +92,14 @@ export default class ExplorableApp extends React.Component {
   render () {
     if (this.state.hidden) return null
 
-    const { name, author } = this.props
+    const { name, author, filter } = this.props
     const { netbeast, logo } = this.state
     const isPlugin = netbeast && (netbeast.type === 'plugin')
     const defaultLogo = isPlugin ? 'url(/img/plugin.png)' : 'url(/img/dflt.png)'
     const logoStyle = { backgroundImage: logo ? `url(${logo})` : defaultLogo }
+
+    if (filter.type === 'plugins' && !isPlugin) return null
+    if (filter.type === 'apps' && isPlugin) return null
 
     return (
       <div className='app'>

@@ -7,6 +7,11 @@ import { OverlayTrigger, Popover } from 'react-bootstrap'
 import Pulse from '../misc/activity-pulse.jsx'
 import { Session } from '../lib'
 
+// Analytics
+var Mixpanel = require('mixpanel')
+var mixpanel = Mixpanel.init('e794af6318eedbddd288e440a50c16f5')
+var user = Session.load('user')
+
 export default class App extends React.Component {
   constructor (props, context) {
     super(props)
@@ -31,8 +36,14 @@ export default class App extends React.Component {
   launch () {
     const { name } = this.props
 
+    mixpanel.track('Running app/plugin', {
+      distinct_id: user.email,
+      name: name,
+      type: 'app'
+    })
+
     request.post('/api/activities/' + name).then(() => {
-      return request.get('/live/' + name).promise()
+      return request.get('/i/' + name).promise()
     }).then(() => {
       this.router.push('/live/' + name)
     }).catch((err) => {
@@ -45,14 +56,16 @@ export default class App extends React.Component {
     })
   }
 
+ //I really don't know what is the function of this if there is another one on explorable-app 
   install () {
     const url = this.props.git_url
-
-    const loader = toastr.info(
-      <span>
-        <div className='loader'></div>
-        Installing app...
-      </span>
+    const loader = window.notify({
+      body: (
+        <span>
+         <div className='loader'></div>
+         Installing app...
+        </span>
+      ), timeout: 0}
     )
 
     request.post('/api/apps').send({ url }).then((res) => {
@@ -64,7 +77,7 @@ export default class App extends React.Component {
       toastr.dismiss(loader)
 
       if (type === 'plugin' || type === 'service' || props.bootOnLoad)
-      return request.post('/api/activities/' + name).promise()
+        return request.post('/api/activities/' + name).promise()
     }).then((res) => { toastr.success(`${res.body.name} is running`) })
     .catch((fail, res) => toastr.error(res.text))
   }
@@ -82,10 +95,28 @@ export default class App extends React.Component {
 
   uninstall () {
     const { name, kind, dismiss } = this.props
-    if (confirm('Do you really want to remove', name, '?'))
+
+    if (!confirm('Do you really want to remove', name, '?')) return
+
+    const loader = window.notify({
+      body: (
+        <span>
+        <div className='loader'></div>
+        Uninstalling {name}...
+        </span>
+      ), timeout: 0}
+    )
+
+    mixpanel.track('Uninstalled app/plugin', {
+        distinct_id: user.email,
+        type: kind,
+        name: name
+    })
+
     request.del('/api/apps/' + name).end((err, res) => {
       if (err) return
       dismiss(name)
+      toastr.dismiss(loader)
       toastr.info(name + ' has been removed.')
     })
   }
@@ -123,11 +154,11 @@ renderButton () {
     })
 
     request.get('/api/activities/' + name).end((err, res) => {
-      if (!err) this.setState({ isRunning: true })
+      if (!err && res.body.port > 0) this.setState({ isRunning: true })
     })
 
     if (netbeast && (netbeast.type === 'plugin')) {
-      const devices = Session.load('devices') || []
+      const devices = Session.load('devices') || []
       const found = devices.find((d) => { return d.app === name })
       this.setState({ inactive: !found })
     }
@@ -148,12 +179,12 @@ renderButton () {
 
     return (
       <div className={'app' + inactiveClass}>
-      {(isRunning) ? <Pulse {...this.props} /> : null}
-      <OverlayTrigger ref='contextMenu' trigger={[]} rootClose placement='bottom' overlay={this.contextMenu()}>
-        <div className='logo' title='Launch app' style={logoStyle} onClick={this.handleClick.bind(this)} onContextMenu={this.toggleMenu.bind(this)} />
-      </OverlayTrigger>
-      {this.renderButton()}
-      <h4 className='name'>{name}</h4>
+        {(isRunning) ? <Pulse {...this.props} /> : null}
+        <OverlayTrigger ref='contextMenu' trigger={[]} rootClose placement='bottom' overlay={this.contextMenu()}>
+          <div className='logo' title='Launch app' style={logoStyle} onClick={this.handleClick.bind(this)} onContextMenu={this.toggleMenu.bind(this)} />
+        </OverlayTrigger>
+        {this.renderButton()}
+        <p className='name'>{name}</p>
       </div>
     )
   }

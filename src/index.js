@@ -1,7 +1,4 @@
 
-// load environment variables
-require('dotenv').load()
-
 var path = require('path')
 
 var fs = require('fs-extra')
@@ -12,10 +9,12 @@ var cookieParser = require('cookie-parser')
 var express = require('express')
 var chalk = require('chalk')
 
+require('./helpers/broker.js')
+
 var app = module.exports = express()
 
 app.use(logger('dev', {
-  // skip: function (req, res) { return res.statusCode < 400 }
+  skip: function (req, res) { return res.statusCode < 400 }
 }))
 
 app.use(require('./middleware/cors'))

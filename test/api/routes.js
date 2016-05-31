@@ -8,50 +8,49 @@ var expect = chai.expect
 
 const URL = 'https://localhost:' + process.env.SECURE_PORT + '/api'
 
-
-console.log(URL + '/resources')
-
 describe('RESTful Resources API', function () {
   it('should insert a new action in db', function (done) {
-    var req = request.post(URL + '/resources')
-    req.send({ app: 'app', location: 'location', topic: 'topic', groupname: 'group', hook: 'hook' })
-      .end(function (err, resp, body) {
-        should.not.exist(err)
-        resp.statusCode.should.equal(200)
-        done()
-      })
+    request.post(URL + '/resources')
+    .send({ app: 'app', location: 'location', topic: 'topic', groupname: 'group', hook: 'hook' })
+    .end(function (err, resp, body) {
+      if (err) throw err
+      resp.statusCode.should.equal(200)
+      done()
+    })
   })
 
   it('should return all specified actions from db', function (done) {
-    var q = 'app=app&topic=topic'
-    request.get(URL + '/resources?' + q).end(function (err, resp, body) {
-      should.not.exist(err)
+    request.get(URL + '/resources')
+    .query({ app: 'app', topic: 'topic' })
+    .end(function (err, resp, body) {
+      if (err) throw err
       resp.statusCode.should.equal(200)
       body = resp.body
       body.should.be.an('Array')
       body.forEach(function (item) {
-        expect(item).to.have.keys('id', 'app', 'topic', 'location', 'groupname', 'hook')
+        expect(item).to.have.keys('id', 'alias', 'app', 'topic', 'location', 'groupname', 'hook')
       })
       done()
     })
   })
 
   it('should update the specified action from db', function (done) {
-    var q = 'app=app&topic=topic'
-    var req = request.patch(URL + '/resources?' + q)
-    req.send({app: 'app2'})
-      .end(function (err, resp, body) {
-        should.not.exist(err)
-        resp.statusCode.should.equal(204)
-        expect(body).to.be.empty
-        done()
-      })
+    request.patch(URL + '/resources')
+    .query({ app: 'app', topic: 'topic' })
+    .send({app: 'app2'})
+    .end(function (err, resp, body) {
+      if (err) throw err
+      resp.statusCode.should.equal(204)
+      expect(body).to.be.empty
+      done()
+    })
   })
 
   it('should delete the specified action from db', function (done) {
-    var q = 'hook=hook'
-    request.del(URL + '/resources?' + q).end(function (err, resp, body) {
-      should.not.exist(err)
+    request.del(URL + '/resources')
+    .query({ hook: 'hook' })
+    .end(function (err, resp, body) {
+      if (err) throw err
       resp.statusCode.should.equal(204)
       expect(body).to.be.empty
       done()

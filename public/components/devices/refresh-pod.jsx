@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 import request from 'superagent-bluebird-promise'
 import Promise from 'bluebird'
 
-export default class VersionPod extends React.Component {
+export default class RefreshPod extends React.Component {
 
   refresh () {
     const APP_PROXY = '/i/'
@@ -17,9 +17,8 @@ export default class VersionPod extends React.Component {
 
   render () {
     return (
-      <span className='refresh-pod clickable' title='Rediscover all devices...'>
-        <Link to='/' title='go back' style={{ color: 'white' }}><i className='fa fa-arrow-left'/></Link>
-        &nbsp;&nbsp;&nbsp;<i className='fa fa-refresh' onClick={this.refresh.bind(this)} />
+      <span className='refresh-pod ' title='Rediscover all devices...'>
+        <i className='fa fa-refresh' onClick={this.refresh.bind(this)} />
       </span>
     )
   }

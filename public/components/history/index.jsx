@@ -1,6 +1,7 @@
 import React from 'react'
 import mqtt from 'mqtt'
 import { Line } from 'react-chartjs'
+import Typist from 'react-typist'
 
 // import chartOptions from './history-conf'
 
@@ -21,14 +22,14 @@ export default class History extends React.Component {
   constructor () {
     super()
     this.mqtt = mqtt.connect(window.mqttUri)
-    this.state = { topics: {}, scalars: {} }
+    this.state = { topics: {}, scalars: {}, autotype: 'your garden' }
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.mqtt.subscribe('#') // subscription to all channels
     this.mqtt.on('message', (topic, message) => {
       const { topics, scalars } = this.state
-
+      console.log('message', message)
       topic = topic.toString().replace('netbeast/', '')
       message = JSON.parse(message)
 
@@ -39,6 +40,7 @@ export default class History extends React.Component {
       } else {
         scalars[topic] = scalars[topic] || new Array(22)
         scalars[topic] = [...scalars[topic], message[topic]].slice(1, 22)
+        console.log(scalars)
         this.setState({ scalars })
       }
     })
@@ -48,11 +50,45 @@ export default class History extends React.Component {
     this.mqtt.unsubscribe('netbeast/network')
   }
 
+  changeAutoTypes () {
+    const { autotype } = this.state
+    const autotypes =  ['your garden', 'the neighbourhood', 'the studio']
+    const index = autotypes.findIndex(text => text === autotype)
+    const nextText = (index + 1) >= autotypes.length ? autotypes[0] : autotypes[index + 1]
+    setTimeout(() => this.setState({ autotype: nextText }), 1000)
+  }
+
   render () {
-    const { topics, scalars } = this.state
+    const { topics, scalars, autotype } = this.state
+    const areThereTopics = (
+      Object.keys(topics).length > 0 ||
+      Object.keys(scalars).length > 0
+    )
 
     return (
       <span className='history-view'>
+        {areThereTopics ? this.renderHistoryData.call(this) : (
+        <div>
+          <h2> <br/> <br/> Reading data from <br/>
+            <Typist key={autotype} onTypingDone={this.changeAutoTypes.bind(this)}>
+              {autotype}.&nbsp;
+            </Typist>
+          </h2>
+          <p style={{ margin: 150 }}>
+            Data published through MQTT to netbeast/* will be here displayed.
+            Try any of <kbd>['volume', 'temperature', 'luminosity', 'humidity']</kbd>
+            &nbsp; as escalar values to see them represented in graphs.
+          </p>
+        </div>
+        )}
+      </span>
+    )
+  }
+
+  renderHistoryData () {
+    const { topics, scalars } = this.state
+
+    return (
         <div className='history-data'>
           {Object.keys(scalars).map((topic, idx) => {
             const localData = Object.create({ labels: LABELS })
@@ -81,7 +117,6 @@ export default class History extends React.Component {
             )
           })}
         </div>
-      </span>
       )
   }
 }

@@ -1,4 +1,3 @@
-public/assets/*
-gulpfile.js
 test
 .travis.yml
+_apps/*

@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 // var chalk = require('chalk')
 var spawn = require('child_process').spawn
 
@@ -9,6 +7,8 @@ var broker = require('../helpers/broker')
 setInterval(function () {
   getArp()
 }, 6000)
+
+var cachedResult
 
 function getArp () {
   Resource.find({}, function (err, devices) {
@@ -32,8 +32,13 @@ function getArp () {
     arp.on('close', function () {
       var arp_table = parse_arp_table(arp_str)
       var result = joinTables(arp_table, devices)
+      result = JSON.stringify(result)
 
-      broker.client.publish('netbeast/network', JSON.stringify(result))
+      if (cachedResult !== result) {
+        console.log('[scanner] devices list changed')
+        cachedResult = result // override
+        broker.client.publish('netbeast/network', result)
+      }
     })
   })
 }
@@ -75,7 +80,7 @@ function parse_arp_table (arpt) {
 
     if (ip) arp_obj['ip'] = ip
 
-      // Get the iface
+    // Get the iface
     var iface_start = entry.indexOf('on') + 3
     var iface_end = entry[entry.length]
     var iface = entry.slice(iface_start, iface_end)

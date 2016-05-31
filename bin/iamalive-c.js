@@ -11,9 +11,9 @@ env_tunnel
 .SERVER_IP = process.env.SERVER_IP
 const DASHBOARD_TUNNEL = path.join(__dirname, './tunnel-c.js')
 
-console.log('Server ' + process.env.SERVER_IP + ':' + process.env.IAMALIVE_SPORT)
+console.log('[tunnel] Server ' + process.env.SERVER_IP + ':' + process.env.IAMALIVE_SPORT)
 
-console.log('📡  Sending:' + process.env.IAMALIVE_SPORT + ' to ' + process.env.SERVER_IP)
+console.log('[tunnel] 📡  Sending:' + process.env.IAMALIVE_SPORT + ' to ' + process.env.SERVER_IP)
 setInterval(function () {
   require('getmac').getMac(function (err, macAddress) {
     if (err) throw err
@@ -29,14 +29,15 @@ setInterval(function () {
 
 client.on('message', function (msg, rinfo) {
   var remotePort = msg.toString()
-  console.log('client got: ' + remotePort + ' from ' + rinfo.address + ':' + rinfo.port)
+  console.log('[tunnel] client got: ' + remotePort + ' from ' + rinfo.address + ':' + rinfo.port)
   if (parseInt(msg, 10) > 0) {
     console.log()
     // tunnel.start(remotePort)
     env_tunnel.RELAY_PORT = remotePort
     var tunnelOptions = { env: env_tunnel }
     var tunnel = spawn(DASHBOARD_TUNNEL, tunnelOptions)
-
+    console.log('[tunnel] tunnel started')
+/*
     tunnel.stdout.on('data', function (data) {
       console.log(data.toString())
     })
@@ -44,9 +45,9 @@ client.on('message', function (msg, rinfo) {
     tunnel.stderr.on('data', function (data) {
       console.log(data.toString())
     })
-
+*/
     tunnel.on('close', function (code) {
-      console.log('child process tunnel exited with code ' + code.toString())
+      console.log('[tunnel] child process tunnel exited with code ' + code.toString())
     })
 
     process.on('exit', function () {
@@ -57,7 +58,7 @@ client.on('message', function (msg, rinfo) {
 
 client.on('listening', function () {
   var address = client.address()
-  console.log('client listening ' + address.address + ':' + address.port)
+  console.log('[tunnel] client listening ' + address.address + ':' + address.port)
 })
 
 client.bind(process.env.IAMALIVE_CPORT)

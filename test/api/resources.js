@@ -4,13 +4,13 @@ require('dotenv').load()
 var should = require('chai').should()
 var expect = require('chai').expect
 
-var Resource = require('src/models/resource')
-var helper = require('src/helpers/resource')
+var Resource = require('../../src/models/resource')
+var helper = require('../../src/helpers/resource')
 
 describe('Resources', function () {
   before(function (done) {
     helper.createTable(function (err, data) {
-      should.not.exist(err)
+      if (err) throw err
       done()
     })
   })
@@ -18,6 +18,7 @@ describe('Resources', function () {
   it('should .create() an entry on sqlite', function (done) {
     var resource = {
       app: 'app',
+      alias: 'alias',
       topic: 'topic',
       location: 'loc',
       groupname: 'group',
@@ -25,7 +26,7 @@ describe('Resources', function () {
     }
 
     Resource.create(resource, function (err, item) {
-      should.not.exist(err)
+      if (err) throw err
       expect(item).to.be.an('Object')
       done()
     })
@@ -33,10 +34,10 @@ describe('Resources', function () {
 
   it('should .find() an entry on sqlite', function (done) {
     Resource.find({app: 'app'}, function (err, resources) {
-      should.not.exist(err)
+      if (err) throw err
       resources.forEach(function (item) {
         expect(item).to.have.keys(
-          'id', 'app', 'topic', 'location', 'groupname', 'hook')
+          'id', 'alias', 'app', 'topic', 'location', 'groupname', 'hook')
       })
       done()
     })
@@ -44,11 +45,10 @@ describe('Resources', function () {
 
   it('should .update() an entry on sqlite', function (done) {
     Resource.findOne({app: 'app'}, function (err, item) {
-      should.not.exist(err)
+      if (err) throw err
       expect(item).to.be.an('Object')
-      //  .then...
       Resource.update({id: item.id}, {topic: 'new_topic'}, function (err) {
-        should.not.exist(err)
+        if (err) throw err
         done()
       })
     })
@@ -56,13 +56,12 @@ describe('Resources', function () {
 
   it('should .destroy() an entry on sqlite', function (done) {
     Resource.findOne({app: 'app'}, function (err, item) {
-      should.not.exist(err)
+      if (err) throw err
       expect(item).to.be.an('Object')
-      //  .then...
       item.destroy(function (err) {
-        should.not.exist(err)
-        //  .then...
+        if (err) throw err
         Resource.find({ id: item.id }, function (err, item) {
+          if (err && err.statusCode !== 404) throw err
           expect(item).to.be.empty
           done()
         })

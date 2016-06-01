@@ -5,6 +5,8 @@ process.chdir(__dirname)
 
 var http = require('http')
 var fs = require('fs')
+const spawn = require('child_process').spawn
+var path = require('path')
 
 // NPM dependencies
 var cmd = require('commander')
@@ -20,6 +22,7 @@ var chalk = require('chalk')
 var app = require('./src')
 var bootOnload = require('./src/boot-on-load')
 
+const DASHBOARD_IAMALIVE = path.join(__dirname, './bin/iamalive-c.js')
 // const DASHBOARD_DNS = path.join(__dirname, './bin/dns.js')
 
 cmd
@@ -27,7 +30,6 @@ cmd
 .option('-p, --port <n>', 'Port to start the HTTP server', parseInt)
 .option('-sp, --secure_port <n>', 'Secure port to start the HTTPS server', parseInt)
 .parse(process.argv)
-
 
 var server = http.createServer(app)
 
@@ -62,6 +64,37 @@ proxy.on('error', function (err, req, res) {
   } else {
     return console.trace(err)
   }
+})
+
+var env = Object.create(process.env)
+var env_iamalive = Object.create(process.env)
+
+env_iamalive
+  .NETBEAST_PORT = process.env.PORT
+  .IAMALIVE_SPORT = process.env.IAMALIVE_SPORT
+  .IAMALIVE_CPORT = process.env.IAMALIVE_CPORT
+  .SERVER_IP = process.env.SERVER_IP
+
+env.NETBEAST_PORT = process.env.PORT
+
+var iamaliveOptions = { env: env_iamalive }
+
+var iamalive = spawn(DASHBOARD_IAMALIVE, iamaliveOptions)
+
+iamalive.stdout.on('data', function (data) {
+  console.log(data.toString())
+})
+
+iamalive.stderr.on('data', function (data) {
+  console.log(data.toString())
+})
+
+iamalive.on('close', function (code) {
+  console.log('child process iamalive exited with code ' + code.toString())
+})
+
+process.on('exit', function () {
+  iamalive.kill('SIGTERM')
 })
 
 require('./src/services/scanner')

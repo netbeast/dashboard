@@ -96585,7 +96585,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // Analytics
 var Mixpanel = require('mixpanel');
 var mixpanel = Mixpanel.init('e794af6318eedbddd288e440a50c16f5');
-var user = _lib.Session.load('user');
+var user = _lib.Session.load('user') || {};
 
 var App = function (_React$Component) {
   _inherits(App, _React$Component);
@@ -97173,7 +97173,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // Analytics
 var Mixpanel = require('mixpanel');
 var mixpanel = Mixpanel.init('e794af6318eedbddd288e440a50c16f5');
-var user = _lib.Session.load('user');
+var user = _lib.Session.load('user') || {};
 
 var ExplorableApp = function (_React$Component) {
   _inherits(ExplorableApp, _React$Component);

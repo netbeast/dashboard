@@ -10,7 +10,7 @@ import { Session } from '../lib'
 // Analytics
 var Mixpanel = require('mixpanel')
 var mixpanel = Mixpanel.init('e794af6318eedbddd288e440a50c16f5')
-var user = Session.load('user')
+var user = Session.load('user') || {}
 
 export default class App extends React.Component {
   constructor (props, context) {
@@ -56,7 +56,7 @@ export default class App extends React.Component {
     })
   }
 
- //I really don't know what is the function of this if there is another one on explorable-app 
+ //I really don't know what is the function of this if there is another one on explorable-app
   install () {
     const url = this.props.git_url
     const loader = window.notify({

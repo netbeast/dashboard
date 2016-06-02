@@ -6,7 +6,7 @@ import { Session } from '../lib'
 // Analytics
 var Mixpanel = require('mixpanel')
 var mixpanel = Mixpanel.init('e794af6318eedbddd288e440a50c16f5')
-var user = Session.load('user')
+var user = Session.load('user') || {}
 
 export default class ExplorableApp extends React.Component {
   constructor (props, context) {

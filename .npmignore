@@ -1,3 +1,4 @@
 test
 .travis.yml
 _apps/*
+!_apps/installed_apps_live_here

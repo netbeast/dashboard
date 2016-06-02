@@ -29,18 +29,19 @@ nav.navigation-bar {
   position: fixed;
   background-color: $grey-dark;
   width: 100%; height: 70px;
+  border-bottom: 1px solid $grey-lighter;
 
-  h1 { 
-    padding-left: 40px; 
+  h1 {
+    padding-left: 40px;
     @media (max-width: 820px) { padding-left: 0px; }
   }
-    
+
   .user-pod {
     float: right;
     padding: 20px 30px;
   }
 
-  .notifications-pod { 
+  .notifications-pod {
     color: #fff;
     float: right;
     padding: 25px 0px;
@@ -81,7 +82,7 @@ nav.navigation-drawer {
 
 .drawer .apps-list .app {
   display: inline-block;
-  text-align: center; 
+  text-align: center;
   border-radius: 3px;
   padding: 40px 23px;
   margin-top: 15px;
@@ -262,7 +263,7 @@ nav.navigation-drawer {
   }
 }
 
-.network__controls {  
+.network__controls {
   position: fixed;
   bottom: 50px; left: 50px;
   color: $brand-info;

@@ -62,16 +62,13 @@ export class Navigation extends React.Component {
           <NotificationsPod />
         </nav>
         <nav className='navigation-drawer' style={{ marginLeft }}>
-          <div>
-          <ul className='collapsed list-unstyled list-inline pull-left'>
-            <li>
-              <i className='fa fa-close clickable' onClick={this.toggleDrawer} />
-            </li>
-          </ul>
+          <div className='navigation-drawer__heading'>
+            <div className='navigation-drawer__heading__content'>
+              <span className='fa fa-close clickable' onClick={this.toggleDrawer} />
+              &nbsp;
+              <Link to='/'>{this.state.title}</Link>
+            </div>
           </div>
-          <Link to='/'><h1 className='pull-left'>{this.state.title}</h1></Link>
-          <br/>
-          <br/>
           <ul className='expanded list-unstyled'>
             <li><Link to='/'><i className='fa fa-th' /> Apps</Link></li>
             <li><Link to='/plugins'><i className='fa fa-puzzle-piece' /> Plugins</Link></li>

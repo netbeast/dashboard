@@ -76,7 +76,7 @@ export default class App extends React.Component {
       toastr.success(`${name} has been installed!`)
       toastr.dismiss(loader)
 
-      if (type === 'plugin' || type === 'service' || props.bootOnLoad)
+      if (type === 'plugin' || type === 'service' || props.netbeast || props.netbeast.bootOnLoad)
         return request.post('/api/activities/' + name).promise()
     }).then((res) => { toastr.success(`${res.body.name} is running`) })
     .catch((fail, res) => toastr.error(res.text))

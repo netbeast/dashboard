@@ -67,7 +67,7 @@ export default class ExplorableApp extends React.Component {
         type: props ? props.type : 'app'
       })
 
-      if (type === 'plugin' || type === 'service' || props.bootOnLoad) {
+      if (type === 'plugin' || type === 'service' || props.netbeast.bootOnLoad) {
 
         mixpanel.track('Running app/plugin', {
           distinct_id: user.email,

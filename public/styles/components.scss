@@ -67,11 +67,13 @@ nav.navigation-drawer {
   box-shadow: 0px 0px 10px 1px rgba(0,0,0,.7);
 }
 
-.drawer {
+.apps-drawer, .explore-drawer {
   text-align: center;
 }
 
-.drawer .apps-list {
+.explore-drawer { padding-bottom: 90px; }
+
+.apps-drawer .apps-list, .explore-drawer .apps-list {
   display: inline-block;
   text-align: left;
   width: 1000px;
@@ -80,7 +82,7 @@ nav.navigation-drawer {
   @media (max-width: 660px) { max-width: 340px; }
 }
 
-.drawer .apps-list .app {
+.apps-drawer .apps-list .app, .explore-drawer .apps-list .app {
   display: inline-block;
   text-align: center;
   border-radius: 3px;
@@ -107,6 +109,10 @@ nav.navigation-drawer {
     .pulse, .halo { stroke: $yellow; }
     .center { fill: $yellow; }
   }
+}
+
+.app__context-menu .popover-content {
+  padding: 10px 10px 15px 10px;
 }
 
 .pulse-container {

@@ -22,7 +22,11 @@ class ExploreApp extends React.Component {
 
 class HistoryApp extends React.Component {
   render () {
+    const { route } = this.props
+    const pathname = route.path ? route.path : 'apps'
     const logoStyle = { backgroundImage: 'url(/img/history.png)' }
+
+    if (pathname !== 'apps') return null
 
     return (
       <div className='app'>
@@ -56,7 +60,7 @@ export default class Drawer extends React.Component {
 
   render () {
     return (
-        <div className='drawer'>
+        <div className='apps-drawer'>
           <AppsList src={'/api/' + this.state.pathname} {...this.props}
           prepend={[
             <ExploreApp key='explore-app' {...this.props} {...this.state} />,

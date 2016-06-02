@@ -12,7 +12,7 @@ export default class ExplorableApp extends React.Component {
   constructor (props, context) {
     super(props)
     this.router = context.router
-    this.state = { hidden: false }
+    this.state = { hidden: false, installed: props.installed }
   }
 
   componentDidMount () {
@@ -58,17 +58,17 @@ export default class ExplorableApp extends React.Component {
       const props = res.body.netbeast
       const type = props ? props.type : 'app'
 
+      this.setState({ installed: true })
+
       toastr.success(`${name} has been installed!`)
-      toastr.dismiss(loader)
 
       mixpanel.track('Installed app/plugin', {
         distinct_id: user.email,
         name: name,
-        type: props ? props.type : 'app'
+        type
       })
 
-      if (type === 'plugin' || type === 'service' || props.bootOnLoad) {
-
+      if (type === 'plugin' || type === 'service' || (props && props.bootOnLoad)) {
         mixpanel.track('Running app/plugin', {
           distinct_id: user.email,
           name: name,
@@ -81,10 +81,12 @@ export default class ExplorableApp extends React.Component {
       if (err.res) toastr.error(err.res.text)
       else toastr.error(err.message)
     })
+    .finally(() => toastr.dismiss(loader))
   }
 
   renderButton () {
-    const { installed, name } = this.props
+    const { name } = this.props
+    const { installed } = this.state
     return installed ? <a href='javascript:void(0)' onClick={this.launch.bind(this)} className='install btn btn-filled btn-primary'> Launch </a>
     : <a href='javascript:void(0)' onClick={this.install.bind(this)} className='install btn btn-filled btn-info'> Install </a>
   }
@@ -103,8 +105,10 @@ export default class ExplorableApp extends React.Component {
 
     return (
       <div className='app'>
-        <div className='logo' title='Launch app' style={logoStyle} onClick={this.launch.bind(this)}>
+        <a target='_blank' href={this.props.html_url}>
+        <div className='logo' title='Try this app' style={logoStyle}>
         </div>
+        </a>
         {this.renderButton()}
         <h4 className='name'>{name}</h4>
       </div>

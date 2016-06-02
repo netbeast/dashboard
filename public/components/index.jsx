@@ -1,11 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Router, Route, browserHistory, IndexRoute, Link } from 'react-router'
+import { Router, Route, browserHistory, IndexRoute } from 'react-router'
 
 import NotFound from './not-found.jsx'
 
+import { Navigation } from './navigation.jsx'
 import Notifications from './notifications'
-import NotificationsPod from './notifications/notifications-pod.jsx'
 import Drawer from './apps/drawer.jsx'
 import AppLiveView from './apps/live.jsx'
 import InstallView from './apps/install.jsx'
@@ -15,75 +15,10 @@ import History from './history/index.jsx'
 import FeedbackPod from './misc/feedback-pod.jsx'
 import ConnectionPod from './misc/connection-pod.jsx'
 import Login from './user/login.jsx'
-import UserPod from './user/user-pod.jsx'
 import Signup from './user/signup.jsx'
 import Settings from './user/settings.jsx'
 
 import { Auth } from './lib'
-
-export class Navigation extends React.Component {
-  constructor () {
-    super()
-    this.state = { title: 'Netbeast', hideDrawer: true }
-    window.title = this.title.bind(this)
-    this.toggleDrawer = this.toggleDrawer.bind(this)
-  }
-
-  title (str) {
-    if (str) {
-      this.setState({ title: str })
-      document.title = str
-    }
-    return document.title
-  }
-
-  toggleDrawer () {
-    this.setState({ hideDrawer: !this.state.hideDrawer })
-  }
-
-  render () {
-    const marginLeft = -300 * this.state.hideDrawer
-
-    return (
-      <span>
-        <nav className='navigation-bar'>
-          <ul className='collapsed list-unstyled list-inline pull-left'>
-            <li>
-              <i className='fa fa-bars clickable' onClick={this.toggleDrawer} />
-            </li>
-          </ul>
-          <Link to='/'><h1 className='pull-left'>{this.state.title}</h1></Link>
-          <ul className='expanded list-unstyled list-inline pull-left'>
-            <li><Link to='/'><i className='fa fa-th' /> Apps</Link></li>
-            <li><Link to='/plugins'><i className='fa fa-puzzle-piece' /> Plugins</Link></li>
-            <li><Link to='/activities'><i className='fa fa-dashboard' /> Activities</Link></li>
-            <li><Link to='/remove'> <i className='fa fa-trash' /> Remove</Link></li>
-          </ul>
-          <UserPod />
-          <NotificationsPod />
-        </nav>
-        <nav className='navigation-drawer' style={{ marginLeft }}>
-          <div>
-          <ul className='collapsed list-unstyled list-inline pull-left'>
-            <li>
-              <i className='fa fa-close clickable' onClick={this.toggleDrawer} />
-            </li>
-          </ul>
-          </div>
-          <Link to='/'><h1 className='pull-left'>{this.state.title}</h1></Link>
-          <br/>
-          <br/>
-          <ul className='expanded list-unstyled'>
-            <li><Link to='/'><i className='fa fa-th' /> Apps</Link></li>
-            <li><Link to='/plugins'><i className='fa fa-puzzle-piece' /> Plugins</Link></li>
-            <li><Link to='/activities'><i className='fa fa-dashboard' /> Activities</Link></li>
-            <li><Link to='/remove'> <i className='fa fa-trash' /> Remove</Link></li>
-          </ul>
-        </nav>
-      </span>
-    )
-  }
-}
 
 export default class Dashboard extends React.Component {
   constructor (props) {

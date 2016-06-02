@@ -89,14 +89,25 @@ export default class Explore extends React.Component {
   render () {
     const { filter, apps } = this.state
     return (
-        <div className='drawer'>
+        <div className='explore-drawer'>
           <div className='apps-list'>
             {apps.map((data) => {
-                return <ExplorableApp key={data.id} { ...data } filter={filter} installed={this.isInstalled(data.name)}/>
+              return <ExplorableApp key={data.id} { ...data } filter={filter} installed={this.isInstalled(data.name)}/>
             })}
-            <span style={{ display: apps.length > 0 ? 'none' : 'block' }}><Typist>
+            <h3 style={{ display: apps.length > 0 ? 'none' : 'block' }}>
+            <br/>
+            <br/>
+            <br/>
+            <Typist>
               Looking for Netbeast packages on the registry...
-            </Typist></span>
+            </Typist>
+            </h3>
+          </div>
+          <div>
+            <a target='_blank' style={{ color: '#555' }}
+            href='https://docs.netbeast.co/chapters/developing/publish.html'>
+            Didn't find yours? Publish your app or plugin.
+            </a>
           </div>
           <form className='module-search' onSubmit={this.onSubmit}>
             <i className='fa fa-search'/>

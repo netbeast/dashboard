@@ -1,6 +1,0 @@
-[submodule "bin/bundles/base-app"]
-	path = bin/bundles/base-app
-	url = https://github.com/netbeast/base-app.git
-[submodule "bin/bundles/base-plugin"]
-	path = bin/bundles/base-plugin
-	url = https://github.com/netbeast/base-plugin.git

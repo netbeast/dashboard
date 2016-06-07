@@ -20,14 +20,11 @@ var chalk = require('chalk')
 var app = require('./src')
 var bootOnload = require('./src/boot-on-load')
 
-// const DASHBOARD_DNS = path.join(__dirname, './bin/dns.js')
-
 cmd
 .version('0.1.42')
 .option('-p, --port <n>', 'Port to start the HTTP server', parseInt)
 .option('-sp, --secure_port <n>', 'Secure port to start the HTTPS server', parseInt)
 .parse(process.argv)
-
 
 var server = http.createServer(app)
 

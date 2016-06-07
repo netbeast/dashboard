@@ -1,7 +1,7 @@
 {
   "name": "netbeast-cli",
   "description": "Netbeast OS dashboard, IoT apps manager",
-  "version": "0.5.2",
+  "version": "0.5.7",
   "preferGlobal": "true",
   "dependencies": {
     "aedes": "^0.17.1",
@@ -14,8 +14,11 @@
     "dotenv": "^2.0.0",
     "express": "^4.12.3",
     "freeport": "^1.0.5",
-    "fs-extra": "^0.30.0",
-    "gift": "^0.7.0",
+    "fs-extra": "^0.26.0",
+    "fstream": "^1.0.8",
+    "fstream-ignore": "^1.0.3",
+    "getmac": "^1.0.7",
+    "gift": "^0.6.1",
     "http-proxy": "^1.13.2",
     "inquirer": "^1.0.2",
     "lodash": "^4.12.0",

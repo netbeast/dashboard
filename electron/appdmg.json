@@ -1,0 +1,10 @@
+{
+  "title": "Netbeast",
+  "icon": "icon.icns",
+  "background": "background.png",
+  "icon-size": 80,
+  "contents": [
+    { "x": 372, "y": 277, "type": "link", "path": "/Applications" },
+    { "x": 160, "y": 277, "type": "file", "path": "Netbeast.app" }
+  ]
+}

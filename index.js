@@ -54,6 +54,7 @@ var proxy = httpProxy.createServer({
     // attach mqtt broker to websockets stream
     websocket.createServer({ server: server }, aedes.handle)
     bootOnload()
+    if (process.send) process.send('ready') //If this file has been called from electron.js
   })
 })
 

@@ -70,10 +70,10 @@ export class Navigation extends React.Component {
             </div>
           </div>
           <ul className='expanded list-unstyled'>
-            <li><Link to='/'><i className='fa fa-th' /> Apps</Link></li>
-            <li><Link to='/plugins'><i className='fa fa-puzzle-piece' /> Plugins</Link></li>
-            <li><Link to='/activities'><i className='fa fa-dashboard' /> Activities</Link></li>
-            <li><Link to='/remove'> <i className='fa fa-trash' /> Remove</Link></li>
+            <Link to='/'><li><i className='fa fa-th' /> &nbsp;Apps</li></Link>
+            <Link to='/plugins'><li><i className='fa fa-puzzle-piece' /> &nbsp;Plugins</li></Link>
+            <Link to='/activities'><li><i className='fa fa-dashboard' /> &nbsp;Activities</li></Link>
+            <Link to='/remove'><li><i className='fa fa-trash' /> &nbsp;Remove</li></Link>
           </ul>
         </nav>
       </span>

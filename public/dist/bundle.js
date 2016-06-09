@@ -98569,8 +98569,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouter = require('react-router');
-
 var _superagentBluebirdPromise = require('superagent-bluebird-promise');
 
 var _superagentBluebirdPromise2 = _interopRequireDefault(_superagentBluebirdPromise);
@@ -98585,7 +98583,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global toastr */
+
 
 var RefreshPod = function (_React$Component) {
   _inherits(RefreshPod, _React$Component);
@@ -98600,10 +98599,25 @@ var RefreshPod = function (_React$Component) {
     key: 'refresh',
     value: function refresh() {
       var APP_PROXY = '/i/';
+      var loader = window.notify({
+        body: _react2.default.createElement(
+          'span',
+          null,
+          _react2.default.createElement('div', { className: 'loader' }),
+          'Scanning for new devices...'
+        ), timeout: 0 });
+
       _superagentBluebirdPromise2.default.get('/api/plugins').then(function (res) {
         console.log(res);
         return _bluebird2.default.map(res.body, function (plugin) {
-          return _superagentBluebirdPromise2.default.get(APP_PROXY + plugin.name + '/discover').promise();
+          return _superagentBluebirdPromise2.default.get(APP_PROXY + plugin.name + '/discover').promise().catch(function () {
+            toastr.error('Could not discover for ' + plugin.name);
+            return _bluebird2.default.resolve(); // continue discovering
+          });
+        }).then(function () {
+          return toastr.info('Scan has finished');
+        }).finally(function () {
+          return toastr.dismiss(loader);
         });
       });
     }
@@ -98612,7 +98626,7 @@ var RefreshPod = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'span',
-        { className: 'refresh-pod ', title: 'Rediscover all devices...' },
+        { className: 'refresh-pod clickable', title: 'Rediscover all devices...' },
         _react2.default.createElement('i', { className: 'fa fa-refresh', onClick: this.refresh.bind(this) })
       );
     }
@@ -98623,7 +98637,7 @@ var RefreshPod = function (_React$Component) {
 
 exports.default = RefreshPod;
 
-},{"bluebird":4,"react":602,"react-router":463,"superagent-bluebird-promise":639}],680:[function(require,module,exports){
+},{"bluebird":4,"react":602,"superagent-bluebird-promise":639}],680:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -99489,44 +99503,43 @@ var Navigation = exports.Navigation = function (_React$Component) {
             'ul',
             { className: 'expanded list-unstyled' },
             _react2.default.createElement(
-              'li',
-              null,
+              _reactRouter.Link,
+              { to: '/' },
               _react2.default.createElement(
-                _reactRouter.Link,
-                { to: '/' },
+                'li',
+                null,
                 _react2.default.createElement('i', { className: 'fa fa-th' }),
-                ' Apps'
+                '  Apps'
               )
             ),
             _react2.default.createElement(
-              'li',
-              null,
+              _reactRouter.Link,
+              { to: '/plugins' },
               _react2.default.createElement(
-                _reactRouter.Link,
-                { to: '/plugins' },
+                'li',
+                null,
                 _react2.default.createElement('i', { className: 'fa fa-puzzle-piece' }),
-                ' Plugins'
+                '  Plugins'
               )
             ),
             _react2.default.createElement(
-              'li',
-              null,
+              _reactRouter.Link,
+              { to: '/activities' },
               _react2.default.createElement(
-                _reactRouter.Link,
-                { to: '/activities' },
+                'li',
+                null,
                 _react2.default.createElement('i', { className: 'fa fa-dashboard' }),
-                ' Activities'
+                '  Activities'
               )
             ),
             _react2.default.createElement(
-              'li',
-              null,
+              _reactRouter.Link,
+              { to: '/remove' },
               _react2.default.createElement(
-                _reactRouter.Link,
-                { to: '/remove' },
-                ' ',
+                'li',
+                null,
                 _react2.default.createElement('i', { className: 'fa fa-trash' }),
-                ' Remove'
+                '  Remove'
               )
             )
           )
@@ -99908,15 +99921,14 @@ var Toast = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         { className: 'toast toast--' + emphasis + (isCurrent ? ' current' : '') },
-        _react2.default.createElement(
+        title ? _react2.default.createElement(
           'span',
           { className: 'toast__title' },
           ' ',
-          title || 'dashboard',
+          title,
           ' '
-        ),
-        typeof this.props.dismiss === 'function' ? _react2.default.createElement('i', { className: 'fa fa-times clickable pull-right', onClick: this.close }) : null,
-        _react2.default.createElement('br', null),
+        ) : null,
+        typeof this.props.dismiss === 'function' ? _react2.default.createElement('i', { className: 'toast__dismiss fa fa-times clickable', onClick: this.close }) : null,
         _react2.default.createElement(
           'div',
           { className: 'toast__body' },

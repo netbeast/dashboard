@@ -99293,7 +99293,7 @@ var VersionPod = function (_React$Component) {
   _createClass(VersionPod, [{
     key: 'render',
     value: function render() {
-      var version = "0.5.7";
+      var version = "0.5.8";
       return _react2.default.createElement(
         'a',
         { target: '_blank', href: 'https://github.com/netbeast/dashboard', className: 'version-pod', title: 'npm package version' },

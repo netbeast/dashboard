@@ -49,6 +49,9 @@ var proxy = httpProxy.createServer({
     // attach mqtt broker to websockets stream
     websocket.createServer({ server: server }, aedes.handle)
     bootOnload()
+
+    // If this file has been called from electron.js
+    if (process.send) process.send('ready')
   })
 })
 
@@ -63,7 +66,3 @@ proxy.on('error', function (err, req, res) {
 
 require('./src/services/scanner')
 require('./src/services/advertiser')
-
-// process.on('exit', function () {
-//   dns.kill('SIGTERM')
-// })

@@ -1,8 +1,9 @@
 {
   "name": "netbeast-cli",
   "description": "Netbeast OS dashboard, IoT apps manager",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "preferGlobal": "true",
+  "main": "electron.js",
   "dependencies": {
     "aedes": "^0.17.1",
     "bluebird": "^3.2.2",
@@ -45,6 +46,7 @@
     "chai": "^3.2.0",
     "chart.js": ">= 1.1.1 & < 2.0",
     "envify": "^3.4.0",
+    "electron-prebuilt": "^0.37.2",
     "enzyme": "^2.3.0",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
@@ -97,6 +99,7 @@
     "build": "./node_modules/.bin/gulp build",
     "dev": "./node_modules/.bin/gulp",
     "start": "node index.js",
+    "electron": "./node_modules/.bin/electron electron.js",
     "clean": "rm -r ./test/coverage; rm .database.sqlite",
     "prepublish": "npm run build",
     "release:major": "npm version major && npm publish && git push --follow-tags",

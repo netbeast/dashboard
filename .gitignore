@@ -35,7 +35,7 @@ Thumbs.db
 
 node_modules
 _apps/*
-!_apps/installed_apps_live_here
+!_apps/.gitkeep
 *.sqlite
 
 node_modules

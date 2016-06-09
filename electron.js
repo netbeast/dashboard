@@ -14,7 +14,7 @@ var dashboard = fork(indexJs)
 
 elecApp.on('ready', function() {
   mainWindow = new BrowserWindow({width: 1000, height: 800, title: 'Netbeast Dashboard | Loading'})
-  mainURL = path.join('file://' + __dirname + '/desktop_app/loading/loading.html')
+  mainURL = path.join('file://' + __dirname + '/electron/loading/loading.html')
   mainWindow.loadURL(mainURL)
   mainWindow.on('closed', function() {
       mainWindow = null;

@@ -33,6 +33,6 @@ describe('Client', function () {
     // .then(function (data) {
     //   return fs.accessAsync(PATH_TO_APP + '/' + data.main, fs.X_OK)
     // })
-    .then(() => done())
+    .then(function () { done() }, done)
   })
 })

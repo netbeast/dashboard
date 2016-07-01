@@ -1,7 +1,7 @@
 | Linux & Mac   |      Windows      | Docker | Docs | Forum | *
 |----------|:-------------:|:------:|:------:|:------:|:------:|------:|
 | [![Build Status](https://travis-ci.org/netbeast/dashboard.svg)](https://travis-ci.org/netbeast/dashboard) |  [![Windows Build Status](https://ci.appveyor.com/api/projects/status/l67h46kbdxtvy43p?svg=true)](https://ci.appveyor.com/project/jsdario/dashboard) | [<img src="https://pbs.twimg.com/profile_images/378800000124779041/fbbb494a7eef5f9278c6967b6072ca3e_400x400.png" height="24px" width="auto"/>](https://dashboard.netbeast.co/) | [<img src="https://avatars2.githubusercontent.com/u/7111340?v=3&s=400" height="24px" width="auto"/>](http://bit.ly/1VYfqDH) |  [<img src="https://pbs.twimg.com/profile_images/3264780953/6c9a2cd7bb2efcb4c53d32900e52c8ac_400x400.png" height="24px" width="auto"/>](http://bit.ly/23UyVMR) | [<img src="https://www.iconexperience.com/_img/i_collection_png/512x512/plain/graph.png" height="24px" width="auto"/>](http://npm.anvaka.com/#/view/2d/netbeast-cli)
-
+ 
 # Netbeast Dashboard
 ### Connect everything. Regardless its brand or technology,
 

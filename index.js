@@ -5,8 +5,6 @@ process.chdir(__dirname)
 
 var http = require('http')
 var fs = require('fs')
-// const spawn = require('child_process').spawn
-// var path = require('path')
 
 // NPM dependencies
 var cmd = require('commander')
@@ -21,9 +19,6 @@ var chalk = require('chalk')
 // Project libraries
 var app = require('./src')
 var bootOnload = require('./src/boot-on-load')
-
-// const DASHBOARD_IAMALIVE = path.join(__dirname, './bin/iamalive-c.js')
-// const DASHBOARD_DNS = path.join(__dirname, './bin/dns.js')
 
 cmd
 .version('0.1.42')
@@ -54,7 +49,9 @@ var proxy = httpProxy.createServer({
     // attach mqtt broker to websockets stream
     websocket.createServer({ server: server }, aedes.handle)
     bootOnload()
-    if (process.send) process.send('ready') //If this file has been called from electron.js
+
+    // If this file has been called from electron.js
+    if (process.send) process.send('ready')
   })
 })
 
@@ -67,24 +64,5 @@ proxy.on('error', function (err, req, res) {
   }
 })
 
-// var env = Object.create(process.env)
-// var env_iamalive = Object.create(process.env)
-//
-// env_iamalive
-//   .NETBEAST_PORT = process.env.PORT
-//   .IAMALIVE_SPORT = process.env.IAMALIVE_SPORT
-//   .IAMALIVE_CPORT = process.env.IAMALIVE_CPORT
-//   .SERVER_IP = process.env.SERVER_IP
-//
-// env.NETBEAST_PORT = process.env.PORT
-//
-// var iamaliveOptions = { env: env_iamalive }
-//
-// var iamalive = spawn(DASHBOARD_IAMALIVE, iamaliveOptions)
-
 require('./src/services/scanner')
 require('./src/services/advertiser')
-
-// process.on('exit', function () {
-//   dns.kill('SIGTERM')
-// })

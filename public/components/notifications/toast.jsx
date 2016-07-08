@@ -19,11 +19,10 @@ export default class Toast extends React.Component {
 
     return (
       <div className={'toast toast--' + (emphasis) + (isCurrent ? ' current' : '')}>
-        <span className='toast__title'> {title || 'dashboard'} </span>
-        { typeof this.props.dismiss === 'function'
-          ? <i className='fa fa-times clickable pull-right' onClick={this.close} />
+        {title ? <span className='toast__title'> {title} </span> : null}
+        {typeof this.props.dismiss === 'function'
+          ? <i className='toast__dismiss fa fa-times clickable' onClick={this.close} />
           : null}
-        <br/>
         <div className='toast__body'>
           {body}
         </div>

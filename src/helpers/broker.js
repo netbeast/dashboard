@@ -25,7 +25,7 @@ client.on('message', function (topic, message) {
     console.log('broker got a non JSON object')
     message = message.toString()
   }
-  broker.client.emit('#' + topic, message)
+  broker.client.emit('#' + topic || 'dashboard', message)
 })
 
 broker.on = function (topic, cb) {

@@ -1,7 +1,6 @@
 var path = require('path')
 var exec = require('child_process').exec
 
-var request = require('superagent')
 var git = require('gift')
 var fs = require('fs-extra')
 
@@ -41,7 +40,7 @@ function _installFromDir (dir, done) {
   }
 
   // Check if main is an executable file
-  const main = path.resolve(dir, appJson.main)
+  const main = path.resolve(dir, appJson.main || '')
   if (!fs.existsSync(main)) {
     return done(new Error('App does not have a main executable'))
   } else {

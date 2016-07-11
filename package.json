@@ -1,7 +1,7 @@
 {
   "name": "netbeast-cli",
   "description": "Netbeast OS dashboard, IoT apps manager",
-  "version": "0.5.8",
+  "version": "0.5.9",
   "preferGlobal": "true",
   "main": "electron.js",
   "dependencies": {

@@ -3,6 +3,16 @@
 | [![Build Status](https://travis-ci.org/netbeast/dashboard.svg)](https://travis-ci.org/netbeast/dashboard) |  [![Windows Build Status](https://ci.appveyor.com/api/projects/status/l67h46kbdxtvy43p?svg=true)](https://ci.appveyor.com/project/jsdario/dashboard) | [<img src="https://pbs.twimg.com/profile_images/378800000124779041/fbbb494a7eef5f9278c6967b6072ca3e_400x400.png" height="24px" width="auto"/>](https://hub.docker.com/r/netbeast/netbeast/) | [<img src="https://avatars2.githubusercontent.com/u/7111340?v=3&s=400" height="24px" width="auto"/>](http://bit.ly/1VYfqDH) |  [<img src="https://pbs.twimg.com/profile_images/3264780953/6c9a2cd7bb2efcb4c53d32900e52c8ac_400x400.png" height="24px" width="auto"/>](http://bit.ly/23UyVMR) |[<img src="https://daks2k3a4ib2z.cloudfront.net/56bde7f6041f53663e470079/56d9a0413dc9ea140fea2762_favicon_32.png" height="24px" width="auto"/>](https://dashboard.netbeast.co/)| [<img src="https://www.iconexperience.com/_img/i_collection_png/512x512/plain/graph.png" height="24px" width="auto"/>](http://npm.anvaka.com/#/view/2d/netbeast-cli)
  
 # Netbeast Dashboard
+
+### Current State
+
+Netbeast is currently developing the mobile app version of the dashboard software platform. We will release a beta version under invitation. So you want to be notified as soon as we release the beta version join our mailing list on the website.
+
+**This project is still on going** so we continue giving support on the forum and on the slack channel. :rocket: 
+
+If you have any question you can always reach us there :smile:
+
+
 ### Connect everything. Regardless its brand or technology.
 
 One API, unlimited products and hacks. Netbeast middleware translates messages from different IoT protocols and device interfaces so they work as one. Have no more "hubs". Work across **devices** not _brands_.

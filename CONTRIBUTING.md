@@ -14,7 +14,7 @@ We follow an agile development convention: develop, test, improve. For all tasks
 1. Open a branch and pull request.
 2. Code the feature / solve the bug
 3. The code passes the tests / new tests are appended
-4. Travis-ci agrees, the code is good to merge.
+4. Travis CI agrees, the code is good to merge.
 5. Code styling will be fixed within the following iterations.
 
 Some of our core team members will be working directly on Github. We will review all pull requests and accept them as soon as possible.
@@ -31,7 +31,7 @@ Long story short:
 3. Ensure your code passes the tests (`npm test`).
 4. If you are solving a bug problem posted on issues with your PR, comment your solution on it.
 
-The Netbeast @engineering team will help you through the process if you have any questions. The moment you create a pull request, [travis](https://travis-ci.org/netbeast/dashboard) will test your code. If this process is successful and follows style guidelines, we will merge your PR.
+The Netbeast @engineering team will help you through the process if you have any questions. The moment you create a pull request, [Travis](https://travis-ci.org/netbeast/dashboard) will test your code. If this process is successful and follows style guidelines, we will merge your PR.
 
 ### Getting started
 
@@ -138,7 +138,7 @@ We run our tests as a script contained in package.json file:
 }
 ```
 
-For now, we mainly use [the mocha test framework](https://mochajs.org/) and [travis ci](https://travis-ci.org/) to test the Dashboard and API. Feel free to experiment with other frameworks if these don't get the job done for you.
+For now, we mainly use [the mocha test framework](https://mochajs.org/) and [Travis CI](https://travis-ci.org/) to test the Dashboard and API. Feel free to experiment with other frameworks if these don't get the job done for you.
 
 Also, keep your tests as simple as possible. Complex tests end up requiring their own tests. We would rather see duplicated assertions across test methods than cunning utility methods that magically determine which assertions are needed at a particular stage. Remember: Explicit is better than implicit.
 
@@ -188,7 +188,7 @@ and (when applicable):
 npm run coverage
 ```
 
-Furthermore, pull requests to the `dashboard`and `api`repos will be checked through tracis ci.
+Furthermore, pull requests to the `dashboard`and `api`repos will be checked through Travis CI.
 
 We finish with a merge and push to GitHub:
 

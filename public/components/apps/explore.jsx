@@ -6,7 +6,7 @@ import VersionPod from '../misc/version-pod.jsx'
 import ExplorableApp from './explorable-app.jsx'
 
 const GITHUB_API = 'https://api.github.com'
-const GITHUB_Q = GITHUB_API + '/search/repositories?q=netbeast+language:javascript&user:netbeast'
+const GITHUB_Q = GITHUB_API + '/search/repositories?q=netbeast&user:netbeast'
 
 export default class Explore extends React.Component {
   constructor (props, context) {

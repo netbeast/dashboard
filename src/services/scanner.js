@@ -7,8 +7,20 @@ var broker = require('../helpers/broker')
 setInterval(function () {
   getArp()
 }, 6000)
+getInitArp();
 
 var cachedResult
+
+function getInitArp(){
+  broker.client.subscribe('network/devices/request')
+  broker.client.on('message', function(topic, message){
+    if (topic !== 'network/devices/request') return
+
+    if (cachedResult) {
+      broker.client.publish('netbeast/network', cachedResult)
+    }
+  })
+}
 
 function getArp () {
   Resource.find({}, function (err, devices) {
@@ -24,7 +36,7 @@ function getArp () {
       arp_str = data
     })
 
-    arp.on('error', function (err) { 
+    arp.on('error', function (err) {
       console.trace(err)
       broker.client.publish('netbeast/network', JSON.stringify(devices))
     })

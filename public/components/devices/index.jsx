@@ -83,7 +83,10 @@ export class Devices extends React.Component {
 
   componentWillMount () {
     window.addEventListener('resize', this.handleResize)
+
+    this.mqtt.publish('network/devices/request')
     this.mqtt.subscribe('netbeast/network')
+
     this.mqtt.on('message', (topic, message) => {
       if (topic !== 'netbeast/network') return
 

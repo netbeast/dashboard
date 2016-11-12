@@ -80,20 +80,18 @@ sudo pm2 start index.js --port 80
 ## Using docker :whale:
 Make sure you already have [docker](https://docs.docker.com/engine/installation/) installed.
 
-1. Download the netbeast image from dockerhub
-```
-docker pull netbeast/netbeast
-```
-2. Run it
+1. Run our docker image, if it's the first time, it'll be downloaded from the [Docker Hub](https://hub.docker.com/r/netbeast/netbeast/)
+
 ```
 docker run -p 49160:8000 -d netbeast/netbeast
 ```
-This will run your docker container on the port 49160
 
-3. You can now play on it. Access to your docker `CONTAINER_IP`.
-> http://CONTAINER_IP:49160
->
-> – Et voilà
+This will run Netbeast dashboard on port 49160 of the host running the container. You can now play with it. 
+
+Access the dashboard on [http://localhost:49160](http://localhost:49160)
+
+Et voilà!
+
 
 <a name="overview"></a>
 # Overview

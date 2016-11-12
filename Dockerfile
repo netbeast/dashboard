@@ -10,15 +10,24 @@ ENV DEBIAN_FRONTEND noninteractive
 MAINTAINER <https://github.com/luisfpinto>
 
 # Install required packages
+RUN apt-get update && apt-get install -y \
+    nodejs \
+    nodejs-legacy \
+    npm \
+    git \
+    net-tools
 
-RUN apt-get update &&  apt-get install -y nodejs nodejs-legacy npm git net-tools
+# Only install dependencies when there's a change in package.json otherwise
+# we rebuild the modules when there's any change to the source code.
+ADD package.json /tmp/package.json
+RUN cd /tmp && npm install
+RUN mkdir -p /src && cp -a /tmp/node_modules /src/
 
-# Copy app to /src
-COPY . /src
-
-# Install all dependencies
-RUN cd /src; npm install
+# Copy the app
+WORKDIR /src
+ADD . /src
 
 # Bind port 8000 & run app
 EXPOSE 8000
-CMD cd /src; node ./index.js
+
+CMD ["node", "index.js"]

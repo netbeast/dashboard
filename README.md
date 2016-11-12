@@ -86,10 +86,12 @@ Make sure you already have [docker](https://docs.docker.com/engine/installation/
 docker run -p 49160:8000 -d netbeast/netbeast
 ```
 
-This will run Netbeast dashboard on port 49160 of the host running the container.
+This will run Netbeast dashboard on port 49160 of the host running the container. You can now play with it. 
 
-3. You can now play with it. Access the dashboard on http://localhost:49160/
-> – Et voilà
+Access the dashboard on [http://localhost:49160](http://localhost:49160)
+
+Et voilà!
+
 
 <a name="overview"></a>
 # Overview

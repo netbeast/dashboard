@@ -1,17 +1,24 @@
-| Linux & Mac   |      Windows      | Docker | Docs | Forum | Demo |  *
-|----------|:-------------:|:------:|:------:|:------:|:------:|:------|------:|
-| [![Build Status](https://travis-ci.org/netbeast/dashboard.svg)](https://travis-ci.org/netbeast/dashboard) |  [![Windows Build Status](https://ci.appveyor.com/api/projects/status/l67h46kbdxtvy43p?svg=true)](https://ci.appveyor.com/project/jsdario/dashboard) | [<img src="https://pbs.twimg.com/profile_images/378800000124779041/fbbb494a7eef5f9278c6967b6072ca3e_400x400.png" height="24px" width="auto"/>](https://hub.docker.com/r/netbeast/netbeast/) | [<img src="https://avatars2.githubusercontent.com/u/7111340?v=3&s=400" height="24px" width="auto"/>](http://bit.ly/1VYfqDH) |  [<img src="https://pbs.twimg.com/profile_images/3264780953/6c9a2cd7bb2efcb4c53d32900e52c8ac_400x400.png" height="24px" width="auto"/>](http://forum.netbeast.co) |[<img src="https://daks2k3a4ib2z.cloudfront.net/56bde7f6041f53663e470079/56d9a0413dc9ea140fea2762_favicon_32.png" height="24px" width="auto"/>](https://dashboard.netbeast.co/)| [<img src="https://www.iconexperience.com/_img/i_collection_png/512x512/plain/graph.png" height="24px" width="auto"/>](http://npm.anvaka.com/#/view/2d/netbeast-cli)
- 
-# Netbeast Dashboard 
-## Netbeast project [website](https://netbeast.co/developer)
-### Current State
+ # Netbeast Dashboard 
 
-Netbeast is currently developing the mobile app version of the dashboard software platform. We will release a beta version under invitation. So you want to be notified as soon as we release the beta version join our mailing list on the website.
+[![Build Status](https://travis-ci.org/netbeast/dashboard.svg)](https://travis-ci.org/netbeast/dashboard)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/l67h46kbdxtvy43p?svg=true)](https://ci.appveyor.com/project/jsdario/dashboard)
+[<img src="https://avatars2.githubusercontent.com/u/7111340?v=3&s=400" height="24px" width="auto"/>](http://bit.ly/1VYfqDH)
+[<img src="https://www.iconexperience.com/_img/i_collection_png/512x512/plain/graph.png" height="24px" width="auto"/>](http://npm.anvaka.com/#/view/2d/netbeast-cli)
 
-**This project is still on going** so we continue giving support on the [forum developer secction](http://forum.netbeast.co/c/otros/desarrolladores) and on the [slack channel](https://netbeastco.typeform.com/to/VGLexg). :rocket: 
+### Important notice
 
-If you have any question you can always reach us there, visit the [website](https://netbeast.co/developer) of the project and see the [documentation site](https://docs.netbeast.co/) :smile:
+Netbeast Dashboard project is moving on.
 
+Developing is hard. Being disruptive is harder. Industry won't stop trying to impose new protocols and standards. Indies won't stop creating open source projects that everyone should adopt --this repo was our own bet-- but it is really hard to take off and critical adoption rate is really difficult to achieve. So we changed our focus.
+
+Firstly we developed [Yeti Smart Home](https://getyeti.co/). It is a mobile app with effortless installation and a thoroughtly worked UI that is the perfect platform to build the next generation tools for IoT development that is actually usable by non-technical people.
+We also did it in an open way, sharing our know-how with the community and releasing a number of packages. You can read it more here: [Developing Beyond the Screen](https://medium.com/react-native-development/developing-beyond-the-screen-9af812b96724).
+
+Now we are going to take a second step. We just started The Bigfoot Project. We took everything we learnt from building the first Netbeast Dashboard, and the UX / UI experience of Yeti, developing a third beast. Instead of developing a new platform or protocol we are releasing a series of documentation, guides and wrapper of already standard tools to make them work with each other. So the Bigfoot project is a collection of already existing tools that work together out of the box and will help you develop your next connected thing as soon as possible. [Please join us here](https://github.com/netbeast/bigfoot).
+
+We want to make compatible all the pieces of our ecosystem to serve best users and developers equally, as our mission is to make things work for people, instead making people work for things.
+
+> Netbeast team
 
 ### Connect everything. Regardless its brand or technology.
 

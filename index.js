@@ -10,10 +10,10 @@ var fs = require('fs')
 
 // NPM dependencies
 var cmd = require('commander')
-var websocket = require('websocket-stream')
-var aedes = require('aedes')({
-  concurrency: 1000
-})
+// var websocket = require('websocket-stream')
+// var aedes = require('aedes')({
+//   concurrency: 1000
+// })
 
 var httpProxy = require('http-proxy')
 var chalk = require('chalk')
@@ -36,36 +36,37 @@ var server = http.createServer(app)
 process.env.SECURE_PORT = cmd.secure_port || process.env.SECURE_PORT
 process.env.PORT = cmd.port || process.env.PORT
 
-var proxy = httpProxy.createServer({
-  target: {
-    host: 'localhost',
-    port: process.env.PORT
-  },
-  ssl: {
-    key: fs.readFileSync(__dirname + '/ssl/dashboard-key.pem', 'utf8'),
-    cert: fs.readFileSync(__dirname + '/ssl/dashboard-cert.pem', 'utf8')
-  },
-  ws: true
-}).listen(process.env.SECURE_PORT, function () {
+// var proxy = httpProxy.createServer({
+//   target: {
+//     host: 'localhost',
+//     port: process.env.PORT
+//   },
+//   ssl: {
+//     key: fs.readFileSync(__dirname + '/ssl/dashboard-key.pem', 'utf8'),
+//     cert: fs.readFileSync(__dirname + '/ssl/dashboard-cert.pem', 'utf8')
+//   },
+//   ws: true
+// }).listen(process.env.SECURE_PORT, function () {
   server.listen(process.env.PORT, function () {
     const addr = server.address().address
     const port = server.address().port
     console.log('👾  Netbeast dashboard started on %s:%s', addr, port)
     // attach mqtt broker to websockets stream
-    websocket.createServer({ server: server }, aedes.handle)
+    // websocket.createServer({ server: server }, aedes.handle)
     bootOnload()
+    process.title = 'Netbeast'
     if (process.send) process.send('ready') //If this file has been called from electron.js
   })
-})
+// })
 
-proxy.on('error', function (err, req, res) {
-  if (err.code === 'ECONNRESET') {
-    console.log(chalk.grey('ECONNRESET'))
-    return res.end()
-  } else {
-    return console.trace(err)
-  }
-})
+// proxy.on('error', function (err, req, res) {
+//   if (err.code === 'ECONNRESET') {
+//     console.log(chalk.grey('ECONNRESET'))
+//     return res.end()
+//   } else {
+//     return console.trace(err)
+//   }
+// })
 
 // var env = Object.create(process.env)
 // var env_iamalive = Object.create(process.env)
@@ -82,8 +83,8 @@ proxy.on('error', function (err, req, res) {
 //
 // var iamalive = spawn(DASHBOARD_IAMALIVE, iamaliveOptions)
 
-require('./src/services/scanner')
-require('./src/services/advertiser')
+// require('./src/services/scanner')
+// require('./src/services/advertiser')
 
 // process.on('exit', function () {
 //   dns.kill('SIGTERM')
